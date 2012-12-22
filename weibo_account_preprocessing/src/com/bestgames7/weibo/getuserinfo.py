@@ -74,14 +74,16 @@ if __name__ == '__main__':
     
     try:
         cursor = conn.cursor()
-        cursor.execute('select * from access_token where version=1 limit 144601,600000')
+        cursor.execute('select * from access_token where version=1 limit 193180,600000')
+        index=1
         for row in cursor.fetchall():
-            print 'process ' + row[0]
+            print '%d: process %s' % (index, row[0])
             if (not exists(row[0])):
                 save_user_info_v1(get_user_info_v1(row[0], row[2],row[3]))
                 time.sleep(0.36)
             else:
                 print row[0] + ' exists'
+            index = index + 1
     except Exception,e:
         print e
         sys.exit()

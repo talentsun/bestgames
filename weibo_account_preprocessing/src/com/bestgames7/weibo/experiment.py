@@ -6,10 +6,13 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 import MySQLdb
-from follow import bestgames_access_token
+from follow import Bestgames
 from follow import follow_v2
+from follow import is_follow_v2
+from follow import is_followed_by_v2
 import time
 import random
+from datetime import datetime
 
 '''
 (0,50]        200
@@ -104,16 +107,52 @@ def execute_experiment(experiment):
         staging_cursor = staging_conn.cursor()
         staging_cursor.execute('select uid from experiments where experiment=%s and followed_us=0 and followed_them=0',(experiment))
         
-        index=1
+        index=0
         for row in staging_cursor.fetchall():
-            print '%d: follow %s' % (index, row[0])
-            follow_v2(bestgames_access_token, row[0])
-            follow_them(experiment, row[0])
-            index = index + 1
-            if index % 100 == 0:
-                time.sleep(random.randint(0,2) * 1800)
+            uid = row[0]
+            access_token = Bestgames.ACCESS_TOKENS[index%8]
+            if is_follow_v2(access_token, Bestgames.UID, uid):
+                print '%d: %s is followed' % (index, uid)
+                follow_them(experiment, uid)
             else:
-                time.sleep(random.randint(1,10))
+                print '%d: follow %s' % (index, uid)
+                if follow_v2(access_token, uid):
+                    follow_them(experiment, uid)
+                time.sleep(7.5)
+            index = index + 1
+    except Exception,e:
+        print e
+        
+    staging_cursor.close()
+    staging_conn.close()
+    
+def validate_experiment(experiment):
+    try:
+        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='', db='bestgames_weibo', port=3306, charset='utf8')
+    except Exception, e:
+        print e
+    
+    try:
+        staging_cursor = staging_conn.cursor()
+        staging_cursor.execute('select uid from experiments where experiment=%s and followed_us=0 and followed_them=1',(experiment))
+        
+        index=0
+        for row in staging_cursor.fetchall():
+            uid = row[0]
+            #access_token = Bestgames.ACCESS_TOKENS[index%9+1]
+            access_token=Bestgames.ACCESS_TOKENS[0]
+            
+            print '%d: process %s' % (index, uid)
+            if is_followed_by_v2(access_token, Bestgames.UID, uid):
+                print '%d: %s followed us' % (index, uid)
+                follow_us(experiment, uid)
+            #else:
+            #    print '%d: follow %s' % (index, uid)
+            #    if follow_v2(access_token, uid):
+            #        follow_them(experiment, uid)
+            #    time.sleep(random.randint(6,10))
+            time.sleep(4)
+            index = index + 1
     except Exception,e:
         print e
         
@@ -128,7 +167,23 @@ def follow_them(experiment, uid):
     
     try:
         staging_cursor = staging_conn.cursor()
-        staging_cursor.execute("update experiments set followed_them=1 where experiment=%s and uid=%s",(experiment,uid))
+        staging_cursor.execute("update experiments set followed_them=1,followed_them_date=%s where experiment=%s and uid=%s",(datetime.today().strftime('%Y-%m-%d %H:%M:%S'), experiment,uid))
+        staging_conn.commit()
+    except Exception,e:
+        print e
+        
+    staging_cursor.close()
+    staging_conn.close()
+
+def follow_us(experiment, uid):
+    try:
+        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='', db='bestgames_weibo', port=3306, charset='utf8')
+    except Exception, e:
+        print e
+    
+    try:
+        staging_cursor = staging_conn.cursor()
+        staging_cursor.execute("update experiments set followed_us=1,followed_us_date=%s where experiment=%s and uid=%s",(datetime.today().strftime('%Y-%m-%d %H:%M:%S'), experiment,uid))
         staging_conn.commit()
     except Exception,e:
         print e
@@ -138,3 +193,5 @@ def follow_them(experiment, uid):
 
 if __name__ == '__main__':
     execute_experiment('refollow_rate-by-followers_count')
+    #follow_us('refollow_rate-by-followers_count',104482)
+    #validate_experiment('refollow_rate-by-followers_count')
