@@ -74,7 +74,7 @@ if __name__ == '__main__':
     
     try:
         cursor = conn.cursor()
-        cursor.execute('select * from access_token where version=1 limit 83466,600000')
+        cursor.execute('select * from access_token where version=1 limit 144601,600000')
         for row in cursor.fetchall():
             print 'process ' + row[0]
             if (not exists(row[0])):
