@@ -7,11 +7,11 @@ sys.setdefaultencoding('utf8')
 
 import MySQLdb
 from follow import Bestgames
+from follow import follow_v1
 from follow import follow_v2
 from follow import is_follow_v2
 from follow import is_followed_by_v2
 import time
-import random
 from datetime import datetime
 
 '''
@@ -126,6 +126,46 @@ def execute_experiment(experiment):
     staging_cursor.close()
     staging_conn.close()
     
+curve1 = [0.05, 0.02, 0.02, 0.01, 0.01, 0.01, 0.01, 0.01, 0.03, 0.04, 0.05, 0.05, 0.06, 0.06, 0.05, 0.06, 0.06, 0.06, 0.06, 0.06, 0.05, 0.06, 0.06, 0.07]
+
+def addfans(experiment, curve):
+    try:
+        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='', db='bestgames_weibo', port=3306, charset='utf8')
+    except Exception, e:
+        print e
+    
+    try:
+        staging_cursor = staging_conn.cursor()
+        staging_cursor.execute('select uid, version, data1, data2 from experiments where experiment=%s and followed_us=0 and followed_them=0',(experiment))
+        
+        index=0
+        for row in staging_cursor.fetchall():
+            hour_count = 600 * curve[datetime.today().time().hour]
+            sleep_interval = 3600 / hour_count
+            
+            uid = row[0]
+            version = int(row[1])
+            if version == 1:
+                if follow_v1(row[2], row[3], Bestgames.UID):
+                    print '%d: %s followed us' % (index, uid)
+                    follow_us(experiment, uid)
+                else:
+                    print '%d: %s failed' % (index, uid)
+            elif version == 2:
+                if follow_v2(row[2], Bestgames.UID):
+                    print '%d: %s followed us' % (index, uid)
+                    follow_us(experiment, uid)
+                else:
+                    print '%d: %s failed' % (index, uid)
+            index = index + 1
+            
+            time.sleep(sleep_interval)
+    except Exception,e:
+        print e
+        
+    staging_cursor.close()
+    staging_conn.close()
+
 def validate_experiment(experiment):
     try:
         staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='', db='bestgames_weibo', port=3306, charset='utf8')
@@ -139,18 +179,12 @@ def validate_experiment(experiment):
         index=0
         for row in staging_cursor.fetchall():
             uid = row[0]
-            #access_token = Bestgames.ACCESS_TOKENS[index%9+1]
             access_token=Bestgames.ACCESS_TOKENS[0]
             
             print '%d: process %s' % (index, uid)
             if is_followed_by_v2(access_token, Bestgames.UID, uid):
                 print '%d: %s followed us' % (index, uid)
                 follow_us(experiment, uid)
-            #else:
-            #    print '%d: follow %s' % (index, uid)
-            #    if follow_v2(access_token, uid):
-            #        follow_them(experiment, uid)
-            #    time.sleep(random.randint(6,10))
             time.sleep(4)
             index = index + 1
     except Exception,e:
@@ -192,6 +226,5 @@ def follow_us(experiment, uid):
     staging_conn.close()
 
 if __name__ == '__main__':
+    validate_experiment('refollow_rate-by-followers_count')
     execute_experiment('refollow_rate-by-followers_count')
-    #follow_us('refollow_rate-by-followers_count',104482)
-    #validate_experiment('refollow_rate-by-followers_count')

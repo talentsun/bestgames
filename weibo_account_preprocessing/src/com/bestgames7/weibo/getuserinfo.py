@@ -74,7 +74,7 @@ if __name__ == '__main__':
     
     try:
         cursor = conn.cursor()
-        cursor.execute('select * from access_token where version=1 limit 193180,600000')
+        cursor.execute('select * from access_token where version=1 limit 286352,600000')
         index=1
         for row in cursor.fetchall():
             print '%d: process %s' % (index, row[0])
