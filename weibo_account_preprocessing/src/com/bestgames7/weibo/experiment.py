@@ -105,7 +105,7 @@ def execute_experiment(experiment):
     
     try:
         staging_cursor = staging_conn.cursor()
-        staging_cursor.execute('select uid from experiments where experiment=%s and followed_us=0 and followed_them=0',(experiment))
+        staging_cursor.execute('select uid from experiments where experiment=%s and followed_us=0 and followed_them=0 limit 200',(experiment))
         
         index=0
         for row in staging_cursor.fetchall():

@@ -105,6 +105,3 @@ def is_followed_by_v2(access_token_, source_uid_, target_uid_):
         print e
     
     return followed
-#print follow_v1('970e9705845ec6c47f951436c03b906d', '118177dd52eec93f07b636ad1a4f68d9', Bestgames.UID)
-#print follow_v2('2.00reFKrBqIR4cB7619c07cd40OOYwV', Bestgames.UID)
-#print is_followed_by_v2('2.00reFKrBqIR4cB7619c07cd40OOYwV', Bestgames.UID, 104482)
