@@ -105,7 +105,7 @@ def execute_experiment(experiment):
     
     try:
         staging_cursor = staging_conn.cursor()
-        staging_cursor.execute('select uid from experiments where experiment=%s and followed_us=0 and followed_them=0 limit 200',(experiment))
+        staging_cursor.execute('select uid from experiments where experiment=%s and followed_us=0 and followed_them=0 limit 300',(experiment))
         
         index=0
         for row in staging_cursor.fetchall():
@@ -117,8 +117,11 @@ def execute_experiment(experiment):
             else:
                 print '%d: follow %s' % (index, uid)
                 if follow_v2(access_token, uid):
-                    follow_them(experiment, uid)
-                time.sleep(7.5)
+                    if is_follow_v2(access_token, Bestgames.UID, uid):
+                        follow_them(experiment, uid)
+                    else:
+                        print '%d: follow %s failed' % (index, uid)
+                time.sleep(15)
             index = index + 1
     except Exception,e:
         print e
@@ -182,10 +185,13 @@ def validate_experiment(experiment):
             access_token=Bestgames.ACCESS_TOKENS[0]
             
             print '%d: process %s' % (index, uid)
+            if not is_follow_v2(access_token, Bestgames.UID, uid):
+                print '%d: %s unfollow them' % (index, uid)
+                unfollow_them(experiment, uid)
             if is_followed_by_v2(access_token, Bestgames.UID, uid):
                 print '%d: %s followed us' % (index, uid)
                 follow_us(experiment, uid)
-            time.sleep(4)
+            time.sleep(0.1)
             index = index + 1
     except Exception,e:
         print e
@@ -202,6 +208,22 @@ def follow_them(experiment, uid):
     try:
         staging_cursor = staging_conn.cursor()
         staging_cursor.execute("update experiments set followed_them=1,followed_them_date=%s where experiment=%s and uid=%s",(datetime.today().strftime('%Y-%m-%d %H:%M:%S'), experiment,uid))
+        staging_conn.commit()
+    except Exception,e:
+        print e
+        
+    staging_cursor.close()
+    staging_conn.close()
+    
+def unfollow_them(experiment, uid):
+    try:
+        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='', db='bestgames_weibo', port=3306, charset='utf8')
+    except Exception, e:
+        print e
+    
+    try:
+        staging_cursor = staging_conn.cursor()
+        staging_cursor.execute("update experiments set followed_them=0 where experiment=%s and uid=%s",(experiment,uid))
         staging_conn.commit()
     except Exception,e:
         print e
@@ -226,5 +248,5 @@ def follow_us(experiment, uid):
     staging_conn.close()
 
 if __name__ == '__main__':
-    validate_experiment('refollow_rate-by-followers_count')
+    #validate_experiment('refollow_rate-by-followers_count')
     execute_experiment('refollow_rate-by-followers_count')
