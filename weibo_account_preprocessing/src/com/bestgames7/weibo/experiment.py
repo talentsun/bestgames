@@ -248,5 +248,5 @@ def follow_us(experiment, uid):
     staging_conn.close()
 
 if __name__ == '__main__':
-    #validate_experiment('refollow_rate-by-followers_count')
+    validate_experiment('refollow_rate-by-followers_count')
     execute_experiment('refollow_rate-by-followers_count')
