@@ -8,6 +8,7 @@ sys.setdefaultencoding('utf8')
 import MySQLdb
 from weibo1 import APIClient
 from weibo1 import OAuthToken
+from weibo import APIClient as APIClientV2
 import time
 
 app_key = '1483181040'
@@ -24,7 +25,7 @@ def get_user_info_v1(uid, oauth_token, oauth_token_secret):
     
     return user
 
-def save_user_info_v1(user_info):
+def save_user_info(user_info):
     if not user_info:
         return
     
@@ -44,8 +45,19 @@ def save_user_info_v1(user_info):
     staging_cursor.close()
     staging_conn.close()
     
-def get_user_info_v2(access_token):
-    return None
+def get_user_info_v2(uid_, access_token_):
+    weiboClientV2 = APIClientV2(app_key, app_secret)
+    weiboClientV2.set_access_token(access_token_, time.time() + 90 * 24 * 3600)
+    
+    user = None
+    
+    try:
+        user = weiboClientV2.get.users__show(access_token=access_token_, uid=uid_)
+    except Exception, e:
+        print e
+    
+    print user
+    return user
 
 def exists(uid):
     try:
@@ -66,7 +78,7 @@ def exists(uid):
     
     return exists
 
-if __name__ == '__main__':
+def get_users_v1(offset, limit):
     try:
         conn = MySQLdb.connect(host='localhost', user='root', passwd='', db='bestgames_weibo')
     except Exception, e:
@@ -74,12 +86,12 @@ if __name__ == '__main__':
     
     try:
         cursor = conn.cursor()
-        cursor.execute('select * from access_token where version=1 limit 417330,600000')
+        cursor.execute('select * from access_token where version=1 limit %d,%d' % (offset, limit))
         index=1
         for row in cursor.fetchall():
             print '%d: process %s' % (index, row[0])
             if (not exists(row[0])):
-                save_user_info_v1(get_user_info_v1(row[0], row[2],row[3]))
+                save_user_info(get_user_info_v1(row[0], row[2],row[3]))
                 time.sleep(0.36)
             else:
                 print row[0] + ' exists'
@@ -90,3 +102,31 @@ if __name__ == '__main__':
     
     cursor.close()
     conn.close()
+    
+def get_users_v2(offset, limit):
+    try:
+        conn = MySQLdb.connect(host='localhost', user='root', passwd='', db='bestgames_weibo')
+    except Exception, e:
+        print e
+    
+    try:
+        cursor = conn.cursor()
+        cursor.execute('select * from access_token where version=2 limit %d,%d' % (offset, limit))
+        index=1
+        for row in cursor.fetchall():
+            print '%d: process %s' % (index, row[0])
+            if (not exists(row[0])):
+                save_user_info(get_user_info_v2(row[0], row[1]))
+                time.sleep(0.36)
+            else:
+                print row[0] + ' exists'
+            index = index + 1
+    except Exception,e:
+        print e
+        sys.exit()
+    
+    cursor.close()
+    conn.close()
+    
+if __name__ == '__main__':
+    get_users_v2(0,108697)
