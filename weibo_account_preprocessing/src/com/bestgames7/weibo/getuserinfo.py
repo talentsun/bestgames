@@ -56,7 +56,6 @@ def get_user_info_v2(uid_, access_token_):
     except Exception, e:
         print e
     
-    print user
     return user
 
 def exists(uid):
@@ -116,7 +115,7 @@ def get_users_v2(offset, limit):
         for row in cursor.fetchall():
             print '%d: process %s' % (index, row[0])
             if (not exists(row[0])):
-                save_user_info(get_user_info_v2(row[0], row[1]))
+                save_user_info(get_user_info_v2(row[0], row[2]))
                 time.sleep(0.36)
             else:
                 print row[0] + ' exists'
@@ -129,4 +128,4 @@ def get_users_v2(offset, limit):
     conn.close()
     
 if __name__ == '__main__':
-    get_users_v2(0,108697)
+    get_users_v2(11305,108697)
