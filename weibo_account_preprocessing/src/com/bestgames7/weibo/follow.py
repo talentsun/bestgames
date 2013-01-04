@@ -92,6 +92,32 @@ def is_follow_v2(access_token_, source_uid_, target_uid_):
     
     return followed
 
+def is_follow_v1(oauth_token, oauth_token_secret, source_uid_, target_uid_):
+    weiboClientV1 = APIClientV1(app_key, app_secret, OAuthToken(oauth_token, oauth_token_secret))
+    
+    followed = False
+    
+    try:
+        weiboClientV1.get.friendships__show(source=app_key, source_id=source_uid_, target_id=target_uid_)
+        followed = ret.source.following
+    except Exception, e:
+        print e
+        
+    return followed
+
+def is_followed_by_v1(oauth_token, oauth_token_secret, source_uid_, target_uid_):
+    weiboClientV1 = APIClientV1(app_key, app_secret, OAuthToken(oauth_token, oauth_token_secret))
+    
+    followed = False
+    
+    try:
+        weiboClientV1.get.friendships__show(source=app_key, source_id=source_uid_, target_id=target_uid_)
+        followed = ret.source.followed_by
+    except Exception, e:
+        print e
+        
+    return followed
+
 def is_followed_by_v2(access_token_, source_uid_, target_uid_):
     weiboClientV2 = APIClientV2(app_key, app_secret)
     weiboClientV2.set_access_token(access_token_, time.time() + 90 * 24 * 3600)

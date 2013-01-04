@@ -25,7 +25,7 @@ def get_user_info_v1(uid, oauth_token, oauth_token_secret):
     
     return user
 
-def save_user_info(user_info):
+def save_user_info(user_info, token_version, token_data1, token_data2):
     if not user_info:
         return
     
@@ -36,8 +36,12 @@ def save_user_info(user_info):
     
     try:
         staging_cursor = staging_conn.cursor()
-        staging_cursor.execute('insert into users(uid, verified, followers_count, statuses_count, friends_count, screen_name, name, favourites_count, gender) values(%s, %s, %s, %s, %s, %s, %s, %s, %s)',
-                                     (int(user_info.id),int(user_info.verified),int(user_info.followers_count),int(user_info.statuses_count),int(user_info.friends_count),user_info.screen_name,user_info.name,int(user_info.favourites_count),user_info.gender))
+        if token_version == 2:
+            staging_cursor.execute('insert into users(uid, verified, followers_count, statuses_count, friends_count, screen_name, name, favourites_count, gender, token_version, token_data1, rel_followed_me, rel_followed_them) values(%s, %s, %s, %s, %s, %s, %s, %s, %s, 2, %s, 0, 0)',
+                                         (int(user_info.id),int(user_info.verified),int(user_info.followers_count),int(user_info.statuses_count),int(user_info.friends_count),user_info.screen_name,user_info.name,int(user_info.favourites_count),user_info.gender, token_data1))
+        elif token_version == 1:
+            staging_cursor.execute('insert into users(uid, verified, followers_count, statuses_count, friends_count, screen_name, name, favourites_count, gender, token_version, token_data1, token_data2, rel_followed_me, rel_followed_them) values(%s, %s, %s, %s, %s, %s, %s, %s, %s, 1, %s, %s, 0, 0)',
+                                         (int(user_info.id),int(user_info.verified),int(user_info.followers_count),int(user_info.statuses_count),int(user_info.friends_count),user_info.screen_name,user_info.name,int(user_info.favourites_count),user_info.gender, token_data1, token_data2))
         staging_conn.commit()
     except Exception,e:
         print e
@@ -90,7 +94,7 @@ def get_users_v1(offset, limit):
         for row in cursor.fetchall():
             print '%d: process %s' % (index, row[0])
             if (not exists(row[0])):
-                save_user_info(get_user_info_v1(row[0], row[2],row[3]))
+                save_user_info(get_user_info_v1(row[0], row[2],row[3]), 1, row[2], row[3])
                 time.sleep(0.36)
             else:
                 print row[0] + ' exists'
@@ -115,7 +119,7 @@ def get_users_v2(offset, limit):
         for row in cursor.fetchall():
             print '%d: process %s' % (index, row[0])
             if (not exists(row[0])):
-                save_user_info(get_user_info_v2(row[0], row[2]))
+                save_user_info(get_user_info_v2(row[0], row[2]), 2, row[2], None)
                 time.sleep(0.36)
             else:
                 print row[0] + ' exists'
@@ -128,4 +132,4 @@ def get_users_v2(offset, limit):
     conn.close()
     
 if __name__ == '__main__':
-    get_users_v2(11305,108697)
+    get_users_v2(49616,108697)

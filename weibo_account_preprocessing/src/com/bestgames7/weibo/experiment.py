@@ -13,6 +13,7 @@ from follow import is_follow_v2
 from follow import is_followed_by_v2
 import time
 from datetime import datetime
+from db import *
 
 '''
 (0,50]        200
@@ -151,13 +152,13 @@ def addfans(experiment, curve):
             if version == 1:
                 if follow_v1(row[2], row[3], Bestgames.UID):
                     print '%d: %s followed us' % (index, uid)
-                    follow_us(experiment, uid)
+                    follow_me(experiment, uid)
                 else:
                     print '%d: %s failed' % (index, uid)
             elif version == 2:
                 if follow_v2(row[2], Bestgames.UID):
                     print '%d: %s followed us' % (index, uid)
-                    follow_us(experiment, uid)
+                    follow_me(experiment, uid)
                 else:
                     print '%d: %s failed' % (index, uid)
             index = index + 1
@@ -190,7 +191,7 @@ def validate_experiment(experiment):
                 unfollow_them(experiment, uid)
             if is_followed_by_v2(access_token, Bestgames.UID, uid):
                 print '%d: %s followed us' % (index, uid)
-                follow_us(experiment, uid)
+                follow_me(experiment, uid)
             time.sleep(0.1)
             index = index + 1
     except Exception,e:
@@ -198,7 +199,7 @@ def validate_experiment(experiment):
         
     staging_cursor.close()
     staging_conn.close()
-    
+
 def follow_them(experiment, uid):
     try:
         staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='', db='bestgames_weibo', port=3306, charset='utf8')
@@ -215,6 +216,8 @@ def follow_them(experiment, uid):
     staging_cursor.close()
     staging_conn.close()
     
+    db_follow_them(uid)
+    
 def unfollow_them(experiment, uid):
     try:
         staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='', db='bestgames_weibo', port=3306, charset='utf8')
@@ -230,8 +233,10 @@ def unfollow_them(experiment, uid):
         
     staging_cursor.close()
     staging_conn.close()
+    
+    db_unfollow_them(uid)
 
-def follow_us(experiment, uid):
+def follow_me(experiment, uid):
     try:
         staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='', db='bestgames_weibo', port=3306, charset='utf8')
     except Exception, e:
@@ -246,6 +251,8 @@ def follow_us(experiment, uid):
         
     staging_cursor.close()
     staging_conn.close()
+    
+    db_follow_me(uid)
 
 if __name__ == '__main__':
     validate_experiment('refollow_rate-by-followers_count')
