@@ -32,7 +32,23 @@ def db_unfollow_them(uid):
     
     try:
         staging_cursor = staging_conn.cursor()
-        staging_cursor.execute("update users set rel_followed_them=0 where uid=%s",(uid))
+        staging_cursor.execute("update users set rel_followed_them=-1, rel_unfollowed_them_date=%s where uid=%s",(datetime.today().strftime('%Y-%m-%d %H:%M:%S'),uid))
+        staging_conn.commit()
+    except Exception,e:
+        print e
+        
+    staging_cursor.close()
+    staging_conn.close()
+    
+def db_unfollow_me(uid):
+    try:
+        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='', db='bestgames_weibo', port=3306, charset='utf8')
+    except Exception, e:
+        print e
+    
+    try:
+        staging_cursor = staging_conn.cursor()
+        staging_cursor.execute("update users set rel_followed_me=-1, rel_unfollowed_me_date=%s where uid=%s",(datetime.today().strftime('%Y-%m-%d %H:%M:%S'),uid))
         staging_conn.commit()
     except Exception,e:
         print e

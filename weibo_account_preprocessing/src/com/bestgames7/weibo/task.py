@@ -62,13 +62,14 @@ def execute(task, limit):
                         db_task_processed(task, uid)
                     else:
                         follow_v2(row[2], Bestgames.UID)
+                        time.sleep(5)
                         if is_followed_by_v2(Bestgames.ACCESS_TOKENS[index%8], Bestgames.UID, uid):
                             print '%s follow me' % (uid)
                             db_follow_me(uid)
                             db_task_processed(task, uid)
                         else:
                             print 'follow me failed'
-                        time.sleep(2 * 60)
+                        time.sleep(2 * 60 - 5)
             elif taskType == TaskType.FOLLOW_THEM:
                 if is_follow_v2(Bestgames.ACCESS_TOKENS[index%8], Bestgames.UID, uid):
                     print '%s already follow them' % (uid)
@@ -76,13 +77,14 @@ def execute(task, limit):
                     db_task_processed(task, uid)
                 else:
                     follow_v2(Bestgames.ACCESS_TOKENS[index%8], uid)
+                    time.sleep(5)
                     if is_follow_v2(Bestgames.ACCESS_TOKENS[index%8], Bestgames.UID, uid):
                         print 'follow %s' % (uid)
                         db_follow_them(uid)
                         db_task_processed(task, uid)
                     else:
                         print 'follow %s failed' % (uid)
-                    time.sleep(15)
+                    time.sleep(10)
             index = index+1
     except Exception,e:
         print e
@@ -91,5 +93,5 @@ def execute(task, limit):
     staging_conn.close()
     
 if __name__ == '__main__':
-    execute('direct-follow_0-60', 40)
+    #execute('direct-follow_0-60', 40)
     execute('refollow_100-150', 150)

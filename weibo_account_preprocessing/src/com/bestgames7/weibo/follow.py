@@ -111,7 +111,7 @@ def is_followed_by_v1(oauth_token, oauth_token_secret, source_uid_, target_uid_)
     followed = False
     
     try:
-        weiboClientV1.get.friendships__show(source=app_key, source_id=source_uid_, target_id=target_uid_)
+        ret = weiboClientV1.get.friendships__show(source=app_key, source_id=source_uid_, target_id=target_uid_)
         followed = ret.source.followed_by
     except Exception, e:
         print e

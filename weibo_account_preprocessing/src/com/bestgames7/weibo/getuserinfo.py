@@ -10,6 +10,9 @@ from weibo1 import APIClient
 from weibo1 import OAuthToken
 from weibo import APIClient as APIClientV2
 import time
+from datetime import datetime,timedelta,date
+from follow import unfollow_v1,unfollow_v2,Bestgames,is_followed_by_v1, is_followed_by_v2
+from db import *
 
 app_key = '1483181040'
 app_secret = '6f503ed72723bacf9f4a0f4902b62c24'
@@ -131,5 +134,57 @@ def get_users_v2(offset, limit):
     cursor.close()
     conn.close()
     
+def update_users():
+    try:
+        conn = MySQLdb.connect(host='localhost', user='root', passwd='', db='bestgames_weibo')
+    except Exception, e:
+        print e
+    
+    try:
+        cursor = conn.cursor()
+        cursor.execute('select uid, token_version, token_data1, token_data2, rel_followed_them, rel_followed_them_date, rel_followed_me from users where rel_followed_them=1 or rel_followed_me=1')
+        index=1
+        for row in cursor.fetchall():
+            uid = row[0]
+            token_version = row[1]
+            token_data1 = row[2]
+            token_data2 = row[3]
+            rel_followed_them = row[4]
+            rel_followed_them_date = row[5]
+            rel_followed_me = row[6]
+            
+            print '%d: process %s' % (index, row[0])
+            if rel_followed_them == 1:
+                #unfollow users followed and not refollow a week ago
+                need_unfollow = False
+                if rel_followed_them_date is not None:
+                    if (date.today() - rel_followed_them_date.date()).days >= 7:
+                        need_unfollow = True
+                else:
+                    need_unfollow = True
+                if need_unfollow:
+                    print 'unfollow %s because of timeout' % (uid)
+                    unfollow_v2(Bestgames.ACCESS_TOKENS[0], uid)
+                    db_unfollow_them(uid)
+                    
+            if rel_followed_me == 1:
+                need_unfollow = False
+                if token_version == 1:
+                    if not is_followed_by_v1(token_data1, token_data2, Bestgames.UID, uid):
+                        need_unfollow = True
+                elif token_version == 2:
+                    if not is_followed_by_v2(token_data1, Bestgames.UID, uid):
+                        need_unfollow = True
+                if need_unfollow:
+                    print 'update %s bescause they unfollow me' % (uid)
+                    db_unfollow_me(uid)
+            index = index + 1
+    except Exception,e:
+        print e
+        sys.exit()
+    
+    cursor.close()
+    conn.close()
+    
 if __name__ == '__main__':
-    get_users_v2(49616,108697)
+    update_users()
