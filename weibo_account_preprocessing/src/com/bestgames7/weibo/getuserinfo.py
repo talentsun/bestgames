@@ -142,7 +142,7 @@ def update_users():
     
     try:
         cursor = conn.cursor()
-        cursor.execute('select uid, token_version, token_data1, token_data2, rel_followed_them, rel_followed_them_date, rel_followed_me from users where rel_followed_them=1 or rel_followed_me=1')
+        cursor.execute('select uid, token_version, token_data1, token_data2, rel_followed_them, rel_followed_them_date, rel_followed_me from users where (rel_followed_them=1 and rel_followed_them_date <= %s) or rel_followed_me=1', ((date.today()-timedelta(days=7)).strftime('%Y-%m-%d %H:%M:%S')))
         index=1
         for row in cursor.fetchall():
             uid = row[0]
@@ -179,6 +179,8 @@ def update_users():
                     print 'update %s bescause they unfollow me' % (uid)
                     db_unfollow_me(uid)
             index = index + 1
+            
+            time.sleep(5)
     except Exception,e:
         print e
         sys.exit()

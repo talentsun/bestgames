@@ -45,13 +45,11 @@ def execute(task, limit):
                     if is_followed_by_v2(Bestgames.ACCESS_TOKENS[index%8], Bestgames.UID, uid):
                         print '%s already follow me' % (uid)
                         db_follow_me(uid)
-                        db_task_processed(task, uid)
                     else:
                         follow_v1(row[2], row[3], Bestgames.UID)
                         if is_followed_by_v2(Bestgames.ACCESS_TOKENS[index%8], Bestgames.UID, uid):
                             print '%s follow me' % (uid)
                             db_follow_me(uid)
-                            db_task_processed(task, uid)
                         else:
                             print 'follow me failed'
                     time.sleep(2 * 60)
@@ -59,14 +57,12 @@ def execute(task, limit):
                     if is_followed_by_v2(Bestgames.ACCESS_TOKENS[index%8], Bestgames.UID, uid):
                         print '%s already follow me' % (uid)
                         db_follow_me(uid)
-                        db_task_processed(task, uid)
                     else:
                         follow_v2(row[2], Bestgames.UID)
                         time.sleep(5)
                         if is_followed_by_v2(Bestgames.ACCESS_TOKENS[index%8], Bestgames.UID, uid):
                             print '%s follow me' % (uid)
                             db_follow_me(uid)
-                            db_task_processed(task, uid)
                         else:
                             print 'follow me failed'
                         time.sleep(2 * 60 - 5)
@@ -74,17 +70,17 @@ def execute(task, limit):
                 if is_follow_v2(Bestgames.ACCESS_TOKENS[index%8], Bestgames.UID, uid):
                     print '%s already follow them' % (uid)
                     db_follow_them(uid)
-                    db_task_processed(task, uid)
                 else:
                     follow_v2(Bestgames.ACCESS_TOKENS[index%8], uid)
                     time.sleep(5)
                     if is_follow_v2(Bestgames.ACCESS_TOKENS[index%8], Bestgames.UID, uid):
                         print 'follow %s' % (uid)
                         db_follow_them(uid)
-                        db_task_processed(task, uid)
                     else:
                         print 'follow %s failed' % (uid)
                     time.sleep(10)
+            
+            db_task_processed(task, uid)
             index = index+1
     except Exception,e:
         print e
