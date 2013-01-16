@@ -12,7 +12,7 @@ def addfans():
     update_users()
     
     #direct follow inactive users
-    execute('direct-follow_0-60', 100)
+    execute('direct-follow_0-60', 90)
     
     #refollow followers-wanting users
     execute('refollow_100-150', 150)
