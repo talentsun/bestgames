@@ -10,7 +10,7 @@ from datetime import datetime
 
 def db_follow_them(uid):
     try:
-        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='', db='bestgames_weibo', port=3306, charset='utf8')
+        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='nameLR9969', db='bestgames', port=3306, charset='utf8')
     except Exception, e:
         print e
     
@@ -26,7 +26,7 @@ def db_follow_them(uid):
     
 def db_unfollow_them(uid):
     try:
-        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='', db='bestgames_weibo', port=3306, charset='utf8')
+        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='nameLR9969', db='bestgames', port=3306, charset='utf8')
     except Exception, e:
         print e
     
@@ -42,7 +42,7 @@ def db_unfollow_them(uid):
     
 def db_unfollow_me(uid):
     try:
-        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='', db='bestgames_weibo', port=3306, charset='utf8')
+        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='nameLR9969', db='bestgames', port=3306, charset='utf8')
     except Exception, e:
         print e
     
@@ -58,7 +58,7 @@ def db_unfollow_me(uid):
 
 def db_follow_me(uid):
     try:
-        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='', db='bestgames_weibo', port=3306, charset='utf8')
+        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='nameLR9969', db='bestgames', port=3306, charset='utf8')
     except Exception, e:
         print e
     
@@ -74,7 +74,7 @@ def db_follow_me(uid):
 
 def db_task_processed(task, uid):
     try:
-        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='', db='bestgames_weibo', port=3306, charset='utf8')
+        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='nameLR9969', db='bestgames', port=3306, charset='utf8')
     except Exception, e:
         print e
     

@@ -37,7 +37,7 @@ def extract_oauth_token_secret(info):
 
 def read_raw_data(offset, limit):
     try:
-        raw_conn = MySQLdb.connect(host='localhost', user='root', passwd='', db='wdj_weibo')
+        raw_conn = MySQLdb.connect(host='localhost', user='root', passwd='nameLR9969', db='bestgames')
     except Exception, e:
         print e
         sys.exit()
@@ -72,7 +72,7 @@ def read_raw_data(offset, limit):
     
 def write_staging_data(access_tokens):
     try:
-        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='', db='bestgames_weibo')
+        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='nameLR9969', db='bestgames')
     except Exception, e:
         print e
     
@@ -90,7 +90,7 @@ def write_staging_data(access_tokens):
 
 if __name__ == '__main__':
     try:
-        conn = MySQLdb.connect(host='localhost', user='root', passwd='', db='wdj_weibo')
+        conn = MySQLdb.connect(host='localhost', user='root', passwd='nameLR9969', db='bestgames')
     except Exception, e:
         print e
         sys.exit()

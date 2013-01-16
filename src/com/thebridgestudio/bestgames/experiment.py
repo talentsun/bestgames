@@ -36,7 +36,7 @@ def build_experiment(experiment, configs):
 
 def sample_users(min_followers, max_followers, count):
     try:
-        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='', db='bestgames_weibo', port=3306, charset='utf8')
+        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='nameLR9969', db='bestgames', port=3306, charset='utf8')
     except Exception, e:
         print e
     
@@ -63,7 +63,7 @@ def sample_users(min_followers, max_followers, count):
 
 def get_access_token(uid):
     try:
-        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='', db='bestgames_weibo', port=3306, charset='utf8')
+        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='nameLR9969', db='bestgames', port=3306, charset='utf8')
     except Exception, e:
         print e
     
@@ -83,7 +83,7 @@ def get_access_token(uid):
 
 def save_user_to_experiment(experiment, user):
     try:
-        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='', db='bestgames_weibo', port=3306, charset='utf8')
+        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='nameLR9969', db='bestgames', port=3306, charset='utf8')
     except Exception, e:
         print e
     
@@ -100,7 +100,7 @@ def save_user_to_experiment(experiment, user):
 
 def execute_experiment(experiment):
     try:
-        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='', db='bestgames_weibo', port=3306, charset='utf8')
+        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='nameLR9969', db='bestgames', port=3306, charset='utf8')
     except Exception, e:
         print e
     
@@ -134,7 +134,7 @@ curve1 = [0.05, 0.02, 0.02, 0.01, 0.01, 0.01, 0.01, 0.01, 0.03, 0.04, 0.05, 0.05
 
 def addfans(experiment, curve):
     try:
-        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='', db='bestgames_weibo', port=3306, charset='utf8')
+        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='nameLR9969', db='bestgames', port=3306, charset='utf8')
     except Exception, e:
         print e
     
@@ -172,7 +172,7 @@ def addfans(experiment, curve):
 
 def validate_experiment(experiment):
     try:
-        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='', db='bestgames_weibo', port=3306, charset='utf8')
+        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='nameLR9969', db='bestgames', port=3306, charset='utf8')
     except Exception, e:
         print e
     
@@ -202,7 +202,7 @@ def validate_experiment(experiment):
 
 def follow_them(experiment, uid):
     try:
-        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='', db='bestgames_weibo', port=3306, charset='utf8')
+        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='nameLR9969', db='bestgames', port=3306, charset='utf8')
     except Exception, e:
         print e
     
@@ -220,7 +220,7 @@ def follow_them(experiment, uid):
     
 def unfollow_them(experiment, uid):
     try:
-        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='', db='bestgames_weibo', port=3306, charset='utf8')
+        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='nameLR9969', db='bestgames', port=3306, charset='utf8')
     except Exception, e:
         print e
     
@@ -238,7 +238,7 @@ def unfollow_them(experiment, uid):
 
 def follow_me(experiment, uid):
     try:
-        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='', db='bestgames_weibo', port=3306, charset='utf8')
+        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='nameLR9969', db='bestgames', port=3306, charset='utf8')
     except Exception, e:
         print e
     

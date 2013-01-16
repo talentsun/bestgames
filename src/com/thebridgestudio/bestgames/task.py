@@ -25,7 +25,7 @@ class TaskState:
 
 def execute(task, limit):
     try:
-        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='', db='bestgames_weibo', port=3306, charset='utf8')
+        staging_conn = MySQLdb.connect(host='localhost', user='root', passwd='nameLR9969', db='bestgames', port=3306, charset='utf8')
     except Exception, e:
         print e
     
