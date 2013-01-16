@@ -4,7 +4,7 @@ Created on 2013-1-8
 @author: bridge
 '''
 
-from user import update_users
+from userinfo import update_users
 from task import execute
 
 def addfans():
