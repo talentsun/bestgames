@@ -16,7 +16,7 @@ def db_follow_them(uid):
     
     try:
         staging_cursor = staging_conn.cursor()
-        staging_cursor.execute("update users set rel_followed_them=1 where uid=%s",(uid))
+        staging_cursor.execute("update users set rel_followed_them=1, rel_followed_them_date=%s where uid=%s",(datetime.today().strftime('%Y-%m-%d %H:%M:%S'),uid))
         staging_conn.commit()
     except Exception,e:
         print e
@@ -64,7 +64,7 @@ def db_follow_me(uid):
     
     try:
         staging_cursor = staging_conn.cursor()
-        staging_cursor.execute("update users set rel_followed_me=1 where uid=%s",(uid))
+        staging_cursor.execute("update users set rel_followed_me=1, rel_followed_me_date=%s where uid=%s",(datetime.today().strftime('%Y-%m-%d %H:%M:%S'),uid))
         staging_conn.commit()
     except Exception,e:
         print e
