@@ -52,7 +52,7 @@ def execute(task, limit):
                             db_follow_me(uid)
                         else:
                             print 'follow me failed'
-                    time.sleep(2 * 60)
+                    time.sleep(60)
                 elif version == 2:
                     if is_followed_by_v2(Bestgames.ACCESS_TOKENS[index%8], Bestgames.UID, uid):
                         print '%s already follow me' % (uid)
@@ -65,7 +65,7 @@ def execute(task, limit):
                             db_follow_me(uid)
                         else:
                             print 'follow me failed'
-                        time.sleep(2 * 60 - 5)
+                        time.sleep(55)
             elif taskType == TaskType.FOLLOW_THEM:
                 if is_follow_v2(Bestgames.ACCESS_TOKENS[index%8], Bestgames.UID, uid):
                     print '%s already follow them' % (uid)
