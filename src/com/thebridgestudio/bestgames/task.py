@@ -78,7 +78,7 @@ def execute(task, limit):
                         db_follow_them(uid)
                     else:
                         print 'follow %s failed' % (uid)
-                    time.sleep(10)
+                    time.sleep(30)
             
             db_task_processed(task, uid)
             index = index+1
