@@ -8,11 +8,11 @@ from userinfo import update_users
 from task import execute
 
 def addfans():
-    #update relationship
-    update_users()
-    
     #direct follow inactive users
     execute('direct-follow_0-60', 350)
+
+    #update relationship
+    update_users()
     
     #refollow followers-wanting users
     #execute('refollow_100-150', 150)
