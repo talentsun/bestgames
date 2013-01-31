@@ -70,16 +70,16 @@ class Competitor:
         conn.close()
         
 
-def FollowUid(uid, client, logger):
-    logger.debug("try to follow %d", uid)
-    ops = Operation.FetchOps(uid)
-    meFollowing = FriendShip.CheckFollow(client, BGApp.dev_uid, uid)
-    meFollowed = FriendShip.CheckFollow(client, uid, BGApp.dev_uid)
+def FollowUid(uid_, client, logger):
+    logger.debug("try to follow %d", uid_)
+    ops = Operation.FetchOps(uid_)
+    meFollowing = FriendShip.CheckFollow(client, BGApp.dev_uid, uid_)
+    meFollowed = FriendShip.CheckFollow(client, uid_, BGApp.dev_uid)
     logger.debug("ops num %d meFollowing %d meFollowed %d" % (len(ops), meFollowing, meFollowed))
     if len(ops) == 0 and not meFollowing and not meFollowed:
-        client.post.friendships__create(uid)
+        client.post.friendships__create(uid=uid_)
         op = Operation()
-        op.uid = uid
+        op.uid = uid_
         op.type = Operation.FollowType
         op.state = Operation.Finished
         op.Save()
