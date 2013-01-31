@@ -136,5 +136,5 @@ if __name__ == '__main__':
         RemoveSingle(singleFilePath)
     except Exception as e:
         traceback.print_exc()
-        logger.debug("one exception")
+        logger.debug(traceback.format_exc())
 
