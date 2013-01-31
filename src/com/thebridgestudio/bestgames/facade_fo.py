@@ -7,6 +7,6 @@ from task import execute
 
 def addfans():
     #refollow followers-wanting users
-    execute('refollow_100-150', 150)
+    execute('refollow_100-150', 100)
     
 addfans()
