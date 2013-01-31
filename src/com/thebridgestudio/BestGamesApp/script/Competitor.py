@@ -101,6 +101,7 @@ if __name__ == '__main__':
         comsWeb = copy.deepcopy(comsDb)
         todayMaxNum = 30
         todayOpNum = len(Operation.FetchTodayOps(Operation.FollowType))
+        logger.debug("current op number %d" % todayOpNum)
         client = APIClientV2(BGApp.app_key, BGApp.app_secret)
         client.set_access_token(BGApp.dev_token, time.time() + 90 * 24 *3600)
         Competitor.GetNumbers(client, comsWeb, logger)
