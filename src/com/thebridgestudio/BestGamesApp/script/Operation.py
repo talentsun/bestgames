@@ -65,10 +65,12 @@ class Operation:
         conn.close()
 
     @classmethod
-    def FetchTodayOps(cls, type):
+    def FetchSomeDayOps(cls, type, day):
         conn = MySQLdb.connect(host='localhost', user='root', passwd='nameLR9969', db='bestgames', port=3306, charset='utf8')
         cursor = conn.cursor()
-        cursor.execute("select uid, op_type, op_date from operation where op_date > '%s' and op_date < '%s'" % (datetime.date.today().strftime('%Y-%m-%d %H:%M:%S'), (datetime.date.today() + datetime.timedelta(days = 1)).strftime('%Y-%m-%d %H:%M:%S')))
+        someDay = datetime.date.today() - datetime.timedelta(days = day)
+        someDayNextDay = datetime.date.today() - datetime.timedelta(days = (day - 1))
+        cursor.execute("select uid, op_type, op_date from operation where op_type = %d and op_date > '%s' and op_date < '%s'" % (type, someDay.strftime('%Y-%m-%d %H:%M:%S'), someDayNextDay.strftime('%Y-%m-%d %H:%M:%S')))
         ops = []
         for row in cursor.fetchall():
             op = Operation()
