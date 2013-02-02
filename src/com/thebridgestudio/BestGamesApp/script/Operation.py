@@ -72,7 +72,7 @@ class Operation:
         conn = MySQLdb.connect(host='localhost', user='root', passwd='nameLR9969', db='bestgames', port=3306, charset='utf8')
         cursor = conn.cursor()
         cursor.execute("delete from operation where uid = %d and op_type = %d" % (self.uid, self.type))
-        cursor.execute("insert into operation (uid, op_type, op_date, op_state, online, follower, friends, statuses values (%d, %d, '%s', %d, %d, %d, %d, %d)" % (self.uid, self.type, self.ts.strftime('%Y-%m-%d %H:%M:%S'), self.state, self.online, self.followers, self.friends, self.statuses))
+        cursor.execute("insert into operation (uid, op_type, op_date, op_state, online, followers, friends, statuses values (%d, %d, '%s', %d, %d, %d, %d, %d)" % (self.uid, self.type, self.ts.strftime('%Y-%m-%d %H:%M:%S'), self.state, self.online, self.followers, self.friends, self.statuses))
         cursor.close()
         conn.close()
 
@@ -82,7 +82,7 @@ class Operation:
         cursor = conn.cursor()
         someDay = datetime.date.today() - datetime.timedelta(days = day)
         someDayNextDay = datetime.date.today() - datetime.timedelta(days = (day - 1))
-        cursor.execute("select uid, op_type, op_date, op_state, online, follower, friends, statuses from operation where op_type = %d and op_date > '%s' and op_date < '%s'" % (type, someDay.strftime('%Y-%m-%d %H:%M:%S'), someDayNextDay.strftime('%Y-%m-%d %H:%M:%S')))
+        cursor.execute("select uid, op_type, op_date, op_state, online, followers, friends, statuses from operation where op_type = %d and op_date > '%s' and op_date < '%s'" % (type, someDay.strftime('%Y-%m-%d %H:%M:%S'), someDayNextDay.strftime('%Y-%m-%d %H:%M:%S')))
         ops = []
         for row in cursor.fetchall():
             op = Operation()
