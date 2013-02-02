@@ -126,17 +126,18 @@ if __name__ == '__main__':
                                     todayOpNum += 1
                                     continue
                                 else:
-                                    logger.debug('follow failed add as AtType')
-                            logger.debug("today's follow count reach max %d" % todayOpNum)
-                            op = Operation()
-                            op.uid = user['id']
-                            op.type = Operation.AtType
-                            op.state = Operation.NotFinished
-                            op.online = user['online_status']
-                            op.followers = user['followers_count']
-                            op.friends = user['friends_count']
-                            op.statuses = user['statuses_count']
-                            op.Save()
+                                    logger.debug('follow failed')
+                            else:
+                                logger.debug("today's follow count reach max %d" % todayOpNum)
+                                op = Operation()
+                                op.uid = user['id']
+                                op.type = Operation.AtType
+                                op.state = Operation.NotFinished
+                                op.online = user['online_status']
+                                op.followers = user['followers_count']
+                                op.friends = user['friends_count']
+                                op.statuses = user['statuses_count']
+                                op.Save()
                     if not comWeb.followers == comDb.followers:
                         logger.debug("%d's followers %d different from original %d" % (comWeb.uid, comWeb.followers, comDb.followers))
                         comDb.followers = comWeb.followers
