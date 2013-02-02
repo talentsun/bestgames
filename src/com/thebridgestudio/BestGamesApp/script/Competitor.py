@@ -59,7 +59,7 @@ class Competitor:
         return
 
     def GetFollowers(self, clientV2, num):
-        return clientV2.get.friendships__followers__ids(uid=str(self.uid), count=num)['ids']
+        return clientV2.get.friendships__followers(uid=str(self.uid), count=num)['users']
 
     def Save(self):
         conn = MySQLdb.connect(host='localhost', user='root', passwd='nameLR9969', db='bestgames', port=3306, charset='utf8')
@@ -70,18 +70,22 @@ class Competitor:
         conn.close()
         
 
-def FollowUid(uid_, client, logger):
-    logger.debug("try to follow %d", uid_)
-    ops = Operation.FetchOps(uid_)
-    meFollowing = FriendShip.CheckFollow(client, BGApp.dev_uid, uid_)
-    meFollowed = FriendShip.CheckFollow(client, uid_, BGApp.dev_uid)
+def FollowUid(user, client, logger):
+    logger.debug("try to follow %d", user['id'])
+    ops = Operation.FetchOps(user['id'])
+    meFollowing = FriendShip.CheckFollow(client, BGApp.dev_uid, user['id'])
+    meFollowed = FriendShip.CheckFollow(client, user['id'], BGApp.dev_uid)
     logger.debug("ops num %d meFollowing %d meFollowed %d" % (len(ops), meFollowing, meFollowed))
     if len(ops) == 0 and not meFollowing and not meFollowed:
-        client.post.friendships__create(uid=uid_)
+        client.post.friendships__create(uid=user['id'])
         op = Operation()
-        op.uid = uid_
+        op.uid = user['id'] 
         op.type = Operation.FollowType
         op.state = Operation.Finished
+        op.online = user['online_status']
+        op.followers = user['followers_count']
+        op.friends = user['friends_count']
+        op.statuses = user['statuses_count']
         op.Save()
         return True
     return False
@@ -113,21 +117,26 @@ if __name__ == '__main__':
                         logger.debug("%d's followers increase %d" % (comWeb.uid, num))
                         if num > 2:
                             num = 2
-                        uids = comWeb.GetFollowers(client, num)
-                        for uid in uids:
+                        followers = comWeb.GetFollowers(client, num)
+                        for user in followers:
                             if todayOpNum < todayMaxNum:
-                                ret = FollowUid(uid, client, logger)
+                                ret = FollowUid(user, client, logger)
                                 if ret:
                                     logger.debug("follow success")
                                     todayOpNum += 1
                                     continue
-                            else:
-                                logger.debug("today's follow count reach max %d" % todayOpNum)
-                                op = Operation()
-                                op.uid = uid
-                                op.type = Operation.AtType
-                                op.state = Operation.NotFinished
-                                op.Save()
+                                else:
+                                    logger.debug('follow failed add as AtType')
+                            logger.debug("today's follow count reach max %d" % todayOpNum)
+                            op = Operation()
+                            op.uid = user['id']
+                            op.type = Operation.AtType
+                            op.state = Operation.NotFinished
+                            op.online = user['online_status']
+                            op.followers = user['followers_count']
+                            op.friends = user['friends_count']
+                            op.statuses = user['statuses_count']
+                            op.Save()
                     if not comWeb.followers == comDb.followers:
                         logger.debug("%d's followers %d different from original %d" % (comWeb.uid, comWeb.followers, comDb.followers))
                         comDb.followers = comWeb.followers
