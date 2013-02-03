@@ -11,6 +11,7 @@ class Operation:
 
     NotFinished = 0
     Finished = 1
+    Removed = 2
     def __init__(self):
         self.uid = 0
         #type = 1, follow them
