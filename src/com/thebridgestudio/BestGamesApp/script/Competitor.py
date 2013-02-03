@@ -107,7 +107,7 @@ if __name__ == '__main__':
         todayOpNum = len(Operation.FetchSomeDayOps(Operation.FollowType, 0))
         logger.debug("current op number %d" % todayOpNum)
         client = APIClientV2(BGApp.app_key, BGApp.app_secret)
-        client.set_access_token(BGApp.dev_token, time.time() + 90 * 24 *3600)
+        client.set_access_token(BGApp.other_token, time.time() + 90 * 24 *3600)
         Competitor.GetNumbers(client, comsWeb, logger)
         for comDb in comsDb:
             for comWeb in comsWeb:
