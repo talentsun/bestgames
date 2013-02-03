@@ -146,6 +146,7 @@ if __name__ == '__main__':
                         comDb.Save()
         RemoveSingle(singleFilePath)
     except Exception as e:
+        RemoveSingle(singleFilePath)
         traceback.print_exc()
         logger.debug(traceback.format_exc())
 
