@@ -6,10 +6,14 @@ from AppValue import BGApp
 from Operation import Operation
 from FriendShip import FriendShip
 
-import time
+import time, sys
 
 if __name__ == '__main__':
-    ops = Operation.FetchSomeDayOps(Operation.FollowType, 1)
+    if len(sys.argv) == 2:
+        num = int(sys.argv[1])
+    else:
+        num = 0
+    ops = Operation.FetchSomeDayOps(Operation.FollowType, num)
     print "all number %d" % len(ops)
     followNum = 0
     client = APIClient(BGApp.app_key, BGApp.app_secret)
