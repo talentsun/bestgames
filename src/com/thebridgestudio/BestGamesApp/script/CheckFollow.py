@@ -19,9 +19,13 @@ if __name__ == '__main__':
     client = APIClient(BGApp.app_key, BGApp.app_secret)
     client.set_access_token(BGApp.dev_token, time.time() + 90 * 24 *3600)
     for op in ops:
-        if FriendShip.CheckFollow(client, op.uid, BGApp.dev_uid):
-            print op.uid, op.ts
-            followNum += 1
-        else:
-            print "not follow:", op.uid, op.ts
+        try:
+            if FriendShip.CheckFollow(client, op.uid, BGApp.dev_uid):
+                print op.uid, op.ts
+                followNum += 1
+            else:
+                print "not follow:", op.uid, op.ts
+        except:
+            pass
+        time.sleep(1)
     print "follow num %d" % followNum
