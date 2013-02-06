@@ -27,6 +27,7 @@ if __name__ == "__main__":
                 op.state = Operation.Removed
                 op.Save()
                 FriendShip.Unfollow(client, op.uid)
+            time.sleep(60)
         except Exception as e:
             traceback.print_exc()
             logger.debug(traceback.format_exc())
