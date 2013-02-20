@@ -11,11 +11,14 @@ from Utils import *
 from Operation import Operation
 from FriendShip import FriendShip
 
+work_path = os.path.dirname(os.path.abspath(__file__))
+
 if __name__ == "__main__":
     if len(sys.argv) == 2:
         num = int(sys.argv[1])
     else:
         num = 7
+    os.chdir(work_path)
     logger = InitLogger("unfollow_competitor", logging.DEBUG, "../log/unfollow_competitor.log")
     ops = Operation.FetchSomeDayOps(Operation.FollowType, num)
     client = APIClient(BGApp.app_key, BGApp.app_secret)
