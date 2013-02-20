@@ -23,6 +23,7 @@ if __name__ == "__main__":
     for op in ops:
         try:
             logger.debug("unfollow %d", op.uid)
+            print op.uid
             if op.state == Operation.Finished:
                 op.state = Operation.Removed
                 op.Save()
