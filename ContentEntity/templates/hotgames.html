@@ -1,0 +1,71 @@
+<html>
+<head>
+<title>内容引擎主界面</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<p>&nbsp;&nbsp;内容引擎</p>
+<form>
+  <fieldset>
+    <legend>功能面板</legend>
+	<button type="button">精品游戏推荐</button>
+	<button type="button">小兵变大咖</button>
+	</fieldset>
+	</form>
+
+    <form>
+  <fieldset>
+    <legend>精品游戏推荐</legend>
+	    <table border="1" width="100%" bordercolor="#99CCFF">
+        <tr> 
+          <td align="center" width="15%">推荐人</td>
+          <td align="center" width="15%">游戏名称</td>
+          <td align="center" width="15%">微博推荐时间</td>
+		  <td align="center" width="15%">微博推荐状态</td>
+		  <td align="center" width="15%">标签</td>
+		  <td align="center" width="15%">&nbsp; </td>
+        </tr>
+        {% for game in hotgames %}
+            <tr>
+                <td align="center" width="15%"> {{ game.presenter }}</td>
+                <td align="center" width="15%">{{ game.name }}</td>
+                <td align="center" width="15%">{{ game.timestamp }}</td>
+                <td align="center" width="15%">未推荐</td>
+                <td align="center" width="15%">{{ game.tags }}</td>
+                <td align="center" width="15%"><a href="http://cow.bestgames7.com/admin/api/entities/{{ game.id}}">编辑</a>
+                 <a href="http://cow.bestgames7.com/admin/api/entities/{{ game.id}}/delete">删除</a></td>
+            </tr>
+        {% endfor %}
+		</table>
+	</fieldset>
+	</form>
+
+    <form>
+    <fieldset>
+        <legend>小兵变大咖</legend>
+        <table border="1" width="100%" bordercolor="#99CCFF">
+            <tr>
+                <td align="center" width="15%">推荐人</td>
+                <td align="center" width="15%">游戏名称</td>
+                <td align="center" width="15%">微博推荐时间</td>
+                <td align="center" width="15%">关卡信息</td>
+                <td align="center" width="15%">微博推荐状态</td>
+                <td align="center" width="15%">标签</td>
+                <td align="center" width="15%">&nbsp; </td>
+            </tr>
+            {% for game in hotgamesRedier %}
+                <tr>
+                    <td align="center" width="15%"> {{ game.presenter }}</td>
+                    <td align="center" width="15%">{{ game.name }}</td>
+                    <td align="center" width="15%">{{ game.timestamp }}</td>
+                    <td align="center" width="15%">....</td>
+                    <td align="center" width="15%">未推荐</td>
+                    <td align="center" width="15%">{{ game.tags }}</td>
+                    <td align="center" width="15%"><a href="http://cow.bestgames7.com/admin/api/gamerediers/add/{{ game.id}}">编辑</a>
+                        <a href="http://cow.bestgames7.com/admin/api/gamerediers/add/{{ game.id}}/delete">删除</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    </fieldset>
+</form>
+
