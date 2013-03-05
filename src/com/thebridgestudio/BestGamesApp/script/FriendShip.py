@@ -17,3 +17,7 @@ class FriendShip:
         ret = client.get.friendships__show(source_id=uidFrom, target_id=uidTo)
 
         return ret.source.following 
+
+    @classmethod
+    def CheckCommonFollow(cls, client, checkUid):
+        

@@ -8,3 +8,7 @@ class BGApp:
     app_secret = "4360e65b0e9de717dfe3a0c127bc96b3"
     redirect_uri = "www.bestgames7.com"
 
+    wdj_app_key = "1483181040"
+    wdj_app_secret = '6f503ed72723bacf9f4a0f4902b62c24'
+    wdj_me_token = "2.00baJBTDqIR4cB04fca35e15ygoN_D"
+
