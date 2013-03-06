@@ -33,4 +33,4 @@ if __name__ == '__main__':
         time.sleep(1)
     print "follow num %d" % followNum
     content = "昨天收听了%d个人，%d个人回粉" % (len(ops), followNum)
-    send_mail(['jfwang213@qq.com',], "增粉日报", content)
+    send_mail(['bestgames@thebridgestudio.net',], "增粉日报", content)
