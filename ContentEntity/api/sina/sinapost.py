@@ -1,30 +1,14 @@
-from weibo import APIError, APIClient
+from api.sina.weibo import  APIClient
 import MySQLdb as mdb
 import time
 import datetime
 import threading
-from functools import partial
-from timeit import Timer
 
 _APP_ID = '1483181040'    
 _APP_SECRET = '6f503ed72723bacf9f4a0f4902b62c24'
 
 client = APIClient(_APP_ID, _APP_SECRET, 'http://account.wandoujia.com/v1/user/?do=platform_sina')
 client.set_access_token('2.00wsGZQCqIR4cB8ac1f7170aj5evFC', '7809909')
-
-# class Timer(threading.Thread):
-
-	
-# 	def __init__(self, seconds,pic,weibostatus):
-# 		self.runTime = seconds
-# 		self.pic = pic
-# 		self.weibostatus = weibostatus
-# 		threading.Thread.__init__(self)
-# 	def run(self):
-# 		time.sleep(self.runTime)
-# 		print "Buzzzz!! Time's up!"
-# 		self.client.statuses.upload.post(status=self.weibostatus ,
-#                                   pic=open(self.pic))
 
 def sendWeibo(weibostatus,pic):
     client.statuses.upload.post(status=weibostatus ,
