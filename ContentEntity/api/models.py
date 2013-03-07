@@ -120,7 +120,7 @@ class HotGamesView(models.Model):
     tags = models.CharField(u"标签",max_length=100)
 #    status = models.CharField(u"推荐状态",max_length=100)
     presenter = models.CharField(u"推荐人",max_length=100)
-#    toll_gate = models.CharField(u'游戏关卡',max_length=100)
+    toll_gate = models.CharField(u'游戏关卡',max_length=100)
 
     class Meta:
         managed=False

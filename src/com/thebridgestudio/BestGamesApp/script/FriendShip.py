@@ -19,5 +19,7 @@ class FriendShip:
         return ret.source.following 
 
     @classmethod
-    def CheckCommonFollow(cls, client, checkUid):
+    def CheckCommonFollow(cls, client, uid1, uid2, count_=10):
+        ret = client.get.friendships__friends__in_common(uid=uid1, suid=uid2, count=count_)
+        return ret.total_number
         

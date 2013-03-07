@@ -1,7 +1,10 @@
 #!/usr/bin/python
+# -*- coding: UTF-8 -*-
 
 from weibo import APIClient
 from AppValue import BGApp
+
+from SendMail import send_mail
 
 from Operation import Operation
 from FriendShip import FriendShip
@@ -16,8 +19,8 @@ if __name__ == '__main__':
     ops = Operation.FetchSomeDayOps(Operation.FollowType, num)
     print "all number %d" % len(ops)
     followNum = 0
-    client = APIClient(BGApp.app_key, BGApp.app_secret)
-    client.set_access_token(BGApp.dev_token, time.time() + 90 * 24 *3600)
+    client = APIClient(BGApp.wdj_app_key, BGApp.wdj_app_secret)
+    client.set_access_token(BGApp.wdj_me_token, time.time() + 90 * 24 *3600)
     for op in ops:
         try:
             if FriendShip.CheckFollow(client, op.uid, BGApp.dev_uid):
@@ -29,3 +32,5 @@ if __name__ == '__main__':
             pass
         time.sleep(1)
     print "follow num %d" % followNum
+    content = "昨天收听了%d个人，%d个人回粉" % (len(ops), followNum)
+    send_mail(['bestgames@thebridgestudio.net',], "增粉日报", content)
