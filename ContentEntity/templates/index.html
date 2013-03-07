@@ -3,7 +3,7 @@
 <head>
   <title>内容引擎主界面</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <link href="style.css" rel="stylesheet"></link>
+  <link href="/static/style.css" rel="stylesheet"></link>
   <script></script>
 </head>
 <body>
@@ -31,30 +31,17 @@
                   <th>标签</th>
                   <th>操作</th>
                </tr>
-               <tr>
-                 <td>滑雪大冒险</td>
-                 <td>刘先生</td>
-                 <td>2012-12-20 20:22:00</td>
-                 <td>未发布</td>
-                 <td>游戏</td>
-                 <td>修改\删除</td>
-               </tr>
-               <tr>
-                 <td>滑雪大冒险</td>
-                 <td>刘先生</td>
-                 <td>2012-12-20 20:22:00</td>
-                 <td>未发布</td>
-                 <td>游戏</td>
-                 <td>修改\删除</td>
-               </tr>
-               <tr>
-                 <td>滑雪大冒险</td>
-                 <td>刘先生</td>
-                 <td>2012-12-20 20:22:00</td>
-                 <td>未发布</td>
-                 <td>游戏</td>
-                 <td>修改\删除</td>
-               </tr>
+                 {% for game in hotgames %}
+                     <tr>
+                         <td align="center" width="15%"> {{ game.presenter }}</td>
+                         <td align="center" width="15%">{{ game.name }}</td>
+                         <td align="center" width="15%">{{ game.timestamp }}</td>
+                         <td align="center" width="15%">未推荐</td>
+                         <td align="center" width="15%">{{ game.tags }}</td>
+                         <td align="center" width="15%"><a href="http://cow.bestgames7.com/admin/api/entities/{{ game.id}}">编辑</a>
+                             <a href="http://cow.bestgames7.com/admin/api/entities/{{ game.id}}/delete">删除</a></td>
+                     </tr>
+                 {% endfor %}
              </table>
            </div>
            </div class="app-grid">
@@ -70,38 +57,18 @@
                   <th>标签</th>
                   <th>操作</th>
                </tr>
-               <tr>
-                 <td>滑雪大冒险</td>
-                 <td>刘先生</td>
-                 <td>2012-12-20 20:22:00</td>
-                 <td>未发布</td>
-                 <td>游戏</td>
-                 <td>修改\删除</td>
-               </tr>
-               <tr>
-                 <td>滑雪大冒险</td>
-                 <td>刘先生</td>
-                 <td>2012-12-20 20:22:00</td>
-                 <td>未发布</td>
-                 <td>游戏</td>
-                 <td>修改\删除</td>
-               </tr>
-               <tr>
-                 <td>滑雪大冒险</td>
-                 <td>刘先生</td>
-                 <td>2012-12-20 20:22:00</td>
-                 <td>未发布</td>
-                 <td>游戏</td>
-                 <td>修改\删除</td>
-               </tr>
-               <tr>
-                 <td>滑雪大冒险</td>
-                 <td>刘先生</td>
-                 <td>2012-12-20 20:22:00</td>
-                 <td>未发布</td>
-                 <td>游戏</td>
-                 <td>修改\删除</td>
-               </tr>
+                 {% for game in hotgamesRedier %}
+                     <tr>
+                         <td align="center" width="15%"> {{ game.presenter }}</td>
+                         <td align="center" width="15%">{{ game.name }}</td>
+                         <td align="center" width="15%">{{ game.timestamp }}</td>
+                         <td align="center" width="15%">....</td>
+                         <td align="center" width="15%">未推荐</td>
+                         <td align="center" width="15%">{{ game.tags }}</td>
+                         <td align="center" width="15%"><a href="http://cow.bestgames7.com/admin/api/gamerediers/add/{{ game.id}}">编辑</a>
+                             <a href="http://cow.bestgames7.com/admin/api/gamerediers/add/{{ game.id}}/delete">删除</a></td>
+                     </tr>
+                 {% endfor %}
              </table>
            </div>
         </div>

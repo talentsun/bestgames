@@ -2,6 +2,8 @@ from django.conf.urls import patterns, include, url
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+import settings
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -18,5 +20,10 @@ urlpatterns = patterns('',
     url(r'site/','site/'),
     url(r'hotgame/',include('api.urls')),
     url(r'sina/',include('api.urls')),
-    url(r'token/',include('api.urls'))
+    url(r'token/',include('api.urls')),
+    url(r'^static/(?P<path>.*)$','django.views.static.serve',{'document_root': settings.STATIC_PATH})
 )
+
+urlpatterns += staticfiles_urlpatterns()
+
+

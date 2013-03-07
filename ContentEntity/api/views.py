@@ -14,7 +14,7 @@ from django.core.urlresolvers import reverse
 
 def HotGamesViewFunc(request):
     hotgames = HotGamesView.objects.all()
-    t = loader.get_template("hotgames.html")
+    t = loader.get_template("index.html")
     c = Context({'hotgames':hotgames})
     return HttpResponse(t.render(c))
 

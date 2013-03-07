@@ -13,7 +13,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'bestgames',                      # Or path to database file if using sqlite3.
+        'NAME': 'contententity',                      # Or path to database file if using sqlite3.
         'USER': 'root',                      # Not used with sqlite3.
         'PASSWORD': '20120811',                  # Not used with sqlite3.
         'HOST': '127.0.0.1',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -63,13 +63,16 @@ STATIC_ROOT = ''
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = '/static/'
+STATIC_URL = 'http://127.0.0.1:8000/static/'
+
+STATIC_PATH = '/Users/huwei/PycharmProjects/ContentEntity/templates'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    '/Users/huwei/PycharmProjects/ContentEntity/templates',
 )
 
 # List of finder classes that know how to find static files in
@@ -105,7 +108,7 @@ ROOT_URLCONF = 'GameRecommend.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'GameRecommend.wsgi.application'
 
-TEMPLATE_DIRS = ('/home/huwei/web/bestgames/templates',)
+TEMPLATE_DIRS = ('/Users/huwei/PycharmProjects/ContentEntity/templates',)
 
 INSTALLED_APPS = (
     'django.contrib.auth',
