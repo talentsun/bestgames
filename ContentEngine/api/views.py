@@ -12,13 +12,22 @@ from django.shortcuts import render_to_response
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.urlresolvers import reverse
 from django.contrib.auth import authenticate,login
+from django.shortcuts import render
+from api.tables import HotGamesTable,GameRediersTable
+
+import django_tables2 as tables
+from django_tables2 import RequestConfig
 
 def HotGamesViewFunc(request):
-    hotgames = HotGamesView.objects.all()
-    hotgamesRedier = HotGamesRedierView.objects.all();
-    t = loader.get_template("index.html")
-    c = Context({'hotgames':hotgames, 'hotgamesRedier' : hotgamesRedier})
-    return HttpResponse(t.render(c))
+    hotgames = HotGamesTable(HotGamesView.objects.all(),prefix="hg-")
+    hotgames.paginate(page=request.GET.get("hg-page",1), per_page=10)
+    hotgames.data.verbose_name = u"精品游戏推荐"
+
+    gamerediers = GameRediersTable(HotGamesRedierView.objects.all(),prefix="gr-")
+    gamerediers.paginate(page=request.GET.get("gr-page",1), per_page=10)
+    gamerediers.data.verbose_name = u"小兵变大咖"
+
+    return render(request, "index.html", {"hotgames": hotgames, "gamerediers":gamerediers})
 
 def Auth(request):
     auth = SinaAuth()

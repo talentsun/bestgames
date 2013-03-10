@@ -118,12 +118,13 @@ class HotGamesView(models.Model):
     name = models.CharField(u"游戏名称",max_length=100)
     timestamp = models.DateTimeField(u"同步时间")
     tags = models.CharField(u"标签",max_length=100)
-#    status = models.CharField(u"推荐状态",max_length=100)
+    #status = models.CharField(u"推荐状态",max_length=100)
     presenter = models.CharField(u"推荐人",max_length=100)
 
     class Meta:
         managed=False
         db_table = u'hotgames'
+	verbose_name = u"精品游戏推荐"
 
 
 class HotGamesRedierView(models.Model):
@@ -137,4 +138,5 @@ class HotGamesRedierView(models.Model):
     class Meta:
         managed=False
         db_table = u'hotgamesRedier'
+	verbose_name = u"小兵变大咖"
 

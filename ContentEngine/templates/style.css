@@ -46,16 +46,69 @@ html, body, p, ul, li{
   background: #f4f4f4;
 }
 .content .addor{
-  margin: 20px 0;
+  margin-top: 20px;
+}
+
+.list{
+  padding:30px 0;
+}
+
+.edit-btn{
+  background: url(images/edit_button_normal.png) no-repeat;
+  display: inline-block;
+  cursor: pointer;
+  text-indent: -9999px;
+  width: 44px;
+  height: 20px;
+}
+
+.edit-btn:hover{
+  background: url(images/edit_button_hover.png) no-repeat;
+}
+
+.del-btn{
+  background: url(images/delete_button_normal.png) no-repeat;
+  display: inline-block;
+  cursor: pointer;
+  text-indent: -9999px;
+  width: 44px;
+  height: 20px;
+}
+
+.del-btn:hover{
+  background: url(images/delete_button_hover.png) no-repeat;
 }
 
 .add-btn{
-  background: url(images/add-btn.png) no-repeat;
+  background: url(images/add_button_normal.png) no-repeat;
   display: inline-block;
   width: 132px;
   height: 132px;
   margin-right: 10px;
   cursor: pointer;
+  text-align: center;
+}
+
+.add-btn:hover{
+  background: url(images/add_button_hover.png) no-repeat;
+}
+
+.add-btn span{
+  position: relative;
+  top: 100px;
+}
+
+.separate-line{
+  display: inline-block;
+  width: 1px;
+  height: 20px;
+  background: url(images/separate_line.png);
+}
+
+.completed{
+  background: url(images/completed.png) no-repeat;
+  background-position-y: 4px;
+  padding-left: 16px;
 }
 
 .app-grid-header{
@@ -63,4 +116,91 @@ html, body, p, ul, li{
   line-height: 28px;
   background: #ffd800;
   text-indent: 20px;
+}
+
+.list .app-grid:first-child{
+  margin-bottom: 20px;
+}
+
+.app-grid table{
+  width: 100%;
+  background-color: white;
+  border-collapse: collapse;
+  border: 1px solid #e3e3e3;
+}
+
+.app-grid table a:link,
+.app-grid table a:visited,
+.app-grid table + ul.pagination > li > a {
+    color: #5B80B2;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.app-grid table a:hover {
+  color: #036;
+}
+
+.app-grid table tr{
+  height: 30px;
+}
+
+.app-grid table th, td{
+  text-align: center;
+  border-left: 1px solid #e3e3e3;
+  border-spacing: 0;
+}
+
+.app-grid table tbody tr:nth-child(odd){
+  background-color: #f8f6f7;
+}
+
+.app-grid table th:nth-child(1), td:nth-child(1) {
+  width: 20%;
+}
+
+.app-grid table .tags {
+  width: 20%;
+}
+
+.app-grid table .ops {
+  width: 180px;
+}
+
+.app-grid table thead th:first-child,
+.app-grid table thead td:first-child {
+    border-left: none !important;
+}
+
+.app-grid table thead th > a:link,
+.app-grid table thead th > a:visited {
+    color: #666;
+}
+
+.app-grid table + ul.pagination {
+    overflow: auto;
+    margin: 0;
+    padding: 10px;
+    border: 1px solid #DDD;
+    list-style: none;
+}
+
+.app-grid table + ul.pagination > li {
+    float: left;
+    line-height: 22px;
+    margin-left: 10px;
+}
+
+.app-grid table + ul.pagination > li:first-child {
+    margin-left: 0;
+}
+
+.app-grid table + ul.pagination > li.cardinality {
+    float: right;
+    color: #8d8d8d;
+}
+
+div.table-container {
+    display: inline-block;
+    width: 100%;
 }
