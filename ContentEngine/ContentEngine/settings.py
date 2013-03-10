@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Django settings for ContentEngine project.
+# Django settings for GameRecommend project.
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -15,8 +15,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'content_entity',                      # Or path to database file if using sqlite3.
         'USER': 'root',                      # Not used with sqlite3.
-        'PASSWORD': '20120811',                  # Not used with sqlite3.
-        'HOST': '127.0.0.1',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PASSWORD': 'nameLR9969',                  # Not used with sqlite3.
+        'HOST': '118.244.225.222',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '3306',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
@@ -48,7 +48,7 @@ USE_TZ = False
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = '/Users/huwei/bestgames/'
+MEDIA_ROOT = '/Users/bridge/Documents/workspace/bestgames'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -65,7 +65,7 @@ STATIC_ROOT = ''
 # Example: "http://media.lawrence.com/static/"
 STATIC_URL = 'http://127.0.0.1/static/'
 
-STATIC_PATH = '/Users/huwei/bestgames/ContentEngine/templates'
+STATIC_PATH = '/Users/bridge/Documents/workspace/bestgames/ContentEngine/templates'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -108,7 +108,7 @@ ROOT_URLCONF = 'ContentEngine.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'ContentEngine.wsgi.application'
 
-TEMPLATE_DIRS = ('/Users/huwei/bestgames/ContentEngine//templates',)
+TEMPLATE_DIRS = ('/Users/bridge/Documents/workspace/bestgames/ContentEngine/templates',)
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -121,7 +121,13 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+    'django_tables2',
     'api',
+)
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.request',
+    'django.contrib.auth.context_processors.auth'
 )
 
 # A sample logging configuration. The only tangible logging

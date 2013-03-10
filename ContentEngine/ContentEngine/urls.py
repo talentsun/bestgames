@@ -16,10 +16,9 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
 #    url(r'^admin/hotgames/$', include(admin.site.urls)),
-    url(r'^admin/bookstore/book/add/$', 'bookstore.admin_views.add_by_isbn')
     url(r'^admin/', include(admin.site.urls)),
     url(r'site/','site/'),
-    url(r'hotgames/',include('api.urls')),
+    url(r'contentengine/',include('api.urls')),
     url(r'sina/',include('api.urls')),
     url(r'token/',include('api.urls')),
     url(r'^static/(?P<path>.*)$','django.views.static.serve',{'document_root': settings.STATIC_PATH})
