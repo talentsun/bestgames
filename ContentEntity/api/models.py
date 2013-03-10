@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.utils.encoding import force_unicode
-from thumbs import ImageWithThumbsField
-from utilities.fields import ImagePreviewField
 
 class Tags(models.Model):
     name = models.CharField(u"名称",max_length=100)
@@ -120,9 +118,21 @@ class HotGamesView(models.Model):
     tags = models.CharField(u"标签",max_length=100)
 #    status = models.CharField(u"推荐状态",max_length=100)
     presenter = models.CharField(u"推荐人",max_length=100)
-    toll_gate = models.CharField(u'游戏关卡',max_length=100)
 
     class Meta:
         managed=False
         db_table = u'hotgames'
+
+
+class HotGamesRedierView(models.Model):
+    name = models.CharField(u"游戏名称",max_length=100)
+    timestamp = models.DateTimeField(u"同步时间")
+    tags = models.CharField(u"标签",max_length=100)
+    #    status = models.CharField(u"推荐状态",max_length=100)
+    presenter = models.CharField(u"推荐人",max_length=100)
+    toll_gate = models.CharField(u'游戏关卡',max_length=100)
+
+    class Meta:
+        managed=False
+        db_table = u'hotgamesRedier'
 

@@ -13,7 +13,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'contententity',                      # Or path to database file if using sqlite3.
+        'NAME': 'content_entity',                      # Or path to database file if using sqlite3.
         'USER': 'root',                      # Not used with sqlite3.
         'PASSWORD': '20120811',                  # Not used with sqlite3.
         'HOST': '127.0.0.1',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -48,7 +48,7 @@ USE_TZ = False
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = '/home/huwei/web/game/'
+MEDIA_ROOT = '/Users/huwei/bestgames/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -63,9 +63,9 @@ STATIC_ROOT = ''
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = 'http://127.0.0.1:8000/static/'
+STATIC_URL = 'http://127.0.0.1/static/'
 
-STATIC_PATH = '/Users/huwei/PycharmProjects/ContentEntity/templates'
+STATIC_PATH = '/Users/huwei/bestgames/ContentEntity/templates'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -108,7 +108,7 @@ ROOT_URLCONF = 'GameRecommend.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'GameRecommend.wsgi.application'
 
-TEMPLATE_DIRS = ('/Users/huwei/PycharmProjects/ContentEntity/templates',)
+TEMPLATE_DIRS = ('/Users/huwei/bestgames/ContentEntity/templates',)
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -122,7 +122,6 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'api',
-    'utilities',
 )
 
 # A sample logging configuration. The only tangible logging

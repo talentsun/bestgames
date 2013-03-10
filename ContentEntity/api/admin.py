@@ -18,6 +18,7 @@ class HotGamesInline(admin.StackedInline):
 class GameRediersInline(admin.StackedInline):
     model = GameRediers
     extra = 1
+    max_num = 1
     fk_name = "hot_game_id"
 
 class HotGamesAdmin(admin.ModelAdmin):
