@@ -33,6 +33,7 @@ if __name__ == '__main__':
         client.set_access_token(BGApp.other_token, time.time() + 90 * 24 *3600)
         Competitor.GetNumbers(client, comsWeb)
         ops = Operation.GetSomeDayOps(datetime.date.today())
+        logger.debug("ops number %d" % len(ops))
         for comDb in comsDb:
             for comWeb in comsWeb:
                 if comDb.uid == comWeb.uid:
