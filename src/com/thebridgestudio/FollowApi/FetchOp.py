@@ -45,12 +45,12 @@ if __name__ == '__main__':
                         followers = comWeb.GetFollowers(client, num)
                         for user in followers:
                             op = Operation()
+                            op.opUid = user['id']
                             if not FriendShip.CheckFollow(client, BGApp.dev_uid, op.opUid) and len(ops) < 100:
                                 FriendShip.Follow(client, op.opUid)
                                 op.state = 1
                             else:
                                 op.state = 0
-                            op.opUid = user['id']
                             op.srcUid = comDb.uid
                             logger.debug("new to follow %d" % op.opUid)
                             op.state = 1
