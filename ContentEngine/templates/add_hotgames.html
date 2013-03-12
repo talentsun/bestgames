@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>添加精品游戏推荐</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/style.css"></link>
+  <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet" type="text/css"/>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.9.1.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/add_games.js"></script>
+  {{ form.media }}
+</head>
+<body>
+   <div class="main">
+     <div class="banner">
+        <div class="logo">每日精品游戏</div>
+        <div class="share"><a href="http://127.0.0.1/sina/auth">新浪微博登陆</a></div>
+     </div>
+     <div class="content">
+      <div class="nav">
+        <span><a href="/" target="_self">内容引擎</a> > 添加精品游戏推荐</span>
+      </div>
+      <form id="add_games_form" action="/games/add/" method="post"> {% csrf_token %}
+        {{ form.name_of_field.errors }}
+        <div class="app-grid-header">
+          <span>游戏信息</span>
+        </div>
+        <table class="form-table">
+          <tr><th>{{ form.name.label }}</th><td>{{ form.name }}{{ form.name.errors }}</td></tr>
+          <tr><th>{{ form.icon.label }}</th><td>{{ form.icon }}{{ form.icon.errors }}</td></tr>
+          <tr><th>{{ form.description.label }}</th><td>{{ form.description }}{{ form.description.errors }}</td></tr>
+          <tr><th>{{ form.category.label }}</th><td>{{ form.category }}{{ form.category.errors }}</td></tr>
+          <tr><th>{{ form.tags.label }}</th><td>{{ form.tags }}{{ form.tags.errors }}</td></tr>
+          <tr><th>{{ form.android_download_url.label }}</th><td>{{ form.android_download_url }}{{ form.android_download_url.errors }}</td></tr>
+          <tr><th>{{ form.iOS_download_url.label }}</th><td>{{ form.iOS_download_url }}{{ form.iOS_download_url.errors }}</td></tr>
+          <tr><th>{{ form.screenshot_path_1.label }}</th><td>{{ form.screenshot_path_1 }}{{ form.screenshot_path_1.errors }}</td></tr>
+          <tr><th>{{ form.screenshot_path_2.label }}</th><td>{{ form.screenshot_path_2 }}{{ form.screenshot_path_2.errors }}</td></tr>
+          <tr><th>{{ form.screenshot_path_3.label }}</th><td>{{ form.screenshot_path_3 }}{{ form.screenshot_path_3.errors }}</td></tr>
+          <tr><th>{{ form.screenshot_path_4.label }}</th><td>{{ form.screenshot_path_4 }}{{ form.screenshot_path_4.errors }}</td></tr>
+          <tr><th>{{ form.screenshot_path_5.label }}</th><td>{{ form.screenshot_path_5 }}{{ form.screenshot_path_5.errors }}</td></tr>
+        </table>
+        <div class="app-grid-header">
+          <span>推荐信息</span>
+        </div>
+        <table class="form-table">
+          <tr><th>{{ form.presenter.label }}</th><td>{{ form.presenter }}{{ form.presenter.errors }}</td></tr>
+          <tr><th>{{ form.rating.label }}</th><td>{{ form.rating }}{{ form.rating.errors }}</td></tr>
+          <tr><th>{{ form.recommended_reason.label }}</th><td>{{ form.recommended_reason }}{{ form.recommended_reason.errors }}</td></tr>
+          <tr><th>{{ form.sync_weibo }}&nbsp;&nbsp;{{ form.sync_weibo.label}}</th><td>{{ form.timestamp.label }}&nbsp;&nbsp;{{ form.timestamp }}{{ form.timestamp.errors }} </td></tr>
+        </table>
+        <div style="text-align:center;padding:20px;">
+          <button class="btn-cancel" id="cancel"></button>
+          <button class="btn-save" id="save" style="margin-left:20px;"></button>
+        </div>
+      </form>
+     </div>
+   </div>
+</body>

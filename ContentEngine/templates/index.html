@@ -4,9 +4,9 @@
 <head>
   <title>内容引擎</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <link rel="stylesheet" type="text/css" href="/static/style.css"></link>
-  <script type="text/javascript" src="/static/js/jquery-1.9.1.js"></script>
-  <script type="text/javascript" src="/static/js/index.js"></script>
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/style.css"></link>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.9.1.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/index.js"></script>
 </head>
 <body>
    <div class="main">
@@ -28,13 +28,13 @@
              <div class="app-grid-header">
                 <span>精品游戏推荐</span>
              </div>
-             {% render_table hotgames %}
+             {% render_table games %}
            </div>
            <div class="app-grid">
              <div class="app-grid-header">
                <span>小兵变大咖</span>
              </div>
-             {% render_table gamerediers %}
+             {% render_table rediers %}
            </div>
         </div>
      </div>

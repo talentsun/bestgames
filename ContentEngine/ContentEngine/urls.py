@@ -17,10 +17,10 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
     url(r'site/','site/'),
-    url(r'^$',include('api.urls')),
-    url(r'sina/',include('api.urls')),
-    url(r'token/',include('api.urls')),
-    url(r'^static/(?P<path>.*)$','django.views.static.serve',{'document_root': settings.STATIC_PATH})
+    url(r'^static/(?P<path>.*)$','django.views.static.serve',{'document_root': settings.STATIC_ROOT}),
+    url(r'^media/(?P<path>.*)$','django.views.static.serve',{'document_root': settings.MEDIA_ROOT}),
+    url(r'^taggit_autocomplete/', include('taggit_autocomplete.urls')),
+    url(r'',include('api.urls'))
 )
 
 urlpatterns += staticfiles_urlpatterns()

@@ -7,12 +7,12 @@ html, body, p, ul, li{
   text-align:left;
   margin:0 auto;
   width: 1280px;
-  background: url(images/banner.png) no-repeat ;
+  background: url(../img/banner.png) no-repeat ;
   min-height: 360px;
   overflow: hidden;
 }
 .banner .logo{
-  background: url(images/icon.png) no-repeat;
+  background: url(../img/icon.png) no-repeat;
   height: 30px;
   color: #00ccff;
   font-size: 20px;
@@ -28,7 +28,7 @@ html, body, p, ul, li{
   text-indent: 24px;
   font-size: 13px;
   
-  background: url(images/sina.png) no-repeat;
+  background: url(../img/sina.png) no-repeat;
   margin-right: 32px;
   margin-top: 13px;
   height: 20px;
@@ -54,7 +54,7 @@ html, body, p, ul, li{
 }
 
 .edit-btn{
-  background: url(images/edit_button_normal.png) no-repeat;
+  background: url(../img/edit_button_normal.png) no-repeat;
   display: inline-block;
   cursor: pointer;
   text-indent: -9999px;
@@ -63,11 +63,11 @@ html, body, p, ul, li{
 }
 
 .edit-btn:hover{
-  background: url(images/edit_button_hover.png) no-repeat;
+  background: url(../img/edit_button_hover.png) no-repeat;
 }
 
 .del-btn{
-  background: url(images/delete_button_normal.png) no-repeat;
+  background: url(../img/delete_button_normal.png) no-repeat;
   display: inline-block;
   cursor: pointer;
   text-indent: -9999px;
@@ -76,11 +76,11 @@ html, body, p, ul, li{
 }
 
 .del-btn:hover{
-  background: url(images/delete_button_hover.png) no-repeat;
+  background: url(../img/delete_button_hover.png) no-repeat;
 }
 
 .add-btn{
-  background: url(images/add_button_normal.png) no-repeat;
+  background: url(../img/add_button_normal.png) no-repeat;
   display: inline-block;
   width: 132px;
   height: 132px;
@@ -90,7 +90,7 @@ html, body, p, ul, li{
 }
 
 .add-btn:hover{
-  background: url(images/add_button_hover.png) no-repeat;
+  background: url(../img/add_button_hover.png) no-repeat;
 }
 
 .add-btn span{
@@ -102,11 +102,11 @@ html, body, p, ul, li{
   display: inline-block;
   width: 1px;
   height: 20px;
-  background: url(images/separate_line.png);
+  background: url(../img/separate_line.png);
 }
 
 .completed{
-  background: url(images/completed.png) no-repeat;
+  background: url(../img/completed.png) no-repeat;
   background-position-y: 4px;
   padding-left: 16px;
 }
@@ -203,4 +203,78 @@ html, body, p, ul, li{
 div.table-container {
     display: inline-block;
     width: 100%;
+}
+
+.nav{
+  margin:20px 0;
+}
+
+.form-table{
+  width: 100%;
+  background-color: white;
+}
+
+.form-table .input-append, .input-prepend, input, select, textarea{
+  margin-bottom: 0 !important;
+}
+
+.form-table input[type="text"], textarea{
+  width: 60% !important;
+}
+
+.form-table input[type="file"]{
+  line-height: 20px;
+  text-align: center;
+}
+
+.form-table tr{
+  border: 1px solid #e3e3e3;
+  vertical-align: middle;
+}
+
+.form-table th{
+  width: 15%;
+  text-align: left;
+  padding-left: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.form-table td{
+  border: 0px;
+  text-align: left;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.btn-cancel{
+  background: url(../img/cancel_button_normal.png) no-repeat;
+  width: 125px;
+  height: 43px;
+}
+
+.btn-cancel:hover{
+  background: url(../img/cancel_button_hover.png) no-repeat;
+}
+
+.btn-cancel:active{
+  background: url(../img/cancel_button_pressed.png) no-repeat;
+}
+
+.btn-save{
+  background: url(../img/save_button_normal.png) no-repeat;
+  width: 125px;
+  height: 43px;
+}
+
+.btn-save:hover{
+  background: url(../img/save_button_hover.png) no-repeat;
+}
+
+.btn-save:active{
+  background: url(../img/save_button_pressed.png) no-repeat;
+}
+
+.errorlist{
+  color:red;
 }

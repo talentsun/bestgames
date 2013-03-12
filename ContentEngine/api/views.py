@@ -4,7 +4,6 @@ import os
 
 from django.template import loader,Context
 from django.http import HttpResponse
-from api.models import HotGamesView, HotGamesRedierView
 from sina.sinaAuth import SinaAuth
 from django.http import HttpResponseRedirect
 from django.template import RequestContext
@@ -13,27 +12,29 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.core.urlresolvers import reverse
 from django.contrib.auth import authenticate,login
 from django.shortcuts import render
-from api.tables import HotGamesTable,GameRediersTable
+
+from api.models import Game, Redier
+from api.tables import GameTable, RedierTable
+from api.forms import GameForm, RedierForm
 
 import django_tables2 as tables
-from django_tables2 import RequestConfig
 
-def HotGamesViewFunc(request):
-    hotgames = HotGamesTable(HotGamesView.objects.all(),prefix="hg-")
-    hotgames.paginate(page=request.GET.get("hg-page",1), per_page=10)
-    hotgames.data.verbose_name = u"精品游戏推荐"
+def index(request):
+    games = GameTable(Game.objects.all(),prefix="hg-")
+    games.paginate(page=request.GET.get("hg-page",1), per_page=10)
+    games.data.verbose_name = u"精品游戏推荐"
 
-    gamerediers = GameRediersTable(HotGamesRedierView.objects.all(),prefix="gr-")
-    gamerediers.paginate(page=request.GET.get("gr-page",1), per_page=10)
-    gamerediers.data.verbose_name = u"小兵变大咖"
+    rediers = RedierTable(Redier.objects.all(),prefix="gr-")
+    rediers.paginate(page=request.GET.get("gr-page",1), per_page=10)
+    rediers.data.verbose_name = u"小兵变大咖"
 
-    return render(request, "index.html", {"hotgames": hotgames, "gamerediers":gamerediers})
+    return render(request, "index.html", {"games": games, "rediers":rediers})
 
-def Auth(request):
+def auth(request):
     auth = SinaAuth()
     return HttpResponseRedirect(auth.getAuthorizeUrl())
 
-def Sinalogin(request):
+def sina_login(request):
     code = request.GET.get('code')
     print code
     auth = SinaAuth()
@@ -41,8 +42,6 @@ def Sinalogin(request):
     if auth is None:
         return HttpResponseRedirect("www.bestgames7.com")
     else:
-#        user.backend='django.contrib.auth.backends.ModelBackend'
-#        login(request, user)
         username = 'admin'
         password = 'admin'
         user = authenticate(username=username, password=password)
@@ -52,12 +51,22 @@ def Sinalogin(request):
                 print 'login success'
                 return HttpResponseRedirect("http://127.0.0.1/hotgames")
 
+def add_rediers(request):
+    form = RedierForm()
+    return render(request, "add_rediers.html", { "form": form })
 
-@staff_member_required
-def report(request):
-    return render_to_response(
-        "admin/hotgamesadmin.html",
-        {'book_list' : HotGamesView.objects.all()},
-        RequestContext(request, {}),
-    )
+def add_games(request):
+    if request.method == "POST":
+        form = GameForm(request.POST)
+        print 'save'
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/completed')
+
+    else:
+        form = GameForm()
+    return render(request, "add_hotgames.html", { "form" : form })
+
+def completed(request):
+    return render(request, "completed.html")
 

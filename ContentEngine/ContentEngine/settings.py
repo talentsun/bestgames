@@ -13,7 +13,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'content_entity',                      # Or path to database file if using sqlite3.
+        'NAME': 'content_engine',                      # Or path to database file if using sqlite3.
         'USER': 'root',                      # Not used with sqlite3.
         'PASSWORD': 'nameLR9969',                  # Not used with sqlite3.
         'HOST': '118.244.225.222',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -48,31 +48,28 @@ USE_TZ = False
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = '/Users/bridge/Documents/workspace/bestgames'
+MEDIA_ROOT = '/Users/bridge/Documents/workspace/bestgames/ContentEngine/media'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
 #MEDIA_URL = 'http://localhost:8080/game/'
-MEDIA_URL = 'http://cow.bestgames7.com/game/'
+MEDIA_URL = 'http://127.0.0.1:8000/media/'
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = ''
+STATIC_ROOT = '/Users/bridge/Documents/workspace/bestgames/ContentEngine/templates'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = 'http://127.0.0.1/static/'
-
-STATIC_PATH = '/Users/bridge/Documents/workspace/bestgames/ContentEngine/templates'
+STATIC_URL = 'http://127.0.0.1:8000/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    '/Users/huwei/PycharmProjects/ContentEntity/templates',
 )
 
 # List of finder classes that know how to find static files in
@@ -122,12 +119,17 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'django_tables2',
+    'taggit',
+    'datetimewidget',
+    'taggit_autocomplete',
     'api',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
-    'django.contrib.auth.context_processors.auth'
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.static',
+    'django.core.context_processors.media'
 )
 
 # A sample logging configuration. The only tangible logging
