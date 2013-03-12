@@ -4,10 +4,21 @@
   <title>添加精品游戏推荐</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/style.css"></link>
-  <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet" type="text/css"/>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.9.1.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/add_games.js"></script>
+  <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('#cancel').click(function(){
+        window.close();
+        return false;
+      });
+      $('#save').click(function(){
+        $('#add_games_form').submit();
+        return false;
+      });
+    });
+  </script>
   {{ form.media }}
 </head>
 <body>

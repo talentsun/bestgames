@@ -21,7 +21,7 @@ class GameTable(tables.Table):
     timestamp = DateTimeColumn(orderable=True)
     status = TemplateColumn(template_name="sync_status_field.html",orderable=False,verbose_name="同步状态")
     tags = TagColumn(orderable=False,attrs={"class":"tags"})
-    ops = TemplateColumn(template_name="hotgames_field_ops.html",verbose_name="操作",orderable=False,attrs={"class":"ops"})
+    ops = TemplateColumn(template_name="games_field_ops.html",verbose_name="操作",orderable=False,attrs={"class":"ops"})
     
     class Meta:
         model = Game
@@ -38,7 +38,7 @@ class RedierTable(tables.Table):
     timestamp = DateTimeColumn(orderable=True)
     status = TemplateColumn(template_name="sync_status_field.html",orderable=False,verbose_name="同步状态")
     tags = tables.Column(orderable=False,attrs={"class":"tags"})
-    ops = TemplateColumn(template_name="gamerediers_field_ops.html",verbose_name="操作",orderable=False,attrs={"class":"ops"})
+    ops = TemplateColumn(template_name="rediers_field_ops.html",verbose_name="操作",orderable=False,attrs={"class":"ops"})
 
     class Meta:
         model = Redier

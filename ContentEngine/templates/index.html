@@ -5,8 +5,19 @@
   <title>内容引擎</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/style.css"></link>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.9.1.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/index.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('#add_hotgames').click(function(){
+        window.open('/games/add/', '添加精品游戏推荐');
+        return false;
+      });
+      $('#add_gamerediers').click(function(){
+        window.open('/rediers/add/', '添加小兵变大咖');
+        return false;
+      });
+    });
+  </script>
 </head>
 <body>
    <div class="main">

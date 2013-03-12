@@ -65,7 +65,7 @@ def add_games(request):
 
     else:
         form = GameForm()
-    return render(request, "add_hotgames.html", { "form" : form })
+    return render(request, "add_games.html", { "form" : form })
 
 def completed(request):
     return render(request, "completed.html")
