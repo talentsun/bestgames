@@ -10,5 +10,5 @@ urlpatterns = patterns('',
     url(r'^rediers/add',add_rediers),
     url(r'^games/add',add_games),
     url(r'^completed',completed),
-    url(r'^game/delete',delete_game)
+    url(r'^game/(\d)/delete',delete_game)
 )

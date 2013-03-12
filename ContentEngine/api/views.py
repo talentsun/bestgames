@@ -67,13 +67,10 @@ def add_games(request):
         form = GameForm()
     return render(request, "add_games.html", { "form" : form })
 
-def delete_game(request):
-    if request.method == "GET":
-        game_id = request.GET.get("game_id")
-        print game_id
-
-        game = Game.objects.get(entity_ptr_id=game_id)
-        game.delete()
+def delete_game(request,game_id):
+    print game_id
+    game = Game.objects.get(entity_ptr_id=game_id)
+    game.delete()
 
     return HttpResponseRedirect("http://cow.bestgames7.com/")
 
