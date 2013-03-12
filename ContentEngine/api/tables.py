@@ -32,7 +32,7 @@ class GameTable(tables.Table):
 
 class RedierTable(tables.Table):
     id = tables.Column(orderable=False, visible=False)
-    name = tables.Column(orderable=False)
+    name = tables.Column(accessor="game.name",orderable=False)
     toll_gate = tables.Column(orderable=False)
     presenter = tables.Column(orderable=False)
     timestamp = DateTimeColumn(orderable=True)
