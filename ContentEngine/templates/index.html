@@ -5,8 +5,10 @@
   <title>内容引擎</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/style.css"></link>
+  <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css"></link>
   <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
   <script src="{{ STATIC_URL }}js/jquery.js"></script>
+  <script type="text/javascript" src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
   <script type="text/javascript">
     $(document).ready(function(){
       $('#add_game').click(function(){
@@ -16,6 +18,28 @@
       $('#add_redier').click(function(){
         window.location.href = '/rediers/add/';
         return false;
+      });
+      $("#dialog").dialog({
+        autoOpen: false,
+        modal: true,
+        dialogClass: 'no-close'
+      });
+      $(".del-btn").click(function(e) {
+        e.preventDefault();
+        var targetUrl = $(this).attr("href");
+
+        $("#dialog").dialog({
+          buttons : {
+            "删除" : function() {
+              window.location.href = targetUrl;
+            },
+            "取消" : function() {
+              $(this).dialog("close");
+            }
+          }
+        });
+
+        $("#dialog").dialog("open");
       });
     });
   </script>
@@ -50,5 +74,8 @@
            </div>
         </div>
      </div>
+   </div>
+   <div id="dialog" title="确认删除？">
+    <span style="margin:16px;">请三思而后行啊！你删除了其他人也看不见了！</span>
    </div>
 </body>
