@@ -12,7 +12,10 @@ class RedierForm(ModelForm):
 
 class GameForm(ModelForm):
 	category = forms.ModelChoiceField(queryset=Category.objects.all(), empty_label=u"选择分类", label=u"分类")
-	timestamp = forms.DateTimeField(label=u"同步时间",widget=DateTimeWidget)
+	weibo_sync_timestamp = forms.DateTimeField(label=u"微博同步时间",widget=DateTimeWidget(options={
+		'autoclose' : 'true',
+		'showMeridian' : 'true'
+		}))
 
 	class Meta:
 		model = Game
@@ -28,8 +31,7 @@ class GameForm(ModelForm):
 			'screenshot_path_3', 
 			'screenshot_path_4', 
 			'screenshot_path_5', 
-			'sync_weibo',
-			'timestamp',
+			'weibo_sync_timestamp',
 			'presenter',
 			'rating',
 			'recommended_reason')
