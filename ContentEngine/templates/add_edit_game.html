@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>添加精品游戏推荐</title>
+  <title>添加/编辑精品游戏推荐</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/style.css"></link>
   <link href="{{ STATIC_URL }}ajax_upload/css/ajax-upload-widget.css" rel="stylesheet" type="text/css"/>
@@ -42,7 +42,7 @@
      </div>
      <div class="content">
       <div class="nav">
-        <span><a href="/" target="_self">内容引擎</a> > 添加精品游戏推荐</span>
+        <span><a href="/" target="_self">内容引擎</a> > 添加/编辑精品游戏推荐</span>
       </div>
       <form id="add_games_form" action="" method="post" enctype="multipart/form-data"> {% csrf_token %}
         {{ form.name_of_field.errors }}
