@@ -13,6 +13,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth import authenticate,login
 from django.shortcuts import get_object_or_404, render, redirect
 from taggit.models import Tag
+from django.conf import settings
 
 from api.models import Game, Redier
 from api.tables import GameTable, RedierTable
@@ -66,12 +67,30 @@ def add_edit_game(request, game_id=None):
         form = GameForm(request.POST, request.FILES,instance=game)
         if form.is_valid():
             game = form.save()
-            game.icon = request.POST['icon']
-            game.screenshot_path_1 = request.POST['screenshot_path_1']
-            game.screenshot_path_2 = request.POST['screenshot_path_2']
-            game.screenshot_path_3 = request.POST['screenshot_path_3']
-            game.screenshot_path_4 = request.POST['screenshot_path_4']
-            game.screenshot_path_5 = request.POST['screenshot_path_5']
+            if request.POST['icon']:
+                game.icon = request.POST['icon'].replace(settings.MEDIA_URL, '', 1)
+            else:
+                game.icon = request.POST['icon']
+            if request.POST['screenshot_path_1']:
+                game.screenshot_path_1 = request.POST['screenshot_path_1'].replace(settings.MEDIA_URL, '', 1)
+            else:
+                game.screenshot_path_1 = request.POST['screenshot_path_1']
+            if request.POST['screenshot_path_2']:
+                game.screenshot_path_2 = request.POST['screenshot_path_2'].replace(settings.MEDIA_URL, '', 1)
+            else:
+                game.screenshot_path_2 = request.POST['screenshot_path_2']
+            if request.POST['screenshot_path_3']:
+                game.screenshot_path_3 = request.POST['screenshot_path_3'].replace(settings.MEDIA_URL, '', 1)
+            else:
+                game.screenshot_path_3 = request.POST['screenshot_path_3']
+            if request.POST['screenshot_path_4']:
+                game.screenshot_path_4 = request.POST['screenshot_path_4'].replace(settings.MEDIA_URL, '', 1)
+            else:
+                game.screenshot_path_4 = request.POST['screenshot_path_4']
+            if request.POST['screenshot_path_5']:
+                game.screenshot_path_5 = request.POST['screenshot_path_5'].replace(settings.MEDIA_URL, '', 1)
+            else:
+                game.screenshot_path_5 = request.POST['screenshot_path_5']
             game.save()
             return HttpResponseRedirect('/')
 
