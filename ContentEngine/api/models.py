@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.utils.encoding import force_unicode
-from taggit_autocomplete.managers import TaggableManager
+from taggit.managers import TaggableManager
 
 class Entity(models.Model):
     GAME = 1

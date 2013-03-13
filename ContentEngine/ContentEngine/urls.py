@@ -19,7 +19,7 @@ urlpatterns = patterns('',
     url(r'site/','site/'),
     url(r'^static/(?P<path>.*)$','django.views.static.serve',{'document_root': settings.STATIC_ROOT}),
     url(r'^media/(?P<path>.*)$','django.views.static.serve',{'document_root': settings.MEDIA_ROOT}),
-    url(r'^taggit_autocomplete/', include('taggit_autocomplete.urls')),
+    url(r'^ajax-upload/', include('ajax_upload.urls')),
     url(r'',include('api.urls'))
 )
 

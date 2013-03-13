@@ -12,6 +12,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.core.urlresolvers import reverse
 from django.contrib.auth import authenticate,login
 from django.shortcuts import render
+from taggit.models import Tag
 
 from api.models import Game, Redier
 from api.tables import GameTable, RedierTable
@@ -65,7 +66,7 @@ def add_games(request):
 
     else:
         form = GameForm()
-    return render(request, "add_games.html", { "form" : form })
+    return render(request, "add_games.html", { "form" : form, "tags" : Tag.objects.all() })
 
 def delete_game(request,game_id):
     print game_id

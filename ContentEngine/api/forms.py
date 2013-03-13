@@ -3,6 +3,7 @@ from django.db import models
 from django import forms
 from django.forms import ModelForm
 from datetimewidget.widgets import DateTimeWidget
+from ajax_upload.widgets import AjaxClearableFileInput
 
 from api.models import Redier, Game, Category
 
@@ -16,6 +17,7 @@ class GameForm(ModelForm):
 		'autoclose' : 'true',
 		'showMeridian' : 'true'
 		}))
+	icon = forms.ImageField(label=u"图表", widget=AjaxClearableFileInput)
 
 	class Meta:
 		model = Game

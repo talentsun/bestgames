@@ -121,7 +121,7 @@ INSTALLED_APPS = (
     'django_tables2',
     'taggit',
     'datetimewidget',
-    'taggit_autocomplete',
+    'ajax_upload',
     'api',
 )
 
