@@ -12,7 +12,7 @@ class GameTable(tables.Table):
     id = tables.Column(orderable=False, visible=False)
     name = tables.Column(orderable=False)
     presenter = tables.Column(orderable=False)
-    sync_weibo_timestamp = DateTimeColumn(verbose_name=u"微博同步时间",orderable=True)
+    weibo_sync_timestamp = DateTimeColumn(verbose_name=u"微博同步时间",orderable=True)
     status = TemplateColumn(template_name="sync_status_field.html",orderable=False,verbose_name=u"同步状态")
     tags = TagColumn(orderable=False,attrs={"class":"tags"})
     ops = TemplateColumn(template_name="game_field_ops.html",verbose_name=u"操作",orderable=False,attrs={"class":"ops"})
@@ -21,15 +21,15 @@ class GameTable(tables.Table):
         model = Game
         order_by = "-timestamp"
         empty_text = u"暂无精品游戏推荐"
-        fields = ("name","presenter","sync_weibo_timestamp","status","tags","ops")
-        sequence = ("name","presenter","sync_weibo_timestamp","status","tags","ops")
+        fields = ("name","presenter","weibo_sync_timestamp","status","tags","ops")
+        sequence = ("name","presenter","weibo_sync_timestamp","status","tags","ops")
 
 class RedierTable(tables.Table):
     id = tables.Column(orderable=False, visible=False)
     name = tables.Column(accessor="game.name",orderable=False)
     toll_gate = tables.Column(orderable=False)
     presenter = tables.Column(orderable=False)
-    sync_weibo_timestamp = DateTimeColumn(verbose_name=u"微博同步时间",orderable=True)
+    weibo_sync_timestamp = DateTimeColumn(verbose_name=u"微博同步时间",orderable=True)
     status = TemplateColumn(template_name="sync_status_field.html",orderable=False,verbose_name=u"同步状态")
     tags = tables.Column(orderable=False,attrs={"class":"tags"})
     ops = TemplateColumn(template_name="redier_field_ops.html",verbose_name=u"操作",orderable=False,attrs={"class":"ops"})
@@ -38,5 +38,5 @@ class RedierTable(tables.Table):
         model = Redier
         order_by = "-timestamp"
         empty_text = u"暂无小兵变大咖"
-        fields = ("name","toll_gate", "presenter","sync_weibo_timestamp","status","tags","ops")
-        sequence = ("name","toll_gate", "presenter","sync_weibo_timestamp","status","tags","ops")
+        fields = ("name","toll_gate", "presenter","weibo_sync_timestamp","status","tags","ops")
+        sequence = ("name","toll_gate", "presenter","weibo_sync_timestamp","status","tags","ops")
