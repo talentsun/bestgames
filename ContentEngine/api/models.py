@@ -39,6 +39,10 @@ class Entity(models.Model):
         db_table = u'entities'
     def __unicode__(self):
         return force_unicode(str(self.id))
+    def save(self, *args, **kwargs):
+        if self.weibo_sync_timestamp is not None:
+            self.status = Entity.STATUS_PENDING
+        super(Entity, self).save(args, kwargs)
 
 class Category(models.Model):
     name = models.CharField(u"名称",max_length=100)

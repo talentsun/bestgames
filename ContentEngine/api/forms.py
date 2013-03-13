@@ -4,6 +4,7 @@ from django import forms
 from django.forms import ModelForm
 from datetimewidget.widgets import DateTimeWidget
 from ajax_upload.widgets import AjaxClearableFileInput
+from datetime import datetime
 
 from api.models import Redier, Game, Category
 
@@ -41,6 +42,7 @@ class GameForm(ModelForm):
 			'screenshot_path_5' : AjaxClearableFileInput(),
 			'weibo_sync_timestamp' : DateTimeWidget(options={
 				'autoclose' : 'true',
-				'showMeridian' : 'true'
+				'showMeridian' : 'true',
+				'startDate' : datetime.today().strftime('%Y-%m-%d %H:%M:%S')
 				})
 		}
