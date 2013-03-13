@@ -9,7 +9,7 @@ class Entity(models.Model):
     type = models.IntegerField(verbose_name=u'类型', default=GAME, editable=False)
     tags = TaggableManager(verbose_name=u"标签")
 
-    weibo_sync_timestamp = models.DateTimeField(verbose_name=u"微博同步时间",blank=True)
+    weibo_sync_timestamp = models.DateTimeField(verbose_name=u"微博同步时间",blank=True, null=True)
     STATUS_DO_NOT_SYNC =  0
     STATUS_PENDING = 1
     STATUS_COMPLETED = 2
@@ -55,19 +55,20 @@ class Game(Entity):
     android_download_url = models.URLField(u"安卓下载地址", max_length=255, blank=True)
     iOS_download_url = models.URLField(u"苹果下载地址", max_length=255, blank=True)
     category = models.ForeignKey(Category, verbose_name='分类')
-    screenshot_path_1 = models.ImageField(u"截图1", upload_to='upload/')
-    screenshot_path_2 = models.ImageField(u"截图2", upload_to='upload/')
-    screenshot_path_3 = models.ImageField(u"截图3", upload_to='upload/')
-    screenshot_path_4 = models.ImageField(u"截图4", upload_to='upload/')
+    screenshot_path_1 = models.ImageField(u"截图1", upload_to='upload/', blank=True)
+    screenshot_path_2 = models.ImageField(u"截图2", upload_to='upload/', blank=True)
+    screenshot_path_3 = models.ImageField(u"截图3", upload_to='upload/', blank=True)
+    screenshot_path_4 = models.ImageField(u"截图4", upload_to='upload/', blank=True)
     screenshot_path_5 = models.ImageField(u"截图5", upload_to='upload/', blank=True)
 
     def __unicode__(self):
         return force_unicode(self.name)
     class Meta:
         db_table = u'games'
-        verbose_name = u'游戏'
+        verbose_name = u'精品游戏推荐'
+        verbose_name_plural = u'精品游戏推荐'
     def save(self, *args, **kwargs):
-        self.type.default = GAME
+        self.type = Entity.GAME
         super(Game, self).save(args, kwargs)
 
 class Redier(Entity):
@@ -79,6 +80,7 @@ class Redier(Entity):
     class Meta:
         db_table = u'rediers'
         verbose_name = u'小兵变大咖'
+        verbose_name_plural = u'小兵变大咖'
     def save(self, *args, **kwargs):
-        self.type.default = REDIER
+        self.type = Entity.REDIER
         super(Redier, self).save(args, kwargs)

@@ -15,7 +15,7 @@ class GameTable(tables.Table):
     sync_weibo_timestamp = DateTimeColumn(verbose_name=u"微博同步时间",orderable=True)
     status = TemplateColumn(template_name="sync_status_field.html",orderable=False,verbose_name=u"同步状态")
     tags = TagColumn(orderable=False,attrs={"class":"tags"})
-    ops = TemplateColumn(template_name="games_field_ops.html",verbose_name=u"操作",orderable=False,attrs={"class":"ops"})
+    ops = TemplateColumn(template_name="game_field_ops.html",verbose_name=u"操作",orderable=False,attrs={"class":"ops"})
     
     class Meta:
         model = Game
@@ -32,7 +32,7 @@ class RedierTable(tables.Table):
     sync_weibo_timestamp = DateTimeColumn(verbose_name=u"微博同步时间",orderable=True)
     status = TemplateColumn(template_name="sync_status_field.html",orderable=False,verbose_name=u"同步状态")
     tags = tables.Column(orderable=False,attrs={"class":"tags"})
-    ops = TemplateColumn(template_name="rediers_field_ops.html",verbose_name=u"操作",orderable=False,attrs={"class":"ops"})
+    ops = TemplateColumn(template_name="redier_field_ops.html",verbose_name=u"操作",orderable=False,attrs={"class":"ops"})
 
     class Meta:
         model = Redier

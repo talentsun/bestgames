@@ -13,11 +13,6 @@ class RedierForm(ModelForm):
 
 class GameForm(ModelForm):
 	category = forms.ModelChoiceField(queryset=Category.objects.all(), empty_label=u"选择分类", label=u"分类")
-	weibo_sync_timestamp = forms.DateTimeField(label=u"微博同步时间",widget=DateTimeWidget(options={
-		'autoclose' : 'true',
-		'showMeridian' : 'true'
-		}))
-	icon = forms.ImageField(label=u"图表", widget=AjaxClearableFileInput)
 
 	class Meta:
 		model = Game
@@ -37,3 +32,15 @@ class GameForm(ModelForm):
 			'presenter',
 			'rating',
 			'recommended_reason')
+		widgets = {
+			'icon' : AjaxClearableFileInput(),
+			'screenshot_path_1' : AjaxClearableFileInput(),
+			'screenshot_path_2' : AjaxClearableFileInput(),
+			'screenshot_path_3' : AjaxClearableFileInput(),
+			'screenshot_path_4' : AjaxClearableFileInput(),
+			'screenshot_path_5' : AjaxClearableFileInput(),
+			'weibo_sync_timestamp' : DateTimeWidget(options={
+				'autoclose' : 'true',
+				'showMeridian' : 'true'
+				})
+		}

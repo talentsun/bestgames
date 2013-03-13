@@ -11,7 +11,7 @@ from django.shortcuts import render_to_response
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.urlresolvers import reverse
 from django.contrib.auth import authenticate,login
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render, redirect
 from taggit.models import Tag
 
 from api.models import Game, Redier
@@ -41,7 +41,7 @@ def sina_login(request):
     auth = SinaAuth()
     print auth.getToken(code)
     if auth is None:
-        return HttpResponseRedirect("www.bestgames7.com")
+        return HttpResponseRedirect("/")
     else:
         username = 'admin'
         password = 'admin'
@@ -50,30 +50,41 @@ def sina_login(request):
             if user.is_active:
                 login(request, user)
                 print 'login success'
-                return HttpResponseRedirect("http://127.0.0.1/hotgames")
+                return HttpResponseRedirect("/")
 
 def add_rediers(request):
     form = RedierForm()
-    return render(request, "add_rediers.html", { "form": form })
+    return render(request, "add_edit_redier.html", { "form": form })
 
-def add_games(request):
+def add_edit_game(request, game_id=None):
+    if game_id:
+        game = get_object_or_404(Game, entity_ptr_id=game_id)
+    else:
+        game = None
+
     if request.method == "POST":
-        form = GameForm(request.POST)
-        print 'save'
+        form = GameForm(request.POST, request.FILES,instance=game)
         if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/completed')
+            game = form.save()
+            game.icon = request.POST['icon']
+            game.screenshot_path_1 = request.POST['screenshot_path_1']
+            game.screenshot_path_2 = request.POST['screenshot_path_2']
+            game.screenshot_path_3 = request.POST['screenshot_path_3']
+            game.screenshot_path_4 = request.POST['screenshot_path_4']
+            game.screenshot_path_5 = request.POST['screenshot_path_5']
+            game.save()
+            return HttpResponseRedirect('/')
 
     else:
-        form = GameForm()
-    return render(request, "add_games.html", { "form" : form, "tags" : Tag.objects.all() })
+        form = GameForm(instance=game)
+    return render(request, "add_edit_game.html", { "form" : form, "tags" : Tag.objects.all() })
 
-def delete_game(request,game_id):
-    print game_id
-    game = Game.objects.get(entity_ptr_id=game_id)
-    game.delete()
-
-    return HttpResponseRedirect("http://cow.bestgames7.com/")
+def delete_game(request, game_id=None):
+    if game_id:
+        game = get_object_or_404(Game, entity_ptr_id=game_id)
+        if game is not None:
+            game.delete()
+            return HttpResponseRedirect("/")
 
 def completed(request):
     return render(request, "completed.html")

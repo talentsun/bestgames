@@ -1,14 +1,14 @@
 __author__ = 'huwei'
 
 from django.conf.urls.defaults import *
-from api.views import index,auth,sina_login,add_rediers,add_games,completed,delete_game
 
-urlpatterns = patterns('',
-    url(r'^$',index),
-    url(r'^auth$',auth),
-    url(r'^login$',sina_login),
-    url(r'^rediers/add',add_rediers),
-    url(r'^games/add',add_games),
-    url(r'^completed',completed),
-    url(r'^games/(\d)/delete',delete_game)
+urlpatterns = patterns('api.views',
+    url(r'^$','index'),
+    url(r'^auth$','auth'),
+    url(r'^login$','sina_login'),
+    url(r'^rediers/add','add_rediers'),
+    url(r'^games/add','add_edit_game'),
+    url(r'^games/(?P<game_id>\d+)/edit','add_edit_game'),
+    url(r'^games/(?P<game_id>\d+)/delete','delete_game'),
+    url(r'^completed','completed'),
 )

@@ -9,12 +9,12 @@
   <script src="{{ STATIC_URL }}js/jquery.js"></script>
   <script type="text/javascript">
     $(document).ready(function(){
-      $('#add_hotgames').click(function(){
-        window.open('/games/add/', '添加精品游戏推荐');
+      $('#add_game').click(function(){
+        window.location.href = '/games/add/';
         return false;
       });
-      $('#add_gamerediers').click(function(){
-        window.open('/rediers/add/', '添加小兵变大咖');
+      $('#add_redier').click(function(){
+        window.location.href = '/rediers/add/';
         return false;
       });
     });
@@ -28,10 +28,10 @@
      </div>
      <div class="content">
         <div class="addor">
-            <div id="add_hotgames" class="add-btn">
+            <div id="add_game" class="add-btn">
               <span>精品游戏推荐</span>
             </div>
-            <div id="add_gamerediers" class="add-btn">
+            <div id="add_redier" class="add-btn">
               <span>小兵变大咖</span>
             </div>
         </div>

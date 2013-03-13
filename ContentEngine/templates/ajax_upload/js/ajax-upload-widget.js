@@ -39,6 +39,7 @@
 
         // Initialize preview area and action buttons
         this.$previewArea = $('<div class="'+this.options.previewAreaClass+'"></div>');
+        this.$previewArea.hide();
         this.$element.before(this.$previewArea);
 
         // Listen for when a file is selected, and perform upload
