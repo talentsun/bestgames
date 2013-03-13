@@ -55,10 +55,10 @@ class Game(Entity):
     android_download_url = models.URLField(u"安卓下载地址", max_length=255, blank=True)
     iOS_download_url = models.URLField(u"苹果下载地址", max_length=255, blank=True)
     category = models.ForeignKey(Category, verbose_name='分类')
-    screenshot_path_1 = models.ImageField(u"截图1", upload_to='upload/', blank=True)
-    screenshot_path_2 = models.ImageField(u"截图2", upload_to='upload/', blank=True)
-    screenshot_path_3 = models.ImageField(u"截图3", upload_to='upload/', blank=True)
-    screenshot_path_4 = models.ImageField(u"截图4", upload_to='upload/', blank=True)
+    screenshot_path_1 = models.ImageField(u"截图1", upload_to='upload/')
+    screenshot_path_2 = models.ImageField(u"截图2", upload_to='upload/')
+    screenshot_path_3 = models.ImageField(u"截图3", upload_to='upload/')
+    screenshot_path_4 = models.ImageField(u"截图4", upload_to='upload/')
     screenshot_path_5 = models.ImageField(u"截图5", upload_to='upload/', blank=True)
 
     def __unicode__(self):
