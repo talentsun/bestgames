@@ -27,16 +27,16 @@ class GameTable(tables.Table):
 class RedierTable(tables.Table):
     id = tables.Column(orderable=False, visible=False)
     name = tables.Column(accessor="game.name",orderable=False)
-    toll_gate = tables.Column(orderable=False)
+    description = tables.Column(orderable=False)
     presenter = tables.Column(orderable=False)
     weibo_sync_timestamp = DateTimeColumn(verbose_name=u"微博同步时间",orderable=True)
     status = TemplateColumn(template_name="sync_status_field.html",orderable=False,verbose_name=u"同步状态")
-    tags = tables.Column(orderable=False,attrs={"class":"tags"})
+    tags = TagColumn(orderable=False,attrs={"class":"tags"})
     ops = TemplateColumn(template_name="redier_field_ops.html",verbose_name=u"操作",orderable=False,attrs={"class":"ops"})
 
     class Meta:
         model = Redier
         order_by = "-timestamp"
         empty_text = u"暂无小兵变大咖"
-        fields = ("name","toll_gate", "presenter","weibo_sync_timestamp","status","tags","ops")
-        sequence = ("name","toll_gate", "presenter","weibo_sync_timestamp","status","tags","ops")
+        fields = ("name","description", "presenter","weibo_sync_timestamp","status","tags","ops")
+        sequence = ("name","description", "presenter","weibo_sync_timestamp","status","tags","ops")

@@ -9,8 +9,25 @@ from datetime import datetime
 from api.models import Redier, Game, Category
 
 class RedierForm(ModelForm):
+	game = forms.ModelChoiceField(queryset=Game.objects.all(), empty_label=u"选择游戏", label=u"游戏")
+
 	class Meta:
 		model = Redier
+		fields = ('game',
+			'description', 
+			'redier_image',
+			'tags',
+			'weibo_sync_timestamp',
+			'presenter',
+			'rating',
+			'recommended_reason')
+		widgets = {
+			'redier_image' : AjaxClearableFileInput(),
+			'weibo_sync_timestamp' : DateTimeWidget(options={
+				'autoclose' : 'true',
+				'showMeridian' : 'true',
+				'startDate' : datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+				})}
 
 class GameForm(ModelForm):
 	category = forms.ModelChoiceField(queryset=Category.objects.all(), empty_label=u"选择分类", label=u"分类")

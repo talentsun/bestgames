@@ -50,15 +50,15 @@ class Category(models.Model):
 
 class Game(Entity):
     name = models.CharField(u"名称", max_length=100)
-    icon = models.ImageField(u"图标", upload_to='upload/', blank=True)
+    icon = models.ImageField(u"图标", upload_to='upload/', max_length=255, blank=True)
     description = models.TextField(u"描述")
     android_download_url = models.URLField(u"安卓下载地址", max_length=255, blank=True)
     iOS_download_url = models.URLField(u"苹果下载地址", max_length=255, blank=True)
     category = models.ForeignKey(Category, verbose_name='分类')
-    screenshot_path_1 = models.ImageField(u"截图1", upload_to='upload/', blank=True)
-    screenshot_path_2 = models.ImageField(u"截图2", upload_to='upload/', blank=True)
-    screenshot_path_3 = models.ImageField(u"截图3", upload_to='upload/', blank=True)
-    screenshot_path_4 = models.ImageField(u"截图4", upload_to='upload/', blank=True)
+    screenshot_path_1 = models.ImageField(u"截图1", upload_to='upload/', max_length=255, blank=True)
+    screenshot_path_2 = models.ImageField(u"截图2", upload_to='upload/', max_length=255, blank=True)
+    screenshot_path_3 = models.ImageField(u"截图3", upload_to='upload/', max_length=255, blank=True)
+    screenshot_path_4 = models.ImageField(u"截图4", upload_to='upload/', max_length=255, blank=True)
 
     def __unicode__(self):
         return force_unicode(self.name)
@@ -74,9 +74,8 @@ class Game(Entity):
 
 class Redier(Entity):
     game = models.ForeignKey(Game, verbose_name='游戏')
-    summary = models.TextField(u"简介")
-    toll_gate = models.CharField(u"关卡", max_length=100)
-    path = models.ImageField(u"攻略", upload_to='upload/', blank=True)
+    description = models.CharField(u"描述", max_length=100)
+    redier_image = models.ImageField(u"攻略", upload_to='upload/', max_length=255, blank=True)
 
     class Meta:
         db_table = u'rediers'
@@ -84,4 +83,6 @@ class Redier(Entity):
         verbose_name_plural = u'小兵变大咖'
     def save(self, *args, **kwargs):
         self.type = Entity.REDIER
+        if self.weibo_sync_timestamp is not None:
+            self.status = Entity.STATUS_PENDING
         super(Redier, self).save(args, kwargs)

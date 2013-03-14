@@ -37,12 +37,37 @@ def logout(request):
 
 @login_required
 def add_edit_redier(request, redier_id=None):
-    form = RedierForm()
-    return render(request, "add_edit_redier.html", { "form": form })
+    if redier_id:
+        redier = get_object_or_404(Redier, entity_ptr_id=redier_id)
+    else:
+        redier = None
+
+    if request.method == "POST":
+        form = RedierForm(request.POST, request.FILES,instance=redier)
+        if form.is_valid():
+            redier = form.save()
+            if request.POST['redier_image']:
+                redier.redier_image = request.POST['redier_image'].replace(settings.MEDIA_URL, '', 1)
+            else:
+                redier.redier_image = request.POST['redier_image']
+            redier.save()
+            return redirect('/')
+
+    else:
+        if redier is None:
+            form = RedierForm(instance=redier, initial={'presenter' : request.user.username})
+        else:
+            form = RedierForm(instance=redier)
+        
+    return render(request, "add_edit_redier.html", { "form" : form, "tags" : Tag.objects.all() })
 
 @login_required
 def delete_redier(request, redier_id=None):
-    pass
+    if redier_id:
+        redier = get_object_or_404(Redier, entity_ptr_id=redier_id)
+        if redier is not None:
+            redier.delete()
+            return redirect("/")
 
 @login_required
 def add_edit_game(request, game_id=None):
@@ -79,7 +104,11 @@ def add_edit_game(request, game_id=None):
             return redirect('/')
 
     else:
-        form = GameForm(instance=game, initial={'presenter' : request.user.username})
+        if game is None:
+            form = GameForm(instance=game, initial={'presenter' : request.user.username})
+        else:
+            form = GameForm(instance=game)
+        
     return render(request, "add_edit_game.html", { "form" : form, "tags" : Tag.objects.all() })
 
 @login_required
@@ -88,5 +117,5 @@ def delete_game(request, game_id=None):
         game = get_object_or_404(Game, entity_ptr_id=game_id)
         if game is not None:
             game.delete()
-            return HttpResponseRedirect("/")
+            return redirect("/")
 
