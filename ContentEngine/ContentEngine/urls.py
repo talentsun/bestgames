@@ -15,12 +15,11 @@ urlpatterns = patterns('',
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'site/','site/'),
     url(r'^static/(?P<path>.*)$','django.views.static.serve',{'document_root': settings.STATIC_ROOT}),
     url(r'^media/(?P<path>.*)$','django.views.static.serve',{'document_root': settings.MEDIA_ROOT}),
     url(r'^ajax-upload/', include('ajax_upload.urls')),
-    url(r'',include('api.urls'))
+    url(r'', include('api.urls')),
+    url(r'', include('social_auth.urls')),
 )
 
 urlpatterns += staticfiles_urlpatterns()

@@ -6,10 +6,10 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta property="wb:webmaster" content="f0737ecc6d43a725" />
   <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/style.css"></link>
-  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jquery-ui-dialog-yellow/jquery-ui-1.10.1.custom.min.css"></link>
   <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
   <script src="{{ STATIC_URL }}js/jquery.js"></script>
-  <script type="text/javascript" src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+  <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+  <script src="{{ STATIC_URL }}js/bootbox.min.js"></script>
   <script type="text/javascript">
     $(document).ready(function(){
       $('#add_game').click(function(){
@@ -20,36 +20,54 @@
         window.location.href = '/rediers/add/';
         return false;
       });
-      $("#dialog").dialog({
-        autoOpen: false,
-        modal: true,
-        dialogClass: 'no-close'
-      });
+      
       $(".del-btn").click(function(e) {
         e.preventDefault();
         var targetUrl = $(this).attr("href");
 
-        $("#dialog").dialog({
-          buttons : {
-            "删除" : function() {
-              window.location.href = targetUrl;
-            },
-            "取消" : function() {
-              $(this).dialog("close");
-            }
+        bootbox.dialog("请三思而后行，你删除了之后其他人也看不见了>_<！",[{
+          "label": "删除",
+          "class": "btn-danger",
+          "callback": function(){
+            window.location.href = targetUrl;
           }
+        }, {
+          "label": "取消",
+          "class": "btn-inverse",
+        }], {
+          "header": "确定删除？"
         });
-
-        $("#dialog").dialog("open");
       });
+
+      {% if not user.is_authenticated %}
+        bootbox.dialog("使用新浪微博登录之后，才能进行添加、删除、编辑操作哦，亲",[{
+          "label": "新浪微博登录",
+          "class": "btn-primary",
+          "callback": function(){
+            window.location.href = "/login/weibo";
+          }
+        }, {
+          "label": "不登录了，随便看看",
+          "class": "btn-inverse",
+        }], {
+          "header": "新浪微博登录"
+        });
+      {% endif %}
     });
   </script>
 </head>
 <body>
-   <div class="main">
-     <div class="banner">
+  <div id="dialog-anchor"></div>
+  <div class="main">
+    <div class="banner">
         <div class="logo">每日精品游戏</div>
-        <div class="share"><a href="http://127.0.0.1/sina/auth">新浪微博登陆</a></div>
+        <div class="share">
+          {% if user.is_authenticated %}
+            <span>{{ user.username }}, <a href="/logout" target="_self">退出</a></span>
+          {% else %}
+            <a href="/login/weibo" target="_self">新浪微博登录</a>
+          {% endif %}
+        </div>
      </div>
      <div class="content">
         <div class="addor">
@@ -75,8 +93,5 @@
            </div>
         </div>
      </div>
-   </div>
-   <div id="dialog" title="确认删除？">
-    <span style="margin:16px;">请三思而后行啊！你删除了其他人也看不见了！</span>
    </div>
 </body>

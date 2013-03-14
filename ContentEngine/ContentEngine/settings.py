@@ -54,7 +54,7 @@ MEDIA_ROOT = '/Users/bridge/Documents/workspace/bestgames/ContentEngine/media'
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
 #MEDIA_URL = 'http://localhost:8080/game/'
-MEDIA_URL = 'http://127.0.0.1:8000/media/'
+MEDIA_URL = 'http://cow.bestgames7.com:8000/media/'
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
@@ -63,7 +63,7 @@ STATIC_ROOT = '/Users/bridge/Documents/workspace/bestgames/ContentEngine/templat
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = 'http://127.0.0.1:8000/static/'
+STATIC_URL = 'http://cow.bestgames7.com:8000/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -102,6 +102,14 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'ContentEngine.urls'
 
+WEIBO_CLIENT_KEY = '2603170429'
+WEIBO_CLIENT_SECRET= 'c0ccb2e65866188ecf9e20624e3ed7c2'
+
+LOGIN_URL          = '/'
+LOGIN_REDIRECT_URL = '/'
+LOGIN_ERROR_URL    = '/'
+LOGOUT_URL = '/logout'
+
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'ContentEngine.wsgi.application'
 
@@ -122,6 +130,7 @@ INSTALLED_APPS = (
     'taggit',
     'datetimewidget',
     'ajax_upload',
+    'social_auth',
     'api',
 )
 
@@ -130,6 +139,11 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.static',
     'django.core.context_processors.media'
+)
+
+AUTHENTICATION_BACKENDS = (
+    'social_auth.backends.contrib.weibo.WeiboBackend',
+    'django.contrib.auth.backends.ModelBackend',
 )
 
 # A sample logging configuration. The only tangible logging

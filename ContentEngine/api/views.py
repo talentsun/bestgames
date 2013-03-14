@@ -2,18 +2,17 @@
 import sys
 import os
 
-from django.template import loader,Context
 from django.http import HttpResponse
-from sina.sinaAuth import SinaAuth
 from django.http import HttpResponseRedirect
+from django.template import loader,Context
 from django.template import RequestContext
-from django.shortcuts import render_to_response
-from django.contrib.admin.views.decorators import staff_member_required
+from django.shortcuts import render_to_response, get_object_or_404, render, redirect
+from django.contrib import auth
+from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from django.contrib.auth import authenticate,login
-from django.shortcuts import get_object_or_404, render, redirect
-from taggit.models import Tag
 from django.conf import settings
+
+from taggit.models import Tag
 
 from api.models import Game, Redier
 from api.tables import GameTable, RedierTable
@@ -32,31 +31,20 @@ def index(request):
 
     return render(request, "index.html", {"games": games, "rediers":rediers})
 
-def auth(request):
-    auth = SinaAuth()
-    return HttpResponseRedirect(auth.getAuthorizeUrl())
+def logout(request):
+    auth.logout(request)
+    return redirect('/')
 
-def sina_login(request):
-    code = request.GET.get('code')
-    print code
-    auth = SinaAuth()
-    print auth.getToken(code)
-    if auth is None:
-        return HttpResponseRedirect("/")
-    else:
-        username = 'admin'
-        password = 'admin'
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                print 'login success'
-                return HttpResponseRedirect("/")
-
-def add_rediers(request):
+@login_required
+def add_edit_redier(request, redier_id=None):
     form = RedierForm()
     return render(request, "add_edit_redier.html", { "form": form })
 
+@login_required
+def delete_redier(request, redier_id=None):
+    pass
+
+@login_required
 def add_edit_game(request, game_id=None):
     if game_id:
         game = get_object_or_404(Game, entity_ptr_id=game_id)
@@ -92,19 +80,17 @@ def add_edit_game(request, game_id=None):
             else:
                 game.screenshot_path_5 = request.POST['screenshot_path_5']
             game.save()
-            return HttpResponseRedirect('/')
+            return redirect('/')
 
     else:
         form = GameForm(instance=game)
     return render(request, "add_edit_game.html", { "form" : form, "tags" : Tag.objects.all() })
 
+@login_required
 def delete_game(request, game_id=None):
     if game_id:
         game = get_object_or_404(Game, entity_ptr_id=game_id)
         if game is not None:
             game.delete()
             return HttpResponseRedirect("/")
-
-def completed(request):
-    return render(request, "completed.html")
 
