@@ -59,7 +59,6 @@ class Game(Entity):
     screenshot_path_2 = models.ImageField(u"截图2", upload_to='upload/', blank=True)
     screenshot_path_3 = models.ImageField(u"截图3", upload_to='upload/', blank=True)
     screenshot_path_4 = models.ImageField(u"截图4", upload_to='upload/', blank=True)
-    screenshot_path_5 = models.ImageField(u"截图5", upload_to='upload/', blank=True)
 
     def __unicode__(self):
         return force_unicode(self.name)

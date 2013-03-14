@@ -75,10 +75,6 @@ def add_edit_game(request, game_id=None):
                 game.screenshot_path_4 = request.POST['screenshot_path_4'].replace(settings.MEDIA_URL, '', 1)
             else:
                 game.screenshot_path_4 = request.POST['screenshot_path_4']
-            if request.POST['screenshot_path_5']:
-                game.screenshot_path_5 = request.POST['screenshot_path_5'].replace(settings.MEDIA_URL, '', 1)
-            else:
-                game.screenshot_path_5 = request.POST['screenshot_path_5']
             game.save()
             return redirect('/')
 

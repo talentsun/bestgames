@@ -28,7 +28,6 @@ class GameForm(ModelForm):
 			'screenshot_path_2', 
 			'screenshot_path_3', 
 			'screenshot_path_4', 
-			'screenshot_path_5', 
 			'weibo_sync_timestamp',
 			'presenter',
 			'rating',
@@ -39,7 +38,6 @@ class GameForm(ModelForm):
 			'screenshot_path_2' : AjaxClearableFileInput(),
 			'screenshot_path_3' : AjaxClearableFileInput(),
 			'screenshot_path_4' : AjaxClearableFileInput(),
-			'screenshot_path_5' : AjaxClearableFileInput(),
 			'weibo_sync_timestamp' : DateTimeWidget(options={
 				'autoclose' : 'true',
 				'showMeridian' : 'true',
