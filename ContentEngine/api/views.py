@@ -83,7 +83,7 @@ def add_edit_game(request, game_id=None):
             return redirect('/')
 
     else:
-        form = GameForm(instance=game)
+        form = GameForm(instance=game, initial={'presenter' : request.user.username})
     return render(request, "add_edit_game.html", { "form" : form, "tags" : Tag.objects.all() })
 
 @login_required
