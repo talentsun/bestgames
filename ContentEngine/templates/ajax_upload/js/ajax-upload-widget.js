@@ -99,12 +99,13 @@
                 console.log(data);
             }
         } else {
-            this.$hiddenElement.val(data.path);
+            var decodedFilePath = decodeURI(data.path);
+            this.$hiddenElement.val(decodedFilePath);
             var tmp = this.$element;
             this.$element = this.$element.clone(true).val('');
             tmp.replaceWith(this.$element);
             this.displaySelection();
-            if(this.options.onComplete) this.options.onComplete.call(this, data.path);
+            if(this.options.onComplete) this.options.onComplete.call(this, decodedFilePath);
         }
     };
 
