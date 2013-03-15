@@ -33,7 +33,8 @@ class Entity(models.Model):
         (RATING_1, u"2"),
         (RATING_1, u"1"))
     rating = models.IntegerField(u"评分", choices=RATING_CHOICES, default=RATING_3)
-    recommended_reason = models.TextField(u"推荐理由")
+    brief_comment = models.CharField(u"一句话点评(同步到微信)", max_length=255)
+    recommended_reason = models.TextField(u"推荐理由(同步到微博)")
 
     class Meta:
         db_table = u'entities'

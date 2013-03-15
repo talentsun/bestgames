@@ -35,7 +35,7 @@ def logout(request):
     auth.logout(request)
     return redirect('/')
 
-@login_required
+#@login_required
 def add_edit_redier(request, redier_id=None):
     if redier_id:
         redier = get_object_or_404(Redier, entity_ptr_id=redier_id)
@@ -69,7 +69,7 @@ def delete_redier(request, redier_id=None):
             redier.delete()
             return redirect("/")
 
-@login_required
+#@login_required
 def add_edit_game(request, game_id=None):
     if game_id:
         game = get_object_or_404(Game, entity_ptr_id=game_id)

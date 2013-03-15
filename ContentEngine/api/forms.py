@@ -20,6 +20,7 @@ class RedierForm(ModelForm):
 			'weibo_sync_timestamp',
 			'presenter',
 			'rating',
+			'brief_comment',
 			'recommended_reason')
 		widgets = {
 			'redier_image' : AjaxClearableFileInput(),
@@ -48,6 +49,7 @@ class GameForm(ModelForm):
 			'weibo_sync_timestamp',
 			'presenter',
 			'rating',
+			'brief_comment',
 			'recommended_reason')
 		widgets = {
 			'icon' : AjaxClearableFileInput(),
