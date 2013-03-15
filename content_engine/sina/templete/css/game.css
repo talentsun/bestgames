@@ -1,0 +1,63 @@
+body{
+    background-color: #eee;
+    color: #444;
+    text-shadow: 0px 1px 2px  #fff;    
+}
+
+img{
+	padding:0;
+	margin:0; 
+}
+
+#container.portrait{
+	width: 640px;
+	margin: auto;
+}
+
+#container.landscape{
+	width: 480px;
+	margin: auto;
+}
+
+.portrait .head{
+	background: url(../img/head-portrait.jpg) no-repeat;
+	width: 640px;
+	height: 116px;
+}
+
+.landscape .head{
+	background: url(../img/head-landscape.jpg) no-repeat;
+	width: 480px;
+	height: 116px;
+}
+
+.portrait .bottom{
+	background: url(../img/bottom-portrait.jpg) no-repeat;
+	width: 640px;
+	height: 89px;
+	margin-top: -2px;
+}
+
+.landscape .bottom{
+	background: url(../img/bottom-landscape.jpg) no-repeat;
+	width: 480px;
+	height: 89px;
+	margin-top: -2px;
+}
+
+.portrait .screenshots img{
+    width: 320px;
+}
+
+.landscape .screenshots img{
+    width: 100%;
+}
+
+.portrait .screenshots img:nth-child(even){
+	margin-left: -4px;
+}
+
+
+
+
+
