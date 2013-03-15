@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8">
+        </meta>
+        <title>redier</title>
+        <link rel="stylesheet" type="text/css" href="css/redier.css">
+        </link>
+
+    </head>
+    <body onload='load()'>
+        <div id="container">
+            <div class="head">
+                <img src="img/head_min.jpg">
+            </div>
+            <div class="redier">
+                <img id="redier_img" src="redier_image"></img>
+            </div>
+            <div class="bottom">
+                <img src="img/bottom_min.jpg" />
+            </div>
+        </div>
+        <script>
+            var load = function() {
+                var redier_img = document.getElementById("redier_img");
+                var img = new Image();
+                var container = document.getElementById('container');
+                img.src = redier_img.src;
+
+                container.style.width = img.width + "px";
+            };
+        </script>
+    </body>
+</html>
