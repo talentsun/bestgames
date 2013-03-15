@@ -33,22 +33,20 @@
           }
         }, {
           "label": "取消",
-          "class": "btn-inverse",
         }], {
           "header": "确定删除？"
         });
       });
 
       {% if not user.is_authenticated %}
-        bootbox.dialog("使用新浪微博登录之后，才能进行添加、删除、编辑操作哦，亲",[{
+        bootbox.dialog("使用新浪微博登录之后，才能进行添加、删除、编辑操作。",[{
+          "label": "不登录了，随便看看",
+        }, {
           "label": "新浪微博登录",
           "class": "btn-primary",
           "callback": function(){
             window.location.href = "/login/weibo";
           }
-        }, {
-          "label": "不登录了，随便看看",
-          "class": "btn-inverse",
         }], {
           "header": "新浪微博登录"
         });
