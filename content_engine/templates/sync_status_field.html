@@ -1,0 +1,9 @@
+{% if record.status == 0 %}
+<span>不同步</span>
+{% elif record.status == 1 %}
+<span class="pending">准备同步</span>
+{% elif record.status == 2 %}
+<span class="completed">同步成功</span>
+{% else %}
+<span class="failed">同步失败</span>
+{% endif %}

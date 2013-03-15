@@ -1,0 +1,312 @@
+
+html, body, p, ul, li{
+  margin:0;
+  padding:0;
+}
+.main{ 
+  text-align:left;
+  margin:0 auto;
+  width: 1280px;
+  background: url(../img/banner.png) no-repeat ;
+  min-height: 360px;
+  overflow: hidden;
+}
+.banner .logo{
+  background: url(../img/icon.png) no-repeat;
+  height: 30px;
+  color: #00ccff;
+  font-size: 20px;
+  margin-left: 32px;
+  margin-top: 6px;
+  text-indent: 37px;
+  line-height: 30px;
+  float: left;
+}
+
+.banner .share{
+  float: right;
+  text-indent: 24px;
+  font-size: 13px;
+  
+  background: url(../img/sina.png) no-repeat;
+  margin-right: 32px;
+  margin-top: 13px;
+  height: 20px;
+  line-height: 20px;
+}
+.share a, .share span{
+  color: #dadada;
+  text-decoration: none;
+}
+
+.content{
+  margin-top: 45px;
+  border-top: 1px solid #fff;
+  padding: 0 30px;
+  background: #f4f4f4;
+}
+.content .addor{
+  margin-top: 20px;
+}
+
+.list{
+  padding:30px 0;
+}
+
+.edit-btn{
+  background: url(../img/edit_button_normal.png) no-repeat;
+  display: inline-block;
+  cursor: pointer;
+  text-indent: -9999px;
+  width: 44px;
+  height: 20px;
+}
+
+.edit-btn:hover{
+  background: url(../img/edit_button_hover.png) no-repeat;
+}
+
+.del-btn{
+  background: url(../img/delete_button_normal.png) no-repeat;
+  display: inline-block;
+  cursor: pointer;
+  text-indent: -9999px;
+  width: 44px;
+  height: 20px;
+}
+
+.del-btn:hover{
+  background: url(../img/delete_button_hover.png) no-repeat;
+}
+
+.add-btn{
+  background: url(../img/add_button_normal.png) no-repeat;
+  display: inline-block;
+  width: 132px;
+  height: 132px;
+  margin-right: 10px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.add-btn:hover{
+  background: url(../img/add_button_hover.png) no-repeat;
+}
+
+.add-btn span{
+  position: relative;
+  top: 100px;
+}
+
+.separate-line{
+  display: inline-block;
+  width: 1px;
+  height: 20px;
+  background: url(../img/separate_line.png);
+}
+
+.pending{
+  background: url(../img/pending.png) no-repeat;
+  padding-left: 16px;
+}
+
+.completed{
+  background: url(../img/completed.png) no-repeat;
+  background-position-y: 4px;
+  padding-left: 16px;
+}
+
+.failed{
+  background: url(../img/failed.png) no-repeat;
+  padding-left: 16px;
+}
+
+.app-grid-header{
+  height: 28px;
+  line-height: 28px;
+  background: #ffd800;
+  text-indent: 20px;
+}
+
+.list .app-grid:first-child{
+  margin-bottom: 20px;
+}
+
+.app-grid table{
+  width: 100%;
+  background-color: white;
+  border-collapse: collapse;
+  border: 1px solid #e3e3e3;
+}
+
+.app-grid table a:link,
+.app-grid table a:visited,
+.app-grid table + ul.pagination > li > a {
+    color: #5B80B2;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.app-grid table a:hover {
+  color: #036;
+}
+
+.app-grid table tr{
+  height: 30px;
+}
+
+.app-grid table th, td{
+  text-align: center;
+  border-left: 1px solid #e3e3e3;
+  border-spacing: 0;
+}
+
+.app-grid table tbody tr:nth-child(odd){
+  background-color: #f8f6f7;
+}
+
+.app-grid table th:nth-child(1), td:nth-child(1) {
+  width: 20%;
+}
+
+.app-grid table .tags {
+  width: 20%;
+}
+
+.app-grid table .ops {
+  width: 180px;
+}
+
+.app-grid table thead th:first-child,
+.app-grid table thead td:first-child {
+    border-left: none !important;
+}
+
+.app-grid table thead th > a:link,
+.app-grid table thead th > a:visited {
+    color: #666;
+}
+
+.app-grid table + ul.pagination {
+    overflow: auto;
+    margin: 0;
+    padding: 10px;
+    border: 1px solid #DDD;
+    list-style: none;
+}
+
+.app-grid table + ul.pagination > li {
+    float: left;
+    line-height: 22px;
+    margin-left: 10px;
+}
+
+.app-grid table + ul.pagination > li:first-child {
+    margin-left: 0;
+}
+
+.app-grid table + ul.pagination > li.cardinality {
+    float: right;
+    color: #8d8d8d;
+}
+
+div.table-container {
+    display: inline-block;
+    width: 100%;
+}
+
+.nav{
+  margin:20px 0;
+}
+
+.form-table{
+  width: 100%;
+  background-color: white;
+}
+
+.form-table .input-append, .input-prepend, input, select, textarea{
+  margin-bottom: 0 !important;
+}
+
+.form-table input[type="text"], textarea{
+  width: 60% !important;
+}
+
+.form-table input[type="file"]{
+  line-height: 20px;
+  text-align: center;
+}
+
+.form-table tr{
+  border: 1px solid #e3e3e3;
+  vertical-align: middle;
+}
+
+.form-table th{
+  width: 15%;
+  text-align: left;
+  padding-left: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.form-table td{
+  border: 0px;
+  text-align: left;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.btn-cancel{
+  background: url(../img/cancel_button_normal.png) no-repeat;
+  width: 125px;
+  height: 43px;
+}
+
+.btn-cancel:hover{
+  background: url(../img/cancel_button_hover.png) no-repeat;
+}
+
+.btn-cancel:active{
+  background: url(../img/cancel_button_pressed.png) no-repeat;
+}
+
+.btn-save{
+  background: url(../img/save_button_normal.png) no-repeat;
+  width: 125px;
+  height: 43px;
+}
+
+.btn-save:hover{
+  background: url(../img/save_button_hover.png) no-repeat;
+}
+
+.btn-save:active{
+  background: url(../img/save_button_pressed.png) no-repeat;
+}
+
+.errorlist{
+  color:red;
+}
+
+span.taggit-tag, li.taggit-tag, p.taggit-tag {
+    display: inline-block;
+    padding-left: 4px;
+    padding-right: 4px;
+    margin-left: 1px;
+    margin-right: 1px;
+    cursor: pointer;
+    color: #007fce;
+}
+span.taggit-tag:hover, li.taggit-tag:hover, p.taggit-tag:hover {
+  color: #fff;
+  background-color: #009dff;
+}
+span.taggit-tag-used, li.taggit-tag-used, p.taggit-tag-used {
+    background-color: #007fce;
+    color: #fff;
+}
+
+#suggested-tags{
+  margin: 10px 0 0 0;
+}
