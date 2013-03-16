@@ -1,0 +1,95 @@
+{% load render_table from django_tables2 %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>内容引擎</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta property="wb:webmaster" content="f0737ecc6d43a725" />
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/style.css"></link>
+  <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+  <script src="{{ STATIC_URL }}js/jquery.js"></script>
+  <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+  <script src="{{ STATIC_URL }}js/bootbox.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('#add_game').click(function(){
+        window.location.href = '/games/add/';
+        return false;
+      });
+      $('#add_redier').click(function(){
+        window.location.href = '/rediers/add/';
+        return false;
+      });
+      
+      $(".del-btn").click(function(e) {
+        e.preventDefault();
+        var targetUrl = $(this).attr("href");
+
+        bootbox.dialog("请三思而后行，你删除了之后其他人也看不见了>_<！",[{
+          "label": "删除",
+          "class": "btn-danger",
+          "callback": function(){
+            window.location.href = targetUrl;
+          }
+        }, {
+          "label": "取消",
+        }], {
+          "header": "确定删除？"
+        });
+      });
+
+      {% if not user.is_authenticated %}
+        bootbox.dialog("使用新浪微博登录之后，才能进行添加、删除、编辑操作。",[{
+          "label": "不登录了，随便看看",
+        }, {
+          "label": "新浪微博登录",
+          "class": "btn-primary",
+          "callback": function(){
+            window.location.href = "/login/weibo";
+          }
+        }], {
+          "header": "新浪微博登录"
+        });
+      {% endif %}
+    });
+  </script>
+</head>
+<body>
+  <div id="dialog-anchor"></div>
+  <div class="main">
+    <div class="banner">
+        <div class="logo">每日精品游戏</div>
+        <div class="share">
+          {% if user.is_authenticated %}
+            <span>{{ user.username }}, <a href="/logout" target="_self">退出</a></span>
+          {% else %}
+            <a href="/login/weibo" target="_self">新浪微博登录</a>
+          {% endif %}
+        </div>
+     </div>
+     <div class="content">
+        <div class="addor">
+            <div id="add_game" class="add-btn">
+              <span>精品游戏推荐</span>
+            </div>
+            <div id="add_redier" class="add-btn">
+              <span>小兵变大咖</span>
+            </div>
+        </div>
+        <div class="list">
+           <div class="app-grid">
+             <div class="app-grid-header">
+                <span>精品游戏推荐</span>
+             </div>
+             {% render_table games %}
+           </div>
+           <div class="app-grid">
+             <div class="app-grid-header">
+               <span>小兵变大咖</span>
+             </div>
+             {% render_table rediers %}
+           </div>
+        </div>
+     </div>
+   </div>
+</body>

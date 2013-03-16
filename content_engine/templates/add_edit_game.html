@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>添加/编辑精品游戏推荐</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/style.css"></link>
+  <link href="{{ STATIC_URL }}ajax_upload/css/ajax-upload-widget.css" rel="stylesheet" type="text/css"/>
+  <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+  <script src="{{ STATIC_URL }}js/jquery.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+  <script src="{{ STATIC_URL }}ajax_upload/js/jquery.iframe-transport.js"></script>
+  <script src="{{ STATIC_URL }}ajax_upload/js/ajax-upload-widget.js"></script>
+  <script src="{{ STATIC_URL }}js/jquery.timers-1.2.js"></script>
+  <script src="{{ STATIC_URL }}js/jquery.taggit.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('#cancel').click(function(){
+        window.location.href = "/";
+        return false;
+      });
+      $('#save').click(function(){
+        $('#add_game_form').submit();
+
+        return false;
+      });
+      taggit = $( "#id_tags" ).taggit( { tag_selector: "#suggested-tags .taggit-tag" } );
+    });
+    $(function() {
+        AjaxUploadWidget.autoDiscover({
+          "changeButtonText" : "修改图标",
+          "removeButtonText" : "删除图标"
+        });
+    });
+  </script>
+  {{ form.media }}
+</head>
+<body>
+   <div class="main">
+     <div class="banner">
+        <div class="logo">每日精品游戏</div>
+        <div class="share">
+          {% if user.is_authenticated %}
+            <span>{{ user.username }}, <a href="/logout" target="_self">退出</a></span>
+          {% else %}
+            <a href="/login/weibo" target="_self">新浪微博登录</a>
+          {% endif %}
+        </div>
+     </div>
+     <div class="content">
+      <div class="nav">
+        <span><a href="/" target="_self">内容引擎</a> > 添加/编辑精品游戏推荐</span>
+      </div>
+      <form id="add_game_form" action="" method="post" enctype="multipart/form-data"> {% csrf_token %}
+        {{ form.name_of_field.errors }}
+        <div class="app-grid-header">
+          <span>游戏信息</span>
+        </div>
+        <table class="form-table">
+          <tr><th>{{ form.name.label }}</th><td>{{ form.name }}{{ form.name.errors }}</td></tr>
+          <tr><th>{{ form.icon.label }}</th><td>{{ form.icon }}{{ form.icon.errors }}</td></tr>
+          <tr><th>{{ form.description.label }}</th><td>{{ form.description }}{{ form.description.errors }}</td></tr>
+          <tr><th>{{ form.category.label }}</th><td>{{ form.category }}{{ form.category.errors }}</td></tr>
+          <tr><th>标签</th>
+            <td>{{ form.tags }}{{ form.tags.errors }}
+              <ul id="suggested-tags">
+                {% for tag in tags %}
+                  <li class="taggit-tag">{{ tag.name }}</li>
+                {% endfor %}
+              </ul>
+            </td></tr>
+          <tr><th>{{ form.android_download_url.label }}</th><td>{{ form.android_download_url }}{{ form.android_download_url.errors }}</td></tr>
+          <tr><th>{{ form.iOS_download_url.label }}</th><td>{{ form.iOS_download_url }}{{ form.iOS_download_url.errors }}</td></tr>
+          <tr><th>{{ form.screenshot_path_1.label }}</th><td>{{ form.screenshot_path_1 }}{{ form.screenshot_path_1.errors }}</td></tr>
+          <tr><th>{{ form.screenshot_path_2.label }}</th><td>{{ form.screenshot_path_2 }}{{ form.screenshot_path_2.errors }}</td></tr>
+          <tr><th>{{ form.screenshot_path_3.label }}</th><td>{{ form.screenshot_path_3 }}{{ form.screenshot_path_3.errors }}</td></tr>
+          <tr><th>{{ form.screenshot_path_4.label }}</th><td>{{ form.screenshot_path_4 }}{{ form.screenshot_path_4.errors }}</td></tr>
+        </table>
+        <div class="app-grid-header">
+          <span>推荐信息</span>
+        </div>
+        <table class="form-table">
+          <tr><th>{{ form.presenter.label }}</th><td>{{ form.presenter }}{{ form.presenter.errors }}</td></tr>
+          <tr><th>{{ form.rating.label }}</th><td>{{ form.rating }}{{ form.rating.errors }}</td></tr>
+          <tr><th>{{ form.brief_comment.label }}</th><td>{{ form.brief_comment }}{{ form.brief_comment.errors }}</td></tr>
+          <tr><th>{{ form.recommended_reason.label }}</th><td>{{ form.recommended_reason }}{{ form.recommended_reason.errors }}</td></tr>
+          <tr><th>{{ form.weibo_sync_timestamp.label }}</th><td>{{ form.weibo_sync_timestamp }}{{ form.weibo_sync_timestamp.errors }} </td></tr>
+        </table>
+        <div style="text-align:center;padding:20px;">
+          <button class="btn-cancel" id="cancel"></button>
+          <button class="btn-save" id="save" style="margin-left:20px;"></button>
+        </div>
+      </form>
+     </div>
+   </div>
+</body>
