@@ -4,14 +4,14 @@
   <title>添加/编辑小兵变大咖</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/style.css"></link>
-  <link href="{{ STATIC_URL }}ajax_upload/css/ajax-upload-widget.css" rel="stylesheet" type="text/css"/>
-  <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-  <script src="{{ STATIC_URL }}js/jquery.js"></script>
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}ajax_upload/css/ajax-upload-widget.css"/>
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.min.css"/>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
-  <script src="{{ STATIC_URL }}ajax_upload/js/jquery.iframe-transport.js"></script>
-  <script src="{{ STATIC_URL }}ajax_upload/js/ajax-upload-widget.js"></script>
-  <script src="{{ STATIC_URL }}js/jquery.timers-1.2.js"></script>
-  <script src="{{ STATIC_URL }}js/jquery.taggit.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}ajax_upload/js/jquery.iframe-transport.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}ajax_upload/js/ajax-upload-widget.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.timers-1.2.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.taggit.js"></script>
   <script type="text/javascript">
     $(document).ready(function(){
       $('#cancel').click(function(){
@@ -56,16 +56,16 @@
         </div>
         <table class="form-table">
           <tr><th>{{ form.game.label }}</th><td>{{ form.game }}{{ form.game.errors }}</td></tr>
-          <tr><th>{{ form.description.label }}</th><td>{{ form.description }}{{ form.description.errors }}</td></tr>
+          <tr><th>{{ form.description.label }}</th><td>{{ form.description }}<span class="help-inline">{{ form.description.help_text }}</span>{{ form.description.errors }}</td></tr>
           <tr><th>标签</th>
-            <td>{{ form.tags }}{{ form.tags.errors }}
+            <td>{{ form.tags }}<span class="help-inline">{{ form.tags.help_text }}</span>{{ form.tags.errors }}
               <ul id="suggested-tags">
                 {% for tag in tags %}
                   <li class="taggit-tag">{{ tag.name }}</li>
                 {% endfor %}
               </ul>
             </td></tr>
-          <tr><th>{{ form.redier_image.label }}</th><td>{{ form.redier_image }}{{ form.redier_image.errors }}</td></tr>
+          <tr><th>{{ form.redier_image.label }}</th><td>{{ form.redier_image }}<span class="help-inline">{{ form.redier_image.help_text }}</span>{{ form.redier_image.errors }}</td></tr>
         </table>
         <div class="app-grid-header">
           <span>推荐信息</span>
@@ -73,8 +73,8 @@
         <table class="form-table">
           <tr><th>{{ form.presenter.label }}</th><td>{{ form.presenter }}{{ form.presenter.errors }}</td></tr>
           <tr><th>{{ form.rating.label }}</th><td>{{ form.rating }}{{ form.rating.errors }}</td></tr>
-          <tr><th>{{ form.brief_comment.label }}</th><td>{{ form.brief_comment }}{{ form.brief_comment.errors }}</td></tr>
-          <tr><th>{{ form.recommended_reason.label }}</th><td>{{ form.recommended_reason }}{{ form.recommended_reason.errors }}</td></tr>
+          <tr><th>{{ form.brief_comment.label }}</th><td>{{ form.brief_comment }}<span class="help-inline">{{ form.brief_comment.help_text }}</span>{{ form.brief_comment.errors }}</td></tr>
+          <tr><th>{{ form.recommended_reason.label }}</th><td>{{ form.recommended_reason }}<span class="help-inline">{{ form.recommended_reason.help_text }}</span>{{ form.recommended_reason.errors }}</td></tr>
           <tr><th>{{ form.weibo_sync_timestamp.label }}</th><td>{{ form.weibo_sync_timestamp }}{{ form.weibo_sync_timestamp.errors }} </td></tr>
         </table>
         <div style="text-align:center;padding:20px;">

@@ -10,6 +10,8 @@ from api.models import Redier, Game, Category
 
 class RedierForm(ModelForm):
 	game = forms.ModelChoiceField(queryset=Game.objects.all(), empty_label=u"选择游戏", label=u"游戏")
+	brief_comment = forms.CharField(label=u"一句话点评", help_text=u"20字以内（作为图文消息的标题同步到微信）。", required=True, max_length=20)
+	description = forms.CharField(label=u"描述", help_text=u"攻略关卡，例如：第五章第三关；攻略目标，例如：刷金币。", required=True, max_length=255)
 
 	class Meta:
 		model = Redier

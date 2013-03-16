@@ -19,7 +19,7 @@ class GameTable(tables.Table):
     
     class Meta:
         model = Game
-        order_by = "-timestamp"
+        order_by = "-weibo_sync_timestamp"
         empty_text = u"暂无精品游戏推荐"
         fields = ("name","presenter","weibo_sync_timestamp","status","tags","ops")
         sequence = ("name","presenter","weibo_sync_timestamp","status","tags","ops")
@@ -36,7 +36,7 @@ class RedierTable(tables.Table):
 
     class Meta:
         model = Redier
-        order_by = "-timestamp"
+        order_by = "-weibo_sync_timestamp"
         empty_text = u"暂无小兵变大咖"
         fields = ("name","description", "presenter","weibo_sync_timestamp","status","tags","ops")
         sequence = ("name","description", "presenter","weibo_sync_timestamp","status","tags","ops")
