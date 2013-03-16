@@ -124,6 +124,8 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'Competitors',
     'Operations',
+    "AccessInfo",
+    "FollowMeTask",
 )
 
 # A sample logging configuration. The only tangible logging

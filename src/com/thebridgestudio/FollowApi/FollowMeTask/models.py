@@ -3,7 +3,7 @@ from django.db import models
 
 # Create your models here.
 class FollowMeTask(models.Model):
-    uid = models.BigIntegerField()
+    uid = models.BigIntegerField(db_index=True)
     # status 0 is not finished
     # status 1 is finished
     status = models.IntegerField()
