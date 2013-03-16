@@ -1,0 +1,17 @@
+<div class="navbar navbar-inverse">
+  <div class="navbar-inner">
+    <img class="img-rounded pull-left" style="margin-top:6px; margin-right:8px;" src="{{ STATIC_URL }}img/icon.png" />
+    <a class="brand" href="/">每日精品游戏</a>
+    {% if user.is_authenticated %}
+      <div class="btn-group pull-right">
+        <a class="btn btn-primary" href="#"><i class="icon-user icon-white"></i> {{user.username}}</a>
+        <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="/logout"><i class="icon-off"></i> 退出</a></li>
+        </ul>
+      </div>
+    {% else %}
+      <a class="btn btn-primary pull-right" href="/login/weibo"><i class="icon-user icon-white"></i>新浪微博登录</a>
+    {% endif %}
+  </div>
+</div>
