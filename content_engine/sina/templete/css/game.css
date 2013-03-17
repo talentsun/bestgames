@@ -1,12 +1,12 @@
 body{
     background-color: #eee;
     color: #444;
-    text-shadow: 0px 1px 2px  #fff;    
 }
 
 img{
 	padding:0;
-	margin:0; 
+	margin:0;
+    margin-left: -4px
 }
 
 #container.portrait{
@@ -23,12 +23,14 @@ img{
 	background: url(../img/head-portrait.jpg) no-repeat;
 	width: 640px;
 	height: 116px;
+    margin-left: -4px
 }
 
 .landscape .head{
 	background: url(../img/head-landscape.jpg) no-repeat;
 	width: 480px;
 	height: 116px;
+    margin-left: -4px
 }
 
 .portrait .bottom{
@@ -36,6 +38,7 @@ img{
 	width: 640px;
 	height: 89px;
 	margin-top: -2px;
+    margin-left: -4px
 }
 
 .landscape .bottom{
@@ -43,10 +46,11 @@ img{
 	width: 480px;
 	height: 89px;
 	margin-top: -2px;
+    margin-left: -4px
 }
 
 .portrait .screenshots img{
-    width: 320px;
+    width: 49%;
 }
 
 .landscape .screenshots img{
