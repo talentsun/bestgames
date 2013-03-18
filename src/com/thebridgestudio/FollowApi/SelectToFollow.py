@@ -36,7 +36,6 @@ def SelectToFollow1(logger, client, num):
     for a in Access.objects.all():
         try:
             allnum += 1
-            time.sleep(1)
             if num == 0:
                 break
             num -= 1
@@ -46,6 +45,7 @@ def SelectToFollow1(logger, client, num):
             except:
                 task = FollowMeTask()
             logger.debug("deal with %d" % a.uid)
+            time.sleep(1)
             lastTime = GetLatestTweetTime(client, a.uid)
             if lastTime == None:
                 continue

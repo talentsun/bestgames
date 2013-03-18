@@ -14,8 +14,6 @@ from weibo1 import OAuthToken
 from AppValue import BGApp
 from FriendShip import FriendShip
 
-work_path = os.path.dirname(os.path.abspath(__file__))
-
 
 
 
@@ -60,8 +58,7 @@ def FollowMe(number, logger):
 
 
 if __name__ == '__main__':
-    os.chdir(work_path)
-    logger = InitLogger("follow_me", logging.DEBUG, "log/follow_me.log")
+    logger = InitLogger("follow_me", logging.DEBUG, "../log/follow_me.log")
     FollowMe(100, logger)
 
 
