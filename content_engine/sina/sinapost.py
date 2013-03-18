@@ -18,13 +18,17 @@ client.set_access_token('2.00baJBTD06XASO35dcd07da0NOAOTC', '1363460399')
 file_prefix = 'file:///home/app_bestgames/content_engine/sina/';
 
 def sendWeibo(weibostatus,pic,game_id):
-    client.statuses.upload.post(status=weibostatus ,
+    try:
+        client.statuses.upload.post(status=weibostatus ,
                                   pic=open(pic))
+        weibo_result = '2'
+    except: 
+        weibo_result = '3'   
     con = mdb.connect('localhost', 'root',
-        'nameLR9969', 'content_engine');
+           'nameLR9969', 'content_engine');
 
     cur = con.cursor()
-    sql = "update entities set status = '2' where id = '" + str(game_id) + "';"
+    sql = "update entities set status = '"  + str(weibo_result) + "' where id = '" + str(game_id) + "';"
     print sql
     cur.execute(sql)
     con.commit()
@@ -111,7 +115,7 @@ def redier():
     curtime = time.strftime('%Y-%m-%d %H:%M',time.localtime(time.time()))
     print 'start: ' + curtime
     #curtime = '2013-03-15 10:31:00'
-    sql = "SELECT rediers.entity_ptr_id,rediers.redier_image,entities.weibo_sync_timestamp, entities.recommended_reason from entities,rediers where entities.weibo_sync_timestamp  like '" + curtime + "%'  and rediers.entity_ptr_id = entities.id "
+    sql = "SELECT rediers.entity_ptr_id,rediers.redier_image,entities.weibo_sync_timestamp, entities.recommended_reason from entities,rediers where entities.weibo_sync_timestamp  like '" + curtime + "%'  and rediers.entity_ptr_id = entities.id and entities.status = '1' "
     print sql
     cur.execute(sql)
     data = cur.fetchall()
@@ -134,7 +138,7 @@ try:
     curtime = time.strftime('%Y-%m-%d %H:%M',time.localtime(time.time()))
     print 'start: ' + curtime
     #curtime = '2013-03-15 10:30:00'
-    sql = "SELECT games.name, games.entity_ptr_id,games.screenshot_path_1,games.screenshot_path_2,games.screenshot_path_3,games.screenshot_path_4,entities.weibo_sync_timestamp, entities.recommended_reason from entities,games where entities.weibo_sync_timestamp  like '" + curtime + "%'  and games.entity_ptr_id = entities.id "
+    sql = "SELECT games.name, games.entity_ptr_id,games.screenshot_path_1,games.screenshot_path_2,games.screenshot_path_3,games.screenshot_path_4,entities.weibo_sync_timestamp, entities.recommended_reason from entities,games where entities.weibo_sync_timestamp  like '" + curtime + "%'  and games.entity_ptr_id = entities.id and entities.status = '1'"
     print sql
     cur.execute(sql)
     data = cur.fetchall()
