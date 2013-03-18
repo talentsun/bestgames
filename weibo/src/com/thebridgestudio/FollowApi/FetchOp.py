@@ -50,11 +50,11 @@ if __name__ == '__main__':
                             if not FriendShip.CheckFollow(client, BGApp.dev_uid, op.opUid) and len(ops) < 100:
                                 FriendShip.Follow(client, op.opUid)
                                 op.state = 1
+                                logger.debug("follow %d" % op.opUid)
                             else:
                                 op.state = 0
+                                logger.debug("today's follow has reach %d" % len(ops))
                             op.srcUid = comDb.uid
-                            logger.debug("new to follow %d" % op.opUid)
-                            op.state = 1
                             op.followers = user['followers_count']
                             op.friends = user['friends_count']
                             op.statuses = user['statuses_count']

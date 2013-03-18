@@ -27,9 +27,12 @@ if __name__ == '__main__':
     ops = Operation.GetSomeDayOps(unfollowDay)
     client = APIClient(BGApp.wdj_app_key, BGApp.wdj_app_secret)
     client.set_access_token(BGApp.wdj_me_token, time.time() + 90 * 24 *3600)
+    allToFollow = 0
     allFollowers = 0
     followResult = {}
     for op in ops:
+        if op.state == 1:
+            allToFollow += 1
         logger.debug("unfollow %d state %d %s" % (op.opUid, op.state, op.actionTime))
         try:
             if not op.srcUid in followResult:
@@ -46,7 +49,7 @@ if __name__ == '__main__':
 
         time.sleep(1)
     mailContent = ""
-    mailContent += "今日一共收听了%d个人，%d个人回粉\n" % (len(ops), allFollowers)
+    mailContent += "今日一共收听了%d个人，%d个人回粉\n" % (allToFollow, allFollowers)
     mailContent += "其中：\n"
     for (k, v) in followResult.items():
         com = Competitor.objects.get(uid=k)
