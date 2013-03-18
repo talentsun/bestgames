@@ -14,7 +14,10 @@ class Operation(models.Model):
     statuses = models.IntegerField(default = 0)
 
     @classmethod
-    def GetSomeDayOps(cls, someDay):
+    def GetSomeDayOps(cls, someDay, state_ = -1):
         beginTime = datetime.datetime(someDay.year, someDay.month, someDay.day)
         endTime = beginTime + datetime.timedelta(days=1)
-        return Operation.objects.filter(actionTime__gte=beginTime).filter(actionTime__lt=endTime)
+        if state_ == -1:
+            return Operation.objects.filter(actionTime__gte=beginTime).filter(actionTime__lt=endTime)
+        else:
+            return Operation.objects.filter(actionTime__gte=beginTime).filter(actionTime__lt=endTime).filter(state=state_)
