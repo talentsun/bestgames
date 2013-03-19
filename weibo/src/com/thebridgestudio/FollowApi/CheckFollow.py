@@ -33,6 +33,8 @@ if __name__ == '__main__':
     for op in ops:
         if op.state == 1:
             allToFollow += 1
+        else:
+            continue
         logger.debug("unfollow %d state %d %s" % (op.opUid, op.state, op.actionTime))
         try:
             if not op.srcUid in followResult:

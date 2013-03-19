@@ -59,7 +59,7 @@ def FollowMe(number, logger):
 
 if __name__ == '__main__':
     logger = InitLogger("follow_me", logging.DEBUG, "../log/follow_me.log")
-    FollowMe(100, logger)
+    FollowMe(150, logger)
 
 
 
