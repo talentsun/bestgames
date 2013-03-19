@@ -32,7 +32,7 @@ if __name__ == '__main__':
         client = APIClient(BGApp.app_key, BGApp.app_secret)
         client.set_access_token(BGApp.other_token, time.time() + 90 * 24 *3600)
         Competitor.GetNumbers(client, comsWeb)
-        ops = Operation.GetSomeDayOps(datetime.date.today())
+        ops = Operation.GetSomeDayOps(datetime.date.today(), 1)
         logger.debug("ops number %d" % len(ops))
         for comDb in comsDb:
             for comWeb in comsWeb:
@@ -47,13 +47,19 @@ if __name__ == '__main__':
                         for user in followers:
                             op = Operation()
                             op.opUid = user['id']
-                            if not FriendShip.CheckFollow(client, BGApp.dev_uid, op.opUid) and len(ops) < 100:
-                                FriendShip.Follow(client, op.opUid)
-                                op.state = 1
+                            op.state = 0
+                            if not FriendShip.CheckFollow(client, BGApp.dev_uid, op.opUid):
+                                if comDb.uid == 2171037552: #anzhuoyouxi
+                                    if len(ops) < 105:
+                                        op.state = 1
+                                else:
+                                    if len(ops) < 80:
+                                        op.state = 1
+                            if op.state == 1:
                                 logger.debug("follow %d" % op.opUid)
+                                FriendShip.Follow(client, op.opUid)
                             else:
-                                op.state = 0
-                                logger.debug("today's follow has reach %d" % len(ops))
+                                logger.debug("today has followed %d" % len(ops))
                             op.srcUid = comDb.uid
                             op.followers = user['followers_count']
                             op.friends = user['friends_count']
