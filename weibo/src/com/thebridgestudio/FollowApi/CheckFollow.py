@@ -24,7 +24,7 @@ if __name__ == '__main__':
     logger = InitLogger("check_follow", logging.DEBUG, "log/check_follow.log")
     os.chdir(work_path)
     unfollowDay = datetime.date.today()
-    ops = Operation.GetSomeDayOps(unfollowDay)
+    ops = Operation.GetSomeDayOps(unfollowDay, 1)
     client = APIClient(BGApp.wdj_app_key, BGApp.wdj_app_secret)
     client.set_access_token(BGApp.wdj_me_token, time.time() + 90 * 24 *3600)
     allToFollow = 0
