@@ -58,6 +58,7 @@
       <ul class="dropdown-menu">
         <li><a href="/games/add">新增精品游戏推荐</a></li>
         <li><a href="/rediers/add">新增小兵变大咖</a></li>
+        <li><a href="/collections/add">新增游戏合集</a></li>
       </ul>
     </div>
 
@@ -74,5 +75,12 @@
       </div>
     </div>
     {% render_table rediers "django_tables2/table.html" %}
+
+    <div class="navbar" style="margin-bottom:0;">
+      <div class="navbar-inner">
+        <p class="navbar-text">游戏合集</p>
+      </div>
+    </div>
+    {% render_table collections "django_tables2/table.html" %}
   </div>
 </body>

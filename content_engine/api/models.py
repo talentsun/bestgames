@@ -6,6 +6,7 @@ from taggit.managers import TaggableManager
 class Entity(models.Model):
     GAME = 1
     REDIER = 2
+    COLLECTION = 3
     type = models.IntegerField(verbose_name=u'类型', default=GAME, editable=False)
     tags = TaggableManager(verbose_name=u"标签")
 
@@ -87,3 +88,18 @@ class Redier(Entity):
         if self.weibo_sync_timestamp is not None:
             self.status = Entity.STATUS_PENDING
         super(Redier, self).save(args, kwargs)
+
+class Collection(Entity):
+    title = models.CharField(u"标题", max_length=20)
+    cover = models.ImageField(u"封面图片", upload_to='upload/', max_length=255, blank=True)
+    games = models.ManyToManyField(Game, verbose_name=u"游戏")
+
+    class Meta:
+        db_table = u'collections'
+        verbose_name = u'游戏合集'
+        verbose_name_plural = u'游戏合集'
+    def save(self, *args, **kwargs):
+        self.type = Entity.COLLECTION
+        if self.weibo_sync_timestamp is not None:
+            self.status = Entity.STATUS_PENDING
+        super(Collection, self).save(args, kwargs)

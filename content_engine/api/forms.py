@@ -6,8 +6,9 @@ from datetimewidget.widgets import DateTimeWidget
 from ajax_upload.widgets import AjaxClearableFileInput
 from datetime import datetime
 from taggit.forms import TagField
+from django_select2 import *
 
-from api.models import Redier, Game, Category
+from api.models import Redier, Game, Category, Collection
 
 class EntityForm(ModelForm):
 	tags = TagField(label=u"标签", help_text=u"使用英文逗号\",\"分隔不同标签")
@@ -63,3 +64,23 @@ class GameForm(EntityForm):
 			'screenshot_path_2' : AjaxClearableFileInput(),
 			'screenshot_path_3' : AjaxClearableFileInput(),
 			'screenshot_path_4' : AjaxClearableFileInput()}
+
+class GameChoices(AutoModelSelect2MultipleField):
+	queryset = Game.objects
+	search_fields = ['name__icontains',]
+
+class CollectionForm(EntityForm):
+	cover = forms.ImageField(label=u"封面图片", help_text=u"建议使用640x320大小的图片", widget=AjaxClearableFileInput())
+	games = GameChoices(label=u"游戏")
+
+	class Meta:
+		model = Collection
+		fields = ('title',
+			'cover',
+			'games',
+			'tags',
+			'weibo_sync_timestamp',
+			'presenter',
+			'rating',
+			'brief_comment',
+			'recommended_reason')

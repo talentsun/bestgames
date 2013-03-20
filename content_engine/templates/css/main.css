@@ -92,3 +92,8 @@ span.taggit-tag-used, li.taggit-tag-used, p.taggit-tag-used {
   background: url(../img/failed.png) no-repeat;
   padding-left: 16px;
 }
+
+/*customized style for select2*/
+#main .select2-container {
+  width: 61%;
+}
