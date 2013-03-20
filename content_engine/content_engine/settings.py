@@ -133,6 +133,7 @@ INSTALLED_APPS = (
     'social_auth',
     'django_select2',
     'api',
+    'weixin',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (

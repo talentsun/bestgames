@@ -19,6 +19,7 @@ urlpatterns = patterns('',
     url(r'^ext/', include('django_select2.urls')),
     url(r'', include('api.urls')),
     url(r'', include('social_auth.urls')),
+    url(r'^weixin/', include('weixin.urls')),
 )
 
 urlpatterns += staticfiles_urlpatterns()
