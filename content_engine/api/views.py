@@ -14,9 +14,9 @@ from django.conf import settings
 
 from taggit.models import Tag
 
-from api.models import Game, Redier, Collection
-from api.tables import GameTable, RedierTable, CollectionTable
-from api.forms import GameForm, RedierForm, CollectionForm
+from api.models import Game, Redier, Collection, Problem
+from api.tables import GameTable, RedierTable, CollectionTable, ProblemTable
+from api.forms import GameForm, RedierForm, CollectionForm, ProblemForm
 
 import django_tables2 as tables
 
@@ -33,11 +33,48 @@ def index(request):
     collections.paginate(page=request.GET.get("co-page",1), per_page=10)
     collections.data.verbose_name = u"游戏合集"
 
-    return render(request, "index.html", {"games": games, "rediers":rediers, 'collections':collections})
+    problems = ProblemTable(Problem.objects.all(),prefix="pb-")
+    problems.paginate(page=request.GET.get("pb-page",1), per_page=10)
+    problems.data.verbose_name = u"宅，必有一技"
+
+    return render(request, "index.html", {"games": games, "rediers":rediers, 'collections':collections, 'problems':problems})
 
 def logout(request):
     auth.logout(request)
     return redirect('/')
+
+#@login_required
+def add_edit_problem(request, problem_id=None):
+    if problem_id:
+        problem = get_object_or_404(Problem, entity_ptr_id=problem_id)
+    else:
+        problem = None
+
+    if request.method == 'POST':
+        form = ProblemForm(request.POST, request.FILES, instance=problem)
+        if form.is_valid():
+            problem = form.save()
+            if request.POST['problem_image']:
+                problem.problem_image = request.POST['problem_image'].replace(settings.MEDIA_URL, '', 1)
+            else:
+                problem.problem_image = request.POST['problem_image']
+            problem.save()
+            return redirect('/')
+    else:
+        if problem is None:
+            form = ProblemForm(instance=problem, initial={'presenter' : request.user.username})
+        else:
+            form = ProblemForm(instance=problem)
+
+    return render(request, 'add_edit_problem.html', {'form' : form, 'tags' : Tag.objects.all()})
+
+#@login_required
+def delete_problem(request, problem_id=None):
+    if problem_id:
+        problem = get_object_or_404(Problem, entity_ptr_id=problem_id)
+        if problem is not None:
+            problem.delete()
+            return redirect('/')
 
 #@login_required
 def add_edit_collection(request, collection_id=None):

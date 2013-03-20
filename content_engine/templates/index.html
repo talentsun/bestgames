@@ -59,6 +59,7 @@
         <li><a href="/games/add">新增精品游戏推荐</a></li>
         <li><a href="/rediers/add">新增小兵变大咖</a></li>
         <li><a href="/collections/add">新增游戏合集</a></li>
+        <li><a href="/problems/add">新增“宅，必有一技”</a></li>
       </ul>
     </div>
 
@@ -82,5 +83,12 @@
       </div>
     </div>
     {% render_table collections "django_tables2/table.html" %}
+
+    <div class="navbar" style="margin-bottom:0;">
+      <div class="navbar-inner">
+        <p class="navbar-text">宅，必有一技</p>
+      </div>
+    </div>
+    {% render_table problems "django_tables2/table.html" %}
   </div>
 </body>

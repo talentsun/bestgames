@@ -8,7 +8,7 @@ from datetime import datetime
 from taggit.forms import TagField
 from django_select2 import *
 
-from api.models import Redier, Game, Category, Collection
+from api.models import Redier, Game, Category, Collection, Problem
 
 class EntityForm(ModelForm):
 	tags = TagField(label=u"标签", help_text=u"使用英文逗号\",\"分隔不同标签")
@@ -78,6 +78,20 @@ class CollectionForm(EntityForm):
 		fields = ('title',
 			'cover',
 			'games',
+			'tags',
+			'weibo_sync_timestamp',
+			'presenter',
+			'rating',
+			'brief_comment',
+			'recommended_reason')
+
+class ProblemForm(EntityForm):
+	problem_image = forms.ImageField(label=u"必有一技", help_text=u"建议图片宽度大于400像素", widget=AjaxClearableFileInput())
+
+	class Meta:
+		model = Problem
+		fields = ('title',
+			'problem_image',
 			'tags',
 			'weibo_sync_timestamp',
 			'presenter',
