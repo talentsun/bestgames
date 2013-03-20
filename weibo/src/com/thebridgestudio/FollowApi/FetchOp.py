@@ -42,7 +42,8 @@ if __name__ == '__main__':
                         num = comWeb.followers - comDb.followers
                         logger.debug("%d's followers increase %d" % (comWeb.uid, num))
                         if num > 1:
-                            num = 1
+                            #shua fen
+                            continue
                         followers = comWeb.GetFollowers(client, num)
                         for user in followers:
                             op = Operation()
