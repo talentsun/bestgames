@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8">
+        </meta>
+        <title>problem</title>
+        <link rel="stylesheet" type="text/css" href="css/collection.css">
+        </link>
+
+    </head>
+    <body onload='load()'>
+        <div id="container">
+            <div class="head"></div>
+            <div>
+                <img class="cover" src="img/cover.jpg"></img>
+                <div class="triangle"></div>
+                <div class="title">
+                    <span style="margin-left:40px;">游戏合集&nbsp;之</span><span style="margin-left:20px;">一周经典回顾</span>
+                </div>
+            </div>
+            <table class="games">
+                <tr>
+                    <td>
+                        <div class="game-info">
+                            <img src="img/cover.jpg"></img>
+                            <table>
+                                <tr><td>游戏名称：</td><td>玩具总动员：粉碎计划</td></tr>
+                                <tr><td>游戏类型：</td><td>休闲益智</td></tr>
+                                <tr><td>游戏评价：</td><td><div class="star"></div><div class="star"></div><div class="star"></div><div class="half-star"></div><div class="empty-star"></div></td></tr>
+                            </table>
+                            <span class="intro">一款国产的精致塔防类的游戏，具有搞笑的风格，精美的游戏画面和独特的透视效果。</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="game-info">
+                            <img src="img/cover.jpg"></img>
+                            <table>
+                                <tr><td>游戏名称：</td><td>玩具总动员：粉碎计划</td></tr>
+                                <tr><td>游戏类型：</td><td>休闲益智</td></tr>
+                                <tr><td>游戏评价：</td><td><div class="star"></div><div class="star"></div><div class="star"></div><div class="half-star"></div><div class="empty-star"></div></td></tr>
+                            </table>
+                            <span class="intro">一款国产的精致塔防类的游戏，具有搞笑的风格，精美的游戏画面和独特的透视效果。我军能否战胜凶恶的敌方? 战争的命运掌握在你的手中! 英雄们行动起来, 带领我军走向胜利!</span>
+                        </div>
+                    </td>
+                <tr>
+                    <td>
+                        <div class="game-info">
+                            <img src="img/cover1.jpg"></img>
+                            <table>
+                                <tr><td>游戏名称：</td><td>玩具总动员：粉碎计划</td></tr>
+                                <tr><td>游戏类型：</td><td>休闲益智</td></tr>
+                                <tr><td>游戏评价：</td><td><div class="star"></div><div class="star"></div><div class="star"></div><div class="half-star"></div><div class="empty-star"></div></td></tr>
+                            </table>
+                            <span class="intro">一款国产的精致塔防类的游戏!</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="game-info">
+                            <img src="img/cover.jpg"></img>
+                            <table>
+                                <tr><td>游戏名称：</td><td>玩具总动员：粉碎计划</td></tr>
+                                <tr><td>游戏类型：</td><td>休闲益智</td></tr>
+                                <tr><td>游戏评价：</td><td><div class="star"></div><div class="star"></div><div class="star"></div><div class="half-star"></div><div class="empty-star"></div></td></tr>
+                            </table>
+                            <span class="intro">一款国产的精致塔防类的游戏，具有搞笑的风格，精美的游戏画面和独特的透视效果。我军能否战胜凶恶的敌方? 战争的命运掌握在你的手中! 英雄们行动起来, 带领我军走向胜利!</span>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <div class="bottom"></div>
+        </div>
+        <script>
+            var load = function() {
+                var problem_img = document.getElementById("problem_img");
+                var img = new Image();
+                var container = document.getElementById('container');
+                img.src = problem_img.src;
+
+                container.style.width = img.width + "px";
+            };
+        </script>
+    </body>
+</html>
