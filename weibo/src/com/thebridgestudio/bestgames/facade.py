@@ -9,7 +9,7 @@ from task import execute
 
 def addfans():
     #direct follow inactive users
-    execute('direct-follow_0-60', 350)
+    execute('direct-follow_0-60', 250)
 
     #update relationship
     update_users()
