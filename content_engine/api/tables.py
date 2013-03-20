@@ -28,7 +28,7 @@ class GameTable(tables.Table):
 class RedierTable(tables.Table):
     id = tables.Column(orderable=False, visible=False)
     name = tables.Column(accessor="game.name",orderable=False)
-    description = tables.Column(orderable=False)
+    title = tables.Column(orderable=False)
     presenter = tables.Column(orderable=False)
     weibo_sync_timestamp = DateTimeColumn(verbose_name=u"微博同步时间",orderable=True)
     status = TemplateColumn(template_name="sync_status_field.html",orderable=False,verbose_name=u"同步状态")
@@ -39,6 +39,6 @@ class RedierTable(tables.Table):
         model = Redier
         order_by = "-weibo_sync_timestamp"
         empty_text = u"暂无小兵变大咖"
-        fields = ("name","description", "presenter","weibo_sync_timestamp","status","tags","ops")
-        sequence = ("name","description", "presenter","weibo_sync_timestamp","status","tags","ops")
+        fields = ("name","title", "presenter","weibo_sync_timestamp","status","tags","ops")
+        sequence = ("name","title", "presenter","weibo_sync_timestamp","status","tags","ops")
         attrs = {'class' : 'table table-striped'}

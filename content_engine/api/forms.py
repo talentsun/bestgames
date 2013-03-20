@@ -21,12 +21,11 @@ class EntityForm(ModelForm):
 
 class RedierForm(EntityForm):
 	game = forms.ModelChoiceField(queryset=Game.objects.all(), empty_label=u"选择游戏", label=u"游戏")
-	description = forms.CharField(label=u"描述", help_text=u"攻略关卡，例如：第三关；攻略目标，例如：刷金币", required=True, max_length=255)
 
 	class Meta:
 		model = Redier
 		fields = ('game',
-			'description', 
+			'title', 
 			'redier_image',
 			'tags',
 			'weibo_sync_timestamp',
