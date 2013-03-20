@@ -10,5 +10,11 @@ urlpatterns = patterns('api.views',
     url(r'^games/add','add_edit_game'),
     url(r'^games/(?P<game_id>\d+)/edit','add_edit_game'),
     url(r'^games/(?P<game_id>\d+)/delete','delete_game'),
+    url(r'^collections/add','add_edit_collection'),
+    url(r'^collections/(?P<collection_id>\d+)/edit','add_edit_collection'),
+    url(r'^collections/(?P<collection_id>\d+)/delete','delete_collection'),
+    url(r'^problems/add','add_edit_problem'),
+    url(r'^problems/(?P<problem_id>\d+)/edit','add_edit_problem'),
+    url(r'^problems/(?P<problem_id>\d+)/delete','delete_problem'),
     url(r'^logout', 'logout')
 )

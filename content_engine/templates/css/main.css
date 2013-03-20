@@ -8,6 +8,12 @@
 	border: 1px solid #e3e3e3;
 }
 
+#main.list-page .table tr td:last-child,
+#main.list-page .table tr th:last-child{
+  text-align: center;
+  width: 10%;
+};
+
 #main.list-page .table th,
 #main.list-page .table td{
 	text-align: center;
@@ -91,4 +97,9 @@ span.taggit-tag-used, li.taggit-tag-used, p.taggit-tag-used {
 .failed{
   background: url(../img/failed.png) no-repeat;
   padding-left: 16px;
+}
+
+/*customized style for select2*/
+#main .select2-container {
+  width: 61%;
 }

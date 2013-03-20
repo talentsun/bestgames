@@ -35,7 +35,7 @@ def sendWeibo(weibostatus,pic,game_id):
     con.close()
 
 def imageBuilder(pic1,pic2,pic3,pic4,game_id,weibo_status):
-    templete_file = open('./templete/game.html','r')
+    templete_file = open('./templates/game.html','r')
     line = templete_file.readline()
     content = ''
     while line:
@@ -74,7 +74,7 @@ def imageBuilder(pic1,pic2,pic3,pic4,game_id,weibo_status):
 
 
 def redierImageBuidler(game_id,pic,weibo_status):
-    templete_file = open('./templete/redier.html','r')
+    templete_file = open('./templates/redier.html','r')
     line = templete_file.readline()
     content = ''
     while line:

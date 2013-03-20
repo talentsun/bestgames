@@ -6,8 +6,9 @@ from datetimewidget.widgets import DateTimeWidget
 from ajax_upload.widgets import AjaxClearableFileInput
 from datetime import datetime
 from taggit.forms import TagField
+from django_select2 import *
 
-from api.models import Redier, Game, Category
+from api.models import Redier, Game, Category, Collection, Problem
 
 class EntityForm(ModelForm):
 	tags = TagField(label=u"标签", help_text=u"使用英文逗号\",\"分隔不同标签")
@@ -21,12 +22,11 @@ class EntityForm(ModelForm):
 
 class RedierForm(EntityForm):
 	game = forms.ModelChoiceField(queryset=Game.objects.all(), empty_label=u"选择游戏", label=u"游戏")
-	description = forms.CharField(label=u"描述", help_text=u"攻略关卡，例如：第三关；攻略目标，例如：刷金币", required=True, max_length=255)
 
 	class Meta:
 		model = Redier
 		fields = ('game',
-			'description', 
+			'title', 
 			'redier_image',
 			'tags',
 			'weibo_sync_timestamp',
@@ -64,3 +64,37 @@ class GameForm(EntityForm):
 			'screenshot_path_2' : AjaxClearableFileInput(),
 			'screenshot_path_3' : AjaxClearableFileInput(),
 			'screenshot_path_4' : AjaxClearableFileInput()}
+
+class GameChoices(AutoModelSelect2MultipleField):
+	queryset = Game.objects
+	search_fields = ['name__icontains',]
+
+class CollectionForm(EntityForm):
+	cover = forms.ImageField(label=u"封面图片", help_text=u"建议使用640x320大小的图片", widget=AjaxClearableFileInput())
+	games = GameChoices(label=u"游戏")
+
+	class Meta:
+		model = Collection
+		fields = ('title',
+			'cover',
+			'games',
+			'tags',
+			'weibo_sync_timestamp',
+			'presenter',
+			'rating',
+			'brief_comment',
+			'recommended_reason')
+
+class ProblemForm(EntityForm):
+	problem_image = forms.ImageField(label=u"必有一技", help_text=u"建议图片宽度大于400像素", widget=AjaxClearableFileInput())
+
+	class Meta:
+		model = Problem
+		fields = ('title',
+			'problem_image',
+			'tags',
+			'weibo_sync_timestamp',
+			'presenter',
+			'rating',
+			'brief_comment',
+			'recommended_reason')

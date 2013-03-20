@@ -131,6 +131,7 @@ INSTALLED_APPS = (
     'datetimewidget',
     'ajax_upload',
     'social_auth',
+    'django_select2',
     'api',
 )
 
