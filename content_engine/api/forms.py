@@ -13,7 +13,7 @@ from api.models import Redier, Game, Category, Collection, Problem
 class EntityForm(ModelForm):
 	tags = TagField(label=u"标签", help_text=u"使用英文逗号\",\"分隔不同标签")
 	brief_comment = forms.CharField(label=u"一句话点评", help_text=u"20字以内（作为图文消息的标题同步到微信）", required=True, max_length=20)
-	recommended_reason = forms.CharField(label=u"推荐理由", help_text=u"120字以内（作为微博内容同步到新浪微博）", required=True, max_length=160, widget=forms.Textarea())
+	recommended_reason = forms.CharField(label=u"推荐理由", help_text=u"150字以内（作为微博内容同步到新浪微博）", required=True, max_length=150, widget=forms.Textarea())
 	weibo_sync_timestamp = forms.DateTimeField(label=u"微博同步时间", required=False, widget=DateTimeWidget(options={
 				'autoclose' : 'true',
 				'showMeridian' : 'true',

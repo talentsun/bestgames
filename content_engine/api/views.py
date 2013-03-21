@@ -43,7 +43,7 @@ def logout(request):
     auth.logout(request)
     return redirect('/')
 
-#@login_required
+@login_required
 def add_edit_problem(request, problem_id=None):
     if problem_id:
         problem = get_object_or_404(Problem, entity_ptr_id=problem_id)
@@ -68,7 +68,7 @@ def add_edit_problem(request, problem_id=None):
 
     return render(request, 'add_edit_problem.html', {'form' : form, 'tags' : Tag.objects.all()})
 
-#@login_required
+@login_required
 def delete_problem(request, problem_id=None):
     if problem_id:
         problem = get_object_or_404(Problem, entity_ptr_id=problem_id)
@@ -76,7 +76,7 @@ def delete_problem(request, problem_id=None):
             problem.delete()
             return redirect('/')
 
-#@login_required
+@login_required
 def add_edit_collection(request, collection_id=None):
     if collection_id:
         collection = get_object_or_404(Collection, entity_ptr_id=collection_id)
@@ -101,7 +101,7 @@ def add_edit_collection(request, collection_id=None):
 
     return render(request, 'add_edit_collection.html', {'form' : form, 'tags' : Tag.objects.all()})
 
-#@login_required
+@login_required
 def delete_collection(request, collection_id=None):
     if collection_id:
         collection = get_object_or_404(Collection, entity_ptr_id=collection_id)

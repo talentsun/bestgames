@@ -103,3 +103,18 @@ span.taggit-tag-used, li.taggit-tag-used, p.taggit-tag-used {
 #main .select2-container {
   width: 61%;
 }
+
+/*style for countable input*/
+.safe, .over{
+  padding:3px;
+  color:white;
+  font-weight:bold;
+}
+
+.safe{
+  background:green;
+}
+
+.over{
+  background:red;
+}
