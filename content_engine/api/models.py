@@ -28,13 +28,23 @@ class Entity(models.Model):
     RATING_3 = 3
     RATING_4 = 4
     RATING_5 = 5
+    RATING_6 = 6
+    RATING_7 = 7
+    RATING_8 = 8
+    RATING_9 = 9
+    RATING_10 = 10
     RATING_CHOICES = (
-        (RATING_5, u"5"),
-        (RATING_4, u"4"),
-        (RATING_3, u"3"),
-        (RATING_1, u"2"),
-        (RATING_1, u"1"))
-    rating = models.IntegerField(u"评分", choices=RATING_CHOICES, default=RATING_3)
+        (RATING_10, u"5"),
+        (RATING_9, u"4.5"),
+        (RATING_8, u"4"),
+        (RATING_7, u"3.5"),
+        (RATING_6, u"3"),
+        (RATING_5, u"2.5"),
+        (RATING_4, u"2"),
+        (RATING_3, u"1.5"),
+        (RATING_1, u"1"),
+        (RATING_1, u"0.5"))
+    rating = models.IntegerField(u"评分", choices=RATING_CHOICES, default=RATING_6)
     brief_comment = models.CharField(u"一句话点评(同步到微信)", max_length=255)
     recommended_reason = models.TextField(u"推荐理由(同步到微博)")
 
