@@ -130,16 +130,16 @@ def collectionImageBuilder(gameId,collectionTitle,collectionCover,nameList,scree
 
     templete_file.close()
     collection_games = ''
-    test = ''
     i = 0
     for name in nameList:
         count = gameRatingList[i]
-        j = 1
+        j = 0
         star = ''
         while j < count :
             star = star + '<div class="star"></div>'
-            j = j + 1
+            j = j + 2
         r = count - j
+
         if r != 0:
             star = star + '<div class="half-star"></div><div class="empty-star"></div>'
         collection_games = collection_games + collection_template%('/home/app_bestgames/content_engine/media/' + screenList[i],name,gameCategoryList[i],star,gameBriefList[i])
