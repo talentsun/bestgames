@@ -11,12 +11,21 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+#        'NAME': 'content_engine',                      # Or path to database file if using sqlite3.
+#        'USER': 'root',                      # Not used with sqlite3.
+#        'PASSWORD': 'nameLR9969',                  # Not used with sqlite3.
+#        'HOST': '118.244.225.222',                      # Set to empty string for localhost. Not used with sqlite3.
+#        'PORT': '3306',                      # Set to empty string for default. Not used with sqlite3.
+#    }
+
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'content_engine',                      # Or path to database file if using sqlite3.
         'USER': 'root',                      # Not used with sqlite3.
-        'PASSWORD': 'nameLR9969',                  # Not used with sqlite3.
-        'HOST': '118.244.225.222',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PASSWORD': '20120811',                  # Not used with sqlite3.
+        'HOST': '127.0.0.1',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '3306',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
@@ -48,7 +57,7 @@ USE_TZ = False
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = '/Users/bridge/Documents/workspace/bestgames/content_engine/media'
+MEDIA_ROOT = '/Users/huwei/games/bestgames/content_engine/media/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -59,7 +68,7 @@ MEDIA_URL = 'http://127.0.0.1:8000/media/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = '/Users/bridge/Documents/workspace/bestgames/content_engine/templates'
+STATIC_ROOT = '/Users/huwei/games/bestgames/content_engine/templates'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -113,7 +122,7 @@ LOGOUT_URL = '/logout'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'content_engine.wsgi.application'
 
-TEMPLATE_DIRS = ('/Users/bridge/Documents/workspace/bestgames/content_engine/templates',)
+TEMPLATE_DIRS = ('/Users/huwei/games/bestgames/content_engine/templates',)
 
 INSTALLED_APPS = (
     'django.contrib.auth',

@@ -145,8 +145,10 @@ def delete_redier(request, redier_id=None):
 
 @login_required
 def add_edit_game(request, game_id=None):
+    status = '1'
     if game_id:
         game = get_object_or_404(Game, entity_ptr_id=game_id)
+        status = game.status
     else:
         game = None
 
@@ -174,6 +176,7 @@ def add_edit_game(request, game_id=None):
                 game.screenshot_path_4 = request.POST['screenshot_path_4'].replace(settings.MEDIA_URL, '', 1)
             else:
                 game.screenshot_path_4 = request.POST['screenshot_path_4']
+            game.status = status
             game.save()
             return redirect('/')
 

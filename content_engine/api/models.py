@@ -3,6 +3,7 @@ from django.db import models
 from django.utils.encoding import force_unicode
 from taggit.managers import TaggableManager
 
+
 class Entity(models.Model):
     GAME = 1
     REDIER = 2
@@ -81,8 +82,10 @@ class Game(Entity):
         verbose_name_plural = u'精品游戏推荐'
     def save(self, *args, **kwargs):
         self.type = Entity.GAME
-        if self.weibo_sync_timestamp is not None:
-            self.status = Entity.STATUS_PENDING
+        if self.status is None:
+            if self.weibo_sync_timestamp is not None:
+                self.status = Entity.STATUS_PENDING
+
         super(Game, self).save(args, kwargs)
 
 class Redier(Entity):
@@ -96,8 +99,9 @@ class Redier(Entity):
         verbose_name_plural = u'小兵变大咖'
     def save(self, *args, **kwargs):
         self.type = Entity.REDIER
-        if self.weibo_sync_timestamp is not None:
-            self.status = Entity.STATUS_PENDING
+        if self.status is None:
+            if self.weibo_sync_timestamp is not None:
+                self.status = Entity.STATUS_PENDING
         super(Redier, self).save(args, kwargs)
 
 class Collection(Entity):
@@ -111,8 +115,9 @@ class Collection(Entity):
         verbose_name_plural = u'游戏合集'
     def save(self, *args, **kwargs):
         self.type = Entity.COLLECTION
-        if self.weibo_sync_timestamp is not None:
-            self.status = Entity.STATUS_PENDING
+        if self.status is None:
+            if self.weibo_sync_timestamp is not None:
+                self.status = Entity.STATUS_PENDING
         super(Collection, self).save(args, kwargs)
 
 class Problem(Entity):
@@ -125,6 +130,7 @@ class Problem(Entity):
         verbose_name_plural = u'宅，必有一技'
     def save(self, *args, **kwargs):
         self.type = Entity.PROBLEM
-        if self.weibo_sync_timestamp is not None:
-            self.status = Entity.STATUS_PENDING
+        if self.status is None:
+            if self.weibo_sync_timestamp is not None:
+                self.status = Entity.STATUS_PENDING
         super(Problem, self).save(args, kwargs)
