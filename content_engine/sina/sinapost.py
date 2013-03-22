@@ -233,15 +233,15 @@ def redier():
 
 
 def collection():
-    con = mdb.connect('localhost', 'root',
+    con = mdb.connect('118.244.225.222', 'root',
         'nameLR9969', 'content_engine',charset='utf8');
 
     cur = con.cursor()
     curtime = time.strftime('%Y-%m-%d %H:%M',time.localtime(time.time()))
     print 'start: ' + curtime
-
+    curtime = '2013'
     sql = "SELECT collections.entity_ptr_id,collections.title AS collection_title, collections.cover AS collection_cover,games.`name` AS game_name,games.screenshot_path_2 AS game_screenshot,game_entities.brief_comment AS game_brief_comment,game_entities.rating AS game_rating,categories.`name` AS game_category," \
-          "collection_entities.weibo_sync_timestamp AS collection_weibo_sync_timestamp,collection_entities.`status` AS collection_status FROM collections INNER JOIN collections_games ON collections.entity_ptr_id = collections_games.collection_id " \
+          "collection_entities.weibo_sync_timestamp AS collection_weibo_sync_timestamp,collection_entities.`status` AS collection_status,collection_entities.`recommended_reason` FROM collections INNER JOIN collections_games ON collections.entity_ptr_id = collections_games.collection_id " \
           "INNER JOIN games ON collections_games.game_id = games.entity_ptr_id INNER JOIN entities game_entities ON games.entity_ptr_id = game_entities.id " \
           "INNER JOIN entities collection_entities ON collections.entity_ptr_id = collection_entities.id INNER JOIN categories ON games.category_id = categories.id " \
           "WHERE collection_entities.weibo_sync_timestamp like '"+ curtime +  "%'"
@@ -268,7 +268,7 @@ def collection():
         gameBriefList.append(result[5])
         gameRatingList.append(result[6])
         gameCategoryList.append(result[7])
-        weibo_status = result[8]
+        weibo_status = result[10]
 
     print collection_title
     print collection_cover
@@ -300,32 +300,32 @@ def problem():
     if con:
         con.close()
 
+collection()
 
-
-con = None
-
-try:
-
-    con = mdb.connect('localhost', 'root',
-        'nameLR9969', 'content_engine',charset='utf8');
-
-    cur = con.cursor()
-
-    curtime = time.strftime('%Y-%m-%d %H:%M',time.localtime(time.time()))
-    print 'start: ' + curtime
-    #curtime = '2013-03-15 10:30:00'
-    sql = "SELECT games.name, games.entity_ptr_id,games.screenshot_path_1,games.screenshot_path_2,games.screenshot_path_3,games.screenshot_path_4,entities.weibo_sync_timestamp, entities.recommended_reason from entities,games where entities.weibo_sync_timestamp  like '" + curtime + "%'  and games.entity_ptr_id = entities.id and entities.status = '1'"
-    print sql
-    cur.execute(sql)
-    data = cur.fetchall()
-    for result in data:
-        print result[7]
-        imageBuilder(result[2],result[3],result[4],result[5],result[1],result[7].decode('utf-8'))
-
-    redier()
-    collection()
-    problem()
-
-finally:
-    if con:
-        con.close()
+#con = None
+#
+#try:
+#
+#    con = mdb.connect('localhost', 'root',
+#        'nameLR9969', 'content_engine',charset='utf8');
+#
+#    cur = con.cursor()
+#
+#    curtime = time.strftime('%Y-%m-%d %H:%M',time.localtime(time.time()))
+#    print 'start: ' + curtime
+#    #curtime = '2013-03-15 10:30:00'
+#    sql = "SELECT games.name, games.entity_ptr_id,games.screenshot_path_1,games.screenshot_path_2,games.screenshot_path_3,games.screenshot_path_4,entities.weibo_sync_timestamp, entities.recommended_reason from entities,games where entities.weibo_sync_timestamp  like '" + curtime + "%'  and games.entity_ptr_id = entities.id and entities.status = '1'"
+#    print sql
+#    cur.execute(sql)
+#    data = cur.fetchall()
+#    for result in data:
+#        print result[7]
+#        imageBuilder(result[2],result[3],result[4],result[5],result[1],result[7].decode('utf-8'))
+#
+#    redier()
+#    collection()
+#    problem()
+#
+#finally:
+#    if con:
+#        con.close()
