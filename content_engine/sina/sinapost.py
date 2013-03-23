@@ -244,7 +244,7 @@ def collection():
           "collection_entities.weibo_sync_timestamp AS collection_weibo_sync_timestamp,collection_entities.`status` AS collection_status,collection_entities.`recommended_reason` FROM collections INNER JOIN collections_games ON collections.entity_ptr_id = collections_games.collection_id " \
           "INNER JOIN games ON collections_games.game_id = games.entity_ptr_id INNER JOIN entities game_entities ON games.entity_ptr_id = game_entities.id " \
           "INNER JOIN entities collection_entities ON collections.entity_ptr_id = collection_entities.id INNER JOIN categories ON games.category_id = categories.id " \
-          "WHERE collection_entities.weibo_sync_timestamp like '"+ curtime +  "%'"
+          "WHERE collection_entities.weibo_sync_timestamp like '"+ curtime +  "%' and collection_entities.status = '1' and collection_entities.type ='3'"
     print sql
     nameList = []
     screenList = []
@@ -258,7 +258,7 @@ def collection():
     cur.execute(sql)
 
     data = cur.fetchall()
-
+    r = 0
     for result in data:
         gameId = result[0]
         collection_title = result[1]
@@ -269,12 +269,10 @@ def collection():
         gameRatingList.append(result[6])
         gameCategoryList.append(result[7])
         weibo_status = result[10]
+        r = 1
 
-    print collection_title
-    print collection_cover
-    print nameList
-
-    collectionImageBuilder(gameId,collection_title,collection_cover,nameList,screenList,gameBriefList,gameRatingList,gameCategoryList,weibo_status)
+    if r != 0:
+        collectionImageBuilder(gameId,collection_title,collection_cover,nameList,screenList,gameBriefList,gameRatingList,gameCategoryList,weibo_status)
 
     if con:
         con.close()
