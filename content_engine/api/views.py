@@ -14,7 +14,7 @@ from django.conf import settings
 
 from taggit.models import Tag
 
-from api.models import Game, Redier, Collection, Problem
+from api.models import Game, Redier, Collection, Problem,Entity
 from api.tables import GameTable, RedierTable, CollectionTable, ProblemTable
 from api.forms import GameForm, RedierForm, CollectionForm, ProblemForm
 
@@ -45,8 +45,10 @@ def logout(request):
 
 @login_required
 def add_edit_problem(request, problem_id=None):
+    weibo_sync_timestamp = ''
     if problem_id:
         problem = get_object_or_404(Problem, entity_ptr_id=problem_id)
+        weibo_sync_timestamp = problem.weibo_sync_timestamp
     else:
         problem = None
 
@@ -58,6 +60,8 @@ def add_edit_problem(request, problem_id=None):
                 problem.problem_image = request.POST['problem_image'].replace(settings.MEDIA_URL, '', 1)
             else:
                 problem.problem_image = request.POST['problem_image']
+            if weibo_sync_timestamp != problem.weibo_sync_timestamp:
+                problem.status = Entity.STATUS_PENDING
             problem.save()
             return redirect('/')
     else:
@@ -78,8 +82,10 @@ def delete_problem(request, problem_id=None):
 
 @login_required
 def add_edit_collection(request, collection_id=None):
+    weibo_sync_timestamp =''
     if collection_id:
         collection = get_object_or_404(Collection, entity_ptr_id=collection_id)
+        weibo_sync_timestamp = collection.weibo_sync_timestamp
     else:
         collection = None
 
@@ -91,6 +97,8 @@ def add_edit_collection(request, collection_id=None):
                 collection.cover = request.POST['cover'].replace(settings.MEDIA_URL, '', 1)
             else:
                 collection.cover = request.POST['cover']
+            if weibo_sync_timestamp != game.weibo_sync_timestamp:
+                collection.status = Entity.STATUS_PENDING
             collection.save()
             return redirect('/')
     else:
@@ -111,8 +119,10 @@ def delete_collection(request, collection_id=None):
 
 @login_required
 def add_edit_redier(request, redier_id=None):
+    weibo_sync_timestamp = ''
     if redier_id:
         redier = get_object_or_404(Redier, entity_ptr_id=redier_id)
+        weibo_sync_timestamp = redier.weibo_sync_timestamp
     else:
         redier = None
 
@@ -124,6 +134,8 @@ def add_edit_redier(request, redier_id=None):
                 redier.redier_image = request.POST['redier_image'].replace(settings.MEDIA_URL, '', 1)
             else:
                 redier.redier_image = request.POST['redier_image']
+            if weibo_sync_timestamp != game.weibo_sync_timestamp:
+                redier.status = Entity.STATUS_PENDING
             redier.save()
             return redirect('/')
 
@@ -145,10 +157,10 @@ def delete_redier(request, redier_id=None):
 
 @login_required
 def add_edit_game(request, game_id=None):
-    status = '1'
+    weibo_sync_timestamp = ''
     if game_id:
         game = get_object_or_404(Game, entity_ptr_id=game_id)
-        status = game.status
+        weibo_sync_timestamp = game.weibo_sync_timestamp
     else:
         game = None
 
@@ -176,7 +188,8 @@ def add_edit_game(request, game_id=None):
                 game.screenshot_path_4 = request.POST['screenshot_path_4'].replace(settings.MEDIA_URL, '', 1)
             else:
                 game.screenshot_path_4 = request.POST['screenshot_path_4']
-            game.status = status
+            if weibo_sync_timestamp != game.weibo_sync_timestamp:
+                game.status = Entity.STATUS_PENDING
             game.save()
             return redirect('/')
 
