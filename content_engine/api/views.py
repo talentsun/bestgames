@@ -4,7 +4,7 @@ import os
 
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
-from django.template import loader,Context
+from django.template import Template,loader,Context
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404, render, redirect
 from django.contrib import auth
@@ -43,8 +43,22 @@ def logout(request):
     auth.logout(request)
     return redirect('/')
 
+def authUser(request):
+    user = auth.get_user(request)
+    if user.is_staff != 1:
+        noauth = {'hint': '您不是管理员'}
+        t = Template('{{noauth.hint}}, 必须是管理员才能更改')
+        c = Context({'noauth':noauth})
+        return HttpResponse(t.render(c))
+
 @login_required
 def add_edit_problem(request, problem_id=None):
+    user = auth.get_user(request)
+    if user.is_staff != 1:
+        noauth = {'hint': '您不是管理员'}
+        t = Template('{{noauth.hint}}, 必须是管理员才能更改')
+        c = Context({'noauth':noauth})
+        return HttpResponse(t.render(c))
     weibo_sync_timestamp = ''
     if problem_id:
         problem = get_object_or_404(Problem, entity_ptr_id=problem_id)
@@ -74,6 +88,12 @@ def add_edit_problem(request, problem_id=None):
 
 @login_required
 def delete_problem(request, problem_id=None):
+    user = auth.get_user(request)
+    if user.is_staff != 1:
+        noauth = {'hint': '您不是管理员'}
+        t = Template('{{noauth.hint}}, 必须是管理员才能更改')
+        c = Context({'noauth':noauth})
+        return HttpResponse(t.render(c))
     if problem_id:
         problem = get_object_or_404(Problem, entity_ptr_id=problem_id)
         if problem is not None:
@@ -82,6 +102,7 @@ def delete_problem(request, problem_id=None):
 
 @login_required
 def add_edit_collection(request, collection_id=None):
+    authUser(request)
     weibo_sync_timestamp =''
     if collection_id:
         collection = get_object_or_404(Collection, entity_ptr_id=collection_id)
@@ -111,6 +132,12 @@ def add_edit_collection(request, collection_id=None):
 
 @login_required
 def delete_collection(request, collection_id=None):
+    user = auth.get_user(request)
+    if user.is_staff != 1:
+        noauth = {'hint': '您不是管理员'}
+        t = Template('{{noauth.hint}}, 必须是管理员才能更改')
+        c = Context({'noauth':noauth})
+        return HttpResponse(t.render(c))
     if collection_id:
         collection = get_object_or_404(Collection, entity_ptr_id=collection_id)
         if collection is not None:
@@ -119,6 +146,12 @@ def delete_collection(request, collection_id=None):
 
 @login_required
 def add_edit_redier(request, redier_id=None):
+    user = auth.get_user(request)
+    if user.is_staff != 1:
+        noauth = {'hint': '您不是管理员'}
+        t = Template('{{noauth.hint}}, 必须是管理员才能更改')
+        c = Context({'noauth':noauth})
+        return HttpResponse(t.render(c))
     weibo_sync_timestamp = ''
     if redier_id:
         redier = get_object_or_404(Redier, entity_ptr_id=redier_id)
@@ -149,6 +182,12 @@ def add_edit_redier(request, redier_id=None):
 
 @login_required
 def delete_redier(request, redier_id=None):
+    user = auth.get_user(request)
+    if user.is_staff != 1:
+        noauth = {'hint': '您不是管理员'}
+        t = Template('{{noauth.hint}}, 必须是管理员才能更改')
+        c = Context({'noauth':noauth})
+        return HttpResponse(t.render(c))
     if redier_id:
         redier = get_object_or_404(Redier, entity_ptr_id=redier_id)
         if redier is not None:
@@ -157,6 +196,12 @@ def delete_redier(request, redier_id=None):
 
 @login_required
 def add_edit_game(request, game_id=None):
+    user = auth.get_user(request)
+    if user.is_staff != 1:
+        noauth = {'hint': '您不是管理员'}
+        t = Template('{{noauth.hint}}, 必须是管理员才能更改')
+        c = Context({'noauth':noauth})
+        return HttpResponse(t.render(c))
     weibo_sync_timestamp = ''
     if game_id:
         game = get_object_or_404(Game, entity_ptr_id=game_id)
@@ -203,6 +248,12 @@ def add_edit_game(request, game_id=None):
 
 @login_required
 def delete_game(request, game_id=None):
+    user = auth.get_user(request)
+    if user.is_staff != 1:
+        noauth = {'hint': '您不是管理员'}
+        t = Template('{{noauth.hint}}, 必须是管理员才能更改')
+        c = Context({'noauth':noauth})
+        return HttpResponse(t.render(c))
     if game_id:
         game = get_object_or_404(Game, entity_ptr_id=game_id)
         if game is not None:
