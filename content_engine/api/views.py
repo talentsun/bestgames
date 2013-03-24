@@ -75,7 +75,8 @@ def add_edit_problem(request, problem_id=None):
             else:
                 problem.problem_image = request.POST['problem_image']
             if weibo_sync_timestamp != problem.weibo_sync_timestamp:
-                problem.status = Entity.STATUS_PENDING
+                if weibo_sync_timestamp != '':
+                    problem.status = Entity.STATUS_PENDING
             problem.save()
             return redirect('/')
     else:
@@ -119,7 +120,8 @@ def add_edit_collection(request, collection_id=None):
             else:
                 collection.cover = request.POST['cover']
             if weibo_sync_timestamp != game.weibo_sync_timestamp:
-                collection.status = Entity.STATUS_PENDING
+                if weibo_sync_timestamp != '':
+                    collection.status = Entity.STATUS_PENDING
             collection.save()
             return redirect('/')
     else:
@@ -168,7 +170,8 @@ def add_edit_redier(request, redier_id=None):
             else:
                 redier.redier_image = request.POST['redier_image']
             if weibo_sync_timestamp != game.weibo_sync_timestamp:
-                redier.status = Entity.STATUS_PENDING
+                if weibo_sync_timestamp != '':
+                    redier.status = Entity.STATUS_PENDING
             redier.save()
             return redirect('/')
 
@@ -234,7 +237,8 @@ def add_edit_game(request, game_id=None):
             else:
                 game.screenshot_path_4 = request.POST['screenshot_path_4']
             if weibo_sync_timestamp != game.weibo_sync_timestamp:
-                game.status = Entity.STATUS_PENDING
+                if weibo_sync_timestamp != '':
+                    game.status = Entity.STATUS_PENDING
             game.save()
             return redirect('/')
 
