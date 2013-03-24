@@ -82,7 +82,7 @@ class Game(Entity):
         verbose_name_plural = u'精品游戏推荐'
     def save(self, *args, **kwargs):
         self.type = Entity.GAME
-        if self.status is None:
+        if self.status == Entity.STATUS_DO_NOT_SYNC:
             if self.weibo_sync_timestamp is not None:
                 self.status = Entity.STATUS_PENDING
 
@@ -99,9 +99,11 @@ class Redier(Entity):
         verbose_name_plural = u'小兵变大咖'
     def save(self, *args, **kwargs):
         self.type = Entity.REDIER
-        if self.status is None:
+        if self.status == Entity.STATUS_DO_NOT_SYNC:
             if self.weibo_sync_timestamp is not None:
                 self.status = Entity.STATUS_PENDING
+
+
         super(Redier, self).save(args, kwargs)
 
 class Collection(Entity):
@@ -115,7 +117,7 @@ class Collection(Entity):
         verbose_name_plural = u'游戏合集'
     def save(self, *args, **kwargs):
         self.type = Entity.COLLECTION
-        if self.status is None:
+        if self.status == Entity.STATUS_DO_NOT_SYNC:
             if self.weibo_sync_timestamp is not None:
                 self.status = Entity.STATUS_PENDING
         super(Collection, self).save(args, kwargs)
@@ -130,7 +132,7 @@ class Problem(Entity):
         verbose_name_plural = u'宅，必有一技'
     def save(self, *args, **kwargs):
         self.type = Entity.PROBLEM
-        if self.status is None:
+        if self.status == Entity.STATUS_DO_NOT_SYNC:
             if self.weibo_sync_timestamp is not None:
                 self.status = Entity.STATUS_PENDING
         super(Problem, self).save(args, kwargs)
