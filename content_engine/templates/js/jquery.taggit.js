@@ -171,6 +171,7 @@ $.fn.taggit.split_strip = function( tags_string, delimiter ) {
     }
 
     var tags = [];
+    tags_string = tags_string.replace(new RegExp("，","gm"),",");
     var split_tags = tags_string.split( delimiter );
     for ( var i = 0; i < split_tags.length; i++ ) {
         var tag = $.trim( split_tags[i] );
@@ -200,6 +201,8 @@ $.fn.taggit.parse_tags = function( tagstring ) {
     if ( tagstring.length <= 0 ) {
         return [];
     }
+
+    tagstring = tagstring.replace(new RegExp("，","gm"),",");
 
     // No commas or quotes?
     if ( ! ( /[,\"]/.test( tagstring ) ) ) {
@@ -320,6 +323,7 @@ $.fn.taggit.edit_string_for_tags = function( tags ) {
 
     for ( var tag in tags ) {
         var name = tags[tag];
+        name = name.replace("，",",");
         if ( name.indexOf( "," ) >= 0 || name.indexOf( " " ) >= 0 ) {
             names.push( "\"" + name + "\"" );
         } else {
