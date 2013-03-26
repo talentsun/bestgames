@@ -3,6 +3,9 @@ import MySQLdb as mdb
 import datetime
 import time
 
+def removeFile(path):
+    if os.path.exists(path):
+        os.remove(path)
 
 def getUselessFile():
     con = mdb.connect('localhost', 'root',
