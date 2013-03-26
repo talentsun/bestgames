@@ -119,7 +119,7 @@ def add_edit_collection(request, collection_id=None):
                 collection.cover = request.POST['cover'].replace(settings.MEDIA_URL, '', 1)
             else:
                 collection.cover = request.POST['cover']
-            if weibo_sync_timestamp != game.weibo_sync_timestamp:
+            if weibo_sync_timestamp != collection.weibo_sync_timestamp:
                 if weibo_sync_timestamp != '':
                     collection.status = Entity.STATUS_PENDING
             collection.save()
@@ -169,7 +169,7 @@ def add_edit_redier(request, redier_id=None):
                 redier.redier_image = request.POST['redier_image'].replace(settings.MEDIA_URL, '', 1)
             else:
                 redier.redier_image = request.POST['redier_image']
-            if weibo_sync_timestamp != game.weibo_sync_timestamp:
+            if weibo_sync_timestamp != redier.weibo_sync_timestamp:
                 if weibo_sync_timestamp != '':
                     redier.status = Entity.STATUS_PENDING
             redier.save()
