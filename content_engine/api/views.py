@@ -264,3 +264,4 @@ def delete_game(request, game_id=None):
             game.delete()
             return redirect("/")
 
+
