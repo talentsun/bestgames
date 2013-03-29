@@ -21,11 +21,9 @@ class EntityForm(ModelForm):
 				}))
 
 class RedierForm(EntityForm):
-	game = forms.ModelChoiceField(queryset=Game.objects.all(), empty_label=u"选择游戏", label=u"游戏")
-
 	class Meta:
 		model = Redier
-		fields = ('game',
+		fields = ('game_name',
 			'title', 
 			'redier_image',
 			'tags',

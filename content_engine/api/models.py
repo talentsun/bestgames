@@ -89,7 +89,7 @@ class Game(Entity):
         super(Game, self).save(args, kwargs)
 
 class Redier(Entity):
-    game = models.ForeignKey(Game, verbose_name='游戏')
+    game_name = models.CharField(u'游戏', max_length=255)
     title = models.CharField(u"标题", max_length=100)
     redier_image = models.ImageField(u"攻略", upload_to='upload/', max_length=255, blank=True)
 
