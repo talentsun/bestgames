@@ -56,10 +56,10 @@
         <span class="caret"></span>
       </a>
       <ul class="dropdown-menu">
-        <li><a href="/games/add?next={{request.path}}">新增精品游戏推荐</a></li>
-        <li><a href="/rediers/add?next={{request.path}}">新增小兵变大咖</a></li>
-        <li><a href="/collections/add?next={{request.path}}">新增游戏合集</a></li>
-        <li><a href="/problems/add?next={{request.path}}">新增“宅，必有一技”</a></li>
+        <li><a href="/games/add?next={{request.get_full_path()}}">新增精品游戏推荐</a></li>
+        <li><a href="/rediers/add?next={{request.get_full_path()}}">新增小兵变大咖</a></li>
+        <li><a href="/collections/add?next={{request.get_full_path()}}">新增游戏合集</a></li>
+        <li><a href="/problems/add?next={{request.get_full_path()}}">新增“宅，必有一技”</a></li>
       </ul>
     </div>
 
