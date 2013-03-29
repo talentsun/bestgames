@@ -22,11 +22,11 @@ from api.forms import GameForm, RedierForm, CollectionForm, ProblemForm
 import django_tables2 as tables
 
 def _redirect_back(request):
-    referer = request.META.get('HTTP_REFERER', None)
-    if referer is None:
+    next_url = request.GET.get('next', None)
+    if next_url is None:
         return redirect('/')
     try:
-        return redirect(urlsplit(referer, 'http', False)[2])
+        return redirect(next_url)
     except IndexError:
         return redirect('/')
 
