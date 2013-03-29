@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import sys
 import os
+from urlparse import urlsplit
 
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
@@ -19,6 +20,15 @@ from api.tables import GameTable, RedierTable, CollectionTable, ProblemTable
 from api.forms import GameForm, RedierForm, CollectionForm, ProblemForm
 
 import django_tables2 as tables
+
+def _redirect_back(request):
+    next_url = request.GET.get('next', None)
+    if next_url is None:
+        return redirect('/')
+    try:
+        return redirect(next_url)
+    except IndexError:
+        return redirect('/')
 
 def index(request):
     games = GameTable(Game.objects.all(),prefix="hg-")
@@ -43,7 +53,7 @@ def logout(request):
     auth.logout(request)
     return redirect('/')
 
-def authUser(request):
+def _auth_user(request):
     user = auth.get_user(request)
     if user.is_staff != 1:
         noauth = {'hint': '您不是管理员'}
@@ -53,12 +63,7 @@ def authUser(request):
 
 @login_required
 def add_edit_problem(request, problem_id=None):
-    user = auth.get_user(request)
-    if user.is_staff != 1:
-        noauth = {'hint': '您不是管理员'}
-        t = Template('{{noauth.hint}}, 必须是管理员才能更改')
-        c = Context({'noauth':noauth})
-        return HttpResponse(t.render(c))
+    _auth_user(request)
     weibo_sync_timestamp = ''
     if problem_id:
         problem = get_object_or_404(Problem, entity_ptr_id=problem_id)
@@ -78,32 +83,27 @@ def add_edit_problem(request, problem_id=None):
                 if weibo_sync_timestamp != '':
                     problem.status = Entity.STATUS_PENDING
             problem.save()
-            return redirect('/')
+            return _redirect_back(request)
     else:
         if problem is None:
             form = ProblemForm(instance=problem, initial={'presenter' : request.user.username})
         else:
             form = ProblemForm(instance=problem)
 
-    return render(request, 'add_edit_problem.html', {'form' : form, 'tags' : Tag.objects.all()})
+    return render(request, 'add_edit_problem.html', {'form' : form})
 
 @login_required
 def delete_problem(request, problem_id=None):
-    user = auth.get_user(request)
-    if user.is_staff != 1:
-        noauth = {'hint': '您不是管理员'}
-        t = Template('{{noauth.hint}}, 必须是管理员才能更改')
-        c = Context({'noauth':noauth})
-        return HttpResponse(t.render(c))
+    _auth_user(request)
     if problem_id:
         problem = get_object_or_404(Problem, entity_ptr_id=problem_id)
         if problem is not None:
             problem.delete()
-            return redirect('/')
+            return _redirect_back(request)
 
 @login_required
 def add_edit_collection(request, collection_id=None):
-    authUser(request)
+    _auth_user(request)
     weibo_sync_timestamp =''
     if collection_id:
         collection = get_object_or_404(Collection, entity_ptr_id=collection_id)
@@ -123,37 +123,27 @@ def add_edit_collection(request, collection_id=None):
                 if weibo_sync_timestamp != '':
                     collection.status = Entity.STATUS_PENDING
             collection.save()
-            return redirect('/')
+            return _redirect_back(request)
     else:
         if collection is None:
             form = CollectionForm(instance=collection, initial={'presenter' : request.user.username})
         else:
             form = CollectionForm(instance=collection)
 
-    return render(request, 'add_edit_collection.html', {'form' : form, 'tags' : Tag.objects.all()})
+    return render(request, 'add_edit_collection.html', {'form' : form})
 
 @login_required
 def delete_collection(request, collection_id=None):
-    user = auth.get_user(request)
-    if user.is_staff != 1:
-        noauth = {'hint': '您不是管理员'}
-        t = Template('{{noauth.hint}}, 必须是管理员才能更改')
-        c = Context({'noauth':noauth})
-        return HttpResponse(t.render(c))
+    _auth_user(request)
     if collection_id:
         collection = get_object_or_404(Collection, entity_ptr_id=collection_id)
         if collection is not None:
             collection.delete()
-            return redirect('/')
+            return _redirect_back(request)
 
 @login_required
 def add_edit_redier(request, redier_id=None):
-    user = auth.get_user(request)
-    if user.is_staff != 1:
-        noauth = {'hint': '您不是管理员'}
-        t = Template('{{noauth.hint}}, 必须是管理员才能更改')
-        c = Context({'noauth':noauth})
-        return HttpResponse(t.render(c))
+    _auth_user(request)
     weibo_sync_timestamp = ''
     if redier_id:
         redier = get_object_or_404(Redier, entity_ptr_id=redier_id)
@@ -173,7 +163,7 @@ def add_edit_redier(request, redier_id=None):
                 if weibo_sync_timestamp != '':
                     redier.status = Entity.STATUS_PENDING
             redier.save()
-            return redirect('/')
+            return _redirect_back(request)
 
     else:
         if redier is None:
@@ -181,30 +171,20 @@ def add_edit_redier(request, redier_id=None):
         else:
             form = RedierForm(instance=redier)
         
-    return render(request, "add_edit_redier.html", { "form" : form, "tags" : Tag.objects.all() })
+    return render(request, "add_edit_redier.html", { "form" : form})
 
 @login_required
 def delete_redier(request, redier_id=None):
-    user = auth.get_user(request)
-    if user.is_staff != 1:
-        noauth = {'hint': '您不是管理员'}
-        t = Template('{{noauth.hint}}, 必须是管理员才能更改')
-        c = Context({'noauth':noauth})
-        return HttpResponse(t.render(c))
+    _auth_user(request)
     if redier_id:
         redier = get_object_or_404(Redier, entity_ptr_id=redier_id)
         if redier is not None:
             redier.delete()
-            return redirect("/")
+            return _redirect_back(request)
 
 @login_required
 def add_edit_game(request, game_id=None):
-    user = auth.get_user(request)
-    if user.is_staff != 1:
-        noauth = {'hint': '您不是管理员'}
-        t = Template('{{noauth.hint}}, 必须是管理员才能更改')
-        c = Context({'noauth':noauth})
-        return HttpResponse(t.render(c))
+    _auth_user(request)
     weibo_sync_timestamp = ''
     if game_id:
         game = get_object_or_404(Game, entity_ptr_id=game_id)
@@ -240,7 +220,7 @@ def add_edit_game(request, game_id=None):
                 if weibo_sync_timestamp != '':
                     game.status = Entity.STATUS_PENDING
             game.save()
-            return redirect('/')
+            return _redirect_back(request)
 
     else:
         if game is None:
@@ -248,19 +228,15 @@ def add_edit_game(request, game_id=None):
         else:
             form = GameForm(instance=game)
         
-    return render(request, "add_edit_game.html", { "form" : form, "tags" : Tag.objects.all() })
+    return render(request, "add_edit_game.html", { "form" : form})
 
 @login_required
 def delete_game(request, game_id=None):
-    user = auth.get_user(request)
-    if user.is_staff != 1:
-        noauth = {'hint': '您不是管理员'}
-        t = Template('{{noauth.hint}}, 必须是管理员才能更改')
-        c = Context({'noauth':noauth})
-        return HttpResponse(t.render(c))
+    _auth_user(request)
     if game_id:
         game = get_object_or_404(Game, entity_ptr_id=game_id)
         if game is not None:
             game.delete()
-            return redirect("/")
+            return _redirect_back(request)
+
 
