@@ -65,6 +65,8 @@ class SearchIndex:
             allNum += len(hitListList[i].hitList)
             termWeight.append(len(hitListList[i].hitList))
             curAddr.append(0)
+        if allNum == 0:
+            return 0
         for i in range(len(hitListList)):
             termWeight[i] = termWeight[i] / allNum
 
@@ -94,10 +96,30 @@ class SearchIndex:
         self.logger.debug("max game id %d %f" % (maxGameId, maxWeight))
         return maxGameId
 
+    def StartServer(self):
+        import socket
+        host = "127.0.0.1"
+        port = 8128
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        s.bind((host, port))
+
+        while True:
+            message, address = s.recvfrom(8192)
+            wLen = struct.unpack("!H", message[0:2])[0]
+            self.logger.debug("len %d" % wLen)
+            if len(message) != wLen + 2:
+                self.logger.error("bad format")
+                continue
+            content = message[2:]
+            self.logger.debug("get content %s" % content.decode("utf8"))
+            gameId = self.Search(content)
+            self.logger.debug("get game %d" % gameId)
+            resp = struct.pack("!HI", 1, gameId)
+            s.sendto(resp, address)
 
 if __name__ == "__main__":
     search = SearchIndex(workPath + "/../db/", workPath + "/../")
-
-    print search.Search("僵尸")
+    search.StartServer()
 
 

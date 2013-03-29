@@ -1,15 +1,19 @@
 # Create your views here.
 # coding: utf8
 from django.http import HttpResponse
+from django.shortcuts import render_to_response, get_object_or_404, render, redirect
 import hashlib
 
-import logging, traceback, time
+import logging, traceback, time, struct, socket
 from django.views.decorators.csrf import csrf_exempt
 
 logger = logging.getLogger('default')
+from api.tables import GameTable
+from api.models import Game
 
 
 import xml.etree.ElementTree as ET
+import socket
 
 def dealWithInput(inputText):
     root = ET.fromstring(inputText)
@@ -60,3 +64,26 @@ def index(request):
             return HttpResponse(resp)
     except:
         logger.debug(traceback.format_exc())
+
+def search(request):
+    games = []
+    if request.method == 'GET':
+        return render(request, "search.html", {"games": GameTable(games)})
+    elif request.method == 'POST':
+        logger.debug("content %s" % request.POST['content'])
+        content = request.POST['content'].encode("utf-8")
+        req = struct.pack("!H%ds" % len(content), len(content), content)
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.sendto(req, ("127.0.0.1", 8128))
+        resp = s.recv(4196)
+        startAddr = 0
+        num = struct.unpack("!H", resp[startAddr : startAddr + 2])[0]
+        logger.debug("get %d games" % num)
+        startAddr += 2
+        for i in range(num):
+            gameId = struct.unpack("!I", resp[startAddr : startAddr + 4])[0]
+            logger.debug("get game %d" % gameId)
+            if gameId != 0:
+                games.append(Game.objects.get(pk = gameId))
+        return render(request, "search.html", {"games": GameTable(games)})
+

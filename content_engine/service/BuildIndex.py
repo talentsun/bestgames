@@ -68,7 +68,7 @@ class Index:
         }
         self.db = leveldb.LevelDB(self.path, **options)
         self.logger = logging.getLogger("build_index") 
-        PySeg.init(workPath)
+        PySeg.init(self.path + "/../")
 
 
     def BuildIndexForOne(self, gameId, name, description, categorys, tags):
