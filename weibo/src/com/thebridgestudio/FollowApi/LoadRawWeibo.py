@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/local/bin/python2.7
 import re
 import MySQLdb
 
@@ -31,7 +31,7 @@ def GetOauthTokenSecret(info):
 def ReadRAWData(limit, offset):
     conn = MySQLdb.connect(host='localhost', user='root', passwd='nameLR9969', db='bestgames', port=3306, charset='utf8')
     cursor = conn.cursor()
-    cursor.execute("select fromuid, propdata from RAW_weibo_20121207_20130101 limit %d offset %d" % (limit, offset))
+    cursor.execute("select fromuid, propdata from RAW_weibo_20110101_20121206 limit %d offset %d" % (limit, offset))
     for row in cursor.fetchall():
         uid = int(row[0])
         try:
@@ -62,6 +62,6 @@ def ReadRAWData(limit, offset):
 
 
 if __name__ == '__main__':
-    ReadRAWData(100000, 0)
+    ReadRAWData(1000000, 0)
 
     

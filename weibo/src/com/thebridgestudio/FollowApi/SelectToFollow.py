@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/local/bin/python2.7
 # -*- coding:utf-8 -*-
 
 from django.core.management import setup_environ
@@ -71,6 +71,6 @@ def SelectToFollow1(logger, client, num):
 if __name__ == '__main__':
     logger = InitLogger("select_to_follow", logging.DEBUG, "../log/select_to_follow.log")
     client = APIClientV2(BGApp.wdj_app_key, BGApp.wdj_app_secret)
-    client.set_access_token(BGApp.wdj_me_token, time.time() + 90 * 24 * 3600)
+    client.set_access_token(BGApp.other_token, time.time() + 90 * 24 * 3600)
     SelectToFollow1(logger, client, -1)
 
