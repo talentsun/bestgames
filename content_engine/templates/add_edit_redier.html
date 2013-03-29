@@ -13,12 +13,11 @@
   <script type="text/javascript">
     $(document).ready(function(){
       $('#cancel').click(function(){
-        window.location.href = "/";
+        history.back();
         return false;
       });
       $('#save').click(function(){
         $('#add_redier_form').submit();
-
         return false;
       });
     });

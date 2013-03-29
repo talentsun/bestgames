@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import sys
 import os
+from urlparse import urlsplit
 
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
@@ -19,6 +20,15 @@ from api.tables import GameTable, RedierTable, CollectionTable, ProblemTable
 from api.forms import GameForm, RedierForm, CollectionForm, ProblemForm
 
 import django_tables2 as tables
+
+def _redirect_back(request):
+    referer = request.META.get('HTTP_REFERER', None)
+    if referer is None:
+        return redirect('/')
+    try:
+        return redirect(urlsplit(referer, 'http', False)[2])
+    except IndexError:
+        return redirect('/')
 
 def index(request):
     games = GameTable(Game.objects.all(),prefix="hg-")
@@ -73,7 +83,7 @@ def add_edit_problem(request, problem_id=None):
                 if weibo_sync_timestamp != '':
                     problem.status = Entity.STATUS_PENDING
             problem.save()
-            return redirect('/')
+            return _redirect_back(request)
     else:
         if problem is None:
             form = ProblemForm(instance=problem, initial={'presenter' : request.user.username})
@@ -89,7 +99,7 @@ def delete_problem(request, problem_id=None):
         problem = get_object_or_404(Problem, entity_ptr_id=problem_id)
         if problem is not None:
             problem.delete()
-            return redirect('/')
+            return _redirect_back(request)
 
 @login_required
 def add_edit_collection(request, collection_id=None):
@@ -113,7 +123,7 @@ def add_edit_collection(request, collection_id=None):
                 if weibo_sync_timestamp != '':
                     collection.status = Entity.STATUS_PENDING
             collection.save()
-            return redirect('/')
+            return _redirect_back(request)
     else:
         if collection is None:
             form = CollectionForm(instance=collection, initial={'presenter' : request.user.username})
@@ -129,11 +139,11 @@ def delete_collection(request, collection_id=None):
         collection = get_object_or_404(Collection, entity_ptr_id=collection_id)
         if collection is not None:
             collection.delete()
-            return redirect('/')
+            return _redirect_back(request)
 
-@login_required
+#@login_required
 def add_edit_redier(request, redier_id=None):
-    _auth_user(request)
+    #_auth_user(request)
     weibo_sync_timestamp = ''
     if redier_id:
         redier = get_object_or_404(Redier, entity_ptr_id=redier_id)
@@ -153,7 +163,7 @@ def add_edit_redier(request, redier_id=None):
                 if weibo_sync_timestamp != '':
                     redier.status = Entity.STATUS_PENDING
             redier.save()
-            return redirect('/')
+            return _redirect_back(request)
 
     else:
         if redier is None:
@@ -170,7 +180,7 @@ def delete_redier(request, redier_id=None):
         redier = get_object_or_404(Redier, entity_ptr_id=redier_id)
         if redier is not None:
             redier.delete()
-            return redirect("/")
+            return _redirect_back(request)
 
 @login_required
 def add_edit_game(request, game_id=None):
@@ -210,7 +220,7 @@ def add_edit_game(request, game_id=None):
                 if weibo_sync_timestamp != '':
                     game.status = Entity.STATUS_PENDING
             game.save()
-            return redirect('/')
+            return _redirect_back(request)
 
     else:
         if game is None:
@@ -227,6 +237,6 @@ def delete_game(request, game_id=None):
         game = get_object_or_404(Game, entity_ptr_id=game_id)
         if game is not None:
             game.delete()
-            return redirect("/")
+            return _redirect_back(request)
 
 
