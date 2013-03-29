@@ -29,7 +29,6 @@ class RedierForm(EntityForm):
 			'tags',
 			'weibo_sync_timestamp',
 			'presenter',
-			'rating',
 			'brief_comment',
 			'recommended_reason')
 		widgets = {
@@ -79,7 +78,6 @@ class CollectionForm(EntityForm):
 			'tags',
 			'weibo_sync_timestamp',
 			'presenter',
-			'rating',
 			'brief_comment',
 			'recommended_reason')
 
@@ -93,6 +91,5 @@ class ProblemForm(EntityForm):
 			'tags',
 			'weibo_sync_timestamp',
 			'presenter',
-			'rating',
 			'brief_comment',
 			'recommended_reason')

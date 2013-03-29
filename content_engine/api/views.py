@@ -141,9 +141,9 @@ def delete_collection(request, collection_id=None):
             collection.delete()
             return _redirect_back(request)
 
-#@login_required
+@login_required
 def add_edit_redier(request, redier_id=None):
-    #_auth_user(request)
+    _auth_user(request)
     weibo_sync_timestamp = ''
     if redier_id:
         redier = get_object_or_404(Redier, entity_ptr_id=redier_id)

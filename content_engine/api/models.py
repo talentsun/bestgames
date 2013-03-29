@@ -24,28 +24,6 @@ class Entity(models.Model):
         (STATUS_FAILED, u"同步失败"))
     status = models.IntegerField(u"同步状态",max_length=20, choices=STATUS_CHOICES, default=STATUS_DO_NOT_SYNC, editable=False)
     presenter = models.CharField(u"推荐人",max_length=100)
-    RATING_1 = 1
-    RATING_2 = 2
-    RATING_3 = 3
-    RATING_4 = 4
-    RATING_5 = 5
-    RATING_6 = 6
-    RATING_7 = 7
-    RATING_8 = 8
-    RATING_9 = 9
-    RATING_10 = 10
-    RATING_CHOICES = (
-        (RATING_10, u"5"),
-        (RATING_9, u"4.5"),
-        (RATING_8, u"4"),
-        (RATING_7, u"3.5"),
-        (RATING_6, u"3"),
-        (RATING_5, u"2.5"),
-        (RATING_4, u"2"),
-        (RATING_3, u"1.5"),
-        (RATING_1, u"1"),
-        (RATING_1, u"0.5"))
-    rating = models.IntegerField(u"评分", choices=RATING_CHOICES, default=RATING_6)
     brief_comment = models.CharField(u"一句话点评(同步到微信)", max_length=255)
     recommended_reason = models.TextField(u"推荐理由(同步到微博)")
 
@@ -73,6 +51,28 @@ class Game(Entity):
     screenshot_path_2 = models.ImageField(u"截图2", upload_to='upload/', max_length=255, blank=True)
     screenshot_path_3 = models.ImageField(u"截图3", upload_to='upload/', max_length=255, blank=True)
     screenshot_path_4 = models.ImageField(u"截图4", upload_to='upload/', max_length=255, blank=True)
+    RATING_1 = 1
+    RATING_2 = 2
+    RATING_3 = 3
+    RATING_4 = 4
+    RATING_5 = 5
+    RATING_6 = 6
+    RATING_7 = 7
+    RATING_8 = 8
+    RATING_9 = 9
+    RATING_10 = 10
+    RATING_CHOICES = (
+        (RATING_10, u"5"),
+        (RATING_9, u"4.5"),
+        (RATING_8, u"4"),
+        (RATING_7, u"3.5"),
+        (RATING_6, u"3"),
+        (RATING_5, u"2.5"),
+        (RATING_4, u"2"),
+        (RATING_3, u"1.5"),
+        (RATING_1, u"1"),
+        (RATING_1, u"0.5"))
+    rating = models.IntegerField(u"评分", choices=RATING_CHOICES, default=RATING_6)
 
     def __unicode__(self):
         return force_unicode(self.name)
