@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.utils.encoding import force_unicode
 from django.utils.functional import wraps
 
