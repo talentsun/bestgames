@@ -5,6 +5,7 @@ from scrapy.spider import BaseSpider
 from auto_get_pic.NetUtils import NetUtil
 from scrapy.contrib.spiders import CrawlSpider
 from scrapy.selector import HtmlXPathSelector
+import os
 
 class parsePic(BaseSpider):
     name="parse_ituns"
@@ -34,16 +35,19 @@ class parsePic(BaseSpider):
         print '1'
         hxs = HtmlXPathSelector(response)
 
+        #TODO use current project path
+        root_path = '/home/app_bestgames/scrapy_itunes/'
+
         iconUrl = hxs.select('//a[contains(@href, iconTag)]/div[@class="artwork"]/img/@src').extract()
         descUrl = hxs.select('//div[@class="lockup"]/img/@src').extract()
         print iconUrl
         for icon in iconUrl:
             if icon.find('175x175-75.jpg') != -1:
-                self.downloadNet.download(icon,'icon' + self.pic_prefix + ".jpg");
+                self.downloadNet.download(icon,root_path + 'games/' + 'icon' + self.pic_prefix + ".jpg");
                 break;
 
         count = 2
         for url in descUrl:
-            self.downloadNet.download(url,'image' + str(count) + self.pic_prefix + ".jpg")
+            self.downloadNet.download(url, root_path + '/games/' + 'desc' + str(count) + self.pic_prefix + ".jpg")
             count = count + 1
 

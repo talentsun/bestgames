@@ -7,7 +7,7 @@ import json
 import time
 
 def getPic(request):
-    root_path = '/Users/huwei/games/bestgames/scrapy_itunes/auto_get_pic'
+    root_path = '/home/app_bestgames/scrapy_itunes/auto_get_pic'
 
     download_url = request.GET.get('download_url')
 
@@ -20,11 +20,13 @@ def getPic(request):
 
     response_data = {}
 
-    response_data['icon'] = 'icon' + curtime + ".jpg"
-    response_data['desc1'] = 'desc1' + curtime + ".jpg"
-    response_data['desc2'] = 'desc2' + curtime + ".jpg"
-    response_data['desc3'] = 'desc3' + curtime + ".jpg"
-    response_data['desc4'] = 'desc4' + curtime + ".jpg"
+    server_url = "http://cow.bestgames7.com/tools/url2icon/static"
+
+    response_data['icon'] = server_url + 'icon' + curtime + ".jpg"
+    response_data['desc1'] = server_url + 'desc1' + curtime + ".jpg"
+    response_data['desc2'] = server_url + 'desc2' + curtime + ".jpg"
+    response_data['desc3'] = server_url + 'desc3' + curtime + ".jpg"
+    response_data['desc4'] = server_url + 'desc4' + curtime + ".jpg"
 
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
