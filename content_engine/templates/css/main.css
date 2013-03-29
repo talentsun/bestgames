@@ -8,15 +8,20 @@
 	border: 1px solid #e3e3e3;
 }
 
-#main.list-page .table tr td:last-child,
-#main.list-page .table tr th:last-child{
+#main.list-page .ops{
   text-align: center;
   width: 10%;
-};
+}
 
 #main.list-page .table th,
 #main.list-page .table td{
 	text-align: center;
+}
+
+#main.list-page .table th.tags,
+#main.list-page .table td.tags{
+  text-align: left;
+  width: 40%;
 }
 
 #main.edit-page .table th{
