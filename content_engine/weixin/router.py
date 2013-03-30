@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import roadmap.Router
 from api.models import Game
 from message_builder import MessageBuilder
