@@ -9,7 +9,7 @@ def processor(build_conf):
 router = roadmap.Router(processor)
 
 @router.destination(r'^下载$', pass_obj=False)
-def get_download_urls_for_today:
+def get_download_urls_for_today():
 	year = date.today().year
 	month = date.today().month
 	day = date.today().day
