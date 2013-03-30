@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import roadmap.Router
+from roadmap import Router
 from api.models import Game
 from message_builder import MessageBuilder
 
