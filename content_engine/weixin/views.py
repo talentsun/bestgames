@@ -2,6 +2,7 @@
 # coding: utf8
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404, render, redirect
+from django.utils.encoding import smart_str, smart_unicode
 import hashlib
 
 import logging, traceback, time, struct, socket
@@ -11,59 +12,38 @@ logger = logging.getLogger('default')
 from api.tables import GameTable
 from api.models import Game
 
-
 import xml.etree.ElementTree as ET
 import socket
+from pyweixin import WeiXin
+from router import router
 
-def dealWithInput(inputText):
-    root = ET.fromstring(inputText)
-    infos = {}
-    for child in root:
-        infos[child.tag] = child.text
-    return infos
-
-def responseText(meName, userName, text):
-    textTpl = """
-        <xml>
-        <ToUserName><![CDATA[%s]]></ToUserName>
-        <FromUserName><![CDATA[%s]]></FromUserName>
-        <CreateTime>%d</CreateTime>
-        <MsgType><![CDATA[text]]></MsgType>
-        <Content><![CDATA[%s]]></Content>
-        <FuncFlag>0</FuncFlag>
-        </xml>
-    """
-
-    return textTpl % (userName, meName, time.time(), text)
+TOKEN = "itv"
 
 @csrf_exempt
 def index(request):
-    try:
-        logger.debug("index %s" % request.method)
-        if request.method == 'GET':
-            if 'signature' not in request.GET or 'timestamp' not in request.GET or 'nonce' not in request.GET or 'echostr' not in request.GET:
+    global TOKEN
+    if request.method == 'GET':
+        if 'signature' not in request.GET or 'timestamp' not in request.GET or 'nonce' not in request.GET or 'echostr' not in request.GET:
                 return HttpResponse('bad request %s' % str(request.GET))
-            signature = request.GET['signature']
-            timestamp = request.GET['timestamp']
-            nonce = request.GET['nonce']
-            echostr = request.GET['echostr']
-            infos = [signature, timestamp, nonce]
-            infos.sort()
-            m = hashlib.sha1()
-            m.update(''.join(infos))
-            caledSig = m.hexdigest()
+        signature = request.GET['signature']
+        timestamp = request.GET['timestamp']
+        nonce = request.GET['nonce']
+        echostr = request.GET['echostr']
+        weixin = WeiXin.on_connect(TOKEN, timestamp, nonce, signature, echostr)
+        if weixin.validate():
+            return HttpResponse(echostr, content_type="text/plain")
+        else:
+            return HttpResponse(None, content_type="text/plain")
+    elif request.method == 'POST':
+        weixin = WeiXin.on_message(smart_str(request.raw_post_data))
+        message = weixin.to_json()
+        
+        build_conf = router.route(message['content'])
+        if build_conf is not None:
+            return HttpResponse(MessageBuilder.build(build_conf), content_type="application/xml")
+        else:
+            return HttpResponse('<xml></xml>', content_type="application/xml")
 
-            return HttpResponse(echostr)
-
-        if request.method == 'POST':
-            logger.debug(request.raw_post_data)
-            infos = dealWithInput(request.raw_post_data)
-            logger.debug(str(infos))
-            resp = responseText(infos['ToUserName'], infos['FromUserName'], "欢迎")
-            logger.debug(resp)
-            return HttpResponse(resp)
-    except:
-        logger.debug(traceback.format_exc())
 
 def search(request):
     games = []
