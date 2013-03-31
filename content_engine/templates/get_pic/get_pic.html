@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<table class="table">
+  <tbody>
+    <tr><th>{{ form.title.label }}</th><td>{{ form.title }}{{ form.title.errors }}</td></tr>
+  </tbody>
+</table>
+{% endblock %}
+
