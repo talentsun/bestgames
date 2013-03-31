@@ -1,5 +1,5 @@
 #encoding=utf-8
-from sync_message.sina.weibo import  APIClient
+from weibo import  APIClient
 import MySQLdb as mdb
 import time
 import os
@@ -13,7 +13,7 @@ _APP_SECRET = '4360e65b0e9de717dfe3a0c127bc96b3'
 
 client = APIClient(_APP_ID, _APP_SECRET, 'http://cow.bestgames7.com/token/login')
 client.set_access_token('2.00baJBTD06XASO35dcd07da0NOAOTC', '1363460399')
-file_prefix = 'file:///home/app_bestgames/content_engine/sina/';
+file_prefix = 'file:///home/app_bestgames/content_engine/sync_message/sina/';
 
 collection_template='''<td> <div class="game-info">
 <img id='game_img' src="%s"></img>
