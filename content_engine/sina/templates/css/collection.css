@@ -70,8 +70,6 @@ img{
 .game-info{
 	width: 315px;
     padding-top:10px;
-    font-size: 20px;
-    font: bold;
 }
 
 .game-info img{
@@ -85,7 +83,7 @@ img{
 }
 
 .game-info table tr td:first-child{
-	width: 100px;
+	width: 80px;
 }
 
 .star{

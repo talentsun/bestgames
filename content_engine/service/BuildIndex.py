@@ -7,9 +7,10 @@ from django.core.management import setup_environ
 from content_engine import settings
 setup_environ(settings)
 
-from api.models import Game
+from api.models import Game, Category
 import leveldb, PySeg
 import logging, struct, os, os.path
+from taggit.models import Tag
 
 NameAddr = 1
 CategoryAddr = 2
@@ -74,14 +75,23 @@ class Index:
     def BuildIndexForOne(self, gameId, name, description, categorys, tags):
         terms = {}
         self.logger.debug("build index for one %d %s %s %s %s" % (gameId, name, description, str(categorys), str(tags)))
-        terms[NameAddr] = PySeg.seg(name.encode('utf8'))
-        terms[DescAddr] = PySeg.seg(description.encode('utf8'))
+        ts = PySeg.seg(name.encode('utf8'))
+        terms[NameAddr] = []
+        for t in ts:
+            if len(t[1]) > 0 and t[1][0] == 'n':
+                terms[NameAddr].append(t[0])
+        ts = PySeg.seg(description.encode('utf8'))
+        terms[DescAddr] = []
+        for t in ts:
+            if len(t[1]) > 0 and t[1][0] == 'n':
+                terms[DescAddr].append(t[0])
+
         terms[CategoryAddr] = []
         for c in categorys:
-            terms[CategoryAddr].append(c.decode('utf8'))
-        terms[TagAddr] = tags
+            terms[CategoryAddr].append(c.encode("utf8"))
+        terms[TagAddr] = []
         for t in tags:
-            terms[TagAddr].append(t.decode('utf8'))
+            terms[TagAddr].append(t.encode('utf8'))
         term2Addrs = {}
 
         for k, v in terms.items():
@@ -104,9 +114,28 @@ class Index:
 if __name__ == "__main__":
     index = Index(workPath + "/../db/")
     index.CreateDB()
+    tags = Tag.objects.all()
+    for t in tags:
+        try:
+            PySeg.addUserWord("%s n" % t.name.encode("gbk"))
+            index.logger.debug("add user word tag %s success" % t.name)
+        except:
+            index.logger.debug("add user word %s error" % t.name)
+
+    cats = Category.objects.all()
+    for c in cats:
+        try:
+            PySeg.addUserWord("%s n" % c.name.encode('gbk'))
+            index.logger.debug("add user word category %s" % c.name)
+        except:
+            index.logger.debug("add user word %s error" % c.name)
     games = Game.objects.all()
     for game in games:
-        index.BuildIndexForOne(game.pk, game.name, game.description, [], [])
+        tags = []
+        for t in game.tags.all():
+            tags.append(t.name)
+        cats = [game.category.name, ]
+        index.BuildIndexForOne(game.pk, game.name, game.description, cats, tags)
 
-    #index.Show()
+    index.Show()
 

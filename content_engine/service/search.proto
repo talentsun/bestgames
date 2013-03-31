@@ -1,0 +1,7 @@
+message Query {
+    required string query = 1;
+}
+message Response {
+    required int32 result = 1;
+    repeated int32 gameIds = 2;
+}

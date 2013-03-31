@@ -8,6 +8,18 @@ class TagColumn(tables.Column):
     def render(self, value):
         return edit_string_for_tags(value.get_query_set())
 
+class SearchResultTable(tables.Table):
+    id = tables.Column(orderable=False, visible=False)
+    name = tables.Column(orderable=False)
+    tags = TagColumn(orderable=False,attrs={"class":"tags"})
+    
+    class Meta:
+        model = Game
+        empty_text = u"暂无精品游戏推荐"
+        fields = ("entity_ptr_id", "name","tags","description")
+        sequence = fields
+        attrs = {'class' : 'table table-striped'}
+
 class GameTable(tables.Table):
     id = tables.Column(orderable=False, visible=False)
     name = tables.Column(orderable=False)

@@ -8,8 +8,9 @@ import logging, traceback, time, struct, socket
 from django.views.decorators.csrf import csrf_exempt
 
 logger = logging.getLogger('default')
-from api.tables import GameTable
+from api.tables import SearchResultTable
 from api.models import Game
+from service import search_pb2
 
 
 import xml.etree.ElementTree as ET
@@ -68,22 +69,26 @@ def index(request):
 def search(request):
     games = []
     if request.method == 'GET':
-        return render(request, "search.html", {"games": GameTable(games)})
+        return render(request, "search.html", {"games": SearchResultTable(games)})
     elif request.method == 'POST':
         logger.debug("content %s" % request.POST['content'])
-        content = request.POST['content'].encode("utf-8")
-        req = struct.pack("!H%ds" % len(content), len(content), content)
+        content = request.POST['content']
+        stQuery = search_pb2.Query()
+        stQuery.query = content
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.sendto(req, ("127.0.0.1", 8128))
+        s.sendto(struct.pack("!H", 1) + stQuery.SerializeToString(), ("127.0.0.1", 8128))
         resp = s.recv(4196)
-        startAddr = 0
-        num = struct.unpack("!H", resp[startAddr : startAddr + 2])[0]
-        logger.debug("get %d games" % num)
-        startAddr += 2
-        for i in range(num):
-            gameId = struct.unpack("!I", resp[startAddr : startAddr + 4])[0]
-            logger.debug("get game %d" % gameId)
-            if gameId != 0:
-                games.append(Game.objects.get(pk = gameId))
-        return render(request, "search.html", {"games": GameTable(games)})
+        stResp = search_pb2.Response()
+        stResp.ParseFromString(resp)
+        logger.debug("result %d" % stResp.result)
+        logger.debug("gameIds %s" % str(stResp.gameIds))
+        for id in stResp.gameIds:
+            try:
+                game = Game.objects.get(pk = id)
+                logger.debug("game id %d" % id)
+            except:
+                logger.error("not find game with id %d" % id)
+                continue
+            games.append(game)
+        return render(request, "search.html", {"games": SearchResultTable(games)})
 
