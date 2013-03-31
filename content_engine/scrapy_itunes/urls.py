@@ -2,6 +2,6 @@ __author__ = 'huwei'
 
 from django.conf.urls.defaults import *
 
-urlpatterns = patterns('api.views',
+urlpatterns = patterns('scrapy_itunes.views',
     url(r'^getPic','getPic'),
 )

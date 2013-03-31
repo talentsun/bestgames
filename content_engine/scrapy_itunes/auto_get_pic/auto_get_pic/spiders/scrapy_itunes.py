@@ -36,7 +36,9 @@ class parsePic(BaseSpider):
         hxs = HtmlXPathSelector(response)
 
         #TODO use current project path
-        root_path = '/home/app_bestgames/scrapy_itunes/'
+        root_path = '/home/app_bestgames/content_engine/scrapy_itunes/'
+
+        print root_path
 
         iconUrl = hxs.select('//a[contains(@href, iconTag)]/div[@class="artwork"]/img/@src').extract()
         descUrl = hxs.select('//div[@class="lockup"]/img/@src').extract()
@@ -48,6 +50,6 @@ class parsePic(BaseSpider):
 
         count = 2
         for url in descUrl:
-            self.downloadNet.download(url, root_path + '/games/' + 'desc' + str(count) + self.pic_prefix + ".jpg")
+            self.downloadNet.download(url, root_path + 'games/' + 'desc' + str(count) + self.pic_prefix + ".jpg")
             count = count + 1
 
