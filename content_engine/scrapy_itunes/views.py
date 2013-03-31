@@ -33,7 +33,7 @@ def getPic(request):
 
 def previewImage(request,filename):
     if filename:
-        image_data = open(settings.GAME_PIC_ROOT + filename, "rb").read()
+        image_data = open('/home/app_bestgames/content_engine/scrapy_itunes/games/' + filename, "rb").read()
         return HttpResponse(image_data, mimetype="image/png")
 
 
