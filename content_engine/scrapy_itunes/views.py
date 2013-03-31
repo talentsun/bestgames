@@ -12,7 +12,7 @@ def getPic(request):
 
     download_url = request.GET.get('download_url')
 
-    curtime = time.strftime('%Y-%m-%d-%H:%M',time.localtime(time.time()))
+    curtime = time.strftime('%Y%m%d%H%M',time.localtime(time.time()))
 
     print download_url
     command = 'cd ' + root_path +  '&&scrapy crawl parse_ituns -a  url=' + download_url + ' -a pic_prefix=' + curtime
@@ -21,7 +21,7 @@ def getPic(request):
 
     response_data = {}
 
-    server_url = "http://cow.bestgames7.com/tools/url2icon/static/"
+    server_url = "http://cow.bestgames7.com/pic/"
 
     response_data['icon'] = server_url + 'icon' + curtime + ".jpg"
     response_data['desc1'] = server_url + 'desc1' + curtime + ".jpg"
@@ -31,9 +31,10 @@ def getPic(request):
 
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-def previewImage(request,filename=None):
-    image_data = open(settings.GAME_PIC_ROOT + filename, "rb").read()
-    return HttpResponse(image_data, mimetype="image/png")
+def previewImage(request,filename):
+    if filename:
+        image_data = open(settings.GAME_PIC_ROOT + filename, "rb").read()
+        return HttpResponse(image_data, mimetype="image/png")
 
 
 

@@ -21,7 +21,6 @@ urlpatterns = patterns('',
     url(r'', include('scrapy_itunes.urls')),
     url(r'', include('social_auth.urls')),
     url(r'^weixin/', include('weixin.urls')),
-    url(r'^/tools/url2icon/', include('scrapy_itunes.urls')),
 )
 
 urlpatterns += staticfiles_urlpatterns()
