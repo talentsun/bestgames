@@ -53,7 +53,7 @@ class parsePic(BaseSpider):
                 self.downloadNet.download(icon,root_path + 'icon' + self.pic_prefix + ".jpg");
                 break;
 
-        count = 2
+        count = 1
         for url in descUrl:
             self.downloadNet.download(url, root_path + 'desc' + str(count) + self.pic_prefix + ".jpg")
             count = count + 1
