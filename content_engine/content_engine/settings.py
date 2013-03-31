@@ -58,13 +58,15 @@ USE_TZ = False
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = '/Users/bridge/Documents/workspace/bestgames/content_engine/media/'
+MEDIA_ROOT = '/home/app_bestgames/content_engine/media/'
+
+GAME_PIC_ROOT = '/home/app_bestgames/content_engine/scrapy_itunes/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
 #MEDIA_URL = 'http://localhost:8080/game/'
-MEDIA_URL = 'http://127.0.0.1:8000/media/'
+MEDIA_URL = 'http://cow.bestgames7.com/media/'
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
@@ -74,7 +76,7 @@ STATIC_ROOT = projectPath + '/templates'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = 'http://127.0.0.1:8000/static/'
+STATIC_URL =  'http://cow.bestgames7.com/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -145,6 +147,7 @@ INSTALLED_APPS = (
     'django_select2',
     'api',
     'weixin',
+    'scrapy_itunes',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
