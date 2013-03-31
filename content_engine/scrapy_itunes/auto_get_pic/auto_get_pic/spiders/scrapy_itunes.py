@@ -36,7 +36,12 @@ class parsePic(BaseSpider):
         hxs = HtmlXPathSelector(response)
 
         #TODO use current project path
-        root_path = '/home/app_bestgames/content_engine/scrapy_itunes/'
+        root_path = os.getcwd() + "/games/"
+
+        if os.path.exists(root_path):
+            pass
+        else:
+            os.makedirs(root_path)
 
         print root_path
 
@@ -45,11 +50,11 @@ class parsePic(BaseSpider):
         print iconUrl
         for icon in iconUrl:
             if icon.find('175x175-75.jpg') != -1:
-                self.downloadNet.download(icon,root_path + 'games/' + 'icon' + self.pic_prefix + ".jpg");
+                self.downloadNet.download(icon,root_path + 'icon' + self.pic_prefix + ".jpg");
                 break;
 
         count = 2
         for url in descUrl:
-            self.downloadNet.download(url, root_path + 'games/' + 'desc' + str(count) + self.pic_prefix + ".jpg")
+            self.downloadNet.download(url, root_path + 'desc' + str(count) + self.pic_prefix + ".jpg")
             count = count + 1
 

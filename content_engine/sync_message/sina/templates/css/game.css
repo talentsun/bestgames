@@ -1,0 +1,67 @@
+body{
+    background-color: #eee;
+    color: #444;
+}
+
+img{
+	padding:0;
+	margin:0;
+    margin-left: -4px
+}
+
+#container.portrait{
+	width: 640px;
+	margin: auto;
+}
+
+#container.landscape{
+	width: 480px;
+	margin: auto;
+}
+
+.portrait .head{
+	background: url(../img/head-portrait.jpg) no-repeat;
+	width: 640px;
+	height: 116px;
+    margin-left: -4px
+}
+
+.landscape .head{
+	background: url(../img/head-landscape.jpg) no-repeat;
+	width: 480px;
+	height: 116px;
+    margin-left: -4px
+}
+
+.portrait .bottom{
+	background: url(../img/bottom-portrait.jpg) no-repeat;
+	width: 640px;
+	height: 89px;
+	margin-top: -2px;
+    margin-left: -4px
+}
+
+.landscape .bottom{
+	background: url(../img/bottom-landscape.jpg) no-repeat;
+	width: 480px;
+	height: 89px;
+	margin-top: -2px;
+    margin-left: -4px
+}
+
+.portrait .screenshots img{
+    width: 49%;
+}
+
+.landscape .screenshots img{
+    width: 100%;
+}
+
+.portrait .screenshots img:nth-child(even){
+	margin-left: -4px;
+}
+
+
+
+
+

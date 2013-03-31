@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404, render, redirect
 import json
 import time
+import socket
 
 def getPic(request):
     root_path = os.path.dirname(os.path.dirname(os.path.normpath(__file__))) + '/scrapy_itunes/auto_get_pic'
@@ -19,7 +20,8 @@ def getPic(request):
       print command
       os.system(command)
 
-      server_url = "http://cow.bestgames7.com/pic/"
+      server_url =  "http://" + socket.gethostname() + "/pic/"
+
 
       response_data['icon'] = server_url + 'icon' + curtime + ".jpg"
       response_data['desc1'] = server_url + 'desc1' + curtime + ".jpg"
@@ -33,7 +35,7 @@ def getPic(request):
 
 def previewImage(request,filename):
     if filename:
-        image_data = open('/home/app_bestgames/content_engine/scrapy_itunes/games/' + filename, "rb").read()
+        image_data = open(os.getcwd() + '/scrapy_itunes/auto_get_pic/games/' + filename, "rb").read()
         return HttpResponse(image_data, mimetype="image/png")
 
 

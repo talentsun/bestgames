@@ -1,0 +1,114 @@
+body{
+    background-color: #eee;
+    color: #444;
+    width: 440px;
+}
+
+img{
+	padding:0;
+	margin:0;
+    margin-left: -4px
+}
+
+#container{
+	width: 640px;
+	margin: auto;
+}
+
+.head{
+	background: url(../img/head-portrait.jpg) no-repeat;
+	width: 640px;
+	height: 116px;
+    margin-left: -4px
+}
+
+.bottom{
+	background: url(../img/bottom-portrait.jpg) no-repeat;
+	width: 640px;
+	height: 89px;
+	margin-top: -2px;
+    margin-left: -4px
+}
+
+.cover{
+	width: 640px;
+	height: 320px;
+}
+
+.triangle{
+	border-width:20px;
+	border-color:transparent black black transparent;
+	border-style:solid;
+	width:0;
+	height:0;
+	line-height:0;
+	position: absolute;
+	top: 404px;
+	left:284px;
+}
+
+.title{
+	z-index: 999;
+	height: 40px;
+	width: 320px;
+	top:404px;
+	left:324px;
+	background-color: black;
+	position: absolute;
+}
+
+.title span{
+	color:#ffe13d;
+	line-height: 40px;
+	font-size: 18px;
+}
+
+.games td{
+	vertical-align: top;
+}
+
+.game-info{
+	width: 315px;
+    padding-top:10px;
+    font-size: 20px;
+    font: bold;
+}
+
+.game-info img{
+	width: 315px;
+	height: 210px;
+}
+
+.game-info table{
+	width: 315px;
+	margin: 8px 0;
+}
+
+.game-info table tr td:first-child{
+	width: 100px;
+}
+
+.star{
+	background: url(../img/star.png) no-repeat;
+	width: 16px;
+	height: 16px;
+	display: inline-block;
+}
+
+.half-star{
+	background: url(../img/half-star.png) no-repeat;
+	width: 16px;
+	height: 16px;
+	display: inline-block;
+}
+
+.empty-star{
+	background: url(../img/empty-star.png) no-repeat;
+	width: 16px;
+	height: 16px;
+	display: inline-block;
+}
+
+.intro{
+	font-size: 14px;
+}
