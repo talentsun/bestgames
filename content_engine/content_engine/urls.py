@@ -18,6 +18,7 @@ urlpatterns = patterns('',
     url(r'^ajax-upload/', include('ajax_upload.urls')),
     url(r'^ext/', include('django_select2.urls')),
     url(r'', include('api.urls')),
+    url(r'', include('scrapy_itunes.urls')),
     url(r'', include('social_auth.urls')),
     url(r'^weixin/', include('weixin.urls')),
 )

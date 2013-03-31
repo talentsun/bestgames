@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<span>Itunes地址:</span> 
+<form method="get"><input id="id_name" type="text" name="download_url" value="" maxlength="100" /><input type="submit" value="下载" /></form>
+
+{% if icon %}
+<div><img src="{{icon}}" /> </div>
+<div><img src="{{desc1}}" /> </div>
+<div><img src="{{desc2}}" /> </div>
+<div><img src="{{desc3}}" /> </div>
+<div><img src="{{desc4}}" /> </div>
+{% endif %}
+
+{% endblock %}
+
