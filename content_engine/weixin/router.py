@@ -6,7 +6,7 @@ from message_builder import MessageBuilder
 def processor(build_conf):
 	return build_conf
 
-router = roadmap.Router(processor)
+router = Router(processor)
 
 @router.destination(r'^下载$', pass_obj=False)
 def get_download_urls_for_today():

@@ -10,6 +10,7 @@ import time
 def getPic(request):
     root_path = os.path.dirname(os.path.dirname(os.path.normpath(__file__))) + '/scrapy_itunes/auto_get_pic'
     download_url = request.GET.get('download_url')
+    response_data = {}
     if download_url:
       curtime = time.strftime('%Y%m%d%H%M',time.localtime(time.time()))
 
@@ -17,8 +18,6 @@ def getPic(request):
       command = 'cd ' + root_path +  '&&scrapy crawl parse_ituns -a  url=' + download_url + ' -a pic_prefix=' + curtime
       print command
       os.system(command)
-
-      response_data = {}
 
       server_url = "http://cow.bestgames7.com/pic/"
 
@@ -30,7 +29,7 @@ def getPic(request):
 
       #return HttpResponse(json.dumps(response_data), content_type="application/json")
     
-    return render(request, "get_pic/get_pic.html", {})
+    return render(request, "get_pic/get_pic.html", response_data)
 
 def previewImage(request,filename):
     if filename:
