@@ -5,7 +5,6 @@ import os
 from django.http import HttpResponse
 import json
 import time
-import settings
 
 def getPic(request):
     root_path = os.path.dirname(os.path.dirname(os.path.normpath(__file__))) + '/scrapy_itunes/auto_get_pic'
