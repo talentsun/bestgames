@@ -132,7 +132,7 @@ class Rule(object):
 		if isinstance(fn, list) and len(fn) >= 1:
 			fn = fn[random.randint(0, len(fn)-1)]
 
-		if isinstance(fn, (str, config)):
+		if isinstance(fn, (str, unicode)):
 			return fn
 
 		if isfunction(fn):
