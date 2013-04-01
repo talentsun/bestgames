@@ -18,3 +18,8 @@ Router.get_instance().set({
 		'pattern' : u'下载',
 		'handler' : get_download_urls_for_today
 	})
+Router.get_instance().set({
+        'name' : u'打招呼',
+        'pattern' : u'.*(你好|hi|hello|您好).*',
+        'handler' : ['你好喽','小每祝您全家发财','好毛啊好']
+	})

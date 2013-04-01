@@ -11,12 +11,11 @@ logger = logging.getLogger('default')
 from portal.tables import SearchResultTable
 from portal.models import Game
 from service import search_pb2
-
-import xml.etree.ElementTree as ET
 import socket
 
-from pyweixin import WeiXin
 import rules
+import rules_game_search
+from pyweixin import WeiXin
 from router import Router
 from message_builder import MessageBuilder
 
