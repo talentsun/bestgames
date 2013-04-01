@@ -1,4 +1,3 @@
-# Create your views here.
 # coding: utf8
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404, render, redirect
@@ -15,14 +14,24 @@ from service import search_pb2
 
 import xml.etree.ElementTree as ET
 import socket
+
 from pyweixin import WeiXin
-from router import router
+import rules
+from router import Router
+from message_builder import MessageBuilder
 
 TOKEN = "itv"
 
+router_error = None
+router_reply = None
+def _route_callback(error=None, reply=None):
+    global router_error, router_reply
+    router_error = error
+    router_reply = reply
+
 @csrf_exempt
 def index(request):
-    global TOKEN
+    global TOKEN, router_error, router_reply
     if request.method == 'GET':
         if 'signature' not in request.GET or 'timestamp' not in request.GET or 'nonce' not in request.GET or 'echostr' not in request.GET:
                 return HttpResponse('bad request %s' % str(request.GET))
@@ -38,10 +47,12 @@ def index(request):
     elif request.method == 'POST':
         weixin = WeiXin.on_message(smart_str(request.raw_post_data))
         message = weixin.to_json()
+
+        Router.get_instance().reply(message, _route_callback)
         
-        build_conf = router.route(message['content'])
-        if build_conf is not None:
-            return HttpResponse(MessageBuilder.build(build_conf), content_type="application/xml")
+        if router_error is None and router_reply is not None:
+            router_reply.platform = MessageBuilder.PLATFORM_WEIXIN
+            return HttpResponse(MessageBuilder.build(message, router_reply), content_type="application/xml")
         else:
             return HttpResponse('<xml></xml>', content_type="application/xml")
 
