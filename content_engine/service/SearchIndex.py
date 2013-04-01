@@ -8,7 +8,7 @@ from django.core.management import setup_environ
 from content_engine import settings
 setup_environ(settings)
 import leveldb, PySeg
-from BuildIndex import DBItem
+from BuildIndex import DBItem, Index
 from search_pb2 import Query, Response
 from portal.models import Category, Game, Category
 from taggit.models import Tag
@@ -45,9 +45,11 @@ class SearchIndex:
 
 
     def GetHitList(self, term):
-        self.logger.debug("get hit list for %s" % term.decode("utf8"))
-        startKey = struct.pack("!H%dsI" % len(term), len(term), term, 0)
-        endKey = struct.pack("!H%dsI" % len(term), len(term), term, 0xFFFFFFFF)
+        self.logger.debug("get hit list for %s" % term)
+        startItem = DBItem(term, 0, [])
+        endItem = DBItem(term, 0xFFFFFFFF, [])
+        startKey = startItem.EncodeKey()
+        endKey = endItem.EncodeKey()
         hitList = HitList()
         for k, v in self.db.RangeIter(key_from = startKey, key_to = endKey):
             item = DBItem("", 0, [])
@@ -59,12 +61,11 @@ class SearchIndex:
 
     def Search(self, query):
         termWeightBase = 0.5
-        terms = PySeg.seg(query)
+        terms = Index.GetRightWords([query, ])
         hitListList = []
         for term in terms:
-            if len(term[1]) > 0 and term[1][0] == 'n':
-                hitList = self.GetHitList(term[0])
-                hitListList.append(hitList)
+            hitList = self.GetHitList(term)
+            hitListList.append(hitList)
 
         termWeight = []
         curAddr = []
@@ -83,7 +84,6 @@ class SearchIndex:
                 termWeight[i] = termWeightBase / len(hitListList) + (1 - termWeightBase) * float(allNum - termWeight[i]) / allNum / (len(hitListList) - 1)
 
         self.logger.debug("weight %s" % str(termWeight))
-
 
         games = []
         while True:
@@ -120,21 +120,6 @@ class SearchIndex:
 
     def InitSeg(self):
         PySeg.init(self.segPath)
-        tags = Tag.objects.all()
-        for t in tags:
-            try:
-                PySeg.addUserWord(t.name.encode("gbk"))
-                self.logger.debug("add user word tag %s success" % t.name)
-            except:
-                self.logger.debug("add user word %s error" % t.name)
-
-        cats = Category.objects.all()
-        for c in cats:
-            try:
-                PySeg.addUserWord(c.name.encode('gbk'))
-                self.logger.debug("add user word category %s" % c.name)
-            except:
-                self.logger.debug("add user word %s error" % c.name)
     def AddOneGame(self, gameId):
         try:
             game = Game.objects.get(pk = gameId)
@@ -209,7 +194,7 @@ class SearchIndex:
                         self.RespGames(1, [], address, s)
                         return
                     self.logger.debug("get content %s" % query.query)
-                    games = self.Search(query.query.encode("utf8"))
+                    games = self.Search(query.query)
                     gameIds = []
                     for game in games:
                         self.logger.debug("game weight %f id %d" % (game[0], game[1]))

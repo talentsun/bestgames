@@ -26,16 +26,21 @@ class DBItem:
         self.addrs = addrs
 
     def Encode(self):
-        key = struct.pack("!H%dsI" % len(self.term), len(self.term), self.term, self.gameId)
+        term = self.term.encode("utf8")
+        key = struct.pack("!H%dsI" % len(term), len(term), term, self.gameId)
         value = struct.pack("!B%dB" % len(self.addrs), len(self.addrs), *self.addrs)
         return (key, value)
 
-
+    def EncodeKey(self):
+        term = self.term.encode("utf8")
+        key = struct.pack("!H%dsI" % len(term), len(term), term, self.gameId)
+        return key
+        
     def Decode(self, key, value):
         start = 0
         wLen = struct.unpack("!H", key[start: start + 2])[0]
         start += 2
-        self.term = key[start: start + wLen]
+        self.term = key[start: start + wLen].decode("utf8")
         start += wLen
         self.gameId = struct.unpack("!I", key[start: start + 4])[0]
 
@@ -53,7 +58,7 @@ class Index:
         item = DBItem("", 0, [])
         for k,v in self.db.RangeIter(include_value = True):
             item.Decode(k, v)
-            self.logger.debug("term %s gameId %d addrs %s" % (item.term.decode('utf8'), item.gameId, str(item.addrs)))
+            self.logger.debug("term %s gameId %d addrs %s" % (item.term, item.gameId, str(item.addrs)))
 
 
     def CreateDB(self):
@@ -72,31 +77,50 @@ class Index:
         PySeg.init(self.path + "/../")
 
 
+    @classmethod
+    def RightPos(cls, pos):
+        if len(pos) > 0 and (pos[0] == 'n' or pos[0] == 'a' or pos[0] == 'v'):
+            return True
+        else:
+            return False
+
+
+    @classmethod
+    def GetRightWords(cls, sentenses):
+        words = []
+        for s in sentenses:
+            ts = PySeg.seg(s.encode('utf8'))
+            for t in ts:
+                if cls.RightPos(t[1]):
+                    words.append(t[0].decode('utf8'))
+        return words
+
+        
     def BuildIndexForOne(self, gameId, name, description, categorys, tags):
         terms = {}
         self.logger.debug("build index for one %d %s %s %s %s" % (gameId, name, description, str(categorys), str(tags)))
-        ts = PySeg.seg(name.encode('utf8'))
+        ts = self.GetRightWords([name,])
         terms[NameAddr] = []
         for t in ts:
-            if len(t[1]) > 0 and t[1][0] == 'n':
-                terms[NameAddr].append(t[0])
-        ts = PySeg.seg(description.encode('utf8'))
+            terms[NameAddr].append(t)
+        ts = self.GetRightWords([description,])
         terms[DescAddr] = []
         for t in ts:
-            if len(t[1]) > 0 and t[1][0] == 'n':
-                terms[DescAddr].append(t[0])
+            terms[DescAddr].append(t)
 
         terms[CategoryAddr] = []
-        for c in categorys:
-            terms[CategoryAddr].append(c.encode("utf8"))
+        ts = self.GetRightWords(categorys)
+        for t in ts:
+            terms[CategoryAddr].append(t)
+        ts = self.GetRightWords(tags)
         terms[TagAddr] = []
-        for t in tags:
-            terms[TagAddr].append(t.encode('utf8'))
+        for t in ts:
+            terms[TagAddr].append(t)
         term2Addrs = {}
 
         for k, v in terms.items():
             for term in v:
-                self.logger.debug("%d %s" % (k, term.decode('utf8')))
+                self.logger.debug("%d %s" % (k, term))
                 if term not in term2Addrs:
                     term2Addrs[term] = []
 
@@ -105,7 +129,7 @@ class Index:
 
 
         for term, addrs in term2Addrs.items():
-            self.logger.debug("term %s addrs %s" % (term.decode('utf8'), str(addrs)))
+            self.logger.debug("term %s addrs %s" % (term, str(addrs)))
             item = DBItem(term, gameId, addrs)
             (k, v) = item.Encode()
 
@@ -114,21 +138,6 @@ class Index:
 if __name__ == "__main__":
     index = Index(workPath + "/../db/")
     index.CreateDB()
-    tags = Tag.objects.all()
-    for t in tags:
-        try:
-            PySeg.addUserWord("%s n" % t.name.encode("gbk"))
-            index.logger.debug("add user word tag %s success" % t.name)
-        except:
-            index.logger.debug("add user word %s error" % t.name)
-
-    cats = Category.objects.all()
-    for c in cats:
-        try:
-            PySeg.addUserWord("%s n" % c.name.encode('gbk'))
-            index.logger.debug("add user word category %s" % c.name)
-        except:
-            index.logger.debug("add user word %s error" % c.name)
     games = Game.objects.all()
     for game in games:
         tags = []
