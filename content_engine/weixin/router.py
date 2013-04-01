@@ -35,7 +35,7 @@ class Router(object):
 
 	def data(self, uid, key, value):
 		obj = self.data_cache[uid] = self.data_cache[uid] or {}
-		if isinstance(key, str):
+		if isinstance(key, (str, unicode)):
 			if value is None:
 				del obj[key]
 			else:
@@ -76,7 +76,7 @@ class Router(object):
 			if Rule.is_match(info, rule):
 				rule.count = i
 				result = Rule.execute(info, rule, cb)
-				if isinstance(result, str):
+				if isinstance(result, (str, unicode)):
 					result = BuildConfig(MessageBuilder.TYPE_RAW_TEXT, None, result)
 				if result:
 					if rule.replies:

@@ -38,11 +38,12 @@ def _build_weixin_download_urls(context, data):
 				content = content + u'无苹果版\n'
 		else:
 			content = content + u'无苹果版\n'
-			content = content + '\n'
+		
+		content = content + '\n'
 
 	weixin = WeiXin()
-	return weixin.to_xml(to_user_name=context.get('ToUserName', None),
-            from_user_name=context.get('FromUserName', None),
+	return weixin.to_xml(to_user_name=context.get('FromUserName', None),
+            from_user_name=context.get('ToUserName', None),
             create_time=datetime.now().strftime('%s'),
             msg_type='text',
             content=content,
@@ -51,8 +52,8 @@ def _build_weixin_download_urls(context, data):
 def _build_weixin_raw_text(context, data):
 	# FIXME
 	weixin = WeiXin()
-	return weixin.to_xml(to_user_name=context.get('ToUserName', None),
-            from_user_name=context.get('FromUserName', None),
+	return weixin.to_xml(to_user_name=context.get('FromUserName', None),
+            from_user_name=context.get('ToUserName', None),
             create_time=datetime.now().strftime('%s'),
             msg_type='text',
             content=data,

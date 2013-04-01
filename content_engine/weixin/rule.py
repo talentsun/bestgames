@@ -8,7 +8,7 @@ import string
 # 执行流程: pattern -> handler -> register reply Rule
 class Rule(object):
 	def __init__(self, config, prex=None):
-		if isinstance(config, str):
+		if isinstance(config, (str, unicode)):
 			#为字符串时，pattern为通过匹配，handler为直接返回该值
 			self.name = config
 			if prex is not None:
@@ -79,7 +79,7 @@ class Rule(object):
 
 		result = []
 
-		if isinstance(config, str):
+		if isinstance(config, (str, unicode)):
 			result.append(Rule(config))
 		elif isfunction(config):
 			result.append(Rule(config))
@@ -127,17 +127,15 @@ class Rule(object):
 
 		fn = rule.handler
 		if fn is None:
-			return cb()
+			return None
 
 		if isinstance(fn, list) and len(fn) >= 1:
 			fn = fn[random.randint(0, len(fn)-1)]
 
-		if isinstance(fn, str):
-			if info.param:
-				fn = string.Formatter.format(fn, info.param)
-			return cb(None, fn)
+		if isinstance(fn, (str, config)):
+			return fn
 
 		if isfunction(fn):
 				return fn(rule, info)
 
-		return cb()
+		return None
