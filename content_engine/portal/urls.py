@@ -2,7 +2,7 @@ __author__ = 'huwei'
 
 from django.conf.urls.defaults import *
 
-urlpatterns = patterns('api.views',
+urlpatterns = patterns('portal.views',
     url(r'^$','index'),
     url(r'^rediers/add','add_edit_redier'),
     url(r'^rediers/(?P<redier_id>\d+)/edit','add_edit_redier'),

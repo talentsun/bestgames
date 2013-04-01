@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from api.models import Game, Redier, Collection, Problem
+from portal.models import Game, Redier, Collection, Problem
 import django_tables2 as tables
 from django_tables2.columns import DateTimeColumn, TemplateColumn
 from taggit.utils import edit_string_for_tags

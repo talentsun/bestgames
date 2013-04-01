@@ -10,9 +10,8 @@ setup_environ(settings)
 import leveldb, PySeg
 from BuildIndex import DBItem
 from search_pb2 import Query, Response
-from api.models import Category
+from portal.models import Category, Game, Category
 from taggit.models import Tag
-from api.models import Game, Category
 from taggit.models import Tag
 
 workPath = os.path.dirname(os.path.abspath(__file__))

@@ -1,6 +1,6 @@
 # coding: utf8
 from router import Router
-from api.models import Game
+from portal.models import Game
 from message_builder import MessageBuilder, BuildConfig
 from datetime import date
 import datetime

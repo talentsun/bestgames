@@ -8,8 +8,8 @@ import logging, traceback, time, struct, socket
 from django.views.decorators.csrf import csrf_exempt
 
 logger = logging.getLogger('default')
-from api.tables import SearchResultTable
-from api.models import Game
+from portal.tables import SearchResultTable
+from portal.models import Game
 from service import search_pb2
 
 import xml.etree.ElementTree as ET

@@ -8,7 +8,7 @@ from datetime import datetime
 from taggit.forms import TagField
 from django_select2 import *
 
-from api.models import Redier, Game, Category, Collection, Problem
+from portal.models import Redier, Game, Category, Collection, Problem
 
 class EntityForm(ModelForm):
 	tags = TagField(label=u"标签")

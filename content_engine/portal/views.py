@@ -15,9 +15,9 @@ from django.conf import settings
 
 from taggit.models import Tag
 
-from api.models import Game, Redier, Collection, Problem,Entity
-from api.tables import GameTable, RedierTable, CollectionTable, ProblemTable
-from api.forms import GameForm, RedierForm, CollectionForm, ProblemForm
+from portal.models import Game, Redier, Collection, Problem,Entity
+from portal.tables import GameTable, RedierTable, CollectionTable, ProblemTable
+from portal.forms import GameForm, RedierForm, CollectionForm, ProblemForm
 
 import django_tables2 as tables
 

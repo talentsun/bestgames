@@ -145,7 +145,7 @@ INSTALLED_APPS = (
     'ajax_upload',
     'social_auth',
     'django_select2',
-    'api',
+    'portal',
     'weixin',
     'scrapy_itunes',
 )

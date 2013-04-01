@@ -9,7 +9,7 @@ setup_environ(settings)
 
 import socket, struct
 
-from api.models import Game
+from portal.models import Game
 
 if __name__ == '__main__':
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

@@ -7,7 +7,7 @@ from django.core.management import setup_environ
 from content_engine import settings
 setup_environ(settings)
 
-from api.models import Game, Category
+from portal.models import Game, Category
 import leveldb, PySeg
 import logging, struct, os, os.path
 from taggit.models import Tag
