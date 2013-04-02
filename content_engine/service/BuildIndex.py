@@ -1,22 +1,26 @@
 #!/usr/local/bin/python2.7
 # -*- coding:utf-8 -*-
 
-import sys
+import sys, subprocess
 sys.path.append("..")
 from django.core.management import setup_environ
 from content_engine import settings
 setup_environ(settings)
 
 from portal.models import Game, Category
-import leveldb, PySeg
+import leveldb
+from SegUtil import SegUtil
 import logging, struct, os, os.path
 from taggit.models import Tag
 
+from Utils import *
 NameAddr = 1
 CategoryAddr = 2
 TagAddr = 3
 DescAddr = 4
 workPath = os.path.dirname(os.path.abspath(__file__))
+logger = logging.getLogger("build_index")
+single = workPath + "/update_index.single"
 
 
 class DBItem:
@@ -74,7 +78,7 @@ class Index:
         }
         self.db = leveldb.LevelDB(self.path, **options)
         self.logger = logging.getLogger("build_index") 
-        PySeg.init(self.path + "/../")
+        SegUtil.Init(self.path + "/../")
 
 
     @classmethod
@@ -89,7 +93,7 @@ class Index:
     def GetRightWords(cls, sentenses):
         words = []
         for s in sentenses:
-            ts = PySeg.seg(s.encode('utf8'))
+            ts = SegUtil.Seg(s.encode('utf8'))
             for t in ts:
                 if cls.RightPos(t[1]):
                     words.append(t[0].decode('utf8'))
@@ -136,7 +140,21 @@ class Index:
             self.db.Put(k, v)
 
 if __name__ == "__main__":
-    index = Index(workPath + "/../db/")
+    if len(sys.argv) != 2:
+        print "Usage: %s cfg" % sys.argv[0]
+        sys.exit()
+
+    if not CheckSingle(single):
+        logger.error("another instance is running")
+        sys.exit()
+
+    os.chdir(workPath)
+    dbPath = GetConfigValue("DB_PATH", sys.argv[1])
+    if dbPath[-1] == '/':
+        dbPath = dbPath[:-1]
+    if CheckFileExist(dbPath + ".tmp"):
+        DeleteFolders(dbPath + ".tmp")
+    index = Index(dbPath + ".tmp")
     index.CreateDB()
     games = Game.objects.all()
     for game in games:
@@ -146,5 +164,28 @@ if __name__ == "__main__":
         cats = [game.category.name, ]
         index.BuildIndexForOne(game.pk, game.name, game.description, cats, tags)
 
-    index.Show()
+
+    pidFilePath = GetConfigValue("PID_FILE", sys.argv[1])
+    port = int(GetConfigValue("SEARCH_PORT", sys.argv[1]))
+    logger.debug("%s %d" % (pidFilePath, port))
+    if CheckFileExist(pidFilePath) and PortIsUsed(port):
+        logger.debug("search index active")
+        pidFile = file(pidFilePath)
+        pid = int(pidFile.readline().strip())
+        KillOne(pid)
+        pidFile.close()
+    else:
+        logger.debug("search index not active")
+
+    if CheckFileExist(dbPath + ".bak"):
+        DeleteFolders(dbPath + ".bak")
+    if CheckFileExist(dbPath):
+        os.rename(dbPath, dbPath + ".bak")
+        DeleteFolders(dbPath)
+    os.rename(dbPath + ".tmp", dbPath)
+
+    subprocess.Popen("./SearchIndex.py Search.cfg", shell=True)
+    RemoveSingle(single)
+
+
 

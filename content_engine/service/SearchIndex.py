@@ -7,12 +7,15 @@ sys.path.append("..")
 from django.core.management import setup_environ
 from content_engine import settings
 setup_environ(settings)
-import leveldb, PySeg
+import leveldb
+from SegUtil import SegUtil
 from BuildIndex import DBItem, Index
 from search_pb2 import Query, Response
 from portal.models import Category, Game, Category
 from taggit.models import Tag
 from taggit.models import Tag
+
+from Utils import *
 
 workPath = os.path.dirname(os.path.abspath(__file__))
 NameAddr = 1
@@ -119,7 +122,7 @@ class SearchIndex:
         
 
     def InitSeg(self):
-        PySeg.init(self.segPath)
+        SegUtil.Init(self.segPath)
     def AddOneGame(self, gameId):
         try:
             game = Game.objects.get(pk = gameId)
@@ -132,12 +135,12 @@ class SearchIndex:
         categorys = [game.category.name, ]
         terms = {}
         self.logger.debug("add one game for one %d %s %s %s %s" % (gameId, game.name, game.description, str(categorys), str(tags)))
-        ts = PySeg.seg(game.name.encode('utf8'))
+        ts = SegUtil.Seg(game.name.encode('utf8'))
         terms[NameAddr] = []
         for t in ts:
             if len(t[1]) > 0 and t[1][0] == 'n':
                 terms[NameAddr].append(t[0])
-        ts = PySeg.seg(game.description.encode('utf8'))
+        ts = SegUtil.Seg(game.description.encode('utf8'))
         terms[DescAddr] = []
         for t in ts:
             if len(t[1]) > 0 and t[1][0] == 'n':
@@ -169,12 +172,10 @@ class SearchIndex:
             self.db.Put(k, v)
 
 
-    def StartServer(self):
+    def StartServer(self, port):
         import socket
         host = "127.0.0.1"
-        port = 8128
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         s.bind((host, port))
 
         while True:
@@ -210,8 +211,19 @@ class SearchIndex:
                 
 
 if __name__ == "__main__":
-    search = SearchIndex(workPath + "/../db/", workPath + "/../")
+    if len(sys.argv) != 2:
+        print "Usage: %s cfg" % sys.argv[0]
+        sys.exit()
+    os.chdir(workPath)
+    port = int(GetConfigValue("SEARCH_PORT", sys.argv[1]))
+    pidFileName = GetConfigValue("PID_FILE", sys.argv[1])
+    print port, pidFileName
+    pidFile = file(pidFileName, "w")
+    pidFile.write("%d" % os.getpid())
+    pidFile.close()
+    dbPath = GetConfigValue("DB_PATH", sys.argv[1])
+    search = SearchIndex(dbPath, workPath + "/../")
     search.InitSeg()
-    search.StartServer()
+    search.StartServer(port)
 
 
