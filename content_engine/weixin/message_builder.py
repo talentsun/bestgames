@@ -33,6 +33,7 @@ def _get_game_ios_shorten_download_url_key(game):
 	return 'g_' + str(game.id) + '_ios_d'
 
 def _build_weixin_download_urls(context, data, cache_key=None, cache_timeout=None):
+	content = None
 	if cache_key and cache.get(_wrap_cache_key_with_platform(cache_key, MessageBuilder.PLATFORM_WEIXIN)):
 		content = cache.get(_wrap_cache_key_with_platform(cache_key, MessageBuilder.PLATFORM_WEIXIN))
 
