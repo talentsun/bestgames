@@ -33,65 +33,62 @@ def _get_game_ios_shorten_download_url_key(game):
 	return 'g_' + str(game.id) + '_ios_d'
 
 def _build_weixin_download_urls(context, data, cache_key=None, cache_timeout=None):
-	content  = ''
-	for game in data:
-		content = content + game.name + '\n'
+	if cache_key and cache.get(_wrap_cache_key_with_platform(cache_key, MessageBuilder.PLATFORM_WEIXIN)):
+		content = cache.get(_wrap_cache_key_with_platform(cache_key, MessageBuilder.PLATFORM_WEIXIN))
 
-		if game.android_download_url is not None:
-			android_download_shorten_url = cache.get(_get_game_android_shorten_download_url_key(game))
-			if android_download_shorten_url is None:
-				android_download_shorten_url = shorten_url(game.android_download_url)
-				cache.set(_get_game_android_shorten_download_url_key(game), android_download_shorten_url)
+	if content is None:
+		for game in data:
+			content = content + game.name + '\n'
 
-			if android_download_shorten_url is not None:
-				content = content + u'安卓下载地址'
-				content = content + android_download_shorten_url + '\n'
+			if game.android_download_url is not None:
+				android_download_shorten_url = cache.get(_get_game_android_shorten_download_url_key(game))
+				if android_download_shorten_url is None:
+					android_download_shorten_url = shorten_url(game.android_download_url)
+					cache.set(_get_game_android_shorten_download_url_key(game), android_download_shorten_url)
+
+				if android_download_shorten_url is not None:
+					content = content + u'安卓下载地址'
+					content = content + android_download_shorten_url + '\n'
+				else:
+					content = content + u'无安卓版\n'
 			else:
 				content = content + u'无安卓版\n'
-		else:
-			content = content + u'无安卓版\n'
 
-		if game.iOS_download_url is not None:
-			ios_download_shorted_url = cache.get(_get_game_ios_shorten_download_url_key(game))
-			if ios_download_shorted_url is None:
-				ios_download_shorted_url = shorten_url(game.iOS_download_url)
-				cache.set(_get_game_ios_shorten_download_url_key(game), ios_download_shorted_url)
+			if game.iOS_download_url is not None:
+				ios_download_shorted_url = cache.get(_get_game_ios_shorten_download_url_key(game))
+				if ios_download_shorted_url is None:
+					ios_download_shorted_url = shorten_url(game.iOS_download_url)
+					cache.set(_get_game_ios_shorten_download_url_key(game), ios_download_shorted_url)
 
-			if ios_download_shorted_url is not None:
-				content = content + u'苹果下载地址'
-				content = content + ios_download_shorted_url + '\n'
+				if ios_download_shorted_url is not None:
+					content = content + u'苹果下载地址'
+					content = content + ios_download_shorted_url + '\n'
+				else:
+					content = content + u'无苹果版\n'
 			else:
 				content = content + u'无苹果版\n'
-		else:
-			content = content + u'无苹果版\n'
-		
-		content = content + '\n'
+			
+			content = content + '\n'
+		if cache_key:
+			cache.set(_wrap_cache_key_with_platform(cache_key, MessageBuilder.PLATFORM_WEIXIN), content, cache_timeout)
 
 	weixin = WeiXin()
-	message = weixin.to_xml(to_user_name=context.get('FromUserName', None),
+	return weixin.to_xml(to_user_name=context.get('FromUserName', None),
             from_user_name=context.get('ToUserName', None),
             create_time=datetime.now().strftime('%s'),
             msg_type='text',
             content=content,
             func_flag=0)
-	
-	if cache_key:
-		cache.set(_wrap_cache_key_with_platform(cache_key, MessageBuilder.PLATFORM_WEIXIN), message, cache_timeout)
-	return message
 
 def _build_weixin_raw_text(context, data, cache_key = None, cache_timeout = None):
 	# FIXME
 	weixin = WeiXin()
-	message = weixin.to_xml(to_user_name=context.get('FromUserName', None),
+	return weixin.to_xml(to_user_name=context.get('FromUserName', None),
             from_user_name=context.get('ToUserName', None),
             create_time=datetime.now().strftime('%s'),
             msg_type='text',
             content=data,
             func_flag=0)
-
-	if cache_key:
-		cache.set(_wrap_cache_key_with_platform(cache_key, MessageBuilder.PLATFORM_WEIXIN), message, cache_timeout)
-	return message
 
 class MessageBuilder:
 	# message types
@@ -103,13 +100,7 @@ class MessageBuilder:
 
 	@classmethod
 	def build(self,  context = None, build_config = None):
-		cache_key = _wrap_cache_key_with_platform(build_config.cache_key, build_config.platform)
-		if cache_key and cache.get(cache_key):
-			return cache.get(cache_key)
-		else:
-			return self._call_build_method(context, build_config.type, build_config.platform, build_config.data, build_config.cache_key, build_config.cache_timeout)
-
-	
+		return self._call_build_method(context, build_config.type, build_config.platform, build_config.data, build_config.cache_key, build_config.cache_timeout)
 
 	_build_methods = {
 		TYPE_DOWNLOAD_URL : {
