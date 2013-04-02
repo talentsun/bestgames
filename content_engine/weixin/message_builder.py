@@ -44,7 +44,7 @@ def _build_weixin_download_urls(context, data, cache_key=None, cache_timeout=Non
 				cache.set(_get_game_android_shorten_download_url_key(game), android_download_shorten_url)
 
 			if android_download_shorten_url is not None:
-				content = content + u'安卓下载地址\n'
+				content = content + u'安卓下载地址'
 				content = content + android_download_shorten_url + '\n'
 			else:
 				content = content + u'无安卓版\n'
@@ -58,7 +58,7 @@ def _build_weixin_download_urls(context, data, cache_key=None, cache_timeout=Non
 				cache.set(_get_game_ios_shorten_download_url_key(game), ios_download_shorted_url)
 
 			if ios_download_shorted_url is not None:
-				content = content + u'苹果下载地址\n'
+				content = content + u'苹果下载地址'
 				content = content + ios_download_shorted_url + '\n'
 			else:
 				content = content + u'无苹果版\n'
@@ -104,9 +104,7 @@ class MessageBuilder:
 	@classmethod
 	def build(self,  context = None, build_config = None):
 		cache_key = _wrap_cache_key_with_platform(build_config.cache_key, build_config.platform)
-		print cache_key
 		if cache_key and cache.get(cache_key):
-			print cache.get(cache_key)
 			return cache.get(cache_key)
 		else:
 			return self._call_build_method(context, build_config.type, build_config.platform, build_config.data, build_config.cache_key, build_config.cache_timeout)
