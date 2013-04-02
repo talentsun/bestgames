@@ -10,7 +10,7 @@ def get_download_urls_for_today(rule, info):
 	day = date.today().day
 	start_date = datetime(year, month, day, 0, 0, 0)
 	end_date = datetime(year, month, day, 23, 59, 59)
-	return BuildConfig(MessageBuilder.TYPE_DOWNLOAD_URL, None, Game.objects.filter(weibo_sync_timestamp__range=(start_date, end_date)), 'download_urls_for_today', (end_date - datetime.today()).seconds)
+	return BuildConfig(MessageBuilder.TYPE_DOWNLOAD_URL, None, Game.objects.filter(weibo_sync_timestamp__range=(start_date, end_date)), 'download_urls_for_today', (end_date - datetime.today()).total_seconds())
 
 Router.get_instance().set({
 		'name' : u'获取今日推荐游戏的下载地址',
