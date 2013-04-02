@@ -44,7 +44,7 @@ def _build_weixin_download_urls(context, data, cache_key=None, cache_timeout=Non
 				cache.set(_get_game_android_shorten_download_url_key(game), android_download_shorten_url)
 
 			if android_download_shorten_url is not None:
-				content = content + u'安卓下载地址'
+				content = content + u'安卓下载地址\n'
 				content = content + android_download_shorten_url + '\n'
 			else:
 				content = content + u'无安卓版\n'
@@ -58,7 +58,7 @@ def _build_weixin_download_urls(context, data, cache_key=None, cache_timeout=Non
 				cache.set(_get_game_ios_shorten_download_url_key(game), ios_download_shorted_url)
 
 			if ios_download_shorted_url is not None:
-				content = content + u'苹果下载地址'
+				content = content + u'苹果下载地址\n'
 				content = content + ios_download_shorted_url + '\n'
 			else:
 				content = content + u'无苹果版\n'
