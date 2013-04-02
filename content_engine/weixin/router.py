@@ -4,6 +4,9 @@ from rule import Rule
 from info import Info
 from message_builder import MessageBuilder, BuildConfig
 
+from django.core.cache import cache
+
+# Router use memcache to share data whole application
 class Router(object):
 	__instance = None
 
@@ -34,7 +37,7 @@ class Router(object):
 			return self.routes
 
 	def data(self, uid, key, value):
-		obj = self.data_cache[uid] = self.data_cache[uid] or {}
+		obj = cache.get(uid, {})
 		if isinstance(key, (str, unicode)):
 			if value is None:
 				del obj[key]
@@ -42,6 +45,7 @@ class Router(object):
 				obj[key] = value
 		elif isinstance(key, dict):
 			obj.__dict__.update(key)
+		cache.set(uid, obj)
 		return obj
 
 	def wait(self, uid, rule):

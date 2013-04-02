@@ -47,6 +47,7 @@ def index(request):
         weixin = WeiXin.on_message(smart_str(request.raw_post_data))
         message = weixin.to_json()
 
+        print message
         Router.get_instance().reply(message, _route_callback)
         
         if router_error is None and router_reply is not None:
