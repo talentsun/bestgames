@@ -7,13 +7,14 @@ from django.shortcuts import render_to_response, get_object_or_404, render, redi
 import json
 import time
 import socket
+import random
 
 def getPic(request):
     root_path = os.path.dirname(os.path.dirname(os.path.normpath(__file__))) + '/scrapy_itunes/auto_get_pic'
     download_url = request.GET.get('download_url')
     response_data = {}
     if download_url:
-      curtime = time.strftime('%Y%m%d%H%M',time.localtime(time.time()))
+      curtime = time.strftime('%Y%m%d%H%M%S',time.localtime(time.time())) + str(random.randint(1, 1000))
 
       print download_url
       command = 'cd ' + root_path +  '&&scrapy crawl parse_ituns -a  url=' + download_url + ' -a pic_prefix=' + curtime
