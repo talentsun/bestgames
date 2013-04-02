@@ -1,39 +1,110 @@
+#encoding=utf-8
 import pycurl
 import cStringIO
-import re
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 class weixin:
-    filename='/Users/huwei/test.jpg'
-    c = pycurl.Curl()
-    c.setopt(c.POST, 1)
-    c.setopt(c.HTTPPOST, [('title', 'test'), (('file', (c.FORM_FILE, filename)))])
-    c.setopt(c.VERBOSE, 1)
-    buff = cStringIO.StringIO()
-    hdr = cStringIO.StringIO()
-    c.setopt(c.WRITEFUNCTION, buff.write)
-    c.setopt(c.URL, "http://mp.weixin.qq.com/cgi-bin/uploadmaterial?cgi=uploadmaterial&type=2&t=iframe-uploadfile&lang=zh_CN&formId=1" )
-    c.setopt(c.HEADERFUNCTION, hdr.write)
+    def postImage(self,cert,slave_user,slave_sid,msg_count):
 
-    c.setopt(c.HTTPHEADER,['Cookie','hasWarningUser=1; pgv_pvid=8543179264; '
-                                    'o_cookie=406465841; ptui_loginuin=406465841; '
-                                    'ptisp=cn; pt2gguin=o0406465841; RK=5dB+IHLqWv;'
-                                    ' cert=Q8LbUgrLPQbhWRGKKpm9pcExkntSNrqA; '
-                                    'slave_user=gh_d8d72c671c22; '
-                                    'slave_sid=UThMYlVnckxQUWJoV1JHS0twbTlwY0V4a250U05ycUF5OE1wbmE5OV9qcVc5NERUdFhfUTdFbXJaUGdKZUVqTU40YTljaWliekc0SUtHemFBd19IOWo1NjhsTm1fNTVNN2ZUanY4dDNPdkt5YWlHTHd6dGZ4Z0ZmcUVMV2pzR0s='])
-    c.perform()
+        from_id_array = []
+        count = 0;
+        while count < msg_count:
+            #TODO read filename from sql
+            filename='/Users/huwei/test' + str(count) + '.jpg'
+            from_id_array.append(self.postSingelImage(cert,slave_user,slave_sid,filename))
+            count = count + 1
 
-    print "status code: %s" % c.getinfo(pycurl.HTTP_CODE)
-    # -> 200
+        self.createSingleMsg(cert,slave_user,slave_sid,from_id_array,msg_count)
 
-    status_line = hdr.getvalue().splitlines()[0]
-    m = re.match(r'HTTP\/\S*\s*\d+\s*(.*?)\s*$', status_line)
-    if m:
-        status_message = m.groups(1)
-    else:
-        status_message = ''
-
-    print "status message: %s" % status_message
+    def postSingelImage(self,cert,slave_user,slave_sid,filename):
+        c = pycurl.Curl()
 
 
+        c.setopt(c.POST, 1)
+        c.setopt(c.HTTPPOST, [('filename', filename), (('uploadfile', (c.FORM_FILE, filename)))])
+        c.setopt(c.URL, "http://mp.weixin.qq.com/cgi-bin/uploadmaterial?cgi=uploadmaterial&type=2&t=iframe-uploadfile&lang=zh_CN&formId=1" )
 
-weixin()
+        c.setopt(c.COOKIE,'hasWarningUer=1;hasWarningUer=1;' + cert +';' + slave_user + ';' + slave_sid + ';')
+        buff = cStringIO.StringIO()
+        hdr = cStringIO.StringIO()
+        c.setopt(c.WRITEFUNCTION, buff.write)
+        c.setopt(c.HEADERFUNCTION, hdr.write)
+        c.perform()
+
+        print 'hdr:' + hdr.getvalue()
+        print 'buff:' + buff.getvalue()
+        index_start = buff.getvalue().find('formId,')
+        index_start = buff.getvalue().find('\'',index_start)
+        print 'index_start =' +  str(index_start)
+        index_end = buff.getvalue().find('\'',index_start + 1)
+        form_id = buff.getvalue()[index_start + 1:index_end]
+        print 'form_id=' + form_id
+        return form_id
+
+
+    def createSingleMsg(self,cert,slave_user,slave_sid,from_id_array,msg_count):
+        c = pycurl.Curl()
+
+        c.setopt(c.COOKIE,'hasWarningUer=1;hasWarningUer=1;' + cert +';' + slave_user + ';' + slave_sid + ';')
+        c.setopt(c.URL, "http://mp.weixin.qq.com/cgi-bin/operate_appmsg?t=ajax-response&sub=create")
+        title = 'autopost'
+        digest = 'test'
+        content = '自动上传微信消息'
+        count = 0
+        post_params = 'error=false&count=' + str(msg_count) + '&AppMsgId='
+        while count < msg_count:
+            title = title + str(count)
+            digest = digest + str(count)
+            content = '自动上传微信消息' + str(count)
+            post_params =post_params + '&title' + str(count) + '=' + title + '&digest' + str(count) + '=' + digest + '&content' + str(count) + '=' + content + '&fileid' + str(count) + '=' + from_id_array[count]
+            count = count + 1
+
+        post_params = post_params + '&ajax=1';
+        c.setopt(c.POSTFIELDS,post_params)
+        buff = cStringIO.StringIO()
+        hdr = cStringIO.StringIO()
+        c.setopt(c.WRITEFUNCTION, buff.write)
+        c.setopt(c.HEADERFUNCTION, hdr.write)
+        c.perform()
+
+        print 'hdr:' + hdr.getvalue()
+        print 'buff:' + buff.getvalue()
+
+
+    def login(self):
+        c = pycurl.Curl()
+        c.setopt(c.URL, 'http://mp.weixin.qq.com/cgi-bin/login?lang=zh_CN')
+        c.setopt(c.POSTFIELDS, 'username=bestgames_&pwd=964d6985a37d6c7c0d7b1d7da6b05608&imgecode=&f=json')
+        buff = cStringIO.StringIO()
+        hdr = cStringIO.StringIO()
+        c.setopt(c.WRITEFUNCTION, buff.write)
+        c.setopt(c.HEADERFUNCTION, hdr.write)
+        c.perform()
+
+        print 'hdr:' + hdr.getvalue()
+        print 'buff:' + buff.getvalue()
+
+        cookies = hdr.getvalue().splitlines()
+        index_start = cookies[7].find('cert=')
+        index_end = cookies[7].find(';',index_start)
+        cert = cookies[7][index_start:index_end]
+        print 'cert=' + cert
+
+        index_start = cookies[8].find('slave_user=')
+        index_end = cookies[8].find(';',index_start)
+        slave_user = cookies[8][index_start:index_end]
+        print 'slave_user=' + cert
+
+        index_start = cookies[9].find('slave_sid=')
+        index_end = cookies[9].find(';',index_start)
+        slave_sid = cookies[9][index_start:index_end]
+        print 'slave_sid='  + slave_sid
+
+        self.postImage(cert,slave_user,slave_sid,2)
+
+w = weixin()
+w.login()
+
+
