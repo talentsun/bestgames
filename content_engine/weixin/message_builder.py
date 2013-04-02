@@ -84,7 +84,7 @@ def _build_weixin_games(context, data, cache_key=None, cache_timeout=None):
 		else:
 			pic_url = 'http://weixin.bestgames7.com/media/%s' % game.icon
 		articles.append({'title' : title, 'description' : description, 'pic_url' : pic_url})
-	return WeiXin.to_news_xml(context.get('FromUserName', None), context.get('ToUserName', None), articles, 0)
+	return WeiXin.to_news_xml(context.get('FromUserName', None), context.get('ToUserName', None), articles)
 
 def _build_weixin_raw_text(context, data, cache_key = None, cache_timeout = None):
 	# FIXME

@@ -66,7 +66,7 @@ class WeiXin(object):
         return xml
 
     @classmethod
-    def to_news_xml(self, to_user_name, from_user_name, articles, func_flag):
+    def to_news_xml(self, to_user_name, from_user_name, articles):
         xml = '<xml>'
         xml += '<ToUserName>%s</ToUserName>' % self._cdata(to_user_name)
         xml += '<FromUserName>%s</FromUserName>' % self._cdata(from_user_name)
@@ -88,7 +88,7 @@ class WeiXin(object):
                 xml += '<Url></Url>'
             xml += '</item>'
         xml += '</Articles>'
-        xml += '<FuncFlag>%d</FuncFlag>' % func_flag
+        xml += '<FuncFlag>1</FuncFlag>'
         xml += '</xml>'
         return xml
 
