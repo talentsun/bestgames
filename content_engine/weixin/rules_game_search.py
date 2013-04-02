@@ -21,7 +21,7 @@ def _search_download_url_by_name(rule, info):
         except:
             continue
         games.append(game)
-    return BuildConfig(MessageBuilder.TYPE_DOWNLOAD_URL, None, games)
+    return BuildConfig(MessageBuilder.TYPE_GAMES, None, games)
 
 Router.get_instance().set({
     'name' : '根据游戏名获取游戏下载地址',

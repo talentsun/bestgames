@@ -2,6 +2,7 @@
 # Author: twinsant@gmail.com
 import hashlib
 import xml.etree.ElementTree as ET
+from datetime import datetime
 
 class WeiXin(object):
     def __init__(self, token=None, timestamp=None, nonce=None, signature=None, echostr=None, xml_body=None):
@@ -40,9 +41,11 @@ class WeiXin(object):
             j[child.tag] = value
         return j
 
+    @classmethod
     def _to_tag(self, k):
         return ''.join([w.capitalize() for w in k.split('_')])
 
+    @classmethod
     def _cdata(self, data):
         '''http://stackoverflow.com/questions/174890/how-to-output-cdata-using-elementtree
         '''
@@ -50,25 +53,42 @@ class WeiXin(object):
             return '<![CDATA[%s]]>' % data.replace(']]>', ']]]]><![CDATA[>')
         return data
 
-    def to_xml(self, **kwargs):
+    @classmethod
+    def to_text_xml(self, to_user_name, from_user_name, content, func_flag):
         xml = '<xml>'
-        def cmp(x, y):
-            ''' WeiXin need ordered elements?
-            '''
-            orderd = ['to_user_name', 'from_user_name', 'create_time', 'msg_type', 'content', 'func_flag']
-            try:
-                ix = orderd.index(x)
-            except ValueError:
-                return 1
-            try:
-                iy = orderd.index(y)
-            except ValueError:
-                return -1
-            return ix - iy
-        for k in sorted(kwargs.iterkeys(), cmp):
-            v = kwargs[k]
-            tag = self._to_tag(k)
-            xml += '<%s>%s</%s>' % (tag, self._cdata(v), tag)
+        xml += '<ToUserName>%s</ToUserName>' % self._cdata(to_user_name)
+        xml += '<FromUserName>%s</FromUserName>' % self._cdata(from_user_name)
+        xml += '<CreateTime>%s</CreateTime>' % datetime.now().strftime('%s')
+        xml += '<MsgType><![CDATA[text]]></MsgType>'
+        xml += '<Content>%s</Content>' % self._cdata(content)
+        xml += '<FuncFlag>%d</FuncFlag>' % func_flag
+        xml += '</xml>'
+        return xml
+
+    @classmethod
+    def to_news_xml(self, to_user_name, from_user_name, articles, func_flag):
+        xml = '<xml>'
+        xml += '<ToUserName>%s</ToUserName>' % self._cdata(to_user_name)
+        xml += '<FromUserName>%s</FromUserName>' % self._cdata(from_user_name)
+        xml += '<CreateTime>%s</CreateTime>' % datetime.now().strftime('%s')
+        xml += '<MsgType><![CDATA[news]]></MsgType>'
+        xml += '<ArticleCount>%d</ArticleCount>' % len(articles)
+        xml += '<Articles>'
+        for item in articles:
+            xml += '<item>'
+            xml += '<Title>%s</Title>' % self._cdata(item['title'])
+            xml += '<Description>%s</Description>' % self._cdata(item['description'])
+            if item.has_key('pic_url'):
+                xml += '<PicUrl>%s</PicUrl>' % self._cdata(item['pic_url'])
+            else:
+                xml += '<PicUrl></PicUrl>'
+            if item.has_key('url'):
+                xml += '<Url>%s</Url>' % self._cdata(item['url'])
+            else:
+                xml += '<Url></Url>'
+            xml += '</item>'
+        xml += '</Articles>'
+        xml += '<FuncFlag>%d</FuncFlag>' % func_flag
         xml += '</xml>'
         return xml
 
