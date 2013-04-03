@@ -55,7 +55,6 @@ def _build_weixin_games(context, data):
 	articles = []
 	is_first = True
 	for game in data:
-		title = '%s - %s' % (game.brief_comment, game.name)
 		url_pos = game.recommended_reason.find('http://')
 		if url_pos != -1:
 			description = game.recommended_reason[:url_pos]
@@ -63,17 +62,21 @@ def _build_weixin_games(context, data):
 			description = game.recommended_reason
 		if is_first:
 			pic_url = 'http://weixin.bestgames7.com/media/%s' % game.screenshot_path_1
+			title = game.name
 			is_first = False
 		else:
 			pic_url = 'http://weixin.bestgames7.com/media/%s' % game.icon
+			title = '%s - %s' % (game.brief_comment, game.name)
 		# FIXME need a mobile page hosting game
 		articles.append({'title' : title, 'description' : description, 'pic_url' : pic_url, 'url' : 'http://www.baidu.com'})
 	return WeiXin.to_news_xml(context.get('FromUserName', None), context.get('ToUserName', None), articles)
+
 def _build_weixin_game_collection(context, data):
 	articles = []
 	
-	articles.append({'title' : data.title, 'description' : data.recommended_reason, 'pic_url' : 'http://weixin.bestgames7.com/media/%s' % data.cover, 'url' : 'http://www.baidu.com/'})
-	for game in data.games:
+	# FIXME need a mobile page hosting collection cover
+	articles.append({'title' : u'游戏合集之' + data.title, 'description' : u'游戏合集' + data.recommended_reason, 'pic_url' : 'http://weixin.bestgames7.com/media/%s' % data.cover, 'url' : 'http://www.baidu.com/'})
+	for game in data.games.all()[:5]:
 		title = '%s - %s' % (game.brief_comment, game.name)
 		url_pos = game.recommended_reason.find('http://')
 		if url_pos != -1:
@@ -84,6 +87,8 @@ def _build_weixin_game_collection(context, data):
 		
 		# FIXME need a mobile page hosting game
 		articles.append({'title' : title, 'description' : description, 'pic_url' : pic_url, 'url' : 'http://www.baidu.com'})
+
+	return WeiXin.to_news_xml(context.get('FromUserName', None), context.get('ToUserName', None), articles) 
 
 def _build_weixin_raw_text(context, data):
 	# FIXME
