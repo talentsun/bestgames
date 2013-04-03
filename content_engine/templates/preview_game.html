@@ -54,7 +54,15 @@
   </div>
   <p style="margin:10px 0;">{{game.recommended_reason|del_link}}</p>
   <div style="margin:20px 0;text-align:center">
-    <a class="btn btn-large" href="{{game.android_download_url}}" style="margin-right:10px;">下载安卓版</a>
-    <a class="btn btn-large" href="{{game.iOS_download_url}}">下载苹果版</a>
+    {% if game.android_download_url %}
+      <a class="btn btn-large" href="{{game.android_download_url}}" style="margin-right:10px;">下载安卓版</a>
+    {% else %}
+      <a class="btn btn-large disabled" href="#" style="margin-right:10px;">无安卓版</a>
+    {% endif %}
+    {% if game.iOS_download_url %}
+      <a class="btn btn-large" href="{{game.iOS_download_url}}">下载苹果版</a>
+    {% else %}
+      <a class="btn btn-large disabled" href="#">无苹果版</a>
+    {% endif %}
   </div>
 </body>
