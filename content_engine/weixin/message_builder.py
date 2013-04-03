@@ -69,6 +69,21 @@ def _build_weixin_games(context, data):
 		# FIXME need a mobile page hosting game
 		articles.append({'title' : title, 'description' : description, 'pic_url' : pic_url, 'url' : 'http://www.baidu.com'})
 	return WeiXin.to_news_xml(context.get('FromUserName', None), context.get('ToUserName', None), articles)
+def _build_weixin_game_collection(context, data):
+	articles = []
+	
+	articles.append({'title' : data.title, 'description' : data.recommended_reason, 'pic_url' : 'http://weixin.bestgames7.com/media/%s' % data.cover, 'url' : 'http://www.baidu.com/'})
+	for game in data.games:
+		title = '%s - %s' % (game.brief_comment, game.name)
+		url_pos = game.recommended_reason.find('http://')
+		if url_pos != -1:
+			description = game.recommended_reason[:url_pos]
+		else:
+			description = game.recommended_reason
+		pic_url = 'http://weixin.bestgames7.com/media/%s' % game.icon
+		
+		# FIXME need a mobile page hosting game
+		articles.append({'title' : title, 'description' : description, 'pic_url' : pic_url, 'url' : 'http://www.baidu.com'})
 
 def _build_weixin_raw_text(context, data):
 	# FIXME
@@ -82,6 +97,7 @@ class MessageBuilder:
 	TYPE_DOWNLOAD_URL = 'type_download_url'
 	TYPE_RAW_TEXT = 'type_raw_text'
 	TYPE_GAMES = 'type_games'
+	TYPE_GAME_COLLECTION = 'type_game_collection'
 
 	# platforms
 	PLATFORM_WEIXIN = 'weixin'
@@ -99,6 +115,9 @@ class MessageBuilder:
 		},
 		TYPE_GAMES : {
 			PLATFORM_WEIXIN : _build_weixin_games
+		},
+		TYPE_GAME_COLLECTION : {
+			PLATFORM_WEIXIN : _build_weixin_game_collection
 		}
 	}
 

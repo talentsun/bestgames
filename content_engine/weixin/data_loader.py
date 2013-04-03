@@ -1,4 +1,4 @@
-from portal.models import Game
+from portal.models import Game, Collection
 from django.core.cache import cache
 from datetime import date, datetime
 from utils import shorten_url
@@ -49,3 +49,6 @@ def load_shorten_urls():
 	for game in Game.objects.all():
 		load_shorten_ios_download_url(game)
 		load_shorten_android_download_url(game)
+
+def load_latest_game_collection():
+	return Collection.objects.latest('id')
