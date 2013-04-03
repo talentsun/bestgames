@@ -13,7 +13,7 @@ from google.protobuf import descriptor_pb2
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='search.proto',
   package='',
-  serialized_pb='\n\x0csearch.proto\"\x16\n\x05Query\x12\r\n\x05query\x18\x01 \x02(\t\"@\n\x0bRelatedGame\x12\x0f\n\x07gameIds\x18\x01 \x02(\x05\x12\x0f\n\x07nameRel\x18\x02 \x02(\x02\x12\x0f\n\x07gameRel\x18\x03 \x02(\x02\")\n\tQueryTerm\x12\x0c\n\x04term\x18\x01 \x02(\t\x12\x0e\n\x06weight\x18\x02 \x02(\x02\"R\n\x08Response\x12\x0e\n\x06result\x18\x01 \x02(\x05\x12\x1b\n\x05games\x18\x02 \x03(\x0b\x32\x0c.RelatedGame\x12\x19\n\x05terms\x18\x03 \x03(\x0b\x32\n.QueryTerm')
+  serialized_pb='\n\x0csearch.proto\"\x16\n\x05Query\x12\r\n\x05query\x18\x01 \x02(\t\"?\n\x0bRelatedGame\x12\x0e\n\x06gameId\x18\x01 \x02(\x05\x12\x0f\n\x07nameRel\x18\x02 \x02(\x02\x12\x0f\n\x07gameRel\x18\x03 \x02(\x02\")\n\tQueryTerm\x12\x0c\n\x04term\x18\x01 \x02(\t\x12\x0e\n\x06weight\x18\x02 \x02(\x02\"R\n\x08Response\x12\x0e\n\x06result\x18\x01 \x02(\x05\x12\x1b\n\x05games\x18\x02 \x03(\x0b\x32\x0c.RelatedGame\x12\x19\n\x05terms\x18\x03 \x03(\x0b\x32\n.QueryTerm')
 
 
 
@@ -54,7 +54,7 @@ _RELATEDGAME = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='gameIds', full_name='RelatedGame.gameIds', index=0,
+      name='gameId', full_name='RelatedGame.gameId', index=0,
       number=1, type=5, cpp_type=1, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -84,7 +84,7 @@ _RELATEDGAME = _descriptor.Descriptor(
   is_extendable=False,
   extension_ranges=[],
   serialized_start=40,
-  serialized_end=104,
+  serialized_end=103,
 )
 
 
@@ -118,8 +118,8 @@ _QUERYTERM = _descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=106,
-  serialized_end=147,
+  serialized_start=105,
+  serialized_end=146,
 )
 
 
@@ -160,8 +160,8 @@ _RESPONSE = _descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=149,
-  serialized_end=231,
+  serialized_start=148,
+  serialized_end=230,
 )
 
 _RESPONSE.fields_by_name['games'].message_type = _RELATEDGAME

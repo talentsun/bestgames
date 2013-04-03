@@ -2,7 +2,7 @@ message Query {
     required string query = 1;
 }
 message RelatedGame {
-    required int32 gameIds = 1;
+    required int32 gameId = 1;
     required float nameRel = 2;
     required float gameRel = 3;
 }
