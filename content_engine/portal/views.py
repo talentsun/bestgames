@@ -135,11 +135,13 @@ def add_edit_collection(request, collection_id=None):
 @login_required
 def delete_collection(request, collection_id=None):
     _auth_user(request)
-    if collection_id:
-        collection = get_object_or_404(Collection, entity_ptr_id=collection_id)
-        if collection is not None:
-            collection.delete()
-            return _redirect_back(request)
+    collection = get_object_or_404(Collection, entity_ptr_id=collection_id)
+    collection.delete()
+    return _redirect_back(request)
+
+def preview_collection(request, collection_id=None):
+    collection = get_object_or_404(Collection, entity_ptr_id=collection_id)
+    return render(request, 'preview_collection.html', { 'collection' : collection })
 
 @login_required
 def add_edit_redier(request, redier_id=None):

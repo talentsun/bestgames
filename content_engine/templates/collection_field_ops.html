@@ -1,5 +1,5 @@
 <div class="btn-group">
-	<a href="#" class="btn"><i class="icon-search"></i></a>
+	<a href="/collections/{{ record.id}}/preview?next={{request.get_full_path}}" class="btn"><i class="icon-search"></i></a>
 	<a href="/collections/{{ record.id}}/edit?next={{request.get_full_path}}" class="btn"><i class="icon-edit"></i></a>
 	<a href="/collections/{{ record.id}}/delete?next={{request.get_full_path}}" class="btn btn-danger btn-del"><i class="icon-trash"></i></a>
 </div>
