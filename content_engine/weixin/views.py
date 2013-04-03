@@ -57,7 +57,7 @@ def index(request):
             return HttpResponse('<xml></xml>', content_type="application/xml")
 
 def load(request):
-    load_games_for_today()
+    load_games_for_today(True)
     load_shorten_urls()
     return render(request, 'weixin_load.html', {})
 

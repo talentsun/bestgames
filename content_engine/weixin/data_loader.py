@@ -5,8 +5,8 @@ from utils import shorten_url
 
 CACHE_TIMEOUT_WEEK = 7 * 24 * 3600
 
-def load_games_for_today():
-	if cache.get('games_for_today'):
+def load_games_for_today(reload=False):
+	if cache.get('games_for_today') and not reload:
 		return cache.get('games_for_today')
 
 	year = date.today().year
@@ -46,9 +46,6 @@ def load_shorten_ios_download_url(game):
 	return ios_download_shorten_url
 
 def load_shorten_urls():
-	index = 0
 	for game in Game.objects.all():
 		load_shorten_ios_download_url(game)
 		load_shorten_android_download_url(game)
-		index += 1
-		print index
