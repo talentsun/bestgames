@@ -39,6 +39,9 @@ class GameTable(tables.Table):
 
 class RedierTable(tables.Table):
     id = tables.Column(orderable=False, visible=False)
+    game_name = tables.Column(verbose_name=u'游戏', orderable=False)
+    title = tables.Column(verbose_name=u'标题', orderable=False)
+    presenter = tables.Column(verbose_name=u'推荐人', orderable=False)
     weibo_sync_timestamp = DateTimeColumn(verbose_name=u"微博同步时间",orderable=True)
     status = TemplateColumn(template_name="sync_status_field.html",orderable=False,verbose_name=u"同步状态")
     tags = TagColumn(orderable=False,attrs={"class":"tags"})
