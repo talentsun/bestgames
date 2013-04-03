@@ -77,13 +77,18 @@ def _build_weixin_games(context, data, cache_key=None, cache_timeout=None):
 	is_first = True
 	for game in data:
 		title = '%s - %s' % (game.brief_comment, game.name)
-		description = game.recommended_reason
+		url_pos = game.recommended_reason.find('http://')
+		if url_pos != -1:
+			description = game.recommended_reason[:url_pos]
+		else:
+			description = game.recommended_reason
 		if is_first:
 			pic_url = 'http://weixin.bestgames7.com/media/%s' % game.screenshot_path_1
 			is_first = False
 		else:
 			pic_url = 'http://weixin.bestgames7.com/media/%s' % game.icon
-		articles.append({'title' : title, 'description' : description, 'pic_url' : pic_url})
+		# FIXME need a mobile page hosting game
+		articles.append({'title' : title, 'description' : description, 'pic_url' : pic_url, 'url' : 'http://www.baidu.com'})
 	return WeiXin.to_news_xml(context.get('FromUserName', None), context.get('ToUserName', None), articles)
 
 def _build_weixin_raw_text(context, data, cache_key = None, cache_timeout = None):

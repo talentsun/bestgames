@@ -3,14 +3,24 @@ from router import Router
 from portal.models import Game
 from message_builder import MessageBuilder, BuildConfig
 from datetime import date, datetime
+from django.core.cache import cache
 
-def get_download_urls_for_today(rule, info):
+def _get_games_for_today():
+	if cache.get('games_for_today'):
+		return cache.get('games_for_today')
+
 	year = date.today().year
 	month = date.today().month
 	day = date.today().day
 	start_date = datetime(year, month, day, 0, 0, 0)
 	end_date = datetime(year, month, day, 23, 59, 59)
-	return BuildConfig(MessageBuilder.TYPE_DOWNLOAD_URL, None, Game.objects.filter(weibo_sync_timestamp__range=(start_date, end_date)), 'download_urls_for_today', (end_date - datetime.today()).total_seconds())
+
+	games = Game.objects.filter(weibo_sync_timestamp__range=(start_date, end_date))
+	cache.set('games_for_today', games, (end_date - datetime.today()).total_seconds())
+	return games
+
+def get_download_urls_for_today(rule, info):
+	return BuildConfig(MessageBuilder.TYPE_DOWNLOAD_URL, None, _get_games_for_today())
 
 def get_games_for_today(rule, info):
 	year = date.today().year
@@ -18,7 +28,7 @@ def get_games_for_today(rule, info):
 	day = date.today().day
 	start_date = datetime(year, month, day, 0, 0, 0)
 	end_date = datetime(year, month, day, 23, 59, 59)
-	return BuildConfig(MessageBuilder.TYPE_GAMES, None, Game.objects.filter(weibo_sync_timestamp__range=(start_date, end_date)), 'games_for_today', (end_date - datetime.today()).total_seconds())
+	return BuildConfig(MessageBuilder.TYPE_GAMES, None, _get_games_for_today())
 
 Router.get_instance().set({
 		'name' : u'获取今日精品推荐游戏的下载地址',
