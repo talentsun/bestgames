@@ -45,7 +45,7 @@
   </script>
 </head>
 <body onload="load()" id="container" style="padding:10px;">
-  <h3>{{game.brief_comment}} - {{game.name}}</h3>
+  <h4>{{game.brief_comment}} - {{game.name}}</h4>
   <div class="screenshots">
     <img id="screenshot_1" src="http://weixin.bestgames7.com/media/{{game.screenshot_path_1}}" alt="">
     <img id="screenshot_2" src="http://weixin.bestgames7.com/media/{{game.screenshot_path_2}}" alt="">
@@ -53,8 +53,8 @@
     <img id="screenshot_4" src="http://weixin.bestgames7.com/media/{{game.screenshot_path_4}}" alt="">
   </div>
   <p style="margin:10px 0;">{{game.recommended_reason|del_link}}</p>
-  <div style="margin:20px;text-align:center">
-    <a class="btn btn-large" href="{{game.android_download_url}}" style="margin-right:20px;">下载安卓版</a>
+  <div style="margin:20px 0;text-align:center">
+    <a class="btn btn-large" href="{{game.android_download_url}}" style="margin-right:10px;">下载安卓版</a>
     <a class="btn btn-large" href="{{game.iOS_download_url}}">下载苹果版</a>
   </div>
 </body>
