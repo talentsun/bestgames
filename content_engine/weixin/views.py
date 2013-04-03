@@ -18,6 +18,7 @@ import rules_game_search
 from pyweixin import WeiXin
 from router import Router
 from message_builder import MessageBuilder
+from data_loader import load_games_for_today, load_shorten_urls
 
 TOKEN = "itv"
 
@@ -55,6 +56,10 @@ def index(request):
         else:
             return HttpResponse('<xml></xml>', content_type="application/xml")
 
+def load(request):
+    load_games_for_today(True)
+    load_shorten_urls()
+    return render(request, 'weixin_load.html', {})
 
 def search(request):
     games = []
@@ -81,4 +86,3 @@ def search(request):
                 continue
             games.append(game)
         return render(request, "search.html", {"games": SearchResultTable(games)})
-
