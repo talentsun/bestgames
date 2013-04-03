@@ -1,7 +1,8 @@
 #!/usr/local/bin/python2.7
 
-import sys, time
-sys.path.append("..")
+import sys, time, os
+workPath = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(workPath + "/..")
 import socket, subprocess
 
 from django.core.management import setup_environ
@@ -11,11 +12,11 @@ setup_environ(settings)
 from portal.models import Game
 
 from Utils import *
-workPath = os.path.dirname(os.path.abspath(__file__))
 single = workPath + "/update_index.single"
 logger = logging.getLogger("build_index")
 
 if __name__ == "__main__":
+    os.chdir(workPath)
     if len(sys.argv) != 2:
         print "Usage: %s cfg" % sys.argv[0]
         sys.exit()

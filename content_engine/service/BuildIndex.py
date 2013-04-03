@@ -1,8 +1,9 @@
 #!/usr/local/bin/python2.7
 # -*- coding:utf-8 -*-
 
-import sys, subprocess
-sys.path.append("..")
+import sys, subprocess, os, os.path
+workPath = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(workPath + "/..")
 from django.core.management import setup_environ
 from content_engine import settings
 setup_environ(settings)
@@ -18,7 +19,6 @@ NameAddr = 1
 CategoryAddr = 2
 TagAddr = 3
 DescAddr = 4
-workPath = os.path.dirname(os.path.abspath(__file__))
 logger = logging.getLogger("build_index")
 single = workPath + "/update_index.single"
 
@@ -140,6 +140,7 @@ class Index:
             self.db.Put(k, v)
 
 if __name__ == "__main__":
+    os.chdir(workPath)
     if len(sys.argv) != 2:
         print "Usage: %s cfg" % sys.argv[0]
         sys.exit()
@@ -148,7 +149,6 @@ if __name__ == "__main__":
         logger.error("another instance is running")
         sys.exit()
 
-    os.chdir(workPath)
     dbPath = GetConfigValue("DB_PATH", sys.argv[1])
     if dbPath[-1] == '/':
         dbPath = dbPath[:-1]

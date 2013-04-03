@@ -9,7 +9,7 @@ class SegUtil:
     @classmethod
     def Init(cls, path):
         PySeg.init(path)
-        customWordPath = os.path.join(path, "CustomWord")
+        customWordPath = os.path.join(path, "custom_word")
         if not os.path.exists(customWordPath):
             return 
         for fileName in os.listdir(customWordPath):
