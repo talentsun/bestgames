@@ -1,7 +1,17 @@
 message Query {
     required string query = 1;
 }
+message RelatedGame {
+    required int32 gameIds = 1;
+    required float nameRel = 2;
+    required float gameRel = 3;
+}
+message QueryTerm {
+    required string term = 1;
+    required float weight = 2;
+}
 message Response {
     required int32 result = 1;
-    repeated int32 gameIds = 2;
+    repeated RelatedGame games = 2;
+    repeated QueryTerm terms = 3;
 }
