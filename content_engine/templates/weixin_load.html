@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>加载小每机器人数据</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}ajax_upload/css/ajax-upload-widget.css"/>
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.min.css"/>
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/main.css"/>
+  <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}ajax_upload/js/jquery.iframe-transport.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}ajax_upload/js/ajax-upload-widget.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}dajax/jquery.dajax.core.js"></script>
+  {{ form.media }}
+</head>
+<body>
+  <div id="main" class="container edit-page">
+    {% include "header.html" %}
+
+    <ul class="breadcrumb">
+      <li><a href="/">内容引擎</a> <span class="divider">/</span></li>
+      <li class="active">加载小每机器人数据</li>
+    </ul>
+    <div style="text-align:center;">
+      <h1>Load Successed!</h1>
+    </div>
+  </div>
+</body>

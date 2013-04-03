@@ -1,47 +1,29 @@
 # -*- coding: utf-8 -*-
 from inspect import isfunction
 from pyweixin import WeiXin
-from utils import shorten_url
 from datetime import datetime
 
 from django.core.cache import cache
 
+from data_loader import load_shorten_android_download_url, load_shorten_ios_download_url
+
 class BuildConfig:
-	def __init__(self, type, platform, data, cache_key=None, cache_timeout=None):
+	def __init__(self, type, platform, data):
 		self.type = type
 		self.platform = platform
 		self.data = data
-		self.cache_key = cache_key
-		self.cache_timeout = cache_timeout
 
 	type = None
 	platform = None
 	data = None
-	cache_key = None
-	cache_timeout = None
 
-def _wrap_cache_key_with_platform(cache_key, platform):
-	if cache_key and platform:
-		return cache_key + '_' + platform
-	else:
-		return cache_key
-
-def _get_game_android_shorten_download_url_key(game):
-	return 'g_' + str(game.id) + '_android_d'
-
-def _get_game_ios_shorten_download_url_key(game):
-	return 'g_' + str(game.id) + '_ios_d'
-
-def _build_weixin_download_urls(context, data, cache_key=None, cache_timeout=None):
+def _build_weixin_download_urls(context, data):
 	content = ''
 	for game in data:
 		content = content + game.name + '\n'
 
 		if game.android_download_url is not None:
-			android_download_shorten_url = cache.get(_get_game_android_shorten_download_url_key(game))
-			if android_download_shorten_url is None:
-				android_download_shorten_url = shorten_url(game.android_download_url)
-				cache.set(_get_game_android_shorten_download_url_key(game), android_download_shorten_url)
+			android_download_shorten_url = load_shorten_android_download_url(game)
 
 			if android_download_shorten_url is not None:
 				content = content + u'安卓下载地址'
@@ -52,10 +34,7 @@ def _build_weixin_download_urls(context, data, cache_key=None, cache_timeout=Non
 			content = content + u'无安卓版\n'
 
 		if game.iOS_download_url is not None:
-			ios_download_shorted_url = cache.get(_get_game_ios_shorten_download_url_key(game))
-			if ios_download_shorted_url is None:
-				ios_download_shorted_url = shorten_url(game.iOS_download_url)
-				cache.set(_get_game_ios_shorten_download_url_key(game), ios_download_shorted_url)
+			ios_download_shorted_url = load_shorten_ios_download_url(game)
 
 			if ios_download_shorted_url is not None:
 				content = content + u'苹果下载地址'
@@ -72,7 +51,7 @@ def _build_weixin_download_urls(context, data, cache_key=None, cache_timeout=Non
             content=content,
             func_flag=0)
 
-def _build_weixin_games(context, data, cache_key=None, cache_timeout=None):
+def _build_weixin_games(context, data):
 	articles = []
 	is_first = True
 	for game in data:
@@ -91,7 +70,7 @@ def _build_weixin_games(context, data, cache_key=None, cache_timeout=None):
 		articles.append({'title' : title, 'description' : description, 'pic_url' : pic_url, 'url' : 'http://www.baidu.com'})
 	return WeiXin.to_news_xml(context.get('FromUserName', None), context.get('ToUserName', None), articles)
 
-def _build_weixin_raw_text(context, data, cache_key = None, cache_timeout = None):
+def _build_weixin_raw_text(context, data):
 	# FIXME
 	return WeiXin.to_text_xml(to_user_name=context.get('FromUserName', None),
             from_user_name=context.get('ToUserName', None),
@@ -109,7 +88,7 @@ class MessageBuilder:
 
 	@classmethod
 	def build(self,  context = None, build_config = None):
-		return self._call_build_method(context, build_config.type, build_config.platform, build_config.data, build_config.cache_key, build_config.cache_timeout)
+		return self._call_build_method(context, build_config.type, build_config.platform, build_config.data)
 
 	_build_methods = {
 		TYPE_DOWNLOAD_URL : {
@@ -124,10 +103,10 @@ class MessageBuilder:
 	}
 
 	@classmethod
-	def _call_build_method(self, context, type, platform, data, cache_key = None, cache_timeout = None):
+	def _call_build_method(self, context, type, platform, data):
 		if self._build_methods[type] is not None:
 			if isfunction(self._build_methods[type]):
-				return self._build_methods[type](context, data, cache_key, cache_timeout)
+				return self._build_methods[type](context, data)
 			elif self._build_methods[type][platform] is not None and isfunction(self._build_methods[type][platform]):
-				return self._build_methods[type][platform](context, data, cache_key, cache_timeout)
+				return self._build_methods[type][platform](context, data)
 		raise 'do not support type: %s and platform: %s' % (type, platform)
