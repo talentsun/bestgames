@@ -16,15 +16,15 @@ def _search_games(rule, info):
 
     if resp.result == 0:
         if len(resp.games) > 0:
-            if resp.games[0].nameRel >= 0.8:
+            if resp.games[0].nameRel >= 0.6:
                 # pattern: search download url by game name
-                return BuildConfig(MessageBuilder.TYPE_DOWNLOAD_URL, None, [].append(Game.objects.get(pk = resp.games[0].gameIds)))
+                return BuildConfig(MessageBuilder.TYPE_DOWNLOAD_URL, None, [Game.objects.get(pk = resp.games[0].gameId)])
 
         games = []
         for related_game in resp.games:
-            if related_game.gameRel >= 0.6:
+            if related_game.gameRel >= 0.2:
                 try:
-                    game = Game.objects.get(pk = related_game.gameIds)
+                    game = Game.objects.get(pk = related_game.gameId)
                 except:
                     continue
                 games.append(game)
