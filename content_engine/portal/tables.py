@@ -22,11 +22,11 @@ class SearchResultTable(tables.Table):
 
 class GameTable(tables.Table):
     id = tables.Column(orderable=False, visible=False)
-    name = tables.Column(orderable=False)
-    presenter = tables.Column(orderable=False)
+    name = tables.Column(verbose_name=u'名称', orderable=False)
+    presenter = tables.Column(verbose_name=u'推荐人', orderable=False)
     weibo_sync_timestamp = DateTimeColumn(verbose_name=u"微博同步时间",orderable=True)
     status = TemplateColumn(template_name="sync_status_field.html",orderable=False,verbose_name=u"同步状态")
-    tags = TagColumn(orderable=False,attrs={"class":"tags"})
+    tags = TagColumn(orderable=False,attrs={"class":"tags"}, verbose_name=u'标签')
     ops = TemplateColumn(template_name="game_field_ops.html",verbose_name=u"操作",orderable=False,attrs={"class":"ops"})
     
     class Meta:
