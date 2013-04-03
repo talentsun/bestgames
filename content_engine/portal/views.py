@@ -233,10 +233,12 @@ def add_edit_game(request, game_id=None):
 @login_required
 def delete_game(request, game_id=None):
     _auth_user(request)
-    if game_id:
-        game = get_object_or_404(Game, entity_ptr_id=game_id)
-        if game is not None:
-            game.delete()
-            return _redirect_back(request)
+    game = get_object_or_404(Game, entity_ptr_id=game_id)
+    game.delete()
+    return _redirect_back(request)
+
+def preview_game(request, game_id=None):
+    game = get_object_or_404(Game, entity_ptr_id=game_id)
+    return render(request, 'preview_game.html', {'game' : game})
 
 

@@ -67,8 +67,9 @@ def _build_weixin_games(context, data):
 		else:
 			pic_url = 'http://weixin.bestgames7.com/media/%s' % game.icon
 			title = '%s - %s' % (game.brief_comment, game.name)
-		# FIXME need a mobile page hosting game
-		articles.append({'title' : title, 'description' : description, 'pic_url' : pic_url, 'url' : 'http://www.baidu.com'})
+		url = 'http://weixin.bestgames7.com/games/%d/preview' % game.id
+
+		articles.append({'title' : title, 'description' : description, 'pic_url' : pic_url, 'url' : url})
 	return WeiXin.to_news_xml(context.get('FromUserName', None), context.get('ToUserName', None), articles)
 
 def _build_weixin_game_collection(context, data):
@@ -84,9 +85,9 @@ def _build_weixin_game_collection(context, data):
 		else:
 			description = game.recommended_reason
 		pic_url = 'http://weixin.bestgames7.com/media/%s' % game.icon
+		url = 'http://weixin.bestgames7.com/games/%d/preview' % game.id
 		
-		# FIXME need a mobile page hosting game
-		articles.append({'title' : title, 'description' : description, 'pic_url' : pic_url, 'url' : 'http://www.baidu.com'})
+		articles.append({'title' : title, 'description' : description, 'pic_url' : pic_url, 'url' : url})
 
 	return WeiXin.to_news_xml(context.get('FromUserName', None), context.get('ToUserName', None), articles) 
 
