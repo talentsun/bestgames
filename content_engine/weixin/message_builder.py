@@ -75,8 +75,7 @@ def _build_weixin_games(context, data):
 def _build_weixin_game_collection(context, data):
 	articles = []
 	
-	# FIXME need a mobile page hosting collection cover
-	articles.append({'title' : u'游戏合集之' + data.title, 'description' : u'游戏合集' + data.recommended_reason, 'pic_url' : 'http://weixin.bestgames7.com/media/%s' % data.cover, 'url' : 'http://www.baidu.com/'})
+	articles.append({'title' : u'游戏合集之' + data.title, 'description' : u'游戏合集' + data.recommended_reason, 'pic_url' : 'http://weixin.bestgames7.com/media/%s' % data.cover, 'url' : 'http://weixin.bestgames7.com/collections/%d/preview' % data.id})
 	for game in data.games.all()[:5]:
 		title = '%s - %s' % (game.brief_comment, game.name)
 		url_pos = game.recommended_reason.find('http://')

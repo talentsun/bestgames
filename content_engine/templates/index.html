@@ -76,7 +76,13 @@
 
     <div class="navbar" style="margin-bottom:0;">
       <div class="navbar-inner">
-        <p class="navbar-text">精品游戏推荐</p>
+        <span class="navbar-text">精品游戏推荐</span>
+        <form class="form-search navbar-search pull-right">
+          <div class="input-append">
+            <input type="text" class="span2 search-query" placeholder="搜索精品游戏推荐" name="hg_q" value="{{ request.GET.hg_q }}">
+            <button type="submit" class="btn"><i class="icon-search"></i></button>
+          </div>
+        </form>
       </div>
     </div>
     {% render_table games "django_tables2/table.html" %}

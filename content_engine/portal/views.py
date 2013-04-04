@@ -12,12 +12,14 @@ from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.conf import settings
+import logging, traceback, time, struct, socket
 
 from taggit.models import Tag
 
 from portal.models import Game, Redier, Collection, Problem,Entity
 from portal.tables import GameTable, RedierTable, CollectionTable, ProblemTable
 from portal.forms import GameForm, RedierForm, CollectionForm, ProblemForm
+from service import search_pb2
 
 import django_tables2 as tables
 
@@ -30,8 +32,30 @@ def _redirect_back(request):
     except IndexError:
         return redirect('/')
 
+def _search_game(query):
+    q = search_pb2.Query()
+    q.query = query
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.sendto(struct.pack("!H", 1) + q.SerializeToString(), ("127.0.0.1", 8128))
+    r = s.recv(4196)
+    resp = search_pb2.Response()
+    resp.ParseFromString(r)
+
+    games = []
+    if resp.result == 0:
+        for related_game in resp.games:
+            try:
+                games.append(Game.objects.get(pk=related_game.gameId))
+            except:
+                continue
+    return games
+
+
 def index(request):
-    games = GameTable(Game.objects.all(),prefix="hg-")
+    if request.GET.get('hg_q', None):
+        games = GameTable(_search_game(request.GET.get('hg_q')),prefix='hg-')
+    else:
+        games = GameTable(Game.objects.all(),prefix="hg-")
     games.paginate(page=request.GET.get("hg-page",1), per_page=10)
     games.data.verbose_name = u"精品游戏推荐"
 
