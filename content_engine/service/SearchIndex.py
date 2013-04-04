@@ -66,7 +66,7 @@ class SearchIndex:
 
 
     def Search(self, query):
-        termWeightBase = 0.5
+        termWeightBase = 0.7
         terms = Index.GetRightWords([query, ])
         hitListList = []
         for term in terms:
@@ -77,7 +77,7 @@ class SearchIndex:
         termWeight = []
         curIndex= []
         allNum = 0
-        addrWeight = {NameAddr:0.4, CategoryAddr:0.3, TagAddr:0.2, DescAddr:0.1}
+        addrWeight = {NameAddr:1, CategoryAddr:0.9, TagAddr:0.8, DescAddr:0.3}
         for i in range(len(hitListList)):
             allNum += len(hitListList[i].hitList)
             termWeight.append(len(hitListList[i].hitList))
@@ -104,8 +104,11 @@ class SearchIndex:
             nameWeight = 0
             for i in range(len(hitListList)):
                 if curIndex[i] < len(hitListList[i].hitList) and hitListList[i].hitList[curIndex[i]][0] == curMinGameId:
+                    maxAddr = 0
                     for addr in hitListList[i].hitList[curIndex[i]][1]:
-                        curWeight += termWeight[i] * addrWeight[addr]
+                        if maxAddr< addrWeight[addr]:
+                            maxAddr= addrWeight[addr]
+                    curWeight += termWeight[i] * maxAddr
                     nameWeight += hitListList[i].hitList[curIndex[i]][2]
                     self.logger.debug("hit term %d %f %f" % (i, curWeight, nameWeight))
                     curIndex[i] += 1
