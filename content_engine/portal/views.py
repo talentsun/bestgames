@@ -44,7 +44,10 @@ def _search_game(query):
     games = []
     if resp.result == 0:
         for related_game in resp.games:
-            games.append(Game.objects.get(pk=related_game.gameId))
+            try:
+                games.append(Game.objects.get(pk=related_game.gameId))
+            except:
+                continue
     return games
 
 
