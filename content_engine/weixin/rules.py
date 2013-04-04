@@ -4,10 +4,26 @@ from message_builder import MessageBuilder, BuildConfig
 from data_loader import load_games_for_today, load_latest_game_collection
 
 def get_download_urls_for_today(rule, info):
-	return BuildConfig(MessageBuilder.TYPE_DOWNLOAD_URL, None, load_games_for_today())
+	games = load_games_for_today()
+	if games is not None and len(games) > 0:
+		return BuildConfig(MessageBuilder.TYPE_DOWNLOAD_URL, None, games)
+	else:
+		collection = load_latest_game_collection()
+		if collection is not None and collection.games.count() > 0:
+			return BuildConfig(MessageBuilder.TYPE_GAME_COLLECTION, None, collection.games.all())
+		else:
+			return BuildConfig(MessageBuilder.TYPE_RAW_TEXT, None, u'小每今天累屎了，没有推荐游戏[[哭]]')
 
 def get_games_for_today(rule, info):
-	return BuildConfig(MessageBuilder.TYPE_GAMES, None, load_games_for_today())
+	games = load_games_for_today()
+	if games is not None and len(games) > 0:
+		return BuildConfig(MessageBuilder.TYPE_GAMES, None, games)
+	else:
+		collection = load_latest_game_collection()
+		if collection is not None and collection.games.count() > 0:
+			return get_latest_game_collection(rule, info)
+		else:
+			return BuildConfig(MessageBuilder.TYPE_RAW_TEXT, None, u'小每今天累屎了，没有推荐游戏[[哭]]')
 
 def get_latest_game_collection(rule, info):
 	return BuildConfig(MessageBuilder.TYPE_GAME_COLLECTION, None, load_latest_game_collection())

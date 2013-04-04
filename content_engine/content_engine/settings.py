@@ -74,7 +74,7 @@ STATIC_ROOT = projectPath + '/templates'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL =  'http://cow.bestgames7.com/static/'
+STATIC_URL =  'http://127.0.0.1:8000/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -88,6 +88,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'dajaxice.finders.DajaxiceFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
@@ -98,7 +99,7 @@ SECRET_KEY = 'v0dwj7&amp;i@d!1lnd36-g+e5&amp;igr)n9y@6^wuh1jrgitv3r6c*(z'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -146,13 +147,16 @@ INSTALLED_APPS = (
     'portal',
     'weixin',
     'scrapy_itunes',
+    'dajaxice',
+    'dajax'
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.static',
-    'django.core.context_processors.media'
+    'django.core.context_processors.media',
+    'django.contrib.messages.context_processors.messages'
 )
 
 AUTHENTICATION_BACKENDS = (
