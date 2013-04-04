@@ -10,10 +10,20 @@ setup_environ(settings)
 import socket, struct
 
 from portal.models import Game
+from BuildIndex import Index
 
 if __name__ == '__main__':
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.sendto(struct.pack("!HI", 2, Game.objects.all()[0].pk), ("127.0.0.1", 8128))
+    index = Index("../testdb")
+
+    index.CreateDB()
+    for game in Game.objects.filter(id = 98):
+        print game.id
+        tags = []
+        for t in game.tags.all():
+            tags.append(t.name)
+        cats = [game.category.name, ]
+        index.BuildIndexForOne(index.db, index.logger, game.pk, game.name, game.description, cats, tags)
+
 
 
 

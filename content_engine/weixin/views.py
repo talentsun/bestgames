@@ -76,13 +76,14 @@ def search(request):
         stResp = search_pb2.Response()
         stResp.ParseFromString(resp)
         logger.debug("result %d" % stResp.result)
-        logger.debug("gameIds %s" % str(stResp.gameIds))
-        for id in stResp.gameIds:
+        for g in stResp.games:
             try:
-                game = Game.objects.get(pk = id)
-                logger.debug("game id %d" % id)
+                game = Game.objects.get(pk = g.gameId)
+                game.nameRel = g.nameRel
+                game.gameRel = g.gameRel
+                logger.debug("game id %d" % g.gameId)
             except:
-                logger.error("not find game with id %d" % id)
+                logger.error("not find game with id %d" % g.gameId)
                 continue
             games.append(game)
         return render(request, "search.html", {"games": SearchResultTable(games)})

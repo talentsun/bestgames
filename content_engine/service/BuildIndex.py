@@ -28,11 +28,13 @@ class DBItem:
         self.term = term
         self.gameId = gameId
         self.addrs = addrs
+        self.nameWeight = 0
 
     def Encode(self):
         term = self.term.encode("utf8")
         key = struct.pack("!H%dsI" % len(term), len(term), term, self.gameId)
         value = struct.pack("!B%dB" % len(self.addrs), len(self.addrs), *self.addrs)
+        value += struct.pack("!I", int(self.nameWeight * 100000))
         return (key, value)
 
     def EncodeKey(self):
@@ -53,6 +55,8 @@ class DBItem:
         start += 1
         self.addrs = struct.unpack("!%dB" % cLen, value[start:start + cLen])
         start += cLen
+        self.nameWeight = struct.unpack("!I", value[start:start + 4])[0]
+        self.nameWeight /= 100000.0;
 
 class Index:
     def __init__(self, dataPath):
@@ -62,7 +66,7 @@ class Index:
         item = DBItem("", 0, [])
         for k,v in self.db.RangeIter(include_value = True):
             item.Decode(k, v)
-            self.logger.debug("term %s gameId %d addrs %s" % (item.term, item.gameId, str(item.addrs)))
+            self.logger.debug("term %s gameId %d addrs %s nameWeight %f" % (item.term, item.gameId, str(item.addrs), item.nameWeight))
 
 
     def CreateDB(self):
@@ -83,48 +87,66 @@ class Index:
 
     @classmethod
     def RightPos(cls, pos):
-        if len(pos) > 0 and (pos[0] == 'n' or pos[0] == 'a' or pos[0] == 'v'):
-            return True
+        if len(pos) == 0 or pos[0] == 'w':
+            return False 
         else:
-            return False
+            return True
 
 
     @classmethod
-    def GetRightWords(cls, sentenses):
-        words = []
+    def GetRightWords(cls, sentenses, logger = None):
+        words = {}
+        allWeight = 0
         for s in sentenses:
             ts = SegUtil.Seg(s.encode('utf8'))
             for t in ts:
                 if cls.RightPos(t[1]):
-                    words.append(t[0].decode('utf8'))
-        return words
+                    if logger:
+                        logger.debug("%s pos %s" % (t[0], t[1]))
+                    if t[1][0] == 'v' or t[1][0] == 'n':
+                        weight = 3
+                    elif t[1] == 'a':
+                        weight = 1.5
+                    else:
+                        weight = 1
+                    allWeight += weight
+                    if t[0].decode('utf8') not in words:
+                        words[t[0].decode('utf8')] = 0
+                    words[t[0].decode('utf8')] += weight
+        res = []
+        for k,v in words.items():
+            res.append((k, float(v) / allWeight))
+        res.sort(key=lambda g:g[1], reverse=True)
+        return res
 
-        
-    def BuildIndexForOne(self, gameId, name, description, categorys, tags):
+    @classmethod    
+    def BuildIndexForOne(cls, db, logger, gameId, name, description, categorys, tags):
         terms = {}
-        self.logger.debug("build index for one %d %s %s %s %s" % (gameId, name, description, str(categorys), str(tags)))
-        ts = self.GetRightWords([name,])
+        logger.debug("build index for one %d %s %s %s %s" % (gameId, name, description, str(categorys), str(tags)))
+        ts = cls.GetRightWords([name,], logger)
         terms[NameAddr] = []
+        term2NameWeight = {}
         for t in ts:
-            terms[NameAddr].append(t)
-        ts = self.GetRightWords([description,])
+            terms[NameAddr].append(t[0])
+            logger.debug("%s weight %f" % (t[0], t[1]))
+            term2NameWeight[t[0]] = t[1]
+        ts = cls.GetRightWords([description,])
         terms[DescAddr] = []
         for t in ts:
-            terms[DescAddr].append(t)
+            terms[DescAddr].append(t[0])
 
         terms[CategoryAddr] = []
-        ts = self.GetRightWords(categorys)
+        ts = cls.GetRightWords(categorys)
         for t in ts:
-            terms[CategoryAddr].append(t)
-        ts = self.GetRightWords(tags)
+            terms[CategoryAddr].append(t[0])
+        ts = cls.GetRightWords(tags)
         terms[TagAddr] = []
         for t in ts:
-            terms[TagAddr].append(t)
+            terms[TagAddr].append(t[0])
         term2Addrs = {}
 
         for k, v in terms.items():
             for term in v:
-                self.logger.debug("%d %s" % (k, term))
                 if term not in term2Addrs:
                     term2Addrs[term] = []
 
@@ -132,12 +154,17 @@ class Index:
                     term2Addrs[term].append(k)
 
 
+        logger.debug("name weight %s", str(term2NameWeight))
         for term, addrs in term2Addrs.items():
-            self.logger.debug("term %s addrs %s" % (term, str(addrs)))
             item = DBItem(term, gameId, addrs)
+            if term in term2NameWeight:
+                item.nameWeight = term2NameWeight[term]
+            else:
+                item.nameWeight = 0
+            logger.debug("term %s addrs %s nameWeight %f" % (term, str(addrs), item.nameWeight))
             (k, v) = item.Encode()
 
-            self.db.Put(k, v)
+            db.Put(k, v)
 
 if __name__ == "__main__":
     os.chdir(workPath)
@@ -162,7 +189,7 @@ if __name__ == "__main__":
         for t in game.tags.all():
             tags.append(t.name)
         cats = [game.category.name, ]
-        index.BuildIndexForOne(game.pk, game.name, game.description, cats, tags)
+        index.BuildIndexForOne(index.db, index.logger, game.pk, game.name, game.description, cats, tags)
 
 
     pidFilePath = GetConfigValue("PID_FILE", sys.argv[1])

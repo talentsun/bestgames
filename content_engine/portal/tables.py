@@ -16,7 +16,7 @@ class SearchResultTable(tables.Table):
     class Meta:
         model = Game
         empty_text = u"暂无精品游戏推荐"
-        fields = ("entity_ptr_id", "name","tags","description")
+        fields = ("entity_ptr_id", "name","tags","description", "nameRel", "gameRel")
         sequence = fields
         attrs = {'class' : 'table table-striped'}
 

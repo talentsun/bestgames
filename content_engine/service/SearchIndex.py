@@ -10,7 +10,7 @@ setup_environ(settings)
 import leveldb
 from SegUtil import SegUtil
 from BuildIndex import DBItem, Index
-from search_pb2 import Query, Response
+from search_pb2 import Query, Response, QueryTerm, RelatedGame
 from portal.models import Category, Game, Category
 from taggit.models import Tag
 from taggit.models import Tag
@@ -27,6 +27,9 @@ MaxRecomGame = 3
 
 class HitList:
     def __init__(self):
+        """
+        every item is (term, addrs, nameWeight)
+        """
         self.hitList = []
 
 class SearchIndex:
@@ -58,7 +61,7 @@ class SearchIndex:
             item = DBItem("", 0, [])
             item.Decode(k, v)
             self.logger.debug("get gameId %d addrs %s" % (item.gameId, str(item.addrs)))
-            hitList.hitList.append((item.gameId, item.addrs))
+            hitList.hitList.append((item.gameId, item.addrs, item.nameWeight))
         return hitList
 
 
@@ -67,57 +70,67 @@ class SearchIndex:
         terms = Index.GetRightWords([query, ])
         hitListList = []
         for term in terms:
-            hitList = self.GetHitList(term)
+            self.logger.debug("term %s weight %f" % (term[0], term[1]))
+            hitList = self.GetHitList(term[0])
             hitListList.append(hitList)
 
         termWeight = []
-        curAddr = []
+        curIndex= []
         allNum = 0
-        addrWeight = {NameAddr:0.2, CategoryAddr:0.3, TagAddr:0.4, DescAddr:0.1}
+        addrWeight = {NameAddr:0.4, CategoryAddr:0.3, TagAddr:0.2, DescAddr:0.1}
         for i in range(len(hitListList)):
             allNum += len(hitListList[i].hitList)
             termWeight.append(len(hitListList[i].hitList))
-            curAddr.append(0)
+            curIndex.append(0)
         if allNum == 0:
             return []
         if len(hitListList) == 1:
             termWeight[i] = 1
         else:
             for i in range(len(hitListList)):
-                termWeight[i] = termWeightBase / len(hitListList) + (1 - termWeightBase) * float(allNum - termWeight[i]) / allNum / (len(hitListList) - 1)
-
+                termWeight[i] = termWeightBase * terms[i][1] + (1 - termWeightBase) * float(allNum - termWeight[i]) / allNum / (len(hitListList) - 1)
         self.logger.debug("weight %s" % str(termWeight))
 
         games = []
         while True:
             curMinGameId = 0xFFFFFFFF
             for i in range(len(hitListList)):
-                if curAddr[i] < len(hitListList[i].hitList) and hitListList[i].hitList[curAddr[i]][0] < curMinGameId:
-                    curMinGameId = hitListList[i].hitList[curAddr[i]][0]
+                if curIndex[i] < len(hitListList[i].hitList) and hitListList[i].hitList[curIndex[i]][0] < curMinGameId:
+                    curMinGameId = hitListList[i].hitList[curIndex[i]][0]
             if curMinGameId == 0xFFFFFFFF:
                 break
             self.logger.debug("deal with gameId %d" % curMinGameId)
             curWeight = 0
+            nameWeight = 0
             for i in range(len(hitListList)):
-                if curAddr[i] < len(hitListList[i].hitList) and hitListList[i].hitList[curAddr[i]][0] == curMinGameId:
-                    for addr in hitListList[i].hitList[curAddr[i]][1]:
+                if curIndex[i] < len(hitListList[i].hitList) and hitListList[i].hitList[curIndex[i]][0] == curMinGameId:
+                    for addr in hitListList[i].hitList[curIndex[i]][1]:
                         curWeight += termWeight[i] * addrWeight[addr]
-                    self.logger.debug("hit term %d %f" % (i, curWeight))
-                    curAddr[i] += 1
+                    nameWeight += hitListList[i].hitList[curIndex[i]][2]
+                    self.logger.debug("hit term %d %f %f" % (i, curWeight, nameWeight))
+                    curIndex[i] += 1
             if len(games) < MaxRecomGame:
-                heapq.heappush(games, [curWeight, curMinGameId])
+                heapq.heappush(games, [curWeight, curMinGameId, nameWeight])
             else:
-                heapq.heappushpop(games, [curWeight, curMinGameId])
+                heapq.heappushpop(games, [curWeight, curMinGameId, nameWeight])
 
 
         games.sort(key=lambda g: g[0], reverse=True)
 
-        return games
+        return (games, terms)
 
-    def RespGames(self, result, gameIds, address, s):
+    def RespGames(self, result, games, terms, address, s):
         resp = Response()
         resp.result = result
-        resp.gameIds.extend(gameIds)
+        for t in terms:
+            q = resp.terms.add()
+            q.term = t[0]
+            q.weight = t[1]
+        for g in games:
+            r = resp.games.add()
+            r.gameId = g[1]
+            r.nameRel = g[2]
+            r.gameRel = g[0]
         s.sendto(resp.SerializeToString(), address)
         
 
@@ -133,43 +146,8 @@ class SearchIndex:
         for t in game.tags.all():
             tags.append(t.name)
         categorys = [game.category.name, ]
-        terms = {}
         self.logger.debug("add one game for one %d %s %s %s %s" % (gameId, game.name, game.description, str(categorys), str(tags)))
-        ts = SegUtil.Seg(game.name.encode('utf8'))
-        terms[NameAddr] = []
-        for t in ts:
-            if len(t[1]) > 0 and t[1][0] == 'n':
-                terms[NameAddr].append(t[0])
-        ts = SegUtil.Seg(game.description.encode('utf8'))
-        terms[DescAddr] = []
-        for t in ts:
-            if len(t[1]) > 0 and t[1][0] == 'n':
-                terms[DescAddr].append(t[0])
-
-        terms[CategoryAddr] = []
-        for c in categorys:
-            terms[CategoryAddr].append(c.encode("utf8"))
-        terms[TagAddr] = []
-        for t in tags:
-            terms[TagAddr].append(t.encode('utf8'))
-        term2Addrs = {}
-
-        for k, v in terms.items():
-            for term in v:
-                self.logger.debug("%d %s" % (k, term.decode('utf8')))
-                if term not in term2Addrs:
-                    term2Addrs[term] = []
-
-                if k not in term2Addrs[term]:
-                    term2Addrs[term].append(k)
-
-
-        for term, addrs in term2Addrs.items():
-            self.logger.debug("term %s addrs %s" % (term.decode('utf8'), str(addrs)))
-            item = DBItem(term, gameId, addrs)
-            (k, v) = item.Encode()
-
-            self.db.Put(k, v)
+        Index.BuildIndexForOne(self.db, self.logger, gameId, game.name, game.description, categorys, tags)
 
 
     def StartServer(self, port):
@@ -192,15 +170,15 @@ class SearchIndex:
                     except:
                         self.logger.debug("parse from string error")
                         self.logger.debug(traceback.format_exc())
-                        self.RespGames(1, [], address, s)
+                        self.RespGames(1, [], [], address, s)
                         return
                     self.logger.debug("get content %s" % query.query)
-                    games = self.Search(query.query)
-                    gameIds = []
+                    games, terms = self.Search(query.query)
                     for game in games:
                         self.logger.debug("game weight %f id %d" % (game[0], game[1]))
-                        gameIds.append(game[1])
-                    self.RespGames(0, gameIds, address, s)
+                    for term in terms:
+                        self.logger.debug("term %s weight %f" % (term[0], term[1]))
+                    self.RespGames(0, games, terms, address, s)
                 elif cmd == 2:
                     gameId = struct.unpack("!I", message[0:4])[0]
                     self.AddOneGame(gameId)
