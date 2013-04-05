@@ -4,6 +4,9 @@ from django.conf.urls import patterns, include, url
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 import settings
 
+from dajaxice.core import dajaxice_autodiscover, dajaxice_config
+dajaxice_autodiscover()
+
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'ContentEngine.views.home', name='home'),
@@ -21,6 +24,7 @@ urlpatterns = patterns('',
     url(r'', include('scrapy_itunes.urls')),
     url(r'', include('social_auth.urls')),
     url(r'^weixin/', include('weixin.urls')),
+    url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
 )
 
 urlpatterns += staticfiles_urlpatterns()

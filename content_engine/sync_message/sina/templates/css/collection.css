@@ -50,11 +50,14 @@ img{
 .title{
 	z-index: 999;
 	height: 40px;
-	width: 320px;
+	max-width: 320px;
 	top:404px;
 	left:324px;
 	background-color: black;
 	position: absolute;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-break: break-all;
 }
 
 .title span{
@@ -70,7 +73,7 @@ img{
 .game-info{
 	width: 315px;
     padding-top:10px;
-    font-size: 20px;
+    font-size: 24px;
     font: bold;
 }
 
@@ -85,7 +88,7 @@ img{
 }
 
 .game-info table tr td:first-child{
-	width: 80px;
+	width: 120px;
 }
 
 .star{
@@ -110,6 +113,6 @@ img{
 }
 
 .intro{
-    font-size: 20px;
+    font-size: 24px;
     font: bold;
 }
