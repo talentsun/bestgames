@@ -244,7 +244,7 @@ def collection():
     cur = con.cursor()
     curtime = time.strftime('%Y-%m-%d %H:%M',time.localtime(time.time()))
     print 'start: ' + curtime
-#    curtime = '2013-03-23 12:30'
+    #curtime = '2013-04-04 13:30'
     sql = "SELECT collections.entity_ptr_id,collections.title AS collection_title, collections.cover AS collection_cover,games.`name` AS game_name,games.screenshot_path_2 AS game_screenshot,game_entities.brief_comment AS game_brief_comment,games.rating AS game_rating,categories.`name` AS game_category," \
           "collection_entities.weibo_sync_timestamp AS collection_weibo_sync_timestamp,collection_entities.`status` AS collection_status,collection_entities.`recommended_reason` FROM collections INNER JOIN collections_games ON collections.entity_ptr_id = collections_games.collection_id " \
           "INNER JOIN games ON collections_games.game_id = games.entity_ptr_id INNER JOIN entities game_entities ON games.entity_ptr_id = game_entities.id " \
