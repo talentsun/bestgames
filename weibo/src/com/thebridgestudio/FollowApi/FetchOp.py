@@ -22,7 +22,7 @@ if __name__ == '__main__':
     from Utils import *
     os.chdir(work_path)
 
-    logger = InitLogger("follow_competitor", logging.DEBUG, "log/follow_competitor.log")
+    logger = InitLogger("follow_competitor", logging.DEBUG, work_path + "/log/follow_competitor.log")
     try:
         if not CheckSingle(singleFilePath):
             sys.exit("another instance running")

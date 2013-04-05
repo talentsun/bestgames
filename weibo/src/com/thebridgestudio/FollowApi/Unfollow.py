@@ -18,7 +18,7 @@ work_path = os.path.dirname(os.path.abspath(__file__))
 if __name__ == '__main__':
     from Utils import *
 
-    logger = InitLogger("unfollow", logging.DEBUG, "log/unfollow.log")
+    logger = InitLogger("unfollow", logging.DEBUG, work_path + "/log/unfollow.log")
     os.chdir(work_path)
     unfollowDay = datetime.date.today() - datetime.timedelta(days=3)
     ops = Operation.GetSomeDayOps(unfollowDay)
