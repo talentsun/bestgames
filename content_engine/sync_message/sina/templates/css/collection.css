@@ -1,7 +1,7 @@
 body{
     background-color: #eee;
     color: #444;
-    width: 440px;
+    width: 640px;
 }
 
 img{
@@ -70,7 +70,7 @@ img{
 .game-info{
 	width: 315px;
     padding-top:10px;
-    font-size: 20px;
+    font-size: 24px;
     font: bold;
 }
 
@@ -110,6 +110,6 @@ img{
 }
 
 .intro{
-    font-size: 20px;
+    font-size: 24px;
     font: bold;
 }
