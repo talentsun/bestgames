@@ -74,7 +74,7 @@ STATIC_ROOT = projectPath + '/templates'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL =  'http://127.0.0.1:8000/static/'
+STATIC_URL =  'http://cow.bestgames7.com/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
