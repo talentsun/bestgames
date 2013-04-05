@@ -208,7 +208,16 @@ LOGGING = {
             'maxBytes': 1024*1024*5,
             'backupCount': 5,
             'formatter':'standard',
+        },
+        'weixin': {
+            'level':'DEBUG',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(projectPath + '/logs/','weixin.log'),
+            'maxBytes': 1024*1024*5,
+            'backupCount': 5,
+            'formatter':'standard',
         }
+
     },
     'loggers': {
         'django.request': {
@@ -228,6 +237,11 @@ LOGGING = {
         },
         'search': {
             'handlers': ['search'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'weixin': {
+            'handlers': ['weixin'],
             'level': 'DEBUG',
             'propagate': False,
         }

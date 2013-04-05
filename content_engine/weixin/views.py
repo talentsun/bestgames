@@ -17,7 +17,7 @@ import rules
 import rules_game_search
 from pyweixin import WeiXin
 from router import Router
-from message_builder import MessageBuilder
+from message_builder import MessageBuilder, BuildConfig
 from data_loader import load_games_for_today, load_shorten_urls
 
 TOKEN = "itv"
@@ -32,6 +32,7 @@ def _route_callback(error=None, reply=None):
 @csrf_exempt
 def index(request):
     global TOKEN, router_error, router_reply
+    weixinlogger = logging.getLogger('weixin')
     if request.method == 'GET':
         if 'signature' not in request.GET or 'timestamp' not in request.GET or 'nonce' not in request.GET or 'echostr' not in request.GET:
                 return HttpResponse('bad request %s' % str(request.GET))
@@ -39,22 +40,32 @@ def index(request):
         timestamp = request.GET['timestamp']
         nonce = request.GET['nonce']
         echostr = request.GET['echostr']
+        weixinlogger.info("receive one get message signature %s timestamp %s nonce %s echostr %s" % (signature, timestamp, nonce, echostr))
         weixin = WeiXin.on_connect(TOKEN, timestamp, nonce, signature, echostr)
         if weixin.validate():
             return HttpResponse(echostr, content_type="text/plain")
         else:
             return HttpResponse(None, content_type="text/plain")
     elif request.method == 'POST':
-        weixin = WeiXin.on_message(smart_str(request.raw_post_data))
-        message = weixin.to_json()
+        try:
+            weixin = WeiXin.on_message(smart_str(request.raw_post_data))
+            message = weixin.to_json()
+            weixinlogger.info("receive one message %s" % str(message))
 
-        Router.get_instance().reply(message, _route_callback)
-        
-        if router_error is None and router_reply is not None:
-            router_reply.platform = MessageBuilder.PLATFORM_WEIXIN
-            return HttpResponse(MessageBuilder.build(message, router_reply), content_type="application/xml")
-        else:
-            return HttpResponse('<xml></xml>', content_type="application/xml")
+            Router.get_instance().reply(message, _route_callback)
+            
+            if router_error is None and router_reply is not None:
+                router_reply.platform = MessageBuilder.PLATFORM_WEIXIN
+                weixinlogger.info("reply success type %s platform %s data %s" % (router_reply.type, router_reply.platform, str(router_reply.data)))
+                return HttpResponse(MessageBuilder.build(message, router_reply), content_type="application/xml")
+            else:
+                weixinlogger.info("router error %s router reply %s" % (str(router_error), str(router_reply)))
+                raise "not find games"
+                return HttpResponse('<xml></xml>', content_type="application/xml")
+        except:
+            logger.error(traceback.format_exc())
+            reply_config = BuildConfig(MessageBuilder.TYPE_RAW_TEXT, MessageBuilder.PLATFORM_WEIXIN, u"你的问题和游戏有关吗？小每可是很专业的，其他的问题小每可是不屑于回答的哟，如果是游戏问题，小每专家得学习一下才能回答你")
+            return HttpResponse(MessageBuilder.build(message, reply_config), content_type="application/xml")
 
 def load(request):
     load_games_for_today(True)
