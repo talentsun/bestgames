@@ -83,7 +83,7 @@ class SearchIndex:
             termWeight.append(len(hitListList[i].hitList))
             curIndex.append(0)
         if allNum == 0:
-            return []
+            return [], terms
         if len(hitListList) == 1:
             termWeight[i] = 1
         else:

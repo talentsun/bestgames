@@ -56,15 +56,18 @@ def index(request):
             
             if router_error is None and router_reply is not None:
                 router_reply.platform = MessageBuilder.PLATFORM_WEIXIN
-                weixinlogger.info("reply success type %s platform %s data %s" % (router_reply.type, router_reply.platform, str(router_reply.data)))
-                return HttpResponse(MessageBuilder.build(message, router_reply), content_type="application/xml")
+                if router_reply.type != MessageBuilder.TYPE_NO_RESPONSE:
+                    weixinlogger.info("reply success type %s platform %s data %s" % (router_reply.type, router_reply.platform, router_reply.data))
+                    return HttpResponse(MessageBuilder.build(message, router_reply), content_type="application/xml")
+                else:
+                    weixinlogger.info("%s", router_reply.data)
             else:
                 weixinlogger.info("router error %s router reply %s" % (str(router_error), str(router_reply)))
                 raise "not find games"
                 return HttpResponse('<xml></xml>', content_type="application/xml")
         except:
             logger.error(traceback.format_exc())
-            reply_config = BuildConfig(MessageBuilder.TYPE_RAW_TEXT, MessageBuilder.PLATFORM_WEIXIN, u"你的问题和游戏有关吗？小每可是很专业的，其他的问题小每可是不屑于回答的哟，如果是游戏问题，小每专家得学习一下才能回答你")
+            reply_config = BuildConfig(MessageBuilder.TYPE_RAW_TEXT, MessageBuilder.PLATFORM_WEIXIN, u"小每的才一个月大，智商还很低，非常抱歉，没能理解你的话。不过小每会多玩游戏，变得越来越聪明的。\r\n你可以输入帮助了解小每现在支持的指令。")
             return HttpResponse(MessageBuilder.build(message, reply_config), content_type="application/xml")
 
 def load(request):
