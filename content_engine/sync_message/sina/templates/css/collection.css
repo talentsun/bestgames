@@ -54,6 +54,7 @@ img{
 	top:404px;
 	left:324px;
 	background-color: black;
+    overflow: hidden;
 	position: absolute;
     text-overflow: ellipsis;
     white-space: nowrap;

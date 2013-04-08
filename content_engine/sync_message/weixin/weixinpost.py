@@ -2,10 +2,63 @@
 import pycurl
 import cStringIO
 import sys
+import json
+import time
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
 class weixin:
+    def getMsgList(self,cert,slave_user,slave_sid,title):
+        c = pycurl.Curl()
+#        c.setopt(c.POST, 1)
+        c.setopt(c.URL, "http://mp.weixin.qq.com/cgi-bin/operate_appmsg?lang=zh_CN&sub=list&t=ajax-appmsgs-fileselect&type=10&r=0.20938333613582416&pageIdx=0&pagesize=10&formid=file_from_1364961994451&subtype=3" )
+
+        c.setopt(c.COOKIE,'hasWarningUer=1;hasWarningUer=1;' + cert +';' + slave_user + ';' + slave_sid + ';')
+        buff = cStringIO.StringIO()
+        hdr = cStringIO.StringIO()
+        c.setopt(c.WRITEFUNCTION, buff.write)
+        c.setopt(c.HEADERFUNCTION, hdr.write)
+        c.perform()
+
+        today = time.strftime('%Y-%m-%d',time.localtime(time.time()))
+        msgList = json.loads(buff.getvalue())
+        print msgList
+
+        msg_id = ''
+        found = False;
+        for msg in msgList['List']:
+            print '123'  +  msg['time']
+            if msg['time'] == today:
+                for appMsg in msg['appmsgList']:
+                    if appMsg['title'] == title:
+                        msg_id = msg['appId']
+                        found = True;
+
+            if found:
+                break;
+
+        print title + '  ' + msg_id
+        self.postMsg(cert,slave_user,slave_sid,msg_id)
+
+    def postMsg(self,cert,slave_user,slave_sid,msg_id):
+        c = pycurl.Curl()
+        c.setopt(c.POST, 1)
+        post_params = 'type=10&fid=' + msg_id + '&appmsgid=' + msg_id + '&error=false&needcomment=0&groupid=-1&sex=0&country=&city=&province=&ajax=1'
+        c.setopt(c.URL, "http://mp.weixin.qq.com/cgi-bin/masssend?t=ajax-response" )
+        c.setopt(c.POSTFIELDS,post_params)
+
+        c.setopt(c.COOKIE,'hasWarningUer=1;hasWarningUer=1;' + cert +';' + slave_user + ';' + slave_sid + ';')
+        buff = cStringIO.StringIO()
+        hdr = cStringIO.StringIO()
+        c.setopt(c.WRITEFUNCTION, buff.write)
+        c.setopt(c.HEADERFUNCTION, hdr.write)
+        c.perform()
+
+        print 'hdr:' + hdr.getvalue()
+        print 'buff:' + buff.getvalue()
+
+
+
     def postImage(self,cert,slave_user,slave_sid,msg_count):
 
         from_id_array = []
@@ -20,12 +73,9 @@ class weixin:
 
     def postSingelImage(self,cert,slave_user,slave_sid,filename):
         c = pycurl.Curl()
-
-
         c.setopt(c.POST, 1)
         c.setopt(c.HTTPPOST, [('filename', filename), (('uploadfile', (c.FORM_FILE, filename)))])
         c.setopt(c.URL, "http://mp.weixin.qq.com/cgi-bin/uploadmaterial?cgi=uploadmaterial&type=2&t=iframe-uploadfile&lang=zh_CN&formId=1" )
-
         c.setopt(c.COOKIE,'hasWarningUer=1;hasWarningUer=1;' + cert +';' + slave_user + ';' + slave_sid + ';')
         buff = cStringIO.StringIO()
         hdr = cStringIO.StringIO()
@@ -46,31 +96,37 @@ class weixin:
 
     def createSingleMsg(self,cert,slave_user,slave_sid,from_id_array,msg_count):
         c = pycurl.Curl()
-
+        c.setopt(c.POST, 1)
         c.setopt(c.COOKIE,'hasWarningUer=1;hasWarningUer=1;' + cert +';' + slave_user + ';' + slave_sid + ';')
         c.setopt(c.URL, "http://mp.weixin.qq.com/cgi-bin/operate_appmsg?t=ajax-response&sub=create")
         title = 'autopost'
         digest = 'test'
-        content = '自动上传微信消息'
+        #content = '自动上传微信消息'
         count = 0
         post_params = 'error=false&count=' + str(msg_count) + '&AppMsgId='
         while count < msg_count:
             title = title + str(count)
             digest = digest + str(count)
-            content = '自动上传微信消息' + str(count)
+            content = 'oooo' + str(count)
             post_params =post_params + '&title' + str(count) + '=' + title + '&digest' + str(count) + '=' + digest + '&content' + str(count) + '=' + content + '&fileid' + str(count) + '=' + from_id_array[count]
             count = count + 1
 
         post_params = post_params + '&ajax=1';
+        print post_params
         c.setopt(c.POSTFIELDS,post_params)
         buff = cStringIO.StringIO()
         hdr = cStringIO.StringIO()
         c.setopt(c.WRITEFUNCTION, buff.write)
         c.setopt(c.HEADERFUNCTION, hdr.write)
+        c.setopt(c.VERBOSE, True)
         c.perform()
 
-        print 'hdr:' + hdr.getvalue()
-        print 'buff:' + buff.getvalue()
+        print 'createSingleMsg hdr:' + hdr.getvalue()
+        print 'createSingleMsg buff:' + buff.getvalue()
+
+        title  ='是英文毁了这个不错的RPG手机游戏！ - 龙之塔'
+
+        self.getMsgList(cert,slave_user,slave_sid,title)
 
 
     def login(self):

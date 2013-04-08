@@ -55,6 +55,8 @@ class parsePic(BaseSpider):
 
         count = 1
         for url in descUrl:
-            self.downloadNet.download(url, root_path + 'desc' + str(count) + self.pic_prefix + ".jpg")
-            count = count + 1
+            if count <=4:
+                self.downloadNet.download(url, root_path + 'desc' + str(count) + self.pic_prefix + ".jpg")
+                count = count + 1
+                break;
 

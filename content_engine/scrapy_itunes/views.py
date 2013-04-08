@@ -21,7 +21,7 @@ def getPic(request):
       print command
       os.system(command)
 
-      server_url =  "http://" + socket.gethostname() + "/pic/"
+      server_url =  "http://" + "cow.bestgames7.com" + "/pic/"
 
 
       response_data['icon'] = server_url + 'icon' + curtime + ".jpg"
