@@ -16,12 +16,12 @@ def getPic(request):
     if download_url:
       curtime = time.strftime('%Y%m%d%H%M%S',time.localtime(time.time())) + str(random.randint(1, 1000))
 
-      print download_url
-      command = 'cd ' + root_path +  '&&scrapy crawl parse_ituns -a  url=' + download_url + ' -a pic_prefix=' + curtime
+      print curtime
+      command = 'cd ' + root_path +  '&&scrapy crawl parse_ituns -a  url="' + download_url + '" -a pic_prefix=' + curtime
       print command
       os.system(command)
 
-      server_url =  "http://" + socket.gethostname() + "/pic/"
+      server_url =  "http://" + "cow.bestgames7.com" + "/pic/"
 
 
       response_data['icon'] = server_url + 'icon' + curtime + ".jpg"
