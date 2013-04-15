@@ -1,7 +1,7 @@
 #!/usr/local/bin/python2.7
 # -*- coding:utf-8 -*-
 
-import sys, subprocess, os, os.path
+import sys, subprocess, os, os.path, traceback
 workPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(workPath + "/..")
 from django.core.management import setup_environ
@@ -185,11 +185,15 @@ if __name__ == "__main__":
     index.CreateDB()
     games = Game.objects.all()
     for game in games:
-        tags = []
-        for t in game.tags.all():
-            tags.append(t.name)
-        cats = [game.category.name, ]
-        index.BuildIndexForOne(index.db, index.logger, game.pk, game.name, game.description, cats, tags)
+        try:
+            tags = []
+            for t in game.tags.all():
+                tags.append(t.name)
+            cats = [game.category.name, ]
+            index.BuildIndexForOne(index.db, index.logger, game.pk, game.name, game.description, cats, tags)
+        except:
+            logger.debug(traceback.format_exc())
+            
 
 
     pidFilePath = GetConfigValue("PID_FILE", sys.argv[1])
