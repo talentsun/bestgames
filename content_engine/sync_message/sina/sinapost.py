@@ -32,8 +32,9 @@ def sendWeibo(weibostatus,pic,game_id):
         client.statuses.upload.post(status=weibostatus ,
                                   pic=open(pic))
         weibo_result = '2'
-    except:
+    except Exception, e:
         weibo_result = '3'
+        print 'Exception error is: %s' % e
     con = mdb.connect('localhost', 'root',
            'nameLR9969', 'content_engine');
 
@@ -316,7 +317,6 @@ try:
 
     curtime = time.strftime('%Y-%m-%d %H:%M',time.localtime(time.time()))
     print 'start: ' + curtime
-    #curtime = '2013-03-15 10:30:00'
     sql = "SELECT games.name, games.entity_ptr_id,games.screenshot_path_1,games.screenshot_path_2,games.screenshot_path_3,games.screenshot_path_4,entities.weibo_sync_timestamp, entities.recommended_reason from entities,games where entities.weibo_sync_timestamp  like '" + curtime + "%'  and games.entity_ptr_id = entities.id and entities.status = '1'"
     print sql
     cur.execute(sql)

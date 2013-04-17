@@ -47,9 +47,12 @@ class parsePic(BaseSpider):
 
         iconUrl = hxs.select('//a[contains(@href, iconTag)]/div[@class="artwork"]/img/@src').extract()
         descUrl = hxs.select('//div[@class="lockup"]/img/@src').extract()
-        print iconUrl
+        print descUrl
         for icon in iconUrl:
             if icon.find('175x175-75.jpg') != -1:
+                print icon
+                print root_path
+                print self.pic_prefix
                 self.downloadNet.download(icon,root_path + 'icon' + self.pic_prefix + ".jpg");
                 break;
 
@@ -58,5 +61,6 @@ class parsePic(BaseSpider):
             if count <=4:
                 self.downloadNet.download(url, root_path + 'desc' + str(count) + self.pic_prefix + ".jpg")
                 count = count + 1
+            else:
                 break;
 
