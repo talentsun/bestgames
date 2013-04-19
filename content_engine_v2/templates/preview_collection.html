@@ -1,0 +1,14 @@
+{% load filters %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{{ collection.title }}</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.min.css"/>
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/main.css"/>
+<body style="padding:10px;">
+  <h4>游戏合集之{{ collection.title }}</h4>
+  <img src="http://weixin.bestgames7.com/media/{{ collection.cover }}" alt="" style="width:100%">
+  <p style="margin:10px 0;">游戏合集{{collection.recommended_reason|del_link}}</p>
+</body>

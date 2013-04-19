@@ -1,0 +1,130 @@
+{% load dajaxice_templatetags %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>加载小每机器人数据</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}ajax_upload/css/ajax-upload-widget.css"/>
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.min.css"/>
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/main.css"/>
+  <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}ajax_upload/js/jquery.iframe-transport.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}ajax_upload/js/ajax-upload-widget.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}dajax/jquery.dajax.core.js"></script>
+  {{ form.media }}
+  {% dajaxice_js_import %}
+  <style type="text/css">
+    .table tr td{
+      vertical-align: middle;
+    }
+
+    .table tr td:nth-child(1){
+      width: 200px;
+    }
+    
+    .table tr td:nth-child(2) .progress{
+      margin-bottom: 0px;
+    }
+    
+    .table tr td:nth-child(3){
+      width: 40px;
+      text-align: center;
+    }
+  </style>
+  <script type="text/javascript">
+  var begin_load_games_for_today = function() {
+    $('#load_games_for_today').addClass('disabled');
+    $('#load_games_for_today_progress .bar').css('width', '0%');
+  };
+
+  var end_load_games_for_today = function() {
+    $('#load_games_for_today').removeClass('disabled');
+    $('#load_games_for_today_progress .bar').css('width', '100%');
+  };
+
+  var load_games_for_today = function() {
+    begin_load_games_for_today();
+    Dajaxice.weixin.load_games_for_today(function(data){
+      Dajax.process(data);
+      end_load_games_for_today();
+    });
+  };
+
+  var begin_load_shorten_urls = function() {
+    $('#load_shorten_urls').addClass('disabled');
+    $('#load_shorten_urls_progress .bar').css('width', '0%');
+  };
+
+  var end_load_shorten_urls = function() {
+    $('#load_shorten_urls').removeClass('disabled');
+    $('#load_shorten_urls_progress .bar').css('width', '100%');
+  };
+
+  var load_shorten_urls = function() {
+    begin_load_shorten_urls();
+    Dajaxice.weixin.begin_load_shorten_urls(Dajax.process, {'offset' : 0 });
+  };
+
+  var load_shorten_urls_callback = function(data) {
+    console.log(data)
+    if (data.percent < 100) {
+      $('#load_shorten_urls_progress .bar').css('width', data.percent + '%');
+      Dajaxice.weixin.begin_load_shorten_urls(Dajax.process, { 'offset' : data.offset });
+    } else {
+      end_load_shorten_urls();
+      $('#load_all').removeClass('disabled');
+    }
+  }
+
+  var load_all = function() {
+    $('#load_all').addClass('disabled');
+    begin_load_games_for_today();
+    begin_load_shorten_urls();
+    
+    load_games_for_today();
+    load_shorten_urls();
+
+  };
+  </script>
+</head>
+<body>
+  <div id="main" class="container">
+    {% include "header.html" %}
+
+    <ul class="breadcrumb">
+      <li><a href="/">内容引擎</a> <span class="divider">/</span></li>
+      <li class="active">加载小每机器人数据</li>
+    </ul>
+
+    <table class="table table-bordered">
+      <tr>
+        <td>Load Games for Today</td>
+        <td>
+          <div id="load_games_for_today_progress" class="progress">
+            <div class="bar" style="width: 0%;"></div>
+          </div>
+        </td>
+        <td>
+          <a id="load_games_for_today" class="btn btn-primary" onclick="load_games_for_today();"><i class="icon-refresh icon-white"></i></a>
+        </td>
+      </tr>
+      <tr>
+        <td>Load Shorten Urls</td>
+        <td>
+          <div id="load_shorten_urls_progress" class="progress">
+            <div class="bar" style="width: 0%;"></div>
+          </div>
+        </td>
+        <td>
+          <a id="load_shorten_urls" class="btn btn-primary" onclick="load_shorten_urls();"><i class="icon-refresh icon-white"></i></a>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3" style="text-align:center;">
+          <a id="load_all" class="btn btn-primary" onclick="load_all();"><i class="icon-refresh icon-white"></i>加载所有数据</a>
+        </td>
+      </tr>
+    </table>
+  </div>
+</body>

@@ -1,0 +1,60 @@
+{% load render_table from django_tables2 %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>内容引擎v2</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta property="wb:webmaster" content="f0737ecc6d43a725" />
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/main.css"/>
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.min.css"/>
+  <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/bootbox.min.js"></script>
+</head>
+<body>
+  <div id="main" class="container list-page">
+    {% include "header.html" %}
+
+    <div class="btn-group" style="margin-bottom:20px;">
+      <a class="btn dropdown-toggle btn-primary btn-large" data-toggle="dropdown" href="#">
+        <i class="icon-plus icon-white"></i>
+        新增内容
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu">
+        {% for entity_type in entity_types %}
+          <li><a href="/entities/add?next={{request.get_full_path}}&type={{entity_type.id}}">{{entity_type.verbose_name}}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="btn-group" style="margin-bottom:20px;">
+      <a class="btn dropdown-toggle btn-large" data-toggle="dropdown" href="#">
+        <i class="icon-wrench"></i>
+        小工具
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu">
+        <li><a href="/tools/url2icon" target="_blank">获取苹果图标和截图</a></li>
+      </ul>
+    </div>
+
+    <div class="btn-group" style="margin-bottom:20px;">
+      <a class="btn dropdown-toggle btn-large" data-toggle="dropdown" href="#">
+        <i class="icon-hdd"></i>
+        小每机器人
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu">
+        <li><a href="http://weixin.bestgames7.com/weixin/load" target="_blank">加载小每机器人数据</a></li>
+      </ul>
+    </div>
+
+    <div class="navbar" style="margin-bottom:0;">
+      <div class="navbar-inner">
+        <span class="navbar-text">内容列表</span>
+      </div>
+    </div>
+    {% render_table entities "django_tables2/table.html" %}
+  </div>
+</body>

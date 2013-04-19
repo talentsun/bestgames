@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>添加/编辑精品游戏推荐</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}ajax_upload/css/ajax-upload-widget.css"/>
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.min.css"/>
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/main.css"/>
+  <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}ajax_upload/js/jquery.iframe-transport.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}ajax_upload/js/ajax-upload-widget.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('#cancel').click(function(){
+        history.back();
+        return false;
+      });
+      $('#save').click(function(){
+        $('#form').submit();
+
+        return false;
+      });
+    });
+    $(function() {
+        AjaxUploadWidget.autoDiscover({
+          "changeButtonText" : "修改图片",
+          "removeButtonText" : "删除图片"
+        });
+    });
+  </script>
+  {{ form.media }}
+</head>
+<body>
+  <div id="main" class="container edit-page">
+    {% include "header.html" %}
+
+    <ul class="breadcrumb">
+      <li><a href="/">内容引擎</a> <span class="divider">/</span></li>
+      <li class="active">添加/编辑{{ entity_type.verbose_name }}</li>
+    </ul>
+
+    <form id="form" action="" method="post" enctype="multipart/form-data"> {% csrf_token %}
+      <div class="navbar" style="margin-bottom:0;">
+        <div class="navbar-inner">
+          <p class="navbar-text">{{ entity_type.verbose_name }}</p>
+        </div>
+      </div>
+      <table class="table">
+        <tbody>
+        {% for field in form %}
+          <tr><th>{{ field.label }}</th><td>{{ field }}{{ field.errors }}</td><td class="help-text">{{ field.help_text }}</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      {% include "save_cancel_section.html"%}
+    </form>
+  </div>
+</body>
