@@ -67,7 +67,7 @@ def index(request):
                 return HttpResponse('<xml></xml>', content_type="application/xml")
         except:
             logger.error(traceback.format_exc())
-            reply_config = BuildConfig(MessageBuilder.TYPE_RAW_TEXT, MessageBuilder.PLATFORM_WEIXIN, u"小每的才一个月大，智商还很低，非常抱歉，没能理解你的话。不过小每会多玩游戏，变得越来越聪明的。\r\n你可以输入帮助了解小每现在支持的指令。")
+            reply_config = BuildConfig(MessageBuilder.TYPE_RAW_TEXT, MessageBuilder.PLATFORM_WEIXIN, u"非常抱歉，没能理解你的话")
             return HttpResponse(MessageBuilder.build(message, reply_config), content_type="application/xml")
 
 def load(request):

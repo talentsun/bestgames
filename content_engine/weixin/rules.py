@@ -1,7 +1,7 @@
 # coding: utf8
 from router import Router
 from message_builder import MessageBuilder, BuildConfig
-from data_loader import load_games_for_today, load_latest_game_collection
+from data_loader import load_games_for_today, load_latest_game_collection, load_random_games
 
 def get_download_urls_for_today(rule, info):
     games = load_games_for_today()
@@ -25,12 +25,17 @@ def get_games_for_today(rule, info):
         else:
             return BuildConfig(MessageBuilder.TYPE_RAW_TEXT, None, u'小每今天累屎了，没有推荐游戏[[哭]]')
 
+def get_random_games(rule, info):
+    games = load_random_games()
+    return BuildConfig(MessageBuilder.TYPE_GAMES, None, games)
+    
+
 def get_latest_game_collection(rule, info):
     return BuildConfig(MessageBuilder.TYPE_GAME_COLLECTION, None, load_latest_game_collection())
 
 
 def get_welcome(rule, info):
-    return BuildConfig(MessageBuilder.TYPE_RAW_TEXT, None, u"欢迎收听每日精品游戏，我喜欢你叫我小每。在这里我们人工为你在海量的游戏中，找到几个属于你的游戏，希望你喜欢。除了接收消息，你还可以做到更多的（提示：你可以回复一下帮助哟!）")
+    return BuildConfig(MessageBuilder.TYPE_RAW_TEXT, None, u"""欢迎收听小每（全称每日精品游戏)。这里是游戏者的乐园，每天都会有经过人工精挑细选的好游戏呈上。回复“滑雪大冒险”，获得滑雪大冒险游戏的下载地址～\n回复“恐怖”将获得恐怖类的游戏～\n回复“推荐”我们将随机给你随机推荐好游戏～""")
 
 def unsubscribe(rule, info):
     return BuildConfig(MessageBuilder.TYPE_NO_RESPONSE, None, u"%s unsubscribe" % info.user)
@@ -41,31 +46,47 @@ def match_subscribe_event(rule, info):
 def match_unsubscribe_event(rule, info):
     return info.type == "event" and info.event == 'unsubscribe'
 
+"""
 Router.get_instance().set({
         'name' : u'获取今日精品推荐游戏的下载地址',
         'pattern' : u'^下载$',
         'handler' : get_download_urls_for_today
     })
+"""
+Router.get_instance().set({
+        'name' : u'获取随机推荐的游戏',
+        'pattern' : u'^(推荐|下载)$',
+        'handler' : get_random_games
+    })
 Router.get_instance().set({
         'name' : u'获取今日精品游戏推荐',
-        'pattern' : u'^(游戏|推荐)$',
+        'pattern' : u'^(今日推荐)$',
         'handler' : get_games_for_today
     })
+"""
 Router.get_instance().set({
         'name' : u'获取本周游戏合集',
         'pattern' : u'合集',
         'handler' : get_latest_game_collection
     })
+"""
 Router.get_instance().set({
         'name' : u'打招呼',
-        'pattern' : u'.*(你好|hi|hello|您好).*',
-        'handler' : ['你好喽','小每祝您全家发财','好毛啊好']
+        'pattern' : u'^(你好|hi|hello|您好).*',
+        'handler' : ['你好，有什么想玩的吗？试着给小每描述一下你想玩的游戏吧！']
     })
+Router.get_instance().set({
+        'name' : u'自我介绍',
+        'pattern' : u'^你是谁.*',
+        'handler' : ['我是小每呀（全程每日精品游戏）,我们团队要为游戏爱好者解决找游戏和玩游戏遇到的困难，让玩家得到更好的游戏体验，感谢对我们的支持']
+    })
+"""
 Router.get_instance().set({
         'name' : u'有病',
         'pattern' : u'.*有病.*',
         'handler' : ['你有药啊！','你妹啊！','春了吧。。。']
     })
+"""
 Router.get_instance().set({
         'name' : u'收听致辞',
         'pattern' : match_subscribe_event,
@@ -77,19 +98,15 @@ Router.get_instance().set({
         'handler' : unsubscribe
     })
 
-help_wording = u"""你可以通过输入下面五类句子来使用小每:
-1. 推荐游戏
-如果你想尝试一些新的游戏，那么就使用这一句话，小每将给你推荐几款好玩的新游戏。
-2.推荐画面精美的赛车游戏
-如果你有特定的口味，那么小每将给你推荐好玩的画面精美的赛车游戏，你可以将画面精美的赛车游戏换成任何词
-3.推荐和植物大战僵尸类似的游戏
-那么小每将给你找和植物大战僵尸类似的游戏，你可以将植物大战僵尸换成你玩过的好游戏的名字
-4.下载魔法庄园
-如果你有自己想玩的游戏，比如魔法庄园，那么小每将给你找到魔法庄园的下载地址
-5.帮助
-小每将告诉你最新的使用指南"""
+help_wording = u"""你可以通过以下3种方式来使用小每:
+1、输入游戏名字
+比如你想玩滑雪大冒险，就输入滑雪大冒险
+2、找特定类型的游戏
+比如你想玩赛车游戏，就输入赛车即可
+3、推荐
+如果你想让小每帮你随机推荐几款好游戏就输入推荐"""
 Router.get_instance().set({
     'name' : u'帮助说明',
-    'pattern' : u'帮助|使用说明',
+    'pattern' : u'^(帮助|使用说明)$',
     'handler' : help_wording
 })

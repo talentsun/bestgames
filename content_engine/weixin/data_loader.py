@@ -2,8 +2,15 @@ from portal.models import Game, Collection
 from django.core.cache import cache
 from datetime import date, datetime
 from utils import shorten_url
+import random
 
 CACHE_TIMEOUT_WEEK = 7 * 24 * 3600
+
+
+def load_random_games():
+    gameIndex = random.randint(0, 20)
+    games = Game.objects.all()[gameIndex: gameIndex + 3]
+    return games
 
 def load_games_for_today(reload=False):
 	if cache.get('games_for_today') and not reload:

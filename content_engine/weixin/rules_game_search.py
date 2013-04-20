@@ -9,7 +9,7 @@ from service import search_pb2
 
 logger = logging.getLogger("default")
 
-default_sorry_wording = u'非常抱歉没有找到你要找的游戏，看来小每要加强学习了'
+default_sorry_wording = u'非常抱歉没有找到你要找的游戏'
 
 def __search_games(query):
     q = search_pb2.Query()
@@ -26,10 +26,26 @@ def _search_games(rule, info):
 
     if resp.result == 0:
         # results is sorted by gameRel not nameRel
+        maxNameRel = 0
+        maxNameRelGameId = -1
         for g in resp.games:
-            if g.nameRel >= 0.8:
-                # pattern: search download url by game name
-                return BuildConfig(MessageBuilder.TYPE_DOWNLOAD_URL, None, [Game.objects.get(pk = g.gameId)])
+            if g.nameRel >= maxNameRel:
+                maxNameRel = g.nameRel
+                maxNameRelGameId = g.gameId
+        if maxNameRel > 0.8:
+            # pattern: search download url by game name
+            return BuildConfig(MessageBuilder.TYPE_DOWNLOAD_URL, None, [Game.objects.get(pk = maxNameRelGameId)])
+        else:
+            res_games = []
+            for g in resp.games:
+                logger.debug("recom game %d" % g.gameId)
+                try:
+                    res_games.append(Game.objects.get(pk = g.gameId))
+                except:
+                    logger.debug(traceback.format_exc())
+            if len(res_games) > 0:
+                return BuildConfig(MessageBuilder.TYPE_GAMES, None, res_games)
+
 
     return BuildConfig(MessageBuilder.TYPE_RAW_TEXT, None, default_sorry_wording)
         
@@ -105,8 +121,7 @@ def _find_similar_game(rule, info):
     return BuildConfig(MessageBuilder.TYPE_RAW_TEXT, None, default_sorry_wording)
 
 
-
-    
+""" 
 
 Router.get_instance().set({
     'name': u'根据玩过的游戏找游戏',
@@ -120,10 +135,10 @@ Router.get_instance().set({
     'pattern': u'((推荐|寻找)(.+)(的{0,1})游戏)',
     'handler': _find_tag_game
 })
+"""
 
 
 Router.get_instance().set({
-    'name' : u'根据游戏名获取游戏下载地址',
-    'pattern': u'(下载(.+)((游戏)?))',
+    'name' : u'根据游戏名获取游戏',
     'handler' : _search_games
     })
