@@ -82,7 +82,7 @@ class weixin:
         print 'buff:' + buff.getvalue()
 
         weixin_result = 3
-        if buff.getvalue().index('''"ret":"0"''') != -1:
+        if buff.getvalue().find('''"ret":"0"''') != -1:
             weixin_result = 2;
 
         self.update_weixin_status(weixin_result)

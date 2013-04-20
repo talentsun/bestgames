@@ -17,7 +17,7 @@ import logging, traceback, time, struct, socket
 from taggit.models import Tag
 
 from portal.models import Game, Redier, Collection, Problem,Entity,Weixin
-from portal.tables import GameTable, RedierTable, CollectionTable, ProblemTable
+from portal.tables import GameTable, RedierTable, CollectionTable, ProblemTable, WeixinTable
 from portal.forms import GameForm, RedierForm, CollectionForm, ProblemForm,WeixinForm
 from service import search_pb2
 
@@ -70,6 +70,10 @@ def index(request):
     problems = ProblemTable(Problem.objects.all(),prefix="pb-")
     problems.paginate(page=request.GET.get("pb-page",1), per_page=10)
     problems.data.verbose_name = u"宅，必有一技"
+
+    weixin = WeixinTable(Problem.objects.all(),prefix="pb-")
+    weixin.paginate(page=request.GET.get("weixin-page",1), per_page=10)
+    weixin.data.verbose_name = u"微信消息"
 
     return render(request, "index.html", {"games": games, "rediers":rediers, 'collections':collections, 'problems':problems})
 
