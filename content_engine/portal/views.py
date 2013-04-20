@@ -75,7 +75,7 @@ def index(request):
     weixin.paginate(page=request.GET.get("weixin-page",1), per_page=10)
     weixin.data.verbose_name = u"微信消息"
 
-    return render(request, "index.html", {"games": games, "rediers":rediers, 'collections':collections, 'problems':problems})
+    return render(request, "index.html", {"games": games, "rediers":rediers, 'collections':collections, 'problems':problems, 'weixin':weixin})
 
 def logout(request):
     auth.logout(request)
