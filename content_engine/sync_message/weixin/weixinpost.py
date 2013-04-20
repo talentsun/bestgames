@@ -21,7 +21,7 @@ class weixin:
     gameCategoryList = []
     collection_title=''
     collection_cover=''
-    gameId = ''
+    entity_id = ''
     weixin_status = ''
 
     get_msg_list_url = "http://mp.weixin.qq.com/cgi-bin/operate_appmsg?token=492370483&lang=zh_CN&sub=list&t=ajax-appmsgs-fileselect&type=10&r=0.9663556832875031&pageIdx=0&pagesize=10&formid=file_from_1366447908777&subtype=3"
@@ -80,6 +80,23 @@ class weixin:
 
         print 'hdr:' + hdr.getvalue()
         print 'buff:' + buff.getvalue()
+
+        weixin_result = 3
+        if buff.getvalue().index('''"ret":"0"''') != -1:
+            weixin_result = 2;
+
+        self.update_weixin_status(weixin_result)
+
+    def update_weixin_status(self,weixin_result):
+        con = mdb.connect('localhost', 'root',
+            'nameLR9969', 'content_engine');
+
+        cur = con.cursor()
+        sql = "update entities set status = '"  + str(weixin_result) + "' where id = '" + str(self.entity_id) + "';"
+        print sql
+        cur.execute(sql)
+        con.commit()
+        con.close()
 
 
 
@@ -226,7 +243,7 @@ class weixin:
             data = cur.fetchall()
             r = 0
             for result in data:
-                self.gameId = result[0]
+                self.entity_id = result[0]
                 self.collection_title = result[1]
                 self.collection_cover = result[2]
                 self.nameList.append(result[3])
