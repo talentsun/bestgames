@@ -8,7 +8,7 @@ from datetime import datetime
 from taggit.forms import TagField
 from django_select2 import *
 
-from portal.models import Redier, Game, Category, Collection, Problem
+from portal.models import Redier, Game, Category, Collection, Problem,Weixin
 
 class EntityForm(ModelForm):
 	tags = TagField(label=u"标签")
@@ -80,6 +80,21 @@ class CollectionForm(EntityForm):
 			'presenter',
 			'brief_comment',
 			'recommended_reason')
+
+
+class WeixinForm(EntityForm):
+    cover = forms.ImageField(label=u"封面图片", help_text=u"建议使用640x320大小的图片", widget=AjaxClearableFileInput())
+    games = GameChoices(label=u"游戏")
+
+    class Meta:
+        model = Weixin
+        fields = ('title',
+                  'cover',
+                  'games',
+                  'weibo_sync_timestamp',
+                  'presenter',
+                  'recommended_reason'
+                  )
 
 class ProblemForm(EntityForm):
 	problem_image = forms.ImageField(label=u"必有一技", help_text=u"建议图片宽度大于400像素", widget=AjaxClearableFileInput())

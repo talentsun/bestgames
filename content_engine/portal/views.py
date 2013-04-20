@@ -16,9 +16,9 @@ import logging, traceback, time, struct, socket
 
 from taggit.models import Tag
 
-from portal.models import Game, Redier, Collection, Problem,Entity
+from portal.models import Game, Redier, Collection, Problem,Entity,Weixin
 from portal.tables import GameTable, RedierTable, CollectionTable, ProblemTable
-from portal.forms import GameForm, RedierForm, CollectionForm, ProblemForm
+from portal.forms import GameForm, RedierForm, CollectionForm, ProblemForm,WeixinForm
 from service import search_pb2
 
 import django_tables2 as tables
@@ -124,6 +124,48 @@ def delete_problem(request, problem_id=None):
         if problem is not None:
             problem.delete()
             return _redirect_back(request)
+
+@login_required
+def add_edit_weixin(request, weixin_id=None):
+    _auth_user(request)
+    weibo_sync_timestamp =''
+    if weixin_id:
+        weixin = get_object_or_404(Weixin, entity_ptr_id=weixin_id)
+        weibo_sync_timestamp = weixin.weibo_sync_timestamp
+    else:
+        weixin = None
+
+    if request.method == 'POST':
+        form = WeixinForm(request.POST, request.FILES, instance=weixin)
+        if form.is_valid():
+            weixin = form.save()
+            if request.POST['cover']:
+                weixin.cover = request.POST['cover'].replace(settings.MEDIA_URL, '', 1)
+            else:
+                weixin.cover = request.POST['cover']
+            if weibo_sync_timestamp != weixin.weibo_sync_timestamp:
+                if weibo_sync_timestamp != '':
+                    weixin.status = Entity.STATUS_PENDING
+            weixin.save()
+            return _redirect_back(request)
+    else:
+        if weixin is None:
+            form = WeixinForm(instance=weixin, initial={'presenter' : request.user.username})
+        else:
+            form = WeixinForm(instance=weixin)
+
+    return render(request, 'add_edit_weixin.html', {'form' : form})
+
+@login_required
+def delete_weixin(request, weixin_id=None):
+    _auth_user(request)
+    weixin = get_object_or_404(Weixin, entity_ptr_id=weixin_id)
+    weixin.delete()
+    return _redirect_back(request)
+
+def preview_weixin(request, weixin_id=None):
+    weixin = get_object_or_404(Collection, entity_ptr_id=weixin_id)
+    return render(request, 'preview_weixin.html', { 'weixin' : weixin })
 
 @login_required
 def add_edit_collection(request, collection_id=None):

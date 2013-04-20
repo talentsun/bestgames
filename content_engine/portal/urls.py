@@ -18,5 +18,8 @@ urlpatterns = patterns('portal.views',
     url(r'^problems/add','add_edit_problem'),
     url(r'^problems/(?P<problem_id>\d+)/edit','add_edit_problem'),
     url(r'^problems/(?P<problem_id>\d+)/delete','delete_problem'),
+    url(r'^weixinmsg/add','add_edit_weixin'),
+    url(r'^weixinmsg/(?P<weixin_id>\d+)/edit','add_edit_weixin'),
+    url(r'^weixinmsg/(?P<weixin_id>\d+)/delete','delete_weixin'),
     url(r'^logout', 'logout')
 )
