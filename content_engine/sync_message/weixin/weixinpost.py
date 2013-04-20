@@ -4,23 +4,40 @@ import cStringIO
 import sys
 import json
 import time
+import MySQLdb as mdb
+import os
+import shutil
+import urllib
+
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
 class weixin:
 
-    get_msg_list_url = "http://mp.weixin.qq.com/cgi-bin/operate_appmsg?lang=zh_CN&sub=list&t=ajax-appmsgs-fileselect&type=10&r=0.20938333613582416&pageIdx=0&pagesize=10&formid=file_from_1364961994451&subtype=3"
-    post_msg_url = "http://mp.weixin.qq.com/cgi-bin/masssend?t=ajax-response"
-    post_msg_referer_url = "http://mp.weixin.qq.com/cgi-bin/masssendpage?t=wxm-send&lang=zh_CN"
-    post_image_url = "http://mp.weixin.qq.com/cgi-bin/uploadmaterial?cgi=uploadmaterial&type=2&t=iframe-uploadfile&lang=zh_CN&formId=1"
+    nameList = []
+    iconList = []
+    gameBriefList = []
+    gameRatingList = []
+    gameCategoryList = []
+    collection_title=''
+    collection_cover=''
+    gameId = ''
+    weixin_status = ''
+
+    get_msg_list_url = "http://mp.weixin.qq.com/cgi-bin/operate_appmsg?token=492370483&lang=zh_CN&sub=list&t=ajax-appmsgs-fileselect&type=10&r=0.9663556832875031&pageIdx=0&pagesize=10&formid=file_from_1366447908777&subtype=3"
+    get_msg_referer_url = 'http://mp.weixin.qq.com/cgi-bin/masssendpage?t=wxm-send&token=492370483&lang=zh_CN'
+    post_msg_url = "http://mp.weixin.qq.com/cgi-bin/masssend?t=ajax-response&token=492370483"
+    post_msg_referer_url = "http://mp.weixin.qq.com/cgi-bin/masssendpage?&token=492370483t=wxm-send&lang=zh_CN"
+    post_image_url = "http://mp.weixin.qq.com/cgi-bin/uploadmaterial?cgi=uploadmaterial&token=492370483&type=2&t=iframe-uploadfile&lang=zh_CN&formId=1"
     login_url = "http://mp.weixin.qq.com/cgi-bin/login?lang=zh_CN"
-    create_msg_url = "http://mp.weixin.qq.com/cgi-bin/operate_appmsg?t=ajax-response&sub=create"
-    create_msg_referer_url = "http://mp.weixin.qq.com/cgi-bin/operate_appmsg?sub=edit&t=wxm-appmsgs-edit-new&type=10&subtype=3&lang=zh_CN&ismul=1"
+    create_msg_url = "http://mp.weixin.qq.com/cgi-bin/operate_appmsg?token=492370483&lang=zh_CN&t=ajax-response&sub=create"
+    create_msg_referer_url = "http://mp.weixin.qq.com/cgi-bin/operate_appmsg?token=492370483&lang=zh_CN&sub=edit&t=wxm-appmsgs"
 
 
     def getMsgList(self,cert,slave_user,slave_sid,title):
         c = pycurl.Curl()
         c.setopt(c.URL, self.get_msg_list_url)
+        c.setopt(c.REFERER,self.get_msg_referer_url)
 
         c.setopt(c.COOKIE,'hasWarningUer=1;hasWarningUer=1;' + cert +';' + slave_user + ';' + slave_sid + ';')
         buff = cStringIO.StringIO()
@@ -72,7 +89,12 @@ class weixin:
         count = 0;
         while count < msg_count:
             #TODO read filename from sql
-            filename='/Users/huwei/test' + str(count) + '.jpg'
+            if count == 0:
+                filename = '/home/app_bestgames/content_engine/media/' + self.collection_cover
+            else:
+                filename= '/home/app_bestgames/content_engine/media/' + self.iconList[count - 1]
+            shutil.copy(filename,'/home/app_bestgames/weixinpic/' + str(count) + ".jpg")
+            filename = '/home/app_bestgames/weixinpic/' + str(count) + ".jpg"
             from_id_array.append(self.postSingelImage(cert,slave_user,slave_sid,filename))
             count = count + 1
 
@@ -81,9 +103,14 @@ class weixin:
     def postSingelImage(self,cert,slave_user,slave_sid,filename):
         c = pycurl.Curl()
         c.setopt(c.POST, 1)
-        c.setopt(c.HTTPPOST, [('filename', filename), (('uploadfile', (c.FORM_FILE, filename)))])
+        print filename
+        values = [
+            ("filename", filename),
+            ("uploadfile", (c.FORM_FILE, filename))
+        ]
+        c.setopt(c.HTTPPOST, values)
         c.setopt(c.URL, self.post_image_url)
-        c.setopt(c.COOKIE,'hasWarningUer=1;hasWarningUer=1;' + cert +';' + slave_user + ';' + slave_sid + ';')
+        c.setopt(c.COOKIE,'hasWarningUer=1;remember_act=bestgames_;hasWarningUer=1;remember_act=bestgames_' + cert +';' + slave_user + ';' + slave_sid + ';')
         buff = cStringIO.StringIO()
         hdr = cStringIO.StringIO()
         c.setopt(c.WRITEFUNCTION, buff.write)
@@ -105,20 +132,22 @@ class weixin:
         c = pycurl.Curl()
         c.setopt(c.POST, 1)
         c.setopt(c.REFERER,self.create_msg_referer_url)
-        c.setopt(c.COOKIE,'hasWarningUer=1;hasWarningUer=1;' + cert +';' + slave_user + ';' + slave_sid + ';')
+        c.setopt(c.COOKIE,'hasWarningUer=1;remember_act=bestgames_;hasWarningUer=1;remember_act=bestgames_;' + cert +';' + slave_user + ';' + slave_sid + ';')
         c.setopt(c.URL, self.create_msg_url)
 
         #TODO get real content from mysql
-        title = 'autopost'
-        digest = 'test'
-        content = '自动上传微信消息'
         count = 0
 
         post_params = 'error=false&count=' + str(msg_count) + '&AppMsgId='
         while count < msg_count:
-            title = title + str(count)
-            digest = digest + str(count)
-            content = content + str(count)
+            if count == 0:
+                title = str(self.collection_title)
+                digest = str(self.collection_title)
+                content = str(self.weixin_status)
+            else:
+                title = str(self.gameBriefList[count - 1])
+                digest = str(self.gameBriefList[count - 1])
+                content = str(self.gameBriefList[count - 1 ])
             post_params =post_params + '&title' + str(count) + '=' + title + '&digest' + str(count) + '=' + digest + '&content' + str(count) + '=' + content + '&fileid' + str(count) + '=' + from_id_array[count]
             count = count + 1
 
@@ -165,9 +194,63 @@ class weixin:
         print 'slave_sid='  + slave_sid
 
         #TODO get msg count from sql
-        self.postImage(cert,slave_user,slave_sid,1)
 
-w = weixin()
-w.login()
+#        print 'count = ' + str(len(self.iconList))
+##        self.iconList.
+        self.postImage(cert,slave_user,slave_sid,len(self.iconList) + 1)
+
+    def get_msg_from_sql(self):
+        con = None
+
+        try:
+
+            con = mdb.connect('localhost', 'root',
+                'nameLR9969', 'content_engine',charset='utf8');
+
+            cur = con.cursor()
+
+            curtime = time.strftime('%Y-%m-%d %H:%M',time.localtime(time.time()))
+            print 'start: ' + curtime
+            #curtime = '2013-04-22 14:10'
+            sql = "SELECT weixin.entity_ptr_id,weixin.title AS weixin_title, weixin.cover AS weixin_cover,games.`name` AS game_name,games.icon AS game_icon,game_entities.brief_comment AS game_brief_comment,games.rating AS game_rating,categories.`name` AS game_category,"\
+                  "weixin_entities.weibo_sync_timestamp AS weixin_weibo_sync_timestamp,weixin_entities.`status` AS weixin_status,weixin_entities.`recommended_reason` FROM weixin INNER JOIN weixin_games ON weixin.entity_ptr_id = weixin_games.weixin_id "\
+                  "INNER JOIN games ON weixin_games.game_id = games.entity_ptr_id INNER JOIN entities game_entities ON games.entity_ptr_id = game_entities.id "\
+                  "INNER JOIN entities weixin_entities ON weixin.entity_ptr_id = weixin_entities.id INNER JOIN categories ON games.category_id = categories.id "\
+                  "WHERE weixin_entities.weibo_sync_timestamp like '"+ curtime +  "%' and weixin_entities.status = '1' and weixin_entities.type ='5'"
+            print sql
+            cur.execute(sql)
+            data = cur.fetchall()
+
+            cur.execute(sql)
+
+            data = cur.fetchall()
+            r = 0
+            for result in data:
+                self.gameId = result[0]
+                self.collection_title = result[1]
+                self.collection_cover = result[2]
+                self.nameList.append(result[3])
+                self.iconList.append(result[4])
+                self.gameBriefList.append(result[5])
+                self.gameRatingList.append(result[6])
+                self.gameCategoryList.append(result[7])
+                self.weixin_status = result[10]
+
+                r = 1
+
+            if r != 0:
+                self.login()
+#                print len(self.iconList)
+
+        finally:
+            if con:
+                con.close()
+
+
+if __name__ == '__main__':
+    weixin().get_msg_from_sql()
+
+
+
 
 

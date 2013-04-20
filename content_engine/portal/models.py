@@ -9,6 +9,7 @@ class Entity(models.Model):
     REDIER = 2
     COLLECTION = 3
     PROBLEM = 4
+    WEIXIN = 5
     type = models.IntegerField(verbose_name=u'类型', default=GAME, editable=False)
     tags = TaggableManager(verbose_name=u"标签")
 
@@ -132,7 +133,7 @@ class Weixin(Entity):
         verbose_name = u'微信合集'
         verbose_name_plural = u'微信合集'
     def save(self, *args, **kwargs):
-        self.type = Entity.COLLECTION
+        self.type = Entity.WEIXIN
         if self.status == Entity.STATUS_DO_NOT_SYNC:
             if self.weibo_sync_timestamp is not None:
                 self.status = Entity.STATUS_PENDING
