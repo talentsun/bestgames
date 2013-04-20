@@ -71,7 +71,7 @@ def index(request):
     problems.paginate(page=request.GET.get("pb-page",1), per_page=10)
     problems.data.verbose_name = u"宅，必有一技"
 
-    weixin = WeixinTable(Problem.objects.all(),prefix="pb-")
+    weixin = WeixinTable(weixin.objects.all(),prefix="pb-")
     weixin.paginate(page=request.GET.get("weixin-page",1), per_page=10)
     weixin.data.verbose_name = u"微信消息"
 
