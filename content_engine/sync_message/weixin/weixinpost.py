@@ -19,8 +19,8 @@ class weixin:
     gameBriefList = []
     gameRatingList = []
     gameCategoryList = []
-    collection_title=''
-    collection_cover=''
+    weixin_message_title=''
+    weixin_message_cover=''
     entity_id = ''
     weixin_status = ''
 
@@ -107,7 +107,11 @@ class weixin:
         while count < msg_count:
             #TODO read filename from sql
             if count == 0:
-                filename = '/home/app_bestgames/content_engine/media/' + self.collection_cover
+                if self.weixin_message_cover is None:
+                    count = count + 1
+                    continue
+                else:
+                    filename = '/home/app_bestgames/content_engine/media/' + self.weixin_message_cover
             else:
                 filename= '/home/app_bestgames/content_engine/media/' + self.iconList[count - 1]
             shutil.copy(filename,'/home/app_bestgames/weixinpic/' + str(count) + ".jpg")
@@ -158,9 +162,13 @@ class weixin:
         post_params = 'error=false&count=' + str(msg_count) + '&AppMsgId='
         while count < msg_count:
             if count == 0:
-                title = str(self.collection_title)
-                digest = str(self.collection_title)
-                content = str(self.weixin_status)
+                if self.weixin_message_title is None:
+                    count = count + 1
+                    continue;
+                else:
+                    title = str(self.weixin_message_title)
+                    digest = str(self.weixin_message_title)
+                    content = str(self.weixin_status)
             else:
                 title = str(self.gameBriefList[count - 1])
                 digest = str(self.gameBriefList[count - 1])
@@ -214,7 +222,9 @@ class weixin:
 
 #        print 'count = ' + str(len(self.iconList))
 ##        self.iconList.
-        self.postImage(cert,slave_user,slave_sid,len(self.iconList) + 1)
+
+        msg_count = len(self.iconList) + 1
+        self.postImage(cert,slave_user,slave_sid,msg_count)
 
     def get_msg_from_sql(self):
         con = None
@@ -244,8 +254,8 @@ class weixin:
             r = 0
             for result in data:
                 self.entity_id = result[0]
-                self.collection_title = result[1]
-                self.collection_cover = result[2]
+                self.weixin_message_title = result[1]
+                self.weixin_message_cover = result[2]
                 self.nameList.append(result[3])
                 self.iconList.append(result[4])
                 self.gameBriefList.append(result[5])

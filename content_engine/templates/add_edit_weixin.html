@@ -48,9 +48,9 @@
         </div>
         <table class="table">
             <tbody>
-            <tr><th>{{ form.title.label }}</th><td>{{ form.title }}{{ form.title.errors }}</td></tr>
-            <tr><th>封面故事</th><td>{{ form.recommended_reason }}<span class="help-inline">作为微信消息的封面</span><p style="margin-top:8px;">你还可以输入 <span id="counter" class="safe">150</span> 字（包含下载链接150字以内，不包含下载链接120字以内）。</p>{{ form.recommended_reason.errors }}</td></tr>
-            <tr><th>{{ form.cover.label }}</th><td>{{ form.cover }}<span class="help-inline">{{ form.cover.help_text }}</span>{{ form.cover.errors }}</td></tr>
+            <tr><th>{{ form.title.label }}</th><td>{{ form.title }}</td></tr>
+            <tr><th>封面故事</th><td>{{ form.recommended_reason }}<span class="help-inline">作为微信消息的封面</span></td></tr>
+            <tr><th>{{ form.cover.label }}</th><td>{{ form.cover }}<span class="help-inline">{{ form.cover.help_text }}</span></td></tr>
             <tr><th>{{ form.games.label }}</th><td>{{ form.games }}{{ form.games.errors }}</td></tr>
             </tbody>
         </table>
