@@ -84,7 +84,7 @@ class CollectionForm(EntityForm):
 
 class WeixinForm(EntityForm):
     cover = forms.ImageField(label=u"封面图片", help_text=u"建议使用640x320大小的图片", widget=AjaxClearableFileInput())
-    games = GameChoices(label=u"微信消息")
+    games = GameChoices(label=u"游戏")
 
     class Meta:
         model = Weixin
