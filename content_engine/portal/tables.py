@@ -8,6 +8,11 @@ class TagColumn(tables.Column):
     def render(self, value):
         return edit_string_for_tags(value.get_query_set())
 
+class GameColumn(tables.Column):
+    def render(self, value):
+        return value.get_query_set()
+
+
 class SearchResultTable(tables.Table):
     id = tables.Column(orderable=False, visible=False)
     name = tables.Column(orderable=False)
@@ -78,7 +83,7 @@ class WeixinTable(tables.Table):
     presenter = tables.Column(orderable=False)
     weibo_sync_timestamp = DateTimeColumn(verbose_name=u"微信同步时间",orderable=True)
     status = TemplateColumn(template_name="sync_status_field.html",orderable=False,verbose_name=u"同步状态")
-    games = tables.Column(verbose_name=u"游戏名称",orderable=False,attrs={"class":"games"},accessor='game.name')
+    games = GameColumn(verbose_name=u"游戏名称",orderable=False,attrs={"class":"games"})
     #games = tables
 
     ops = TemplateColumn(template_name="weixin_field_ops.html",verbose_name=u"操作",orderable=False,attrs={"class":"ops"})
