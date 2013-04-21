@@ -26,7 +26,7 @@ class Entity(models.Model):
     status = models.IntegerField(u"同步状态",max_length=20, choices=STATUS_CHOICES, default=STATUS_DO_NOT_SYNC, editable=False)
     presenter = models.CharField(u"推荐人",max_length=100)
     brief_comment = models.CharField(u"一句话点评(同步到微信)", max_length=255)
-    recommended_reason = models.TextField(u"推荐理由(同步到微博)")
+    recommended_reason = models.TextField(u"推荐理由(同步到微博)",blank=True,null=True)
 
     class Meta:
         db_table = u'entities'
@@ -124,8 +124,8 @@ class Collection(Entity):
         super(Collection, self).save(args, kwargs)
 
 class Weixin(Entity):
-    title = models.CharField(u"标题", max_length=20)
-    cover = models.ImageField(u"封面图片", upload_to='upload/', max_length=255, blank=True)
+    title = models.CharField(u"标题", max_length=20,blank=True,null=True)
+    cover = models.ImageField(u"封面图片", upload_to='upload/', max_length=255, blank=True,null=True)
     games = models.ManyToManyField(Game, verbose_name=u"游戏")
 
     class Meta:
