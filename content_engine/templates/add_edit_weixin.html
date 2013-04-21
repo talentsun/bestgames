@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>添加/编辑微信合集</title>
+    <title>添加/编辑微信消息</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}ajax_upload/css/ajax-upload-widget.css"/>
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.min.css"/>
@@ -37,26 +37,24 @@
 
     <ul class="breadcrumb">
         <li><a href="/">内容引擎</a> <span class="divider">/</span></li>
-        <li class="active">添加/编辑微信合集</li>
+        <li class="active">添加/编辑微信消息</li>
     </ul>
 
     <form id="add_weixin_form" action="" method="post" enctype="multipart/form-data"> {% csrf_token %}
         <div class="navbar" style="margin-bottom:0;">
             <div class="navbar-inner">
-                <p class="navbar-text">合集信息</p>
+                <p class="navbar-text">微信信息</p>
             </div>
         </div>
         <table class="table">
             <tbody>
             <tr><th>{{ form.title.label }}</th><td>{{ form.title }}{{ form.title.errors }}</td></tr>
+            <tr><th>封面故事</th><td>{{ form.recommended_reason }}<span class="help-inline">{{ form.recommended_reason.help_text }}</span><p style="margin-top:8px;">你还可以输入 <span id="counter" class="safe">150</span> 字（包含下载链接150字以内，不包含下载链接120字以内）。</p>{{ form.recommended_reason.errors }}</td></tr>
             <tr><th>{{ form.cover.label }}</th><td>{{ form.cover }}<span class="help-inline">{{ form.cover.help_text }}</span>{{ form.cover.errors }}</td></tr>
             <tr><th>{{ form.games.label }}</th><td>{{ form.games }}{{ form.games.errors }}</td></tr>
-            <tr><th>标签</th>
-                <td>{{ form.tags }}<span class="help-inline">{{ form.tags.help_text }}</span>{{ form.tags.errors }}
-                </td></tr>
             </tbody>
         </table>
-        {% include "recommendation_section.html"%}
+        {% include "weixin_section.html"%}
         {% include "save_cancel_section.html"%}
     </form>
 </div> </body>
