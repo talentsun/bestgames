@@ -110,6 +110,9 @@ class weixin:
                 if self.weixin_message_cover is None:
                     count = count + 1
                     continue
+                elif self.weixin_status is None:
+                    count = count + 1
+                    continue
                 else:
                     filename = '/home/app_bestgames/content_engine/media/' + self.weixin_message_cover
             else:
@@ -165,6 +168,12 @@ class weixin:
                 if self.weixin_message_title is None:
                     count = count + 1
                     continue;
+                elif self.weixin_status is None:
+                    count = count + 1
+                    continue
+                elif self.weixin_message_cover is None:
+                    count = count + 1
+                    continue
                 else:
                     title = str(self.weixin_message_title)
                     digest = str(self.weixin_message_title)
