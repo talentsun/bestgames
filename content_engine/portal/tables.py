@@ -13,8 +13,8 @@ class GameColumn(tables.Column):
         game_name_list = ''
         game_set = value.get_query_set()
         for game_info in game_set:
-            game_name_list = game_name_list + game_info.name + '，'
-        return game_name_list[0:len(game_name_list) - 1]
+            game_name_list = game_name_list + game_info.name + ', '
+        return game_name_list[0:len(game_name_list) - 2]
 
 
 class SearchResultTable(tables.Table):
