@@ -10,7 +10,11 @@ class TagColumn(tables.Column):
 
 class GameColumn(tables.Column):
     def render(self, value):
-        return value.get_query_set()
+        game_name_list = ''
+        game_set = value.get_query_set()
+        for game_info in game_set:
+            game_name_list = game_name_list + game_info.name + ' '
+        return game_name_list
 
 
 class SearchResultTable(tables.Table):
