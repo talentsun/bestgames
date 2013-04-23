@@ -9,7 +9,7 @@ from service import search_pb2
 
 logger = logging.getLogger("default")
 
-default_sorry_wording = u'非常抱歉没有找到你要找的游戏'
+default_sorry_wording = u'小每真是太笨了，没有理解您的意思[流泪]，求您一口盐汽水喷死小每吧'
 
 def __search_games(query):
     q = search_pb2.Query()
@@ -39,6 +39,8 @@ def _search_games(rule, info):
             res_games = []
             for g in resp.games:
                 logger.debug("recom game %d" % g.gameId)
+                if g.gameRel < 0.3:
+                    continue
                 try:
                     res_games.append(Game.objects.get(pk = g.gameId))
                 except:
