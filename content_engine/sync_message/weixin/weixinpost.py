@@ -53,20 +53,21 @@ class weixin:
         content = content.replace('screenShotPath4','/home/app_bestgames/content_engine/media/' + screen4)
 
         curtime = time.strftime('%Y-%m-%d-%H:%M',time.localtime(time.time()))
-        root = "/home/app_bestgames/content_engine/sync_message/weixin/"
+        root = "/home/app_bestgames/content_engine/media/"
         filename = root + curtime + 'share.html'
         shareGameFile = open(filename,'w')
         shareGameFile.write(content)
         shareGameFile.close()
 
-        outputFilePath = root + "cover.png"
+        coverFileName = "cover.png"
+        outputFilePath = root + coverFileName
 
         command = "phantomjs --disk-cache=yes --max-disk-cache-size=10000 rasterize.js "+ filename + "  " + outputFilePath
 
         print command
         os.system(command)
 
-        self.iconList[0] = outputFilePath
+        self.iconList[0] = coverFileName
 
 
     def getMsgList(self,cert,slave_user,slave_sid,title):
