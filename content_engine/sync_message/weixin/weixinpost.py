@@ -17,27 +17,28 @@ class weixin:
     nameList = []
     iconList = []
     gameBriefList = []
-    gameRatingList = []
+    gameDescriptionList = []
     gameCategoryList = []
     weixin_message_title=''
     weixin_message_cover=''
     entity_id = ''
     weixin_status = ''
+    weixin_token = ''
 
-    get_msg_list_url = "http://mp.weixin.qq.com/cgi-bin/operate_appmsg?token=492370483&lang=zh_CN&sub=list&t=ajax-appmsgs-fileselect&type=10&r=0.9663556832875031&pageIdx=0&pagesize=10&formid=file_from_1366447908777&subtype=3"
-    get_msg_referer_url = 'http://mp.weixin.qq.com/cgi-bin/masssendpage?t=wxm-send&token=492370483&lang=zh_CN'
-    post_msg_url = "http://mp.weixin.qq.com/cgi-bin/masssend?t=ajax-response&token=492370483"
-    post_msg_referer_url = "http://mp.weixin.qq.com/cgi-bin/masssendpage?&token=492370483t=wxm-send&lang=zh_CN"
-    post_image_url = "http://mp.weixin.qq.com/cgi-bin/uploadmaterial?cgi=uploadmaterial&token=492370483&type=2&t=iframe-uploadfile&lang=zh_CN&formId=1"
+    get_msg_list_url = "http://mp.weixin.qq.com/cgi-bin/operate_appmsg?token=%s&lang=zh_CN&sub=list&t=ajax-appmsgs-fileselect&type=10&r=0.9663556832875031&pageIdx=0&pagesize=10&formid=file_from_1366447908777&subtype=3"
+    get_msg_referer_url = 'http://mp.weixin.qq.com/cgi-bin/masssendpage?t=wxm-send&token=%s&lang=zh_CN'
+    post_msg_url = "http://mp.weixin.qq.com/cgi-bin/masssend?t=ajax-response&token=%s"
+    post_msg_referer_url = "http://mp.weixin.qq.com/cgi-bin/masssendpage?&token=%s=wxm-send&lang=zh_CN"
+    post_image_url = "http://mp.weixin.qq.com/cgi-bin/uploadmaterial?cgi=uploadmaterial&token=%s&type=2&t=iframe-uploadfile&lang=zh_CN&formId=1"
     login_url = "http://mp.weixin.qq.com/cgi-bin/login?lang=zh_CN"
-    create_msg_url = "http://mp.weixin.qq.com/cgi-bin/operate_appmsg?token=492370483&lang=zh_CN&t=ajax-response&sub=create"
-    create_msg_referer_url = "http://mp.weixin.qq.com/cgi-bin/operate_appmsg?token=492370483&lang=zh_CN&sub=edit&t=wxm-appmsgs"
+    create_msg_url = "http://mp.weixin.qq.com/cgi-bin/operate_appmsg?token=%s&lang=zh_CN&t=ajax-response&sub=create"
+    create_msg_referer_url = "http://mp.weixin.qq.com/cgi-bin/operate_appmsg?token=%s&lang=zh_CN&sub=edit&t=wxm-appmsgs"
 
 
     def getMsgList(self,cert,slave_user,slave_sid,title):
         c = pycurl.Curl()
-        c.setopt(c.URL, self.get_msg_list_url)
-        c.setopt(c.REFERER,self.get_msg_referer_url)
+        c.setopt(c.URL, str(self.get_msg_list_url%self.weixin_token))
+        c.setopt(c.REFERER,str(self.get_msg_referer_url%self.weixin_token))
 
         c.setopt(c.COOKIE,'hasWarningUer=1;hasWarningUer=1;' + cert +';' + slave_user + ';' + slave_sid + ';')
         buff = cStringIO.StringIO()
@@ -66,9 +67,9 @@ class weixin:
     def postMsg(self,cert,slave_user,slave_sid,msg_id):
         c = pycurl.Curl()
         post_params = 'type=10&fid=' + msg_id + '&appmsgid=' + msg_id + '&error=false&needcomment=0&groupid=-1&sex=0&country=&city=&province=&ajax=1'
-        c.setopt(c.URL, self.post_msg_url)
+        c.setopt(c.URL, str(self.post_msg_url%self.weixin_token))
         print post_params
-        c.setopt(c.REFERER,self.post_msg_referer_url)
+        c.setopt(c.REFERER,str(self.post_msg_referer_url%self.weixin_token))
         c.setopt(c.POSTFIELDS, post_params)
 
         c.setopt(c.COOKIE,'hasWarningUer=1;hasWarningUer=1;' + cert +';' + slave_user + ';' + slave_sid + ';')
@@ -105,18 +106,7 @@ class weixin:
         from_id_array = []
         count = 0;
         while count < msg_count:
-            #TODO read filename from sql
-            if count == 0:
-                if self.weixin_message_cover is None:
-                    count = count + 1
-                    continue
-                elif self.weixin_status is None:
-                    count = count + 1
-                    continue
-                else:
-                    filename = '/home/app_bestgames/content_engine/media/' + self.weixin_message_cover
-            else:
-                filename= '/home/app_bestgames/content_engine/media/' + self.iconList[count - 1]
+            filename= '/home/app_bestgames/content_engine/media/' + self.iconList[count]
             shutil.copy(filename,'/home/app_bestgames/weixinpic/' + str(count) + ".jpg")
             filename = '/home/app_bestgames/weixinpic/' + str(count) + ".jpg"
             from_id_array.append(self.postSingelImage(cert,slave_user,slave_sid,filename))
@@ -133,7 +123,7 @@ class weixin:
             ("uploadfile", (c.FORM_FILE, filename))
         ]
         c.setopt(c.HTTPPOST, values)
-        c.setopt(c.URL, self.post_image_url)
+        c.setopt(c.URL, str(self.post_image_url%self.weixin_token))
         c.setopt(c.COOKIE,'hasWarningUer=1;remember_act=bestgames_;hasWarningUer=1;remember_act=bestgames_' + cert +';' + slave_user + ';' + slave_sid + ';')
         buff = cStringIO.StringIO()
         hdr = cStringIO.StringIO()
@@ -155,33 +145,19 @@ class weixin:
     def createSingleMsg(self,cert,slave_user,slave_sid,from_id_array,msg_count):
         c = pycurl.Curl()
         c.setopt(c.POST, 1)
-        c.setopt(c.REFERER,self.create_msg_referer_url)
+        url = self.create_msg_referer_url%self.weixin_token
+        print url
+        c.setopt(c.REFERER,str(url))
         c.setopt(c.COOKIE,'hasWarningUer=1;remember_act=bestgames_;hasWarningUer=1;remember_act=bestgames_;' + cert +';' + slave_user + ';' + slave_sid + ';')
-        c.setopt(c.URL, self.create_msg_url)
+        c.setopt(c.URL, str(self.create_msg_url%self.weixin_token))
 
-        #TODO get real content from mysql
         count = 0
-
         post_params = 'error=false&count=' + str(msg_count) + '&AppMsgId='
+
         while count < msg_count:
-            if count == 0:
-                if self.weixin_message_title is None:
-                    count = count + 1
-                    continue;
-                elif self.weixin_status is None:
-                    count = count + 1
-                    continue
-                elif self.weixin_message_cover is None:
-                    count = count + 1
-                    continue
-                else:
-                    title = str(self.weixin_message_title)
-                    digest = str(self.weixin_message_title)
-                    content = str(self.weixin_status)
-            else:
-                title = str(self.gameBriefList[count - 1])
-                digest = str(self.gameBriefList[count - 1])
-                content = str(self.gameBriefList[count - 1 ])
+            title = str(self.gameBriefList[count])
+            digest = str(self.gameBriefList[count])
+            content = str(self.gameDescriptionList[count])
             post_params =post_params + '&title' + str(count) + '=' + title + '&digest' + str(count) + '=' + digest + '&content' + str(count) + '=' + content + '&fileid' + str(count) + '=' + from_id_array[count]
             count = count + 1
 
@@ -227,12 +203,16 @@ class weixin:
         slave_sid = cookies[9][index_start:index_end]
         print 'slave_sid='  + slave_sid
 
-        #TODO get msg count from sql
+        json_obj = json.loads(buff.getvalue())
+        error_msg = json_obj['ErrMsg']
+        print error_msg
+        index_start = error_msg.find('&token')
+        self.weixin_token = error_msg[index_start + 7:len(error_msg)]
 
-#        print 'count = ' + str(len(self.iconList))
-##        self.iconList.
+#        print self.weixin_token
 
-        msg_count = len(self.iconList) + 1
+        msg_count = len(self.iconList)
+        print str(msg_count)
         self.postImage(cert,slave_user,slave_sid,msg_count)
 
     def get_msg_from_sql(self):
@@ -248,7 +228,7 @@ class weixin:
             curtime = time.strftime('%Y-%m-%d %H:%M',time.localtime(time.time()))
             print 'start: ' + curtime
             #curtime = '2013-04-22 14:10'
-            sql = "SELECT weixin.entity_ptr_id,weixin.title AS weixin_title, weixin.cover AS weixin_cover,games.`name` AS game_name,games.icon AS game_icon,game_entities.brief_comment AS game_brief_comment,games.rating AS game_rating,categories.`name` AS game_category,"\
+            sql = "SELECT weixin.entity_ptr_id,weixin.title AS weixin_title, weixin.cover AS weixin_cover,games.`name` AS game_name,games.icon AS game_icon,game_entities.brief_comment AS game_brief_comment,games.description AS game_description,categories.`name` AS game_category,"\
                   "weixin_entities.weibo_sync_timestamp AS weixin_weibo_sync_timestamp,weixin_entities.`status` AS weixin_status,weixin_entities.`recommended_reason` FROM weixin INNER JOIN weixin_games ON weixin.entity_ptr_id = weixin_games.weixin_id "\
                   "INNER JOIN games ON weixin_games.game_id = games.entity_ptr_id INNER JOIN entities game_entities ON games.entity_ptr_id = game_entities.id "\
                   "INNER JOIN entities weixin_entities ON weixin.entity_ptr_id = weixin_entities.id INNER JOIN categories ON games.category_id = categories.id "\
@@ -268,15 +248,22 @@ class weixin:
                 self.nameList.append(result[3])
                 self.iconList.append(result[4])
                 self.gameBriefList.append(result[5])
-                self.gameRatingList.append(result[6])
+                self.gameDescriptionList.append(result[6])
                 self.gameCategoryList.append(result[7])
                 self.weixin_status = result[10]
 
                 r = 1
 
             if r != 0:
+                if self.weixin_message_title is None or self.weixin_status is None\
+                   or str(self.weixin_status).strip() == '' or self.weixin_message_cover is None\
+                or str(self.weixin_message_cover).strip() == '':
+                    pass
+                else:
+                    self.iconList.insert(0,self.weixin_message_cover)
+                    self.gameBriefList.insert(0,self.weixin_message_title)
+                    self.gameDescriptionList.insert(0,self.weixin_status)
                 self.login()
-#                print len(self.iconList)
 
         finally:
             if con:
@@ -284,7 +271,7 @@ class weixin:
 
 
 if __name__ == '__main__':
-    weixin().get_msg_from_sql()
+    print weixin().get_msg_from_sql()
 
 
 
