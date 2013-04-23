@@ -302,7 +302,7 @@ class weixin:
                 else:
                     self.iconList.insert(0,self.weixin_message_cover)
                     self.gameBriefList.insert(0,self.weixin_message_title)
-                    self.gameDescriptionList.insert(0,self.weixin_status + '<br><br><font color="gray">回复游戏名获得该游戏的下载地址</font>')
+                    self.gameDescriptionList.insert(0,self.weixin_status)
                 self.login()
 
         finally:
