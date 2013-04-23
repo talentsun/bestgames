@@ -25,7 +25,7 @@ class Entity(models.Model):
         (STATUS_FAILED, u"同步失败"))
     status = models.IntegerField(u"同步状态",max_length=20, choices=STATUS_CHOICES, default=STATUS_DO_NOT_SYNC, editable=False)
     presenter = models.CharField(u"推荐人",max_length=100)
-    brief_comment = models.CharField(u"一句话点评(同步到微信)", max_length=255)
+    brief_comment = models.CharField(u"一句话点评(同步到微信)", max_length=255,blank=True,null=True)
     recommended_reason = models.TextField(u"推荐理由(同步到微博)",blank=True,null=True)
 
     class Meta:
