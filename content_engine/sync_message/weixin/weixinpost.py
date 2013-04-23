@@ -283,7 +283,7 @@ class weixin:
                 self.weixin_message_cover = result[2]
                 self.nameList.append(result[3])
                 self.iconList.append(result[4])
-                self.gameDescriptionList.append(result[5] + '\n\n回复游戏名获得该游戏的下载地址，回复下载获得所有游戏的下载地址')
+                self.gameDescriptionList.append(result[5] + '<br><br><br><br>回复游戏名获得该游戏的下载地址，回复下载获得所有游戏的下载地址')
                 self.gameBriefList.append(result[6] + "  -  " + result[3])
                 self.gameScreenPath1List.append(result[7])
                 self.gameScreenPath2List.append(result[8])
@@ -302,7 +302,7 @@ class weixin:
                 else:
                     self.iconList.insert(0,self.weixin_message_cover)
                     self.gameBriefList.insert(0,self.weixin_message_title)
-                    self.gameDescriptionList.insert(0,self.weixin_status + '\n\n回复游戏名获得该游戏的下载地址，回复下载获得所有游戏的下载地址')
+                    self.gameDescriptionList.insert(0,self.weixin_status + '<br><br><br><br>回复游戏名获得该游戏的下载地址，回复下载获得所有游戏的下载地址')
                 self.login()
 
         finally:
