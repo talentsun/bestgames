@@ -11,9 +11,9 @@ class Entity(models.Model):
     PROBLEM = 4
     WEIXIN = 5
     type = models.IntegerField(verbose_name=u'类型', default=GAME, editable=False)
-    tags = TaggableManager(verbose_name=u"标签",blank=True,null=True)
+    tags = TaggableManager(verbose_name=u"标签",blank=True)
 
-    weibo_sync_timestamp = models.DateTimeField(verbose_name=u"微博同步时间",blank=True, null=True)
+    weibo_sync_timestamp = models.DateTimeField(verbose_name=u"微博同步时间",blank=True)
     STATUS_DO_NOT_SYNC =  0
     STATUS_PENDING = 1
     STATUS_COMPLETED = 2
@@ -25,8 +25,8 @@ class Entity(models.Model):
         (STATUS_FAILED, u"同步失败"))
     status = models.IntegerField(u"同步状态",max_length=20, choices=STATUS_CHOICES, default=STATUS_DO_NOT_SYNC, editable=False)
     presenter = models.CharField(u"推荐人",max_length=100)
-    brief_comment = models.CharField(u"一句话点评(同步到微信)", max_length=255,blank=True,null=True)
-    recommended_reason = models.TextField(u"推荐理由(同步到微博)",blank=True,null=True)
+    brief_comment = models.CharField(u"一句话点评(同步到微信)", max_length=255,blank=True)
+    recommended_reason = models.TextField(u"推荐理由(同步到微博)",blank=True)
 
     class Meta:
         db_table = u'entities'

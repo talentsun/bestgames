@@ -39,7 +39,7 @@ def _search_games(rule, info):
             res_games = []
             for g in resp.games:
                 logger.debug("recom game %d" % g.gameId)
-                if g.gameRel < 0.3:
+                if g.gameRel < 0.4:
                     continue
                 try:
                     res_games.append(Game.objects.get(pk = g.gameId))
