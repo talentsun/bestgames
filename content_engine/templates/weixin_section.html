@@ -7,13 +7,6 @@
     <tbody>
     <tr><th>{{ form.presenter.label }}</th><td>{{ form.presenter }}{{ form.presenter.errors }}</td></tr>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.simplyCountable.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $('#id_recommended_reason').simplyCountable({
-                maxCount : 150
-            });
-        });
-    </script>
     <tr><th>微信同步时间</th><td>{{ form.weibo_sync_timestamp }}{{ form.weibo_sync_timestamp.errors }} </td></tr>
     </tbody>
 </table>

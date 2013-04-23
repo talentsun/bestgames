@@ -41,7 +41,7 @@ def _search_game(query):
     resp = search_pb2.Response()
     resp.ParseFromString(r)
 
-    
+
     games = []
     if resp.result == 0:
         for related_game in resp.games:

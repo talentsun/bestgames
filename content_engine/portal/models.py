@@ -124,8 +124,8 @@ class Collection(Entity):
         super(Collection, self).save(args, kwargs)
 
 class Weixin(Entity):
-    title = models.CharField(u"标题", max_length=20,blank=True,null=True)
-    cover = models.ImageField(u"封面图片", upload_to='upload/', max_length=255, blank=True,null=True)
+    title = models.CharField(u"标题", max_length=20,blank=True)
+    cover = models.ImageField(u"封面图片", upload_to='upload/', max_length=255, blank=True)
     games = models.ManyToManyField(Game, verbose_name=u"游戏")
 
     class Meta:
