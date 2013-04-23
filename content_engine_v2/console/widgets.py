@@ -1,8 +1,24 @@
 # -*- coding: utf-8 -*-
+from django import forms
 from django.forms import Textarea
 from django.utils.html import conditional_escape, format_html, format_html_join
 from django.utils.safestring import SafeData, mark_safe
+
 from content_engine_v2 import settings
+from console.utils import parse_tags, edit_string_for_tags
+
+class TagWidget(forms.TextInput):
+	def render(self, name, value, attrs=None):
+		if value is not None and not isinstance(value, basestring):
+			value_str = edit_string_for_tags([tag for tag in value.select_related("tag")])
+		html = super(TagWidget, self).render(name, value_str, attrs)
+		html += u'\r\n'
+		html += u'<ul id="%s-suggested-tags" class="suggested-tags">' % name
+		for tag in value.get_available_tags().all():
+			html += u'<li class="taggit-tag">%s</li>' % tag.name
+		html += u'</ul>\r\n'
+		html += u'<script type="text/javascript">$(document).ready(function(){0});</script>\r\n'
+		return format_html(html, mark_safe('{$("#id_%s" ).taggit({tag_selector:"#%s-suggested-tags .taggit-tag"});}' % (name, name)))
 
 class CountableTextarea(Textarea):
 	def __init__(self, max_length, attrs=None):

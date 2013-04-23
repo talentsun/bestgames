@@ -5,7 +5,10 @@ from django.forms import Form
 from datetime import datetime
 from datetimewidget.widgets import DateTimeWidget
 from ajax_upload.widgets import AjaxClearableFileInput
+from django_select2 import *
+from django.utils.translation import ugettext as _
 
+from console.fields import TagField
 from console.widgets import CountableTextarea
 from console.models import Entity, EntityType, Property, EntityType2Property
 
@@ -17,9 +20,12 @@ class EntityForm(Form):
 		for e2p in EntityType2Property.objects.filter(entity_type=entity_type).order_by('order'):
 			initial = None
 			if entity:
-				entity_prop = entity.entityproperty_set.get(property=e2p.property)
-				if entity_prop:
-					initial = entity_prop.get_value()
+				try:
+					entity_prop = entity.entityproperty_set.get(property=e2p.property)
+					if entity_prop:
+						initial = entity_prop.get_value()
+				except:
+					entity_prop = None
 			self.fields[e2p.property.name] = self._build_field(e2p.property, e2p.is_required, initial)
 
 	def _build_field(self, prop, required, initial):
@@ -35,6 +41,8 @@ class EntityForm(Form):
 			return self._build_url_field(prop, required, initial)
 		elif prop.type.name == 'choices':
 			return self._build_choices_field(prop, required, initial)
+		elif prop.type.name == 'tags':
+			return self._build_tags_field(prop, required, initial)
 
 		return None
 
@@ -46,7 +54,6 @@ class EntityForm(Form):
 		except:
 			multiple_line = None
 		if multiple_line and multiple_line.get_value() > 0:
-			print multiple_line
 			field.widget = forms.Textarea()
 
 		try:
@@ -55,13 +62,11 @@ class EntityForm(Form):
 			max_length_attr = None
 		if max_length_attr:
 			field.max_length = max_length_attr.get_value()
-			print field.max_length
 			try:
 				countable = prop.propertyattr_set.get(type__name='countable')
 			except:
 				countable = None
 			if countable and countable.get_value() > 0:
-				print countable
 				field.widget = CountableTextarea(max_length_attr.get_value())
 
 		self._set_help_text(field, prop)
@@ -126,13 +131,16 @@ class EntityForm(Form):
 		self._set_help_text(field, prop)
 		return field
 
+	def _build_tags_field(self, prop, required, initial):
+		field = TagField(label=prop.verbose_name, required=required, initial=initial, max_length=100)
+		self._set_help_text(field, prop)
+		return field
+
 	def _set_help_text(self, field, prop):
 		try:
 			help_text_attr = prop.propertyattr_set.get(type__name='help_text')
 		except:
 			help_text_attr = None
-
-		print help_text_attr
 
 		if help_text_attr:
 			field.help_text = help_text_attr.get_value()

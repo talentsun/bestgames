@@ -131,7 +131,9 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'console',
     'django_tables2',
-    'ajax_upload'
+    'ajax_upload',
+    'django_select2',
+    'uuslug'
 )
 
 # A sample logging configuration. The only tangible logging

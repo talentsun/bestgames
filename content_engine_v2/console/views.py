@@ -53,9 +53,10 @@ def add_edit_entity(request, entity_id=None):
                     val = form.cleaned_data[prop.name]
                     if prop.type.name == 'image':
                         val = val.name
-                    if val != entity_property.get_value():
+                    if not entity_property.compare(val):
                         entity_property.set_value(val)
                         entity_property.save()
+                        
             return _redirect_back(request)
     else:
         form = EntityForm(entity_type, entity)

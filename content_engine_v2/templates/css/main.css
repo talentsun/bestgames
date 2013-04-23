@@ -75,7 +75,7 @@ span.taggit-tag-used, li.taggit-tag-used, p.taggit-tag-used {
     color: #fff;
 }
 
-#suggested-tags{
+ul.suggested-tags{
   margin: 10px 0 0 0;
 }
 
@@ -111,7 +111,7 @@ span.taggit-tag-used, li.taggit-tag-used, p.taggit-tag-used {
 
 /*customized style for select2*/
 #main .select2-container {
-  width: 61%;
+  width: 97%;
 }
 
 /*style for countable input*/
