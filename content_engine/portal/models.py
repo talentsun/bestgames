@@ -11,7 +11,7 @@ class Entity(models.Model):
     PROBLEM = 4
     WEIXIN = 5
     type = models.IntegerField(verbose_name=u'类型', default=GAME, editable=False)
-    tags = TaggableManager(verbose_name=u"标签")
+    tags = TaggableManager(verbose_name=u"标签",blank=True,null=True)
 
     weibo_sync_timestamp = models.DateTimeField(verbose_name=u"微博同步时间",blank=True, null=True)
     STATUS_DO_NOT_SYNC =  0
