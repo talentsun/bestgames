@@ -11,9 +11,9 @@ from django_select2 import *
 from portal.models import Redier, Game, Category, Collection, Problem,Weixin
 
 class EntityForm(ModelForm):
-	tags = TagField(label=u"标签")
-	brief_comment = forms.CharField(label=u"一句话点评", help_text=u"20字以内（作为图文消息的标题同步到微信）", required=True, max_length=20)
-	recommended_reason = forms.CharField(label=u"推荐理由", help_text=u"150字以内（作为微博内容同步到新浪微博）", required=True, max_length=150, widget=forms.Textarea())
+	tags = TagField(label=u"标签",required=False)
+	brief_comment = forms.CharField(label=u"一句话点评", help_text=u"20字以内（作为图文消息的标题同步到微信）", required=False, max_length=20)
+	recommended_reason = forms.CharField(label=u"推荐理由", help_text=u"150字以内（作为微博内容同步到新浪微博）", required=False, max_length=150, widget=forms.Textarea())
 	weibo_sync_timestamp = forms.DateTimeField(label=u"微博同步时间", required=False, widget=DateTimeWidget(options={
 				'autoclose' : 'true',
 				'showMeridian' : 'true',
@@ -83,8 +83,8 @@ class CollectionForm(EntityForm):
 
 
 class WeixinForm(EntityForm):
-    cover = forms.ImageField(label=u"封面图片", help_text=u"建议使用640x320大小的图片", widget=AjaxClearableFileInput())
-    games = GameChoices(label=u"微信消息")
+    cover = forms.ImageField(label=u"封面图片", help_text=u"建议使用640x320大小的图片", widget=AjaxClearableFileInput(),required=False)
+    games = GameChoices(label=u"游戏")
 
     class Meta:
         model = Weixin

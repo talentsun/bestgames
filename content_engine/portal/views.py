@@ -41,6 +41,7 @@ def _search_game(query):
     resp = search_pb2.Response()
     resp.ParseFromString(r)
 
+
     games = []
     if resp.result == 0:
         for related_game in resp.games:
@@ -145,8 +146,8 @@ def add_edit_weixin(request, weixin_id=None):
             weixin = form.save()
             if request.POST['cover']:
                 weixin.cover = request.POST['cover'].replace(settings.MEDIA_URL, '', 1)
-            else:
-                weixin.cover = request.POST['cover']
+#            else:
+#                weixin.cover = request.POST['cover']
             if weibo_sync_timestamp != weixin.weibo_sync_timestamp:
                 if weibo_sync_timestamp != '':
                     weixin.status = Entity.STATUS_PENDING

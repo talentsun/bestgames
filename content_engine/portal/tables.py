@@ -8,6 +8,15 @@ class TagColumn(tables.Column):
     def render(self, value):
         return edit_string_for_tags(value.get_query_set())
 
+class GameColumn(tables.Column):
+    def render(self, value):
+        game_name_list = ''
+        game_set = value.get_query_set()
+        for game_info in game_set:
+            game_name_list = game_name_list + game_info.name + ', '
+        return game_name_list[0:len(game_name_list) - 2]
+
+
 class SearchResultTable(tables.Table):
     id = tables.Column(orderable=False, visible=False)
     name = tables.Column(orderable=False)
@@ -78,15 +87,17 @@ class WeixinTable(tables.Table):
     presenter = tables.Column(orderable=False)
     weibo_sync_timestamp = DateTimeColumn(verbose_name=u"微信同步时间",orderable=True)
     status = TemplateColumn(template_name="sync_status_field.html",orderable=False,verbose_name=u"同步状态")
-    tags = TagColumn(orderable=False,attrs={"class":"tags"})
+    games = GameColumn(verbose_name=u"游戏名称",orderable=False,attrs={"class":"games"})
+    #games = tables
+
     ops = TemplateColumn(template_name="weixin_field_ops.html",verbose_name=u"操作",orderable=False,attrs={"class":"ops"})
 
     class Meta:
         model = Weixin
         order_by = "-weibo_sync_timestamp"
         empty_text = u"暂无微信消息"
-        fields = ("title", "presenter","weibo_sync_timestamp","status","tags","ops")
-        sequence = ("title", "presenter","weibo_sync_timestamp","status","tags","ops")
+        fields = ("title", "presenter","weibo_sync_timestamp","status","games","ops")
+        sequence = ("title", "presenter","weibo_sync_timestamp","status","games","ops")
         attrs = {'class' : 'table table-striped'}
 
 
