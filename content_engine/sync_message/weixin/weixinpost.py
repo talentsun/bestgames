@@ -18,7 +18,10 @@ class weixin:
     iconList = []
     gameBriefList = []
     gameDescriptionList = []
-    gameCategoryList = []
+    gameScreenPath1List = []
+    gameScreenPath2List = []
+    gameScreenPath3List = []
+    gameScreenPath4List = []
     weixin_message_title=''
     weixin_message_cover=''
     entity_id = ''
@@ -33,6 +36,37 @@ class weixin:
     login_url = "http://mp.weixin.qq.com/cgi-bin/login?lang=zh_CN"
     create_msg_url = "http://mp.weixin.qq.com/cgi-bin/operate_appmsg?token=%s&lang=zh_CN&t=ajax-response&sub=create"
     create_msg_referer_url = "http://mp.weixin.qq.com/cgi-bin/operate_appmsg?token=%s&lang=zh_CN&sub=edit&t=wxm-appmsgs"
+
+    def CoverImageBuilder(self,screen1,screen2,screen3,screen4):
+        templete_file = open('./templates/screenShot.html','r')
+        line = templete_file.readline()
+        content = ''
+        while line:
+            content = content + line;
+            line = templete_file.readline()
+
+        templete_file.close()
+
+        content = content.replace('screenShotPath1','/home/app_bestgames/content_engine/media/' + screen1)
+        content = content.replace('screenShotPath2','/home/app_bestgames/content_engine/media/' + screen2)
+        content = content.replace('screenShotPath3','/home/app_bestgames/content_engine/media/' + screen3)
+        content = content.replace('screenShotPath4','/home/app_bestgames/content_engine/media/' + screen4)
+
+        curtime = time.strftime('%Y-%m-%d-%H:%M',time.localtime(time.time()))
+        root = "/home/app_bestgames/content_engine/sync_message/weixin/"
+        filename = root + curtime + 'share.html'
+        shareGameFile = open(filename,'w')
+        shareGameFile.write(content)
+        shareGameFile.close()
+
+        outputFilePath = root + "cover.png"
+
+        command = "phantomjs --disk-cache=yes --max-disk-cache-size=10000 rasterize.js "+ filename + "  " + outputFilePath
+
+        print command
+        os.system(command)
+
+        self.iconList[0] = outputFilePath
 
 
     def getMsgList(self,cert,slave_user,slave_sid,title):
@@ -217,10 +251,8 @@ class weixin:
 
     def get_msg_from_sql(self):
         con = None
-
         try:
-
-            con = mdb.connect('localhost', 'root',
+            con = mdb.connect('118.244.225.222', 'root',
                 'nameLR9969', 'content_engine',charset='utf8');
 
             cur = con.cursor()
@@ -228,8 +260,11 @@ class weixin:
             curtime = time.strftime('%Y-%m-%d %H:%M',time.localtime(time.time()))
             print 'start: ' + curtime
             #curtime = '2013-04-22 14:10'
-            sql = "SELECT weixin.entity_ptr_id,weixin.title AS weixin_title, weixin.cover AS weixin_cover,games.`name` AS game_name,games.icon AS game_icon,game_entities.brief_comment AS game_brief_comment,games.description AS game_description,categories.`name` AS game_category,"\
-                  "weixin_entities.weibo_sync_timestamp AS weixin_weibo_sync_timestamp,weixin_entities.`status` AS weixin_status,weixin_entities.`recommended_reason` FROM weixin INNER JOIN weixin_games ON weixin.entity_ptr_id = weixin_games.weixin_id "\
+            sql = "SELECT weixin.entity_ptr_id,weixin.title AS weixin_title, weixin.cover AS weixin_cover,games.`name` AS game_name,games.icon AS game_icon,games.description AS game_description,game_entities.brief_comment AS game_brief_comment," \
+                  "games.screenshot_path_1 AS game_screenshot_path_1,games.screenshot_path_2 AS game_screenshot_path_2,"\
+                  "games.screenshot_path_3 AS game_screenshot_path_3, games.screenshot_path_4 AS game_screenshot_path_4,weixin_entities.weibo_sync_timestamp AS weixin_weibo_sync_timestamp," \
+                  "weixin_entities.`status` AS weixin_status,weixin_entities.`recommended_reason`" \
+                  " FROM weixin INNER JOIN weixin_games ON weixin.entity_ptr_id = weixin_games.weixin_id "\
                   "INNER JOIN games ON weixin_games.game_id = games.entity_ptr_id INNER JOIN entities game_entities ON games.entity_ptr_id = game_entities.id "\
                   "INNER JOIN entities weixin_entities ON weixin.entity_ptr_id = weixin_entities.id INNER JOIN categories ON games.category_id = categories.id "\
                   "WHERE weixin_entities.weibo_sync_timestamp like '"+ curtime +  "%' and weixin_entities.status = '1' and weixin_entities.type ='5'"
@@ -247,10 +282,13 @@ class weixin:
                 self.weixin_message_cover = result[2]
                 self.nameList.append(result[3])
                 self.iconList.append(result[4])
-                self.gameBriefList.append(result[5])
-                self.gameDescriptionList.append(result[6])
-                self.gameCategoryList.append(result[7])
-                self.weixin_status = result[10]
+                self.gameDescriptionList.append(result[5] + '\n\n回复游戏名获得该游戏的下载地址，回复下载获得所有游戏的下载地址')
+                self.gameBriefList.append(result[6] + "  -  " + result[3])
+                self.gameScreenPath1List.append(result[7])
+                self.gameScreenPath2List.append(result[8])
+                self.gameScreenPath3List.append(result[9])
+                self.gameScreenPath4List.append(result[10])
+                self.weixin_status = result[13]
 
                 r = 1
 
@@ -258,11 +296,12 @@ class weixin:
                 if self.weixin_message_title is None or self.weixin_status is None\
                    or str(self.weixin_status).strip() == '' or self.weixin_message_cover is None\
                 or str(self.weixin_message_cover).strip() == '':
+                    self.CoverImageBuilder(self.gameScreenPath1List[0],self.gameScreenPath2List[0],self.gameScreenPath3List[0],self.gameScreenPath4List[0])
                     pass
                 else:
                     self.iconList.insert(0,self.weixin_message_cover)
                     self.gameBriefList.insert(0,self.weixin_message_title)
-                    self.gameDescriptionList.insert(0,self.weixin_status)
+                    self.gameDescriptionList.insert(0,self.weixin_status + '\n\n回复游戏名获得该游戏的下载地址，回复下载获得所有游戏的下载地址')
                 self.login()
 
         finally:
