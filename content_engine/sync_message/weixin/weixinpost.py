@@ -17,7 +17,7 @@ class weixin:
     nameList = []
     iconList = []
     gameBriefList = []
-    gameDescriptionList = []
+    gameRecommendReasonList = []
     gameScreenPath1List = []
     gameScreenPath2List = []
     gameScreenPath3List = []
@@ -30,7 +30,7 @@ class weixin:
 
     get_msg_list_url = "http://mp.weixin.qq.com/cgi-bin/operate_appmsg?token=%s&lang=zh_CN&sub=list&t=ajax-appmsgs-fileselect&type=10&r=0.9663556832875031&pageIdx=0&pagesize=10&formid=file_from_1366447908777&subtype=3"
     get_msg_referer_url = 'http://mp.weixin.qq.com/cgi-bin/masssendpage?t=wxm-send&token=%s&lang=zh_CN'
-    post_msg_url = "http://mp.weixin.qq.com/cgi-bin/masssend?t=ajax-response&token=%s"
+    post_msg_url = "http://mp.weixin.qq.com/cgi-bin/masssend?t=ajax-response"
     post_msg_referer_url = "http://mp.weixin.qq.com/cgi-bin/masssendpage?&token=%s=wxm-send&lang=zh_CN"
     post_image_url = "http://mp.weixin.qq.com/cgi-bin/uploadmaterial?cgi=uploadmaterial&token=%s&type=2&t=iframe-uploadfile&lang=zh_CN&formId=1"
     login_url = "http://mp.weixin.qq.com/cgi-bin/login?lang=zh_CN"
@@ -101,11 +101,11 @@ class weixin:
 
     def postMsg(self,cert,slave_user,slave_sid,msg_id):
         c = pycurl.Curl()
-        post_params = 'type=10&fid=' + msg_id + '&appmsgid=' + msg_id + '&error=false&needcomment=0&groupid=-1&sex=0&country=&city=&province=&ajax=1'
-        c.setopt(c.URL, str(self.post_msg_url%self.weixin_token))
+        post_params = 'type=10&fid=' + msg_id + '&appmsgid=' + msg_id + '&error=false&needcomment=0&groupid=-1&sex=0&country=&city=&province=&token=' + self.weixin_token + '&ajax=1'
+        c.setopt(c.URL, str(self.post_msg_url))
         print post_params
         c.setopt(c.REFERER,str(self.post_msg_referer_url%self.weixin_token))
-        c.setopt(c.POSTFIELDS, post_params)
+        c.setopt(c.POSTFIELDS, str(post_params))
 
         c.setopt(c.COOKIE,'hasWarningUer=1;hasWarningUer=1;' + cert +';' + slave_user + ';' + slave_sid + ';')
         buff = cStringIO.StringIO()
@@ -192,7 +192,7 @@ class weixin:
         while count < msg_count:
             title = str(self.gameBriefList[count])
             digest = str(self.gameBriefList[count])
-            content = str(self.gameDescriptionList[count])
+            content = str(self.gameRecommendReasonList[count])
             post_params =post_params + '&title' + str(count) + '=' + title + '&digest' + str(count) + '=' + digest + '&content' + str(count) + '=' + content + '&fileid' + str(count) + '=' + from_id_array[count]
             count = count + 1
 
@@ -209,7 +209,7 @@ class weixin:
         print 'createSingleMsg hdr:' + hdr.getvalue()
         print 'createSingleMsg buff:' + buff.getvalue()
 
-        self.getMsgList(cert,slave_user,slave_sid,title)
+        self.getMsgList(cert,slave_user,slave_sid,self.gameBriefList[0])
 
 
     def login(self):
@@ -261,7 +261,7 @@ class weixin:
             curtime = time.strftime('%Y-%m-%d %H:%M',time.localtime(time.time()))
             print 'start: ' + curtime
             #curtime = '2013-04-22 14:10'
-            sql = "SELECT weixin.entity_ptr_id,weixin.title AS weixin_title, weixin.cover AS weixin_cover,games.`name` AS game_name,games.icon AS game_icon,games.description AS game_description,game_entities.brief_comment AS game_brief_comment," \
+            sql = "SELECT weixin.entity_ptr_id,weixin.title AS weixin_title, weixin.cover AS weixin_cover,games.`name` AS game_name,games.icon AS game_icon,game_entities.`recommended_reason` AS game_recommended_reason,game_entities.brief_comment AS game_brief_comment," \
                   "games.screenshot_path_1 AS game_screenshot_path_1,games.screenshot_path_2 AS game_screenshot_path_2,"\
                   "games.screenshot_path_3 AS game_screenshot_path_3, games.screenshot_path_4 AS game_screenshot_path_4,weixin_entities.weibo_sync_timestamp AS weixin_weibo_sync_timestamp," \
                   "weixin_entities.`status` AS weixin_status,weixin_entities.`recommended_reason`" \
@@ -283,7 +283,7 @@ class weixin:
                 self.weixin_message_cover = result[2]
                 self.nameList.append(result[3])
                 self.iconList.append(result[4])
-                self.gameDescriptionList.append(result[5] + '<br><br><font color="gray">回复游戏名获得该游戏的下载地址</font>')
+                self.gameRecommendReasonList.append(result[5] + '<br><br><font color="gray">回复游戏名获得该游戏的下载地址</font>')
                 self.gameBriefList.append(result[6] + "  -  " + result[3])
                 self.gameScreenPath1List.append(result[7])
                 self.gameScreenPath2List.append(result[8])
@@ -302,7 +302,7 @@ class weixin:
                 else:
                     self.iconList.insert(0,self.weixin_message_cover)
                     self.gameBriefList.insert(0,self.weixin_message_title)
-                    self.gameDescriptionList.insert(0,self.weixin_status)
+                    self.gameRecommendReasonList.insert(0,self.weixin_status)
                 self.login()
 
         finally:
