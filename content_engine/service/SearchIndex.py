@@ -23,7 +23,7 @@ CategoryAddr = 2
 TagAddr = 3
 DescAddr = 4
 
-MaxRecomGame = 3
+MaxRecomGame = 30
 
 class HitList:
     def __init__(self):
@@ -51,6 +51,7 @@ class SearchIndex:
 
 
     def GetHitList(self, term):
+        term = term.lower()
         self.logger.debug("get hit list for %s" % term)
         startItem = DBItem(term, 0, [])
         endItem = DBItem(term, 0xFFFFFFFF, [])

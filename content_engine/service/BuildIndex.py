@@ -156,7 +156,8 @@ class Index:
 
         logger.debug("name weight %s", str(term2NameWeight))
         for term, addrs in term2Addrs.items():
-            item = DBItem(term, gameId, addrs)
+            #lower case englist word
+            item = DBItem(term.lower(), gameId, addrs)
             if term in term2NameWeight:
                 item.nameWeight = term2NameWeight[term]
             else:

@@ -1,6 +1,6 @@
 # coding: utf8
 
-import logging, re
+import logging, re, random
 from router import Router
 from portal.models import Game
 from message_builder import MessageBuilder, BuildConfig
@@ -25,6 +25,7 @@ def _search_games(rule, info):
     resp = __search_games(info.text)
 
     if resp.result == 0:
+        logger.debug("search return")
         # results is sorted by gameRel not nameRel
         maxNameRel = 0
         maxNameRelGameId = -1
@@ -33,19 +34,31 @@ def _search_games(rule, info):
                 maxNameRel = g.nameRel
                 maxNameRelGameId = g.gameId
         if maxNameRel > 0.8:
+            logger.debug("get download url")
             # pattern: search download url by game name
             return BuildConfig(MessageBuilder.TYPE_DOWNLOAD_URL, None, [Game.objects.get(pk = maxNameRelGameId)])
         else:
+            res_game_ids = []
             res_games = []
             for g in resp.games:
                 logger.debug("recom game %d" % g.gameId)
-                if g.gameRel < 0.4:
+                if g.gameRel < 0.5:
                     continue
                 try:
-                    res_games.append(Game.objects.get(pk = g.gameId))
+                    res_game_ids.append(g.gameId)
                 except:
                     logger.debug(traceback.format_exc())
-            if len(res_games) > 0:
+            
+            if len(res_game_ids) > 0:
+                if len(res_game_ids) < 3:
+                    res_num = len(res_game_ids)
+                else:
+                    res_num = 3
+                start_index = random.randint(0, len(res_game_ids) - 1)
+
+                logger.debug("start index %d" % start_index)
+                for i in range(res_num):
+                    res_games.append(Game.objects.get(pk = res_game_ids[(start_index + i) % len(res_game_ids)]))
                 return BuildConfig(MessageBuilder.TYPE_GAMES, None, res_games)
 
 

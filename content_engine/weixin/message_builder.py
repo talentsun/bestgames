@@ -2,8 +2,10 @@
 from inspect import isfunction
 from pyweixin import WeiXin
 from datetime import datetime
+import logging
 
 from django.core.cache import cache
+logger = logging.getLogger("default")
 
 from data_loader import load_shorten_android_download_url, load_shorten_ios_download_url
 
@@ -66,11 +68,14 @@ def _build_weixin_games(context, data):
             is_first = False
         else:
             pic_url = 'http://weixin.bestgames7.com/media/%s' % game.icon
-            title = '%s - %s' % (game.brief_comment, game.name)
+            title = '%s - %s' % (game.brief_comment.strip(), game.name)
         url = 'http://weixin.bestgames7.com/games/%d/preview' % game.id
 
         articles.append({'title' : title, 'description' : description, 'pic_url' : pic_url, 'url' : url})
-    return WeiXin.to_news_xml(context.get('FromUserName', None), context.get('ToUserName', None), articles)
+    resp = WeiXin.to_news_xml(context.get('FromUserName', None), context.get('ToUserName', None), articles)
+    logger.debug("len %d %s" % (len(resp), resp))
+    return resp
+
 
 def _build_weixin_game_collection(context, data):
     articles = []

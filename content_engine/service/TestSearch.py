@@ -17,7 +17,7 @@ if __name__ == '__main__':
     index = SearchIndex("../testdb", "..")
 
     index.InitSeg()
-    print index.Search(u"蘑菇大战")
+    print index.Search(u"3D")
 
 
 
