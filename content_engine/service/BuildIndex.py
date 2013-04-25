@@ -87,7 +87,7 @@ class Index:
 
     @classmethod
     def RightPos(cls, pos):
-        if len(pos) == 0 or pos[0] == 'w':
+        if len(pos) == 0 or pos[0] == 'w' or pos[0] == 'u' or pos[0] == 'e' or pos[0] == 'y' or pos[0] == 'o' or pos[0] == 'x':
             return False 
         else:
             return True

@@ -23,8 +23,9 @@ def _build_weixin_download_urls(context, data):
     content = ''
     for game in data:
         content = content + game.name + '\n'
+        logger.debug("android %s iOS %s" % (game.android_download_url, game.iOS_download_url))
 
-        if game.android_download_url is not None:
+        if game.android_download_url is not None and len(game.android_download_url) > 0:
             android_download_shorten_url = load_shorten_android_download_url(game)
 
             if android_download_shorten_url is not None:
@@ -35,7 +36,7 @@ def _build_weixin_download_urls(context, data):
         else:
             content = content + u'无安卓版\n'
 
-        if game.iOS_download_url is not None:
+        if game.iOS_download_url is not None and len(game.iOS_download_url) > 0:
             ios_download_shorted_url = load_shorten_ios_download_url(game)
 
             if ios_download_shorted_url is not None:

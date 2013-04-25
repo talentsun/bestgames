@@ -6,10 +6,11 @@ import PySeg
 import os, os.path
 
 class SegUtil:
+    tongyiPair = {}
     @classmethod
-    def Init(cls, path):
-        PySeg.init(path)
-        customWordPath = os.path.join(path, "custom_word")
+    def Init(cls, folder):
+        PySeg.init(folder)
+        customWordPath = os.path.join(folder, "custom_word")
         if not os.path.exists(customWordPath):
             return 
         for fileName in os.listdir(customWordPath):
@@ -21,10 +22,35 @@ class SegUtil:
                     break
                 PySeg.addUserWord(line.decode("utf8").encode("gbk"))
             wordFile.close()
+        tongyiWordPath = os.path.join(folder, "tong_yi_word")
+        if not os.path.exists(tongyiWordPath):
+            return
+        for fileName in os.listdir(tongyiWordPath):
+            path = os.path.join(tongyiWordPath, fileName)
+            wordFile = file(path)
+            while True:
+                line = wordFile.readline()
+                if len(line) == 0:
+                    break
+                seps = line.split()
+                if len(seps) != 2:
+                    continue
+                if seps[0] not in cls.tongyiPair:
+                    cls.tongyiPair[seps[0]] = seps[1]
+                    PySeg.addUserWord(seps[0].decode('utf8').encode("gbk"))
+                    PySeg.addUserWord(seps[1].decode('utf8').encode("gbk"))
+
 
     @classmethod
     def Seg(cls, content):
-        return PySeg.seg(content)
+        res = []
+        tmp = PySeg.seg(content)
+        for t in tmp:
+            if t[0] in cls.tongyiPair:
+                res.append((cls.tongyiPair[t[0]], t[1]))
+            else:
+                res.append(t)
+        return res
 
     @classmethod
     def SegForLtp(cls, content):
@@ -45,7 +71,7 @@ class SegUtil:
 
 if __name__ == '__main__':
     SegUtil.Init("..")
-    words = "有什么好游戏推荐吗？"
+    words = "阿飞"
     parts = SegUtil.Seg(words)
     for p in parts:
         print p[0].decode("utf8"), p[1]

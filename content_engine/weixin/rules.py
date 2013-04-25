@@ -87,7 +87,7 @@ Router.get_instance().set({
     })
 Router.get_instance().set({
         'name' : u'自我介绍',
-        'pattern' : u'^你是谁.*',
+        'pattern' : u'(^你是谁.*)|(小每)',
         'handler' : ['''我是小每呀，立志成为一个您身边的手机游戏砖家，您可以和小每对话，让小每来帮您：
 1. 找游戏的下载地址
 回复游戏的名字，例如“滑雪大冒险”
