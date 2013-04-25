@@ -52,16 +52,14 @@ def match_subscribe_event(rule, info):
 def match_unsubscribe_event(rule, info):
     return info.type == "event" and info.event == 'unsubscribe'
 
-"""
 Router.get_instance().set({
         'name' : u'获取今日精品推荐游戏的下载地址',
         'pattern' : u'^下载$',
         'handler' : get_download_urls_for_today
     })
-"""
 Router.get_instance().set({
         'name' : u'获取随机推荐的游戏',
-        'pattern' : u'^(推荐|下载)$',
+        'pattern' : u'^(推荐)$',
         'handler' : get_random_games
     })
 Router.get_instance().set({
