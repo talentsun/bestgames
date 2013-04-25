@@ -253,7 +253,7 @@ class weixin:
     def get_msg_from_sql(self):
         con = None
         try:
-            con = mdb.connect('118.244.225.222', 'root',
+            con = mdb.connect('localhost', 'root',
                 'nameLR9969', 'content_engine',charset='utf8');
 
             cur = con.cursor()
@@ -283,7 +283,12 @@ class weixin:
                 self.weixin_message_cover = result[2]
                 self.nameList.append(result[3])
                 self.iconList.append(result[4])
-                self.gameRecommendReasonList.append(result[5] + '<br><br><font color="gray">回复游戏名获得该游戏的下载地址</font>')
+                url_pos = result[5].find('http://')
+                if url_pos != -1:
+                    description = result[5][:url_pos]
+                else:
+                    description = result[5]
+                self.gameRecommendReasonList.append(description + '<br><br><font color="gray">回复游戏名获得该游戏的下载地址</font>')
                 self.gameBriefList.append(result[6] + "  -  " + result[3])
                 self.gameScreenPath1List.append(result[7])
                 self.gameScreenPath2List.append(result[8])
