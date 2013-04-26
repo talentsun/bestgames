@@ -1,4 +1,4 @@
-from portal.models import Game, Collection
+from portal.models import Game, Collection, Weixin
 from django.core.cache import cache
 from datetime import date, datetime
 from utils import shorten_url
@@ -13,17 +13,17 @@ def load_random_games():
     return games
 
 def load_games_for_today(reload=False):
-    if cache.get('games_for_today') and not reload:
-        return cache.get('games_for_today')
 
     year = date.today().year
     month = date.today().month
     day = date.today().day
     start_date = datetime(year, month, day, 0, 0, 0)
     end_date = datetime(year, month, day, 23, 59, 59)
+    games = []
 
-    games = Game.objects.filter(weibo_sync_timestamp__range=(start_date, end_date))
-    cache.set('games_for_today', games, (end_date - datetime.today()).total_seconds())
+    weixin = Weixin.objects.filter(weibo_sync_timestamp__range=(start_date, end_date))[:1]
+    if len(weixin) > 0:
+        games = weixin[0].games.all();
     return games
 
 def _get_game_android_shorten_download_url_key(game):

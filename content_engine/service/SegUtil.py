@@ -71,7 +71,7 @@ class SegUtil:
 
 if __name__ == '__main__':
     SegUtil.Init("..")
-    words = "阿飞"
+    words = "跪求一款好玩的赛车游戏"
     parts = SegUtil.Seg(words)
     for p in parts:
         print p[0].decode("utf8"), p[1]
