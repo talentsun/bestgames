@@ -17,7 +17,7 @@
                 return false;
             });
             $('#save').click(function(){
-                $('#add_problem_form').submit();
+                $('#add_player_form').submit();
 
                 return false;
             });
@@ -40,7 +40,7 @@
         <li class="active">添加/编辑“我是玩家”</li>
     </ul>
 
-    <form id="add_problem_form" action="" method="post" enctype="multipart/form-data"> {% csrf_token %}
+    <form id="add_player_form" action="" method="post" enctype="multipart/form-data"> {% csrf_token %}
         <div class="navbar" style="margin-bottom:0;">
             <div class="navbar-inner">
                 <p class="navbar-text">我是玩家</p>

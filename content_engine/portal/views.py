@@ -344,9 +344,9 @@ def add_edit_player(request, player_id=None):
             return _redirect_back(request)
     else:
         if player is None:
-            form = WeixinForm(instance=player, initial={'presenter' : request.user.username})
+            form = PlayerForm(instance=player, initial={'presenter' : request.user.username})
         else:
-            form = WeixinForm(instance=player)
+            form = PlayerForm(instance=player)
 
     return render(request, 'add_edit_player.html', {'form' : form})
 
