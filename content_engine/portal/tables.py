@@ -131,8 +131,8 @@ class PlayerTable(tables.Table):
         model = Problem
         order_by = "-weibo_sync_timestamp"
         empty_text = u"暂无\"我是玩家\""
-        fields = ("title", "presenter","weibo_sync_timestamp","status","tags","ops")
-        sequence = ("title", "presenter","weibo_sync_timestamp","status","tags","ops")
+        fields = ("title", "presenter","weibo_sync_timestamp","status","ops")
+        sequence = ("title", "presenter","weibo_sync_timestamp","status","ops")
         attrs = {'class' : 'table table-striped'}
 
 
