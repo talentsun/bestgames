@@ -49,10 +49,10 @@
         <table class="table">
             <tbody>
             <tr><th>{{ form.title.label }}</th><td>{{ form.title }}{{ form.title.errors }}</td></tr>
-            <tr><th>{{ form.problem_image.label }}</th><td>{{ form.problem_image }}<span class="help-inline">{{ form.problem_image.help_text }}</span>{{ form.problem_image.errors }}</td></tr>
+            <tr><th>{{ form.player_image.label }}</th><td>{{ form.player_image }}<span class="help-inline">{{ form.player_image.help_text }}</span>{{ form.player_image.errors }}</td></tr>
             </tbody>
         </table>
-        {% include "recommendation_section.html"%}
+        {% include "player_section.html"%}
         {% include "save_cancel_section.html"%}
     </form>
 </div>
