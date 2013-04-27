@@ -76,7 +76,7 @@ def index(request):
     weixin.paginate(page=request.GET.get("wm-page",1), per_page=10)
     weixin.data.verbose_name = u"微信消息"
 
-    player = PlayerTable(Weixin.objects.all(),prefix="pr-")
+    player = PlayerTable(Player.objects.all(),prefix="pr-")
     player.paginate(page=request.GET.get("pr-page",1), per_page=10)
     player.data.verbose_name = u"我是玩家"
 
