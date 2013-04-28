@@ -85,10 +85,13 @@ class weixin:
         today = time.strftime('%Y-%m-%d',time.localtime(time.time()))
         msgList = json.loads(buff.getvalue())
 
+        title = title.replace(' ','&nbsp;',len(title))
+
         msg_id = ''
         found = False;
         for msg in msgList['List']:
             if msg['time'] == today:
+                msg_id = msg['appId']
                 for appMsg in msg['appmsgList']:
                     if appMsg['title'] == title:
                         msg_id = msg['appId']
@@ -317,6 +320,8 @@ class weixin:
 
 if __name__ == '__main__':
     print weixin().get_msg_from_sql()
+
+
 
 
 
