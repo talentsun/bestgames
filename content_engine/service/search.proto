@@ -15,3 +15,15 @@ message Response {
     repeated RelatedGame games = 2;
     repeated QueryTerm terms = 3;
 }
+
+message RelatedDialog {
+    required int32 qId = 1;
+    required float rel = 2;
+}
+
+message ResponseDialog {
+    required int32 result = 1;
+    repeated RelatedDialog dialogs = 2;
+    repeated QueryTerm terms = 3;
+}
+

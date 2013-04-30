@@ -13,7 +13,7 @@ from google.protobuf import descriptor_pb2
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='search.proto',
   package='',
-  serialized_pb='\n\x0csearch.proto\"\x16\n\x05Query\x12\r\n\x05query\x18\x01 \x02(\t\"?\n\x0bRelatedGame\x12\x0e\n\x06gameId\x18\x01 \x02(\x05\x12\x0f\n\x07nameRel\x18\x02 \x02(\x02\x12\x0f\n\x07gameRel\x18\x03 \x02(\x02\")\n\tQueryTerm\x12\x0c\n\x04term\x18\x01 \x02(\t\x12\x0e\n\x06weight\x18\x02 \x02(\x02\"R\n\x08Response\x12\x0e\n\x06result\x18\x01 \x02(\x05\x12\x1b\n\x05games\x18\x02 \x03(\x0b\x32\x0c.RelatedGame\x12\x19\n\x05terms\x18\x03 \x03(\x0b\x32\n.QueryTerm')
+  serialized_pb='\n\x0csearch.proto\"\x16\n\x05Query\x12\r\n\x05query\x18\x01 \x02(\t\"?\n\x0bRelatedGame\x12\x0e\n\x06gameId\x18\x01 \x02(\x05\x12\x0f\n\x07nameRel\x18\x02 \x02(\x02\x12\x0f\n\x07gameRel\x18\x03 \x02(\x02\")\n\tQueryTerm\x12\x0c\n\x04term\x18\x01 \x02(\t\x12\x0e\n\x06weight\x18\x02 \x02(\x02\"R\n\x08Response\x12\x0e\n\x06result\x18\x01 \x02(\x05\x12\x1b\n\x05games\x18\x02 \x03(\x0b\x32\x0c.RelatedGame\x12\x19\n\x05terms\x18\x03 \x03(\x0b\x32\n.QueryTerm\")\n\rRelatedDialog\x12\x0b\n\x03qId\x18\x01 \x02(\x05\x12\x0b\n\x03rel\x18\x02 \x02(\x02\"\\\n\x0eResponseDialog\x12\x0e\n\x06result\x18\x01 \x02(\x05\x12\x1f\n\x07\x64ialogs\x18\x02 \x03(\x0b\x32\x0e.RelatedDialog\x12\x19\n\x05terms\x18\x03 \x03(\x0b\x32\n.QueryTerm')
 
 
 
@@ -164,12 +164,93 @@ _RESPONSE = _descriptor.Descriptor(
   serialized_end=230,
 )
 
+
+_RELATEDDIALOG = _descriptor.Descriptor(
+  name='RelatedDialog',
+  full_name='RelatedDialog',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='qId', full_name='RelatedDialog.qId', index=0,
+      number=1, type=5, cpp_type=1, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='rel', full_name='RelatedDialog.rel', index=1,
+      number=2, type=2, cpp_type=6, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=232,
+  serialized_end=273,
+)
+
+
+_RESPONSEDIALOG = _descriptor.Descriptor(
+  name='ResponseDialog',
+  full_name='ResponseDialog',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='result', full_name='ResponseDialog.result', index=0,
+      number=1, type=5, cpp_type=1, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='dialogs', full_name='ResponseDialog.dialogs', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='terms', full_name='ResponseDialog.terms', index=2,
+      number=3, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=275,
+  serialized_end=367,
+)
+
 _RESPONSE.fields_by_name['games'].message_type = _RELATEDGAME
 _RESPONSE.fields_by_name['terms'].message_type = _QUERYTERM
+_RESPONSEDIALOG.fields_by_name['dialogs'].message_type = _RELATEDDIALOG
+_RESPONSEDIALOG.fields_by_name['terms'].message_type = _QUERYTERM
 DESCRIPTOR.message_types_by_name['Query'] = _QUERY
 DESCRIPTOR.message_types_by_name['RelatedGame'] = _RELATEDGAME
 DESCRIPTOR.message_types_by_name['QueryTerm'] = _QUERYTERM
 DESCRIPTOR.message_types_by_name['Response'] = _RESPONSE
+DESCRIPTOR.message_types_by_name['RelatedDialog'] = _RELATEDDIALOG
+DESCRIPTOR.message_types_by_name['ResponseDialog'] = _RESPONSEDIALOG
 
 class Query(_message.Message):
   __metaclass__ = _reflection.GeneratedProtocolMessageType
@@ -194,6 +275,18 @@ class Response(_message.Message):
   DESCRIPTOR = _RESPONSE
 
   # @@protoc_insertion_point(class_scope:Response)
+
+class RelatedDialog(_message.Message):
+  __metaclass__ = _reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _RELATEDDIALOG
+
+  # @@protoc_insertion_point(class_scope:RelatedDialog)
+
+class ResponseDialog(_message.Message):
+  __metaclass__ = _reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _RESPONSEDIALOG
+
+  # @@protoc_insertion_point(class_scope:ResponseDialog)
 
 
 # @@protoc_insertion_point(module_scope)

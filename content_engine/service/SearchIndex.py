@@ -28,7 +28,7 @@ MaxRecomGame = 30
 class HitList:
     def __init__(self):
         """
-        every item is (term, addrs, nameWeight)
+        every item is (gameId, addrs, nameWeight)
         """
         self.hitList = []
 
