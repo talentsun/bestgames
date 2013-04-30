@@ -1,0 +1,20 @@
+<div class="navbar" style="margin-bottom:0;">
+    <div class="navbar-inner">
+        <p class="navbar-text">推荐信息</p>
+    </div>
+</div>
+<table class="table">
+    <tbody>
+    <tr><th>{{ form.presenter.label }}</th><td>{{ form.presenter }}{{ form.presenter.errors }}</td></tr>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.simplyCountable.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#id_recommended_reason').simplyCountable({
+                maxCount : 150
+            });
+        });
+    </script>
+    <tr><th>{{ form.recommended_reason.label }}</th><td>{{ form.recommended_reason }}<span class="help-inline">{{ form.recommended_reason.help_text }}</span><p style="margin-top:8px;">你还可以输入 <span id="counter" class="safe">150</span> 字（包含下载链接150字以内，不包含下载链接120字以内）。</p>{{ form.recommended_reason.errors }}</td></tr>
+    <tr><th>{{ form.weibo_sync_timestamp.label }}</th><td>{{ form.weibo_sync_timestamp }}{{ form.weibo_sync_timestamp.errors }} </td></tr>
+    </tbody>
+</table>

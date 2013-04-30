@@ -16,9 +16,9 @@ import logging, traceback, time, struct, socket
 
 from taggit.models import Tag
 
-from portal.models import Game, Redier, Collection, Problem,Entity,Weixin
-from portal.tables import GameTable, RedierTable, CollectionTable, ProblemTable, WeixinTable
-from portal.forms import GameForm, RedierForm, CollectionForm, ProblemForm,WeixinForm
+from portal.models import Game, Redier, Collection, Problem,Entity,Weixin,Player
+from portal.tables import GameTable, RedierTable, CollectionTable, ProblemTable, WeixinTable,PlayerTable
+from portal.forms import GameForm, RedierForm, CollectionForm, ProblemForm,WeixinForm,PlayerForm
 from service import search_pb2
 
 import django_tables2 as tables
@@ -76,7 +76,11 @@ def index(request):
     weixin.paginate(page=request.GET.get("wm-page",1), per_page=10)
     weixin.data.verbose_name = u"微信消息"
 
-    return render(request, "index.html", {"games": games, "rediers":rediers, 'collections':collections, 'problems':problems, 'weixin':weixin})
+    player = PlayerTable(Player.objects.all(),prefix="pr-")
+    player.paginate(page=request.GET.get("pr-page",1), per_page=10)
+    player.data.verbose_name = u"我是玩家"
+
+    return render(request, "index.html", {"games": games, "rediers":rediers, 'collections':collections, 'problems':problems, 'weixin':weixin,'player':player})
 
 def logout(request):
     auth.logout(request)
@@ -313,5 +317,48 @@ def delete_game(request, game_id=None):
 def preview_game(request, game_id=None):
     game = get_object_or_404(Game, entity_ptr_id=game_id)
     return render(request, 'preview_game.html', {'game' : game})
+
+
+@login_required
+def add_edit_player(request, player_id=None):
+    _auth_user(request)
+    weibo_sync_timestamp =''
+    if player_id:
+        player = get_object_or_404(Player, entity_ptr_id=player_id)
+        weibo_sync_timestamp = player.weibo_sync_timestamp
+    else:
+        player = None
+
+    if request.method == 'POST':
+        form = PlayerForm(request.POST, request.FILES, instance=player)
+        if form.is_valid():
+            player = form.save()
+            if request.POST['player_image']:
+                player.player_image = request.POST['player_image'].replace(settings.MEDIA_URL, '', 1)
+            #            else:
+            #                weixin.cover = request.POST['cover']
+            if weibo_sync_timestamp != player.weibo_sync_timestamp:
+                if weibo_sync_timestamp != '':
+                    player.status = Entity.STATUS_PENDING
+            player.save()
+            return _redirect_back(request)
+    else:
+        if player is None:
+            form = PlayerForm(instance=player, initial={'presenter' : request.user.username})
+        else:
+            form = PlayerForm(instance=player)
+
+    return render(request, 'add_edit_player.html', {'form' : form})
+
+@login_required
+def delete_player(request, player_id=None):
+    _auth_user(request)
+    player = get_object_or_404(Player, entity_ptr_id=player_id)
+    player.delete()
+    return _redirect_back(request)
+
+def preview_player(request, player_id=None):
+    player = get_object_or_404(Player, entity_ptr_id=player_id)
+    return render(request, 'preview_player.html', { 'player' : player })
 
 

@@ -219,6 +219,40 @@ def problemImageBuidler(game_id,pic,weibo_status):
     sendWeibo('#宅，必有一技# ' + weibo_status,outputFilePath,game_id)
 
 
+def playerImageBuidler(game_id,pic,weibo_status):
+    templete_file = open('./templates/problem.html','r')
+    line = templete_file.readline()
+    content = ''
+    while line:
+        content = content + line;
+        line = templete_file.readline()
+
+    templete_file.close()
+
+
+    content = content.replace('problem_image','/home/app_bestgames/content_engine/media/' + pic)
+
+    today = time.strftime('%Y-%m-%d',time.localtime(time.time()))
+    if os.path.exists(today):
+        pass
+    else:
+        os.makedirs(today)
+
+    curtime = time.strftime('%Y-%m-%d-%H:%M',time.localtime(time.time()))
+    filename = curtime + 'share.html'
+    shareGameFile = open(today + '/' + filename,'w')
+    shareGameFile.write(content)
+    shareGameFile.close()
+
+    outputFilePath = today + "/" + str(game_id) + "player.png"
+
+    command = "phantomjs --disk-cache=yes --max-disk-cache-size=10000 rasterize.js "+ file_prefix + today + "/" + filename + "  " + outputFilePath
+
+    print command
+    os.system(command)
+
+    sendWeibo('#我是玩家# ' + weibo_status,outputFilePath,game_id)
+
 def redier():
     con = mdb.connect('localhost', 'root',
         'nameLR9969', 'content_engine',charset='utf8');
@@ -304,6 +338,26 @@ def problem():
     if con:
         con.close()
 
+def player():
+    con = mdb.connect('localhost', 'root',
+        'nameLR9969', 'content_engine',charset='utf8');
+
+    cur = con.cursor()
+    curtime = time.strftime('%Y-%m-%d %H:%M',time.localtime(time.time()))
+    print 'start: ' + curtime
+    sql = "SELECT players.entity_ptr_id,players.player_image,entities.recommended_reason, entities.weibo_sync_timestamp from entities,players where entities.weibo_sync_timestamp  like '" + curtime + "%'  and players.entity_ptr_id = entities.id and entities.status = '1' and entities.type = '6' "
+    print sql
+    cur.execute(sql)
+
+    data = cur.fetchall()
+
+    for result in data:
+        playerImageBuidler(result[0],result[1],result[2])
+
+
+    if con:
+        con.close()
+
 
 
 con = None
@@ -328,6 +382,7 @@ try:
     redier()
     collection()
     problem()
+    player()
 
 finally:
     if con:

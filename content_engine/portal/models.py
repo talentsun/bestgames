@@ -10,6 +10,7 @@ class Entity(models.Model):
     COLLECTION = 3
     PROBLEM = 4
     WEIXIN = 5
+    PLAYER = 6
     type = models.IntegerField(verbose_name=u'类型', default=GAME, editable=False)
     tags = TaggableManager(verbose_name=u"标签",blank=True)
 
@@ -153,3 +154,18 @@ class Problem(Entity):
             if self.weibo_sync_timestamp is not None:
                 self.status = Entity.STATUS_PENDING
         super(Problem, self).save(args, kwargs)
+
+class Player(Entity):
+    title = models.CharField(u"标题", max_length=50)
+    player_image = models.ImageField(u"我是玩家", upload_to='upload/', max_length=255, blank=True)
+
+    class Meta:
+        db_table = u'players'
+        verbose_name = u'我是玩家'
+        verbose_name_plural = u'我是玩家'
+    def save(self, *args, **kwargs):
+        self.type = Entity.PLAYER
+        if self.status == Entity.STATUS_DO_NOT_SYNC:
+            if self.weibo_sync_timestamp is not None:
+                self.status = Entity.STATUS_PENDING
+        super(Player, self).save(args, kwargs)
