@@ -220,36 +220,7 @@ def problemImageBuidler(game_id,pic,weibo_status):
 
 
 def playerImageBuidler(game_id,pic,weibo_status):
-    templete_file = open('./templates/problem.html','r')
-    line = templete_file.readline()
-    content = ''
-    while line:
-        content = content + line;
-        line = templete_file.readline()
-
-    templete_file.close()
-
-
-    content = content.replace('problem_image','/home/app_bestgames/content_engine/media/' + pic)
-
-    today = time.strftime('%Y-%m-%d',time.localtime(time.time()))
-    if os.path.exists(today):
-        pass
-    else:
-        os.makedirs(today)
-
-    curtime = time.strftime('%Y-%m-%d-%H:%M',time.localtime(time.time()))
-    filename = curtime + 'share.html'
-    shareGameFile = open(today + '/' + filename,'w')
-    shareGameFile.write(content)
-    shareGameFile.close()
-
-    outputFilePath = today + "/" + str(game_id) + "player.png"
-
-    command = "phantomjs --disk-cache=yes --max-disk-cache-size=10000 rasterize.js "+ file_prefix + today + "/" + filename + "  " + outputFilePath
-
-    print command
-    os.system(command)
+    outputFilePath = '/home/app_bestgames/content_engine/media/' + pic
 
     sendWeibo('#我是玩家# ' + weibo_status,outputFilePath,game_id)
 
