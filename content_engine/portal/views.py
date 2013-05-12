@@ -84,7 +84,7 @@ def index(request):
     gameAdvices.paginate(page=request.GET.get("ga-page",1), per_page=10)
     gameAdvices.data.verbose_name = u"游戏情报站"
 
-    return render(request, "index.html", {"games": games, "rediers":rediers, 'collections':collections, 'problems':problems, 'weixin':weixin,'player':player,'gameadvices':gameAdvices})
+    return render(request, "index.html", {"games": games, "rediers":rediers, 'collections':collections, 'problems':problems, 'weixin':weixin,'player':player,'game_advices':gameAdvices})
 
 def logout(request):
     auth.logout(request)
@@ -379,7 +379,7 @@ def add_edit_game_advice(request, game_advice_id=None):
     if request.method == 'POST':
         form = GameAdvicesForm(request.POST, request.FILES, instance=game_advice)
         if form.is_valid():
-            player = form.save()
+            game_advice = form.save()
             if request.POST['advice_image']:
                 game_advice.advice_image = request.POST['advice_image'].replace(settings.MEDIA_URL, '', 1)
                 #            else:
