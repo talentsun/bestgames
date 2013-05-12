@@ -380,7 +380,7 @@ def add_edit_game_advice(request, game_advice_id=None):
         form = GameAdvicesForm(request.POST, request.FILES, instance=game_advice)
         if form.is_valid():
             player = form.save()
-            if request.POST['player_image']:
+            if request.POST['advice_image']:
                 game_advice.advice_image = request.POST['advice_image'].replace(settings.MEDIA_URL, '', 1)
                 #            else:
             #                weixin.cover = request.POST['cover']
@@ -404,8 +404,8 @@ def delete_game_advice(request, game_advice_id=None):
     game_advice.delete()
     return _redirect_back(request)
 
-def preview_game_advice(request, player_id=None):
-    game_advice = get_object_or_404(GameAdvices, entity_ptr_id=player_id)
+def preview_game_advice(request, game_advice_id=None):
+    game_advice = get_object_or_404(GameAdvices, entity_ptr_id=game_advice_id)
     return render(request, 'preview_game_advices.html', { 'gameadvice' : game_advice })
 
 

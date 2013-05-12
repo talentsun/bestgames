@@ -11,6 +11,7 @@ class Entity(models.Model):
     PROBLEM = 4
     WEIXIN = 5
     PLAYER = 6
+    GAMEADVICE = 7
     type = models.IntegerField(verbose_name=u'类型', default=GAME, editable=False)
     tags = TaggableManager(verbose_name=u"标签",blank=True)
 
@@ -175,11 +176,11 @@ class GameAdvices(Entity):
     advice_image = models.ImageField(u"游戏情报站", upload_to='upload/', max_length=255, blank=True)
 
     class Meta:
-        db_table = u'gameadvices'
+        db_table = u'game_advices'
         verbose_name = u'游戏情报站'
         verbose_name_plural = u'游戏情报站'
     def save(self, *args, **kwargs):
-        self.type = Entity.PLAYER
+        self.type = Entity.GAMEADVICE
         if self.status == Entity.STATUS_DO_NOT_SYNC:
             if self.weibo_sync_timestamp is not None:
                 self.status = Entity.STATUS_PENDING
