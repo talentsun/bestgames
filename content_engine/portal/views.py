@@ -384,7 +384,7 @@ def add_edit_game_advice(request, game_advice_id=None):
                 game_advice.advice_image = request.POST['advice_image'].replace(settings.MEDIA_URL, '', 1)
                 #            else:
             #                weixin.cover = request.POST['cover']
-            if weibo_sync_timestamp != player.weibo_sync_timestamp:
+            if weibo_sync_timestamp != game_advice.weibo_sync_timestamp:
                 if weibo_sync_timestamp != '':
                     game_advice.status = Entity.STATUS_PENDING
             game_advice.save()
