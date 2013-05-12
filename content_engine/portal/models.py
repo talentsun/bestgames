@@ -169,3 +169,19 @@ class Player(Entity):
             if self.weibo_sync_timestamp is not None:
                 self.status = Entity.STATUS_PENDING
         super(Player, self).save(args, kwargs)
+
+class GameAdvices(Entity):
+    title = models.CharField(u"标题", max_length=50)
+    advice_image = models.ImageField(u"游戏情报站", upload_to='upload/', max_length=255, blank=True)
+
+    class Meta:
+        db_table = u'gameadvices'
+        verbose_name = u'游戏情报站'
+        verbose_name_plural = u'游戏情报站'
+    def save(self, *args, **kwargs):
+        self.type = Entity.PLAYER
+        if self.status == Entity.STATUS_DO_NOT_SYNC:
+            if self.weibo_sync_timestamp is not None:
+                self.status = Entity.STATUS_PENDING
+        super(GameAdvices, self).save(args, kwargs)
+

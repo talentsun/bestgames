@@ -61,7 +61,8 @@
         <li><a href="/collections/add?next={{request.get_full_path}}">新增游戏合集</a></li>
         <li><a href="/problems/add?next={{request.get_full_path}}">新增“宅，必有一技”</a></li>
         <li><a href="/weixinmsg/add?next={{request.get_full_path}}">新增微信消息</a></li>
-          <li><a href="/player/add?next={{request.get_full_path}}">新增我是玩家</a></li>
+        <li><a href="/player/add?next={{request.get_full_path}}">新增我是玩家</a></li>
+        <li><a href="/gameAdvices/add?next={{request.get_full_path}}">新增游戏情报站</a></li>
       </ul>
     </div>
 
@@ -131,6 +132,13 @@
       <div class="navbar" style="margin-bottom:0;">
           <div class="navbar-inner">
               <p class="navbar-text">我是玩家</p>
+          </div>
+      </div>
+      {% render_table player "django_tables2/table.html" %}
+
+      <div class="navbar" style="margin-bottom:0;">
+          <div class="navbar-inner">
+              <p class="navbar-text">游戏情报站</p>
           </div>
       </div>
       {% render_table player "django_tables2/table.html" %}
