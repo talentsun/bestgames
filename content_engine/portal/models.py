@@ -142,7 +142,7 @@ class Collection(Entity):
 class Weixin(Entity):
     title = models.CharField(u"标题", max_length=20,blank=True)
     cover = models.ImageField(u"封面图片", upload_to='upload/', max_length=255, blank=True)
-    games = models.ManyToManyField(Entity, verbose_name=u"微信内容")
+    entities = models.ManyToManyField(Entity, verbose_name=u"微信内容")
 
     class Meta:
         db_table = u'weixinnew'
