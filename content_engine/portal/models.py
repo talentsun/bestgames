@@ -139,21 +139,6 @@ class Collection(Entity):
                 self.status = Entity.STATUS_PENDING
         super(Collection, self).save(args, kwargs)
 
-class Weixin(Entity):
-    title = models.CharField(u"标题", max_length=20,blank=True)
-    cover = models.ImageField(u"封面图片", upload_to='upload/', max_length=255, blank=True)
-    entities = models.ManyToManyField(Entity, verbose_name=u"微信内容")
-
-    class Meta:
-        db_table = u'weixinnew'
-        verbose_name = u'微信合集'
-        verbose_name_plural = u'微信合集'
-    def save(self, *args, **kwargs):
-        self.type = Entity.WEIXIN
-        if self.status == Entity.STATUS_DO_NOT_SYNC:
-            if self.weibo_sync_timestamp is not None:
-                self.status = Entity.STATUS_PENDING
-        super(Weixin, self).save(args, kwargs)
 
 class Problem(Entity):
     title = models.CharField(u"标题", max_length=50)
@@ -189,6 +174,8 @@ class GameAdvices(Entity):
     title = models.CharField(u"标题", max_length=50)
     advice_image = models.ImageField(u"游戏情报站", upload_to='upload/', max_length=255, blank=True)
 
+    def __unicode__(self):
+        return force_unicode(self.title)
     class Meta:
         db_table = u'game_advices'
         verbose_name = u'游戏情报站'
@@ -200,3 +187,19 @@ class GameAdvices(Entity):
                 self.status = Entity.STATUS_PENDING
         super(GameAdvices, self).save(args, kwargs)
 
+class Weixin(Entity):
+    title = models.CharField(u"标题", max_length=20,blank=True)
+    cover = models.ImageField(u"封面图片", upload_to='upload/', max_length=255, blank=True)
+    games = models.ManyToManyField(Game, verbose_name=u"游戏")
+    gameAdvices = models.ManyToManyField(GameAdvices, verbose_name=u"游戏情报站")
+
+    class Meta:
+        db_table = u'weixin'
+        verbose_name = u'微信合集'
+        verbose_name_plural = u'微信合集'
+    def save(self, *args, **kwargs):
+        self.type = Entity.WEIXIN
+        if self.status == Entity.STATUS_DO_NOT_SYNC:
+            if self.weibo_sync_timestamp is not None:
+                self.status = Entity.STATUS_PENDING
+        super(Weixin, self).save(args, kwargs)
