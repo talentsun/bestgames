@@ -70,9 +70,9 @@ class CollectionForm(EntityForm):
     cover = forms.ImageField(label=u"封面图片", help_text=u"建议使用640x320大小的图片", widget=AjaxClearableFileInput())
     games = GameChoices(label=u"游戏")
 
-	class Meta:
-		model = Collection
-		fields = ('title',
+    class Meta:
+        model = Collection
+        fields = ('title',
 			'cover',
 			'games',
 			'tags',
