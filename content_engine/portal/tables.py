@@ -96,7 +96,7 @@ class WeixinTable(tables.Table):
     weibo_sync_timestamp = DateTimeColumn(verbose_name=u"微信同步时间",orderable=True)
     status = TemplateColumn(template_name="sync_status_field.html",orderable=False,verbose_name=u"同步状态")
     games = GameColumn(verbose_name=u"内容",orderable=False,attrs={"class":"games"})
-    gameAdvices = GameAdviceColumn(verbose_name=u"游戏情报站",orderable=False,attrs={"class":"gameAdvices"})
+    advices = GameAdviceColumn(verbose_name=u"游戏情报站",orderable=False,attrs={"class":"advices"})
 
     ops = TemplateColumn(template_name="weixin_field_ops.html",verbose_name=u"操作",orderable=False,attrs={"class":"ops"})
 
@@ -104,8 +104,8 @@ class WeixinTable(tables.Table):
         model = Weixin
         order_by = "-weibo_sync_timestamp"
         empty_text = u"暂无微信消息"
-        fields = ("title", "presenter","weibo_sync_timestamp","status","games","gameAdvices","ops")
-        sequence = ("title", "presenter","weibo_sync_timestamp","status","games","gameAdvices","ops")
+        fields = ("title", "presenter","weibo_sync_timestamp","status","games","advices","ops")
+        sequence = ("title", "presenter","weibo_sync_timestamp","status","games","advices","ops")
         attrs = {'class' : 'table table-striped'}
 
 

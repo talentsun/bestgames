@@ -194,7 +194,7 @@ class Weixin(Entity):
     gameAdvices = models.ManyToManyField(GameAdvices, verbose_name=u"游戏情报站")
 
     class Meta:
-        db_table = u'weixin'
+        db_table = u'weixin2'
         verbose_name = u'微信合集'
         verbose_name_plural = u'微信合集'
     def save(self, *args, **kwargs):
