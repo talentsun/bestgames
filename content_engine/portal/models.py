@@ -2,6 +2,7 @@
 from django.db import models
 from django.utils.encoding import force_unicode
 from taggit.managers import TaggableManager
+from django.shortcuts import get_object_or_404
 
 
 class Entity(models.Model):
@@ -29,6 +30,19 @@ class Entity(models.Model):
     presenter = models.CharField(u"推荐人",max_length=100)
     brief_comment = models.CharField(u"一句话点评(同步到微信)", max_length=255,blank=True)
     recommended_reason = models.TextField(u"推荐理由(同步到微博)",blank=True)
+
+    def __unicode__(self):
+        if self.type == 1:
+            game = get_object_or_404(Game,game_id=self.id)
+            return force_unicode(game.name)
+        elif self.type == 6:
+            player = get_object_or_404(Player, player_id=self.id)
+            return force_unicode(player.title)
+        elif self.type == 7:
+            gameAdvice = get_object_or_404(GameAdvices, player_id=self.id)
+            return force_unicode(gameAdvice.title)
+        else:
+            return u"entity"
 
     class Meta:
         db_table = u'entities'
@@ -128,10 +142,10 @@ class Collection(Entity):
 class Weixin(Entity):
     title = models.CharField(u"标题", max_length=20,blank=True)
     cover = models.ImageField(u"封面图片", upload_to='upload/', max_length=255, blank=True)
-    games = models.ManyToManyField(Game, verbose_name=u"游戏")
+    games = models.ManyToManyField(Entity, verbose_name=u"微信内容")
 
     class Meta:
-        db_table = u'weixin'
+        db_table = u'weixinnew'
         verbose_name = u'微信合集'
         verbose_name_plural = u'微信合集'
     def save(self, *args, **kwargs):
