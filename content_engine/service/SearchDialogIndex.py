@@ -67,8 +67,8 @@ class SearchIndex:
         curIndex = []
 
         for term in terms:
+            self.logger.debug("term %s weight %f" % (term[0], term[1]))
             term = term[0]
-            self.logger.debug("term %s" % term)
             hitList = self.GetHitList(term)
             hitListList.append(hitList)
             curIndex.append(0)
@@ -86,11 +86,14 @@ class SearchIndex:
                 break
 
             self.logger.debug("deal with qId %d" % curMinQId)
+            matchQueryWeight = 0
             for i in range(len(hitListList)):
                 if curIndex[i] < len(hitListList[i].hitList) and hitListList[i].hitList[curIndex[i]][0] == curMinQId:
                     tmpWeight += hitListList[i].hitList[curIndex[i]][1]
                     curIndex[i] += 1
+                    matchQueryWeight += terms[i][1]
 
+            tmpWeight *= matchQueryWeight
             if tmpWeight > maxWeight:
                 maxWeight = tmpWeight
                 maxQId = curMinQId

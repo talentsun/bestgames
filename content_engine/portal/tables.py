@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from portal.models import Game, Redier, Collection, Problem,Weixin
+from weixin.models import BaseDialog
 import django_tables2 as tables
 from django_tables2.columns import DateTimeColumn, TemplateColumn
 from taggit.utils import edit_string_for_tags
@@ -135,4 +136,16 @@ class PlayerTable(tables.Table):
         sequence = ("title", "presenter","weibo_sync_timestamp","status","ops")
         attrs = {'class' : 'table table-striped'}
 
+class DialogTable(tables.Table):
+    id = tables.Column(orderable=False, visible=False)
+    question = tables.Column(orderable=False)
+    answer = tables.Column(orderable=False)
+    presenter = tables.Column(orderable=False)
+    ops = TemplateColumn(template_name="dialog_field_ops.html",verbose_name=u"操作",orderable=False,attrs={"class":"ops"})
+    class Meta:
+        model = BaseDialog 
+        empty_text = u"暂无\"基本对话\""
+        fields = ("id", "question", "answer", "presenter" ,"ops")
+        sequence = ("id", "question", "answer", "presenter" ,"ops")
+        attrs = {'class' : 'table table-striped'}
 

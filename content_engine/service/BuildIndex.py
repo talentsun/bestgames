@@ -130,10 +130,14 @@ class Index:
             terms[NameAddr].append(t[0])
             logger.debug("%s weight %f" % (t[0], t[1]))
             term2NameWeight[t[0]] = t[1]
-        ts = cls.GetRightWords([description,])
-        terms[DescAddr] = []
-        for t in ts:
-            terms[DescAddr].append(t[0])
+        try:
+            ts = cls.GetRightWords([description,])
+            terms[DescAddr] = []
+            for t in ts:
+                terms[DescAddr].append(t[0])
+        except:
+            logger.error(traceback.format_exc())
+            logger.error(description)
 
         terms[CategoryAddr] = []
         ts = cls.GetRightWords(categorys)

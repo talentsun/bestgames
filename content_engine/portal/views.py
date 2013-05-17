@@ -17,7 +17,8 @@ import logging, traceback, time, struct, socket
 from taggit.models import Tag
 
 from portal.models import Game, Redier, Collection, Problem,Entity,Weixin,Player
-from portal.tables import GameTable, RedierTable, CollectionTable, ProblemTable, WeixinTable,PlayerTable
+from weixin.models import BaseDialog
+from portal.tables import GameTable, RedierTable, CollectionTable, ProblemTable, WeixinTable,PlayerTable, DialogTable
 from portal.forms import GameForm, RedierForm, CollectionForm, ProblemForm,WeixinForm,PlayerForm
 from service import search_pb2
 
@@ -40,8 +41,6 @@ def _search_game(query):
     r = s.recv(4196)
     resp = search_pb2.Response()
     resp.ParseFromString(r)
-
-
     games = []
     if resp.result == 0:
         for related_game in resp.games:
@@ -50,6 +49,24 @@ def _search_game(query):
             except:
                 continue
     return games
+
+def _search_dialog(query):
+    q = search_pb2.Query()
+    q.query = query
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.sendto(q.SerializeToString(), ("127.0.0.1", 8038))
+    r = s.recv(4196)
+    resp = search_pb2.ResponseDialog()
+    resp.ParseFromString(r)
+
+    dialogs = []
+    if resp.result == 0:
+        for related_dialog in resp.dialogs:
+            try:
+                dialogs.append(BaseDialog.objects.get(pk=related_dialog.qId))
+            except:
+                continue
+    return dialogs
 
 
 def index(request):
@@ -80,7 +97,16 @@ def index(request):
     player.paginate(page=request.GET.get("pr-page",1), per_page=10)
     player.data.verbose_name = u"我是玩家"
 
-    return render(request, "index.html", {"games": games, "rediers":rediers, 'collections':collections, 'problems':problems, 'weixin':weixin,'player':player})
+
+    if request.GET.get('bd_q', None):
+        dialog = DialogTable(_search_dialog(request.GET.get("bd_q")), prefix="dia-")
+    else:
+        dialog = DialogTable(BaseDialog.objects.all(), prefix="dia-")
+    dialog.paginate(page=request.GET.get("dia-page",1), per_page=10)
+    dialog.data.verbose_name = u"基本对话"
+
+
+    return render(request, "index.html", {"games": games, "rediers":rediers, 'collections':collections, 'problems':problems, 'weixin':weixin,'player':player, 'dialog':dialog})
 
 def logout(request):
     auth.logout(request)

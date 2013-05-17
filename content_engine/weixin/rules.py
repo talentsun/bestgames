@@ -33,6 +33,8 @@ def get_random_games(rule, info):
 def get_latest_game_collection(rule, info):
     return BuildConfig(MessageBuilder.TYPE_GAME_COLLECTION, None, load_latest_game_collection())
 
+def voice_message(rule, info):
+    return BuildConfig(MessageBuilder.TYPE_RAW_TEXT, None, u"非常抱歉，小每还不能理解语音信息，现在你可以用文字和小每交流")
 
 def get_welcome(rule, info):
     return BuildConfig(MessageBuilder.TYPE_RAW_TEXT, None, u"""您好，小每立志成为一个您身边的手机游戏砖家，您可以和小每对话，让小每来帮您：
@@ -45,6 +47,9 @@ def get_welcome(rule, info):
 
 def unsubscribe(rule, info):
     return BuildConfig(MessageBuilder.TYPE_NO_RESPONSE, None, u"%s unsubscribe" % info.user)
+
+def match_voice_message(rule, info):
+    return info.type == 'voice'
 
 def match_subscribe_event(rule, info):
     return info.type == "event" and info.event == 'subscribe'
@@ -112,6 +117,11 @@ Router.get_instance().set({
         'name' : u'取消收听',
         'pattern' : match_unsubscribe_event,
         'handler' : unsubscribe
+    })
+Router.get_instance().set({
+        'name' : u'声音消息',
+        'pattern' : match_voice_message,
+        'handler' : voice_message
     })
 
 help_wording = u"""小每立志成为一个您身边的手机游戏砖家，您可以和小每对话，让小每来帮您：

@@ -10,15 +10,23 @@ from django.views.decorators.csrf import csrf_exempt
 logger = logging.getLogger('default')
 from portal.tables import SearchResultTable
 from portal.models import Game
+from portal.views import _auth_user, _redirect_back
 from service import search_pb2
 import socket
 
 import rules
+import rules_base_dialog
 import rules_game_search
 from pyweixin import WeiXin
 from router import Router
 from message_builder import MessageBuilder, BuildConfig
 from data_loader import load_games_for_today, load_shorten_urls
+
+from weixin.forms import DialogForm
+from weixin.models import BaseDialog
+
+from django.contrib import auth
+from django.contrib.auth.decorators import login_required
 
 TOKEN = "itv"
 
@@ -101,3 +109,30 @@ def search(request):
                 continue
             games.append(game)
         return render(request, "search.html", {"games": SearchResultTable(games)})
+
+@login_required
+def add_edit_dialog(request, dialog_id=None):
+    _auth_user(request)
+    dialog = None
+    if dialog_id:
+        dialog = get_object_or_404(BaseDialog, id=dialog_id)
+    if request.method == 'POST':
+        form = DialogForm(request.POST, instance=dialog)
+        if form.is_valid():
+            form.save()
+            return _redirect_back(request)
+    else:
+        if dialog == None:
+            form = DialogForm(instance=dialog, initial={'presenter': request.user.username})
+        else:
+            form = DialogForm(instance=dialog)
+
+
+    return render(request, "add_edit_dialog.html", {"form": form})
+
+@login_required
+def delete_dialog(request, dialog_id):
+    dialog = get_object_or_404(BaseDialog, id=dialog_id)
+    dialog.delete()
+    return _redirect_back(request)
+

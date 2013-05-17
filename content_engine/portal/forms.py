@@ -119,3 +119,6 @@ class PlayerForm(EntityForm):
                   'weibo_sync_timestamp',
                   'presenter',
                   'recommended_reason')
+
+
+

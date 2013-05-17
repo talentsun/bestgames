@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # Django settings for GameRecommend project.
 import os
+from my_setting import *
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -114,8 +115,6 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'content_engine.urls'
 
-WEIBO_CLIENT_KEY = '2603170429'
-WEIBO_CLIENT_SECRET= 'c0ccb2e65866188ecf9e20624e3ed7c2'
 
 LOGIN_URL          = '/'
 LOGIN_REDIRECT_URL = '/'

@@ -73,11 +73,17 @@ class Index:
         SegUtil.Init(self.path + "/../")
 
     @classmethod
-    def GetWords(cls, sentense):
+    def GetWords(cls, sentense, logger = None):
         ts = SegUtil.Seg(sentense.encode("utf8"))
-        ws = []
+        unique_word = {}
         for t in ts:
-            ws.append((t[0].decode('utf8'), 1.0/len(ts)))
+            if not t[0] in unique_word:
+                unique_word[t[0]] = 0
+            unique_word[t[0]] += 1
+
+        ws = []
+        for k, v in unique_word.iteritems():
+            ws.append((k.decode('utf8'), (v *1.0)/len(ts)))
         return ws
 
     @classmethod
@@ -85,7 +91,7 @@ class Index:
         logger.debug("build index for one %d %s" % (qId, question))
         ws = cls.GetWords(question)
         for w in ws:
-            item = DBItem(w[0], qId, 1.0/len(ws))
+            item = DBItem(w[0], qId, w[1])
             (k, v) = item.Encode()
             db.Put(k, v)
 
@@ -136,10 +142,8 @@ if __name__ == "__main__":
 
     os.rename(dbPath+".tmp", dbPath)
     searchScript = GetConfigValue("SEARCH_SCRIPT", sys.argv[1])
+    print searchScript
     if searchScript != None:
-        subprocess.Popen("%s %s" % (searchScript, sys.argv[1]))
+        subprocess.Popen("%s %s" % (searchScript, sys.argv[1]), shell=True)
     RemoveSingle(single)
-
-
-
         
