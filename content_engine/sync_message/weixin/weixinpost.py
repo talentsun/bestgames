@@ -22,6 +22,7 @@ class weixin:
     gameScreenPath2List = []
     gameScreenPath3List = []
     gameScreenPath4List = []
+    adviceImageList = []
     weixin_message_title=''
     weixin_message_cover=''
     entity_id = ''
@@ -264,13 +265,13 @@ class weixin:
             curtime = time.strftime('%Y-%m-%d %H:%M',time.localtime(time.time()))
             print 'start: ' + curtime
             #curtime = '2013-04-22 14:10'
-            sql = "SELECT weixin.entity_ptr_id,weixin.title AS weixin_title, weixin.cover AS weixin_cover,games.`name` AS game_name,games.icon AS game_icon,game_entities.`recommended_reason` AS game_recommended_reason,game_entities.brief_comment AS game_brief_comment," \
+            sql = "SELECT weixin2.entity_ptr_id,weixin2.title AS weixin_title, weixin2.cover AS weixin_cover,games.`name` AS game_name,games.icon AS game_icon,game_entities.`recommended_reason` AS game_recommended_reason,game_entities.brief_comment AS game_brief_comment," \
                   "games.screenshot_path_1 AS game_screenshot_path_1,games.screenshot_path_2 AS game_screenshot_path_2,"\
                   "games.screenshot_path_3 AS game_screenshot_path_3, games.screenshot_path_4 AS game_screenshot_path_4,weixin_entities.weibo_sync_timestamp AS weixin_weibo_sync_timestamp," \
                   "weixin_entities.`status` AS weixin_status,weixin_entities.`recommended_reason`" \
-                  " FROM weixin INNER JOIN weixin_games ON weixin.entity_ptr_id = weixin_games.weixin_id "\
-                  "INNER JOIN games ON weixin_games.game_id = games.entity_ptr_id INNER JOIN entities game_entities ON games.entity_ptr_id = game_entities.id "\
-                  "INNER JOIN entities weixin_entities ON weixin.entity_ptr_id = weixin_entities.id INNER JOIN categories ON games.category_id = categories.id "\
+                  " FROM weixin2 INNER JOIN weixin2_games ON weixin2.entity_ptr_id = weixin2_games.weixin_id "\
+                  "INNER JOIN games ON weixin2_games.game_id = games.entity_ptr_id INNER JOIN entities game_entities ON games.entity_ptr_id = game_entities.id "\
+                  "INNER JOIN entities weixin_entities ON weixin2.entity_ptr_id = weixin_entities.id INNER JOIN categories ON games.category_id = categories.id "\
                   "WHERE weixin_entities.weibo_sync_timestamp like '"+ curtime +  "%' and weixin_entities.status = '1' and weixin_entities.type ='5'"
             print sql
             cur.execute(sql)
@@ -300,6 +301,38 @@ class weixin:
                 self.weixin_status = result[13]
 
                 r = 1
+
+            sql = "select weixin2.entity_ptr_id, weixin2.title,weixin2.cover, advice_entities.`recommended_reason`,"+ \
+                  " advice_entities.brief_comment,game_advices.advice_image, advice_entities.status, advice_entities.weibo_sync_timestamp " + \
+                  " FROM weixin2 INNER JOIN weixin2_advices ON weixin2.entity_ptr_id = weixin2_advices.weixin_id INNER JOIN game_advices ON weixin2_advices.`gameadvices_id` = game_advices.entity_ptr_id " +\
+                  " INNER JOIN entities advice_entities WHERE advice_entities.weibo_sync_timestamp like '" + curtime + "%' and advice_entities.status = '1' and advice_entities.type ='5'";
+
+            cur.execute(sql)
+            data = cur.fetchall()
+
+            cur.execute(sql)
+
+            data = cur.fetchall()
+
+            for result in data:
+                self.entity_id = result[0]
+                self.weixin_message_title = result[1]
+                self.weixin_message_cover = result[2]
+#                self.nameList.append(result[3])
+#                self.iconList.append(result[4])
+                url_pos = result[3].find('http://')
+                if url_pos != -1:
+                    description = result[3][:url_pos]
+                else:
+                    description = result[3]
+                self.gameRecommendReasonList.append(description + '<br><br><font color="gray">回复游戏名获得该游戏的下载地址</font>')
+                self.gameBriefList.append(result[4] + "  -  " + result[3])
+                self.iconList.append(result[5])
+#                self.gameScreenPath2List.append(result[8])
+#                self.gameScreenPath3List.append(result[9])
+#                self.gameScreenPath4List.append(result[10])
+                self.weixin_status = result[6]
+
 
             if r != 0:
                 if self.weixin_message_title is None or self.weixin_status is None\
