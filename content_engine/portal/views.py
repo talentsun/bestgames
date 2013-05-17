@@ -16,10 +16,10 @@ import logging, traceback, time, struct, socket
 
 from taggit.models import Tag
 
-from portal.models import Game, Redier, Collection, Problem,Entity,Weixin,Player
 from weixin.models import BaseDialog
-from portal.tables import GameTable, RedierTable, CollectionTable, ProblemTable, WeixinTable,PlayerTable, DialogTable
-from portal.forms import GameForm, RedierForm, CollectionForm, ProblemForm,WeixinForm,PlayerForm
+from portal.models import Game, Redier, Collection, Problem,Entity,Weixin, Player,GameAdvices
+from portal.tables import GameTable, RedierTable, CollectionTable, ProblemTable, WeixinTable,PlayerTable,GameAdvicesTable, DialogTable
+from portal.forms import GameForm, RedierForm, CollectionForm, ProblemForm,WeixinForm,PlayerForm,GameAdvicesForm
 from service import search_pb2
 
 import django_tables2 as tables
@@ -106,7 +106,11 @@ def index(request):
     dialog.data.verbose_name = u"基本对话"
 
 
-    return render(request, "index.html", {"games": games, "rediers":rediers, 'collections':collections, 'problems':problems, 'weixin':weixin,'player':player, 'dialog':dialog})
+    gameAdvices = GameAdvicesTable(GameAdvices.objects.all(),prefix="pr-")
+    gameAdvices.paginate(page=request.GET.get("ga-page",1), per_page=10)
+    gameAdvices.data.verbose_name = u"游戏情报站"
+
+    return render(request, "index.html", {"games": games, "rediers":rediers, 'collections':collections, 'problems':problems, 'weixin':weixin,'player':player,'dialog': dialog, 'game_advices':gameAdvices})
 
 def logout(request):
     auth.logout(request)
@@ -386,5 +390,48 @@ def delete_player(request, player_id=None):
 def preview_player(request, player_id=None):
     player = get_object_or_404(Player, entity_ptr_id=player_id)
     return render(request, 'preview_player.html', { 'player' : player })
+
+
+@login_required
+def add_edit_game_advice(request, game_advice_id=None):
+    _auth_user(request)
+    weibo_sync_timestamp =''
+    if game_advice_id:
+        game_advice = get_object_or_404(GameAdvices, entity_ptr_id=game_advice_id)
+        weibo_sync_timestamp = game_advice.weibo_sync_timestamp
+    else:
+        game_advice = None
+
+    if request.method == 'POST':
+        form = GameAdvicesForm(request.POST, request.FILES, instance=game_advice)
+        if form.is_valid():
+            game_advice = form.save()
+            if request.POST['advice_image']:
+                game_advice.advice_image = request.POST['advice_image'].replace(settings.MEDIA_URL, '', 1)
+                #            else:
+            #                weixin.cover = request.POST['cover']
+            if weibo_sync_timestamp != game_advice.weibo_sync_timestamp:
+                if weibo_sync_timestamp != '':
+                    game_advice.status = Entity.STATUS_PENDING
+            game_advice.save()
+            return _redirect_back(request)
+    else:
+        if game_advice is None:
+            form = GameAdvicesForm(instance=game_advice, initial={'presenter' : request.user.username})
+        else:
+            form = GameAdvicesForm(instance=game_advice)
+
+    return render(request, 'add_edit_game_advices.html', {'form' : form})
+
+@login_required
+def delete_game_advice(request, game_advice_id=None):
+    _auth_user(request)
+    game_advice = get_object_or_404(GameAdvices, entity_ptr_id=game_advice_id)
+    game_advice.delete()
+    return _redirect_back(request)
+
+def preview_game_advice(request, game_advice_id=None):
+    game_advice = get_object_or_404(GameAdvices, entity_ptr_id=game_advice_id)
+    return render(request, 'preview_game_advices.html', { 'gameadvice' : game_advice })
 
 

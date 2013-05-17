@@ -224,6 +224,11 @@ def playerImageBuidler(game_id,pic,weibo_status):
 
     sendWeibo('#我是玩家# ' + weibo_status,outputFilePath,game_id)
 
+def gameAdviceImageBuidler(game_id,pic,weibo_status):
+    outputFilePath = '/home/app_bestgames/content_engine/media/' + pic
+
+    sendWeibo('#游戏情报站# ' + weibo_status,outputFilePath,game_id)
+
 def redier():
     con = mdb.connect('localhost', 'root',
         'nameLR9969', 'content_engine',charset='utf8');
@@ -329,6 +334,26 @@ def player():
     if con:
         con.close()
 
+def game_advices():
+    con = mdb.connect('localhost', 'root',
+        'nameLR9969', 'content_engine',charset='utf8');
+
+    cur = con.cursor()
+    curtime = time.strftime('%Y-%m-%d %H:%M',time.localtime(time.time()))
+    print 'start: ' + curtime
+    sql = "SELECT game_advices.entity_ptr_id,game_advices.advice_image,entities.recommended_reason, entities.weibo_sync_timestamp from entities,game_advices where entities.weibo_sync_timestamp  like '" + curtime + "%'  and game_advices.entity_ptr_id = entities.id and entities.status = '1' and entities.type = '7' "
+    print sql
+    cur.execute(sql)
+
+    data = cur.fetchall()
+
+    for result in data:
+        gameAdviceImageBuidler(result[0],result[1],result[2])
+
+
+    if con:
+        con.close()
+
 
 
 con = None
@@ -354,6 +379,7 @@ try:
     collection()
     problem()
     player()
+    game_advices()
 
 finally:
     if con:
