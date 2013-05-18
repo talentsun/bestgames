@@ -124,6 +124,7 @@ class PlayerForm(EntityForm):
                   'player_image',
                   'weibo_sync_timestamp',
                   'presenter',
+                  'brief_comment',
                   'recommended_reason')
 
 
@@ -137,4 +138,5 @@ class GameAdvicesForm(EntityForm):
                   'advice_image',
                   'weibo_sync_timestamp',
                   'presenter',
+                  'brief_comment',
                   'recommended_reason')
