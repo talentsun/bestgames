@@ -318,28 +318,26 @@ class weixin:
                 self.entity_id = result[0]
                 self.weixin_message_title = result[1]
                 self.weixin_message_cover = result[2]
-#                self.nameList.append(result[3])
-#                self.iconList.append(result[4])
                 url_pos = result[3].find('http://')
                 if url_pos != -1:
                     description = result[3][:url_pos]
                 else:
                     description = result[3]
-                self.gameRecommendReasonList.append(description + '<br><br><font color="gray">回复游戏名获得该游戏的下载地址</font>')
+                self.gameRecommendReasonList.append(description)
                 self.gameBriefList.append(result[4] + "  -  " + result[3])
                 self.iconList.append(result[5])
-#                self.gameScreenPath2List.append(result[8])
-#                self.gameScreenPath3List.append(result[9])
-#                self.gameScreenPath4List.append(result[10])
                 self.weixin_status = result[6]
-
+                r = 1
 
             if r != 0:
                 if self.weixin_message_title is None or self.weixin_status is None\
                    or str(self.weixin_status).strip() == '' or self.weixin_message_cover is None\
                 or str(self.weixin_message_cover).strip() == '':
-                    self.CoverImageBuilder(self.gameScreenPath1List[0],self.gameScreenPath2List[0],self.gameScreenPath3List[0],self.gameScreenPath4List[0])
-                    pass
+                    if str(self.gameScreenPath1List[0]).strip() == '':
+                        pass
+                    else:
+                        self.CoverImageBuilder(self.gameScreenPath1List[0],self.gameScreenPath2List[0],self.gameScreenPath3List[0],self.gameScreenPath4List[0])
+                        pass
                 else:
                     self.iconList.insert(0,self.weixin_message_cover)
                     self.gameBriefList.insert(0,self.weixin_message_title)
