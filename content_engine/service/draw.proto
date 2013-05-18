@@ -1,0 +1,11 @@
+message DrawQuery {
+    required string uid = 1;
+}
+
+message DrawResp {
+    required int32 result = 1;
+    optional int32 reward = 2;
+    optional string value = 3;
+    optional int32 leftTimes = 4;
+}
+    
