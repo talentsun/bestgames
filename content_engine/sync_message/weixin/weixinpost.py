@@ -257,7 +257,7 @@ class weixin:
     def get_msg_from_sql(self):
         con = None
         try:
-            con = mdb.connect('localhost', 'root',
+            con = mdb.connect('118.244.225.222', 'root',
                 'nameLR9969', 'content_engine',charset='utf8');
 
             cur = con.cursor()
@@ -303,16 +303,26 @@ class weixin:
                 r = 1
 
             sql = "select weixin2.entity_ptr_id, weixin2.title,weixin2.cover, advice_entities.`recommended_reason`,"+ \
-                  " advice_entities.brief_comment,game_advices.advice_image, advice_entities.status, advice_entities.weibo_sync_timestamp " + \
+                  " advice_entities.brief_comment,game_advices.advice_image, advice_entities.status, advice_entities.weibo_sync_timestamp,game_advices.title " + \
                   " FROM weixin2 INNER JOIN weixin2_advices ON weixin2.entity_ptr_id = weixin2_advices.weixin_id INNER JOIN game_advices ON weixin2_advices.`gameadvices_id` = game_advices.entity_ptr_id " +\
                   " INNER JOIN entities advice_entities WHERE advice_entities.weibo_sync_timestamp like '" + curtime + "%' and advice_entities.status = '1' and advice_entities.type ='5'";
 
+            sql = "select weixin2.entity_ptr_id, weixin2.title,weixin2.cover, advice_entities.`recommended_reason`, " + \
+                  " advice_entities.brief_comment,game_advices.advice_image, advice_entities.status, " + \
+                  " advice_entities.weibo_sync_timestamp,game_advices.title  FROM weixin2 INNER JOIN weixin2_advices " + \
+                  " ON weixin2.entity_ptr_id = weixin2_advices.weixin_id INNER JOIN game_advices " + \
+                  "ON weixin2_advices.`gameadvices_id` = game_advices.entity_ptr_id " + \
+                  " INNER JOIN entities advice_entities ON game_advices.entity_ptr_id = advice_entities.id" + \
+                  " INNER JOIN entities weixin_entities ON weixin2.entity_ptr_id = weixin_entities.id " + \
+                  " WHERE weixin_entities.weibo_sync_timestamp like '" + curtime + "' and weixin_entities.status = '3' and weixin_entities.type ='5'";
+
             cur.execute(sql)
             data = cur.fetchall()
 
             cur.execute(sql)
 
             data = cur.fetchall()
+
 
             for result in data:
                 self.entity_id = result[0]
@@ -323,8 +333,12 @@ class weixin:
                     description = result[3][:url_pos]
                 else:
                     description = result[3]
+                if(str(description).strip() == ''):
+                    description = result[8]
                 self.gameRecommendReasonList.append(description)
-                self.gameBriefList.append(result[4] + "  -  " + result[3])
+                if str(result[4]).strip() == '':
+                    result[4] = u"游戏情报站"
+                self.gameBriefList.append(result[4] + " - " + result[8])
                 self.iconList.append(result[5])
                 self.weixin_status = result[6]
                 r = 1
@@ -333,7 +347,7 @@ class weixin:
                 if self.weixin_message_title is None or self.weixin_status is None\
                    or str(self.weixin_status).strip() == '' or self.weixin_message_cover is None\
                 or str(self.weixin_message_cover).strip() == '':
-                    if str(self.gameScreenPath1List[0]).strip() == '':
+                    if len(self.gameScreenPath1List) == 0:
                         pass
                     else:
                         self.CoverImageBuilder(self.gameScreenPath1List[0],self.gameScreenPath2List[0],self.gameScreenPath3List[0],self.gameScreenPath4List[0])
