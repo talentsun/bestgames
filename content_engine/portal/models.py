@@ -191,10 +191,10 @@ class Weixin(Entity):
     title = models.CharField(u"标题", max_length=20,blank=True)
     cover = models.ImageField(u"封面图片", upload_to='upload/', max_length=255, blank=True)
     games = models.ManyToManyField(Game, verbose_name=u"游戏")
-    gameAdvices = models.ManyToManyField(GameAdvices, verbose_name=u"游戏情报站")
+    advices = models.ManyToManyField(GameAdvices, verbose_name=u"游戏情报站")
 
     class Meta:
-        db_table = u'weixin'
+        db_table = u'weixin2'
         verbose_name = u'微信合集'
         verbose_name_plural = u'微信合集'
     def save(self, *args, **kwargs):

@@ -15,6 +15,7 @@ from service import search_pb2
 import socket
 
 import rules
+#import rules_draw
 import rules_base_dialog
 import rules_game_search
 from pyweixin import WeiXin
