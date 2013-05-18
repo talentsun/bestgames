@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>添加/编辑机器人对话</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}ajax_upload/css/ajax-upload-widget.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/main.css"/>
+    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}ajax_upload/js/jquery.iframe-transport.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}ajax_upload/js/ajax-upload-widget.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#cancel').click(function(){
+                history.back();
+                return false;
+            });
+            $('#save').click(function(){
+                $('#add_dialog_form').submit();
+
+                return false;
+            });
+        });
+    </script>
+    {{ form.media }}
+</head>
+<body>
+<div id="main" class="container edit-page">
+    {% include "header.html" %}
+
+    <ul class="breadcrumb">
+        <li><a href="/">内容引擎</a> <span class="divider">/</span></li>
+        <li class="active">添加/编辑机器人对话消息</li>
+    </ul>
+
+    <form id="add_dialog_form" action="" method="post" enctype="multipart/form-data"> {% csrf_token %}
+        <div class="navbar" style="margin-bottom:0;">
+            <div class="navbar-inner">
+                <p class="navbar-text">机器人对话</p>
+            </div>
+        </div>
+        <table class="table">
+            <tbody>
+            <tr><th>{{ form.question.label }}</th><td>{{ form.question }}{{ form.question.errors }}</td></tr>
+            <tr><th>{{ form.answer.label }}</th><td>{{ form.answer}}{{ form.answer.errors }}</td></tr>
+            <tr><th>{{ form.presenter.label }}</th><td>{{ form.presenter}}{{ form.presenter.errors }}</td></tr>
+            </tbody>
+        </table>
+        {% include "save_cancel_section.html"%}
+    </form>
+</div> </body>
