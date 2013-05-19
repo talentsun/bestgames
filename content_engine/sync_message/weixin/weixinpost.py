@@ -145,7 +145,7 @@ class weixin:
         from_id_array = []
         count = 0;
         while count < msg_count:
-            filename= '/home/app_bestgames/content_engine/media/' + self.iconList[count]
+            filename= '/data/media/' + self.iconList[count]
             shutil.copy(filename,'/home/app_bestgames/weixinpic/' + str(count) + ".jpg")
             filename = '/home/app_bestgames/weixinpic/' + str(count) + ".jpg"
             from_id_array.append(self.postSingelImage(cert,slave_user,slave_sid,filename))
