@@ -8,11 +8,11 @@ from content_engine import settings
 setup_environ(settings)
 
 lastRewardTime = time.time()
-reloadRewardInternal = 3600*24 #每天5次
+reloadRewardInternal = 3600*24 #每天1次
 reloadRewardNums = [5, 20]
 
 rewardNums = [5, 20]
-maxDrawTime = 100
+maxDrawTime = 250
 rewardResources = {1:{}, 2:{}}
 rewardLeftNums = []
 
