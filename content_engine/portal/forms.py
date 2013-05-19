@@ -86,10 +86,15 @@ class GameAdviceChoices(AutoModelSelect2MultipleField):
     queryset = GameAdvices.objects
     search_fields = ['title__icontains',]
 
+class PlayerChoices(AutoModelSelect2MultipleField):
+    queryset = Player.objects
+    search_fields = ['title__icontains',]
+
 class WeixinForm(EntityForm):
     cover = forms.ImageField(label=u"封面图片", help_text=u"建议使用640x320大小的图片", widget=AjaxClearableFileInput(),required=False)
     games = GameChoices(label=u"游戏",required = False)
     advices = GameAdviceChoices(label=u"游戏情报站",required = False)
+    players = PlayerChoices(label=u"我是玩家",required = False)
 
     class Meta:
         model = Weixin
@@ -97,6 +102,7 @@ class WeixinForm(EntityForm):
                   'cover',
                   'games',
                   'advices',
+                  'players',
                   'weibo_sync_timestamp',
                   'presenter',
                   'recommended_reason'

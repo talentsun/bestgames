@@ -159,6 +159,8 @@ class Player(Entity):
     title = models.CharField(u"标题", max_length=50)
     player_image = models.ImageField(u"我是玩家", upload_to='upload/', max_length=255, blank=True)
 
+    def __unicode__(self):
+        return force_unicode(self.title)
     class Meta:
         db_table = u'players'
         verbose_name = u'我是玩家'
@@ -192,6 +194,7 @@ class Weixin(Entity):
     cover = models.ImageField(u"封面图片", upload_to='upload/', max_length=255, blank=True)
     games = models.ManyToManyField(Game, verbose_name=u"游戏")
     advices = models.ManyToManyField(GameAdvices, verbose_name=u"游戏情报站")
+    players = models.ManyToManyField(Player,verbose_name=u"我是玩家")
 
     class Meta:
         db_table = u'weixin2'
