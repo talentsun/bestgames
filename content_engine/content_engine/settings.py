@@ -57,7 +57,7 @@ USE_TZ = False
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = '/home/app_bestgames/content_engine/media/'
+MEDIA_ROOT = '/data/media/'
 
 GAME_PIC_ROOT = '/home/app_bestgames/content_engine/scrapy_itunes/'
 
