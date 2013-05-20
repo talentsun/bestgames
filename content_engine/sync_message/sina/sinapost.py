@@ -58,10 +58,10 @@ def imageBuilder(pic1,pic2,pic3,pic4,game_id,weibo_status):
 
     print pic1 + pic2
 
-    content = content.replace('game_screenshot_1','/home/app_bestgames/content_engine/media/' + pic1)
-    content = content.replace('game_screenshot_2','/home/app_bestgames/content_engine/media/' + pic2)
-    content = content.replace('game_screenshot_3','/home/app_bestgames/content_engine/media/' + pic3)
-    content = content.replace('game_screenshot_4','/home/app_bestgames/content_engine/media/' + pic4)
+    content = content.replace('game_screenshot_1','/data/media/' + pic1)
+    content = content.replace('game_screenshot_2','/data/media/' + pic2)
+    content = content.replace('game_screenshot_3','/data/media/' + pic3)
+    content = content.replace('game_screenshot_4','/data/media/' + pic4)
 
     today = time.strftime('%Y-%m-%d',time.localtime(time.time()))
     if os.path.exists(today):
@@ -96,7 +96,7 @@ def redierImageBuidler(game_id,pic,weibo_status):
     templete_file.close()
 
 
-    content = content.replace('redier_image','/home/app_bestgames/content_engine/media/' + pic)
+    content = content.replace('redier_image','/data/media/' + pic)
 
     today = time.strftime('%Y-%m-%d',time.localtime(time.time()))
     if os.path.exists(today):
@@ -150,14 +150,14 @@ def collectionImageBuilder(gameId,collectionTitle,collectionCover,nameList,scree
         while t < empty_star_count:
             star = star + '<div class="empty-star"></div>'
             t = t + 1
-        collection_games = collection_games + collection_template%('/home/app_bestgames/content_engine/media/' + screenList[i],name,gameCategoryList[i],star,gameBriefList[i])
+        collection_games = collection_games + collection_template%('/data/media/' + screenList[i],name,gameCategoryList[i],star,gameBriefList[i])
         i = i + 1
         if i%2 == 0:
             collection_games = '<tr>%s</tr>' %(collection_games)
 
     collection_games = '<tr>%s</tr>' %(collection_games)
 
-    content = content.replace('collection_cover_image','/home/app_bestgames/content_engine/media/' + collectionCover)
+    content = content.replace('collection_cover_image','/data/media/' + collectionCover)
     content = content.replace('collection_title',collectionTitle)
     content = content.replace('collection_game',collection_games)
 
@@ -195,7 +195,7 @@ def problemImageBuidler(game_id,pic,weibo_status):
     templete_file.close()
 
 
-    content = content.replace('problem_image','/home/app_bestgames/content_engine/media/' + pic)
+    content = content.replace('problem_image','/data/media/' + pic)
 
     today = time.strftime('%Y-%m-%d',time.localtime(time.time()))
     if os.path.exists(today):
@@ -220,12 +220,12 @@ def problemImageBuidler(game_id,pic,weibo_status):
 
 
 def playerImageBuidler(game_id,pic,weibo_status):
-    outputFilePath = '/home/app_bestgames/content_engine/media/' + pic
+    outputFilePath = '/data/media/' + pic
 
     sendWeibo('#我是玩家# ' + weibo_status,outputFilePath,game_id)
 
 def gameAdviceImageBuidler(game_id,pic,weibo_status):
-    outputFilePath = '/home/app_bestgames/content_engine/media/' + pic
+    outputFilePath = '/data/media/' + pic
 
     sendWeibo('#游戏情报站# ' + weibo_status,outputFilePath,game_id)
 
