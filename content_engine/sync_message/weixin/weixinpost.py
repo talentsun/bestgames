@@ -48,13 +48,13 @@ class weixin:
 
         templete_file.close()
 
-        content = content.replace('screenShotPath1','/home/app_bestgames/content_engine/media/' + screen1)
-        content = content.replace('screenShotPath2','/home/app_bestgames/content_engine/media/' + screen2)
-        content = content.replace('screenShotPath3','/home/app_bestgames/content_engine/media/' + screen3)
-        content = content.replace('screenShotPath4','/home/app_bestgames/content_engine/media/' + screen4)
+        content = content.replace('screenShotPath1','/data/media/' + screen1)
+        content = content.replace('screenShotPath2','/data/media/' + screen2)
+        content = content.replace('screenShotPath3','/data/media/' + screen3)
+        content = content.replace('screenShotPath4','/data/media/' + screen4)
 
         curtime = time.strftime('%Y-%m-%d-%H:%M',time.localtime(time.time()))
-        root = "/home/app_bestgames/content_engine/media/"
+        root = "/data/media/"
         filename = root + curtime + 'share.html'
         shareGameFile = open(filename,'w')
         shareGameFile.write(content)
