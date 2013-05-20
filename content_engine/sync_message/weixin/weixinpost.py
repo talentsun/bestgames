@@ -297,8 +297,9 @@ class weixin:
               " ON weixin2_advices.`gameadvices_id` = game_advices.entity_ptr_id " +\
               " INNER JOIN entities advice_entities ON game_advices.entity_ptr_id = advice_entities.id" +\
               " INNER JOIN entities weixin_entities ON weixin2.entity_ptr_id = weixin_entities.id " +\
-              " WHERE weixin_entities.weibo_sync_timestamp like '" + curtime + "' and weixin_entities.status = '3' and weixin_entities.type ='5'";
+              " WHERE weixin_entities.weibo_sync_timestamp like '" + curtime + "%' and weixin_entities.status = '1' and weixin_entities.type ='5'";
         cur.execute(sql)
+
         data = cur.fetchall()
         cur.execute(sql)
         data = cur.fetchall()
@@ -330,7 +331,7 @@ class weixin:
               " ON weixin2_players.`player_id` = players.entity_ptr_id " +\
               " INNER JOIN entities player_entities ON players.entity_ptr_id = player_entities.id" +\
               " INNER JOIN entities weixin_entities ON weixin2.entity_ptr_id = weixin_entities.id " +\
-              " WHERE weixin_entities.weibo_sync_timestamp like '" + curtime + "' and weixin_entities.status = '3' and weixin_entities.type ='5'";
+              " WHERE weixin_entities.weibo_sync_timestamp like '" + curtime + "%' and weixin_entities.status = '1' and weixin_entities.type ='5'";
         cur.execute(sql)
         data = cur.fetchall()
         cur.execute(sql)
@@ -365,7 +366,6 @@ class weixin:
 
             curtime = time.strftime('%Y-%m-%d %H:%M',time.localtime(time.time()))
             print 'start: ' + curtime
-            #curtime = '2013-04-22 14:10'
             r = self.get_games(cur, curtime)
 
             r = self.get_game_advices(cur, curtime, r)
