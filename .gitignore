@@ -1,7 +1,6 @@
 *.pyc
 .idea
 *.log*
-Search.cfg
 search.pid
 last_id
 *.log
