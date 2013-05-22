@@ -280,7 +280,7 @@ class weixin:
             else:
                 description = result[5]
             self.gameRecommendReasonList.append(description + '<br><br><font color="gray">回复游戏名获得该游戏的下载地址</font>')
-            self.gameBriefList.append(u"#精品游戏推荐##精品游戏推荐# " + result[6] + "  -  " + result[3])
+            self.gameBriefList.append(u"#精品游戏推荐# " + result[6] + "  -  " + result[3])
             self.gameScreenPath1List.append(result[7])
             self.gameScreenPath2List.append(result[8])
             self.gameScreenPath3List.append(result[9])
