@@ -67,7 +67,7 @@ if __name__ == '__main__':
                             op.save()
 
         RemoveSingle(singleFilePath)
-    except Exception as e:
+    except:
         RemoveSingle(singleFilePath)
         traceback.print_exc()
         logger.debug(traceback.format_exc())
