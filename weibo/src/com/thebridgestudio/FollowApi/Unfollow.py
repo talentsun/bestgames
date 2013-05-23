@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/local/bin/python2.7
 
 from django.core.management import setup_environ
 from FollowApi import settings
