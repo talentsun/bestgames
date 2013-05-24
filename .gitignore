@@ -6,3 +6,4 @@ last_id
 *.log
 *.swp
 my_setting.py
+content_uwsgi.ini
