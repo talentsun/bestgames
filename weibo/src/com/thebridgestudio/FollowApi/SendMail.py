@@ -14,8 +14,8 @@ import os
 def send_mail(to, subject, text, files=[]):
     server = {}
     server['name'] = 'smtp.qq.com'
-    server['user'] = 'wangjianfei@thebridgestudio.net'
-    server['passwd'] = 'jfwang213'
+    server['user'] = 'wangjianfei@limijiaoyin.com'
+    server['passwd'] = 'nameLR9969'
     assert type(server) == dict 
     assert type(to) == list 
     assert type(files) == list 
