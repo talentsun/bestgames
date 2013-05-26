@@ -18,6 +18,10 @@ from Competitors.models import Competitor
 from Operations.models import Operation
 
 
+def GetUserInfo(client, uid):
+    pass
+
+
 if __name__ == '__main__':
     from Utils import *
     os.chdir(work_path)
@@ -45,9 +49,21 @@ if __name__ == '__main__':
                             num = 1
                         followers = comWeb.GetFollowers(client, num)
                         for user in followers:
-                            op = Operation()
+                            try:
+                                op = Operation.objects.get(opUid = user['id'])
+                                # already follow once
+                                continue
+                            except:
+                                op = Operation()
                             op.opUid = user['id']
                             op.state = 0
+                            if user['followers_count'] < 50:
+                                logger.debug("newer")
+                                continue
+
+                            if user['friends_count'] > user['followers_count'] * 10:
+                                logger.debug("dead user")
+                                continue
                             if not FriendShip.CheckFollow(client, BGApp.dev_uid, op.opUid):
                                 if comDb.uid == 2171037552: #anzhuoyouxi
                                     if len(ops) < 105:

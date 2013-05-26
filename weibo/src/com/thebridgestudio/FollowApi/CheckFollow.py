@@ -59,5 +59,5 @@ if __name__ == '__main__':
         mailContent += "一共收听了%d个人，回粉了%d个人\n" % (v[0], v[1])
 
     print mailContent
-    send_mail(['bestgames@thebridgestudio.net',], "增粉日报", mailContent)
+    send_mail(['bestgames@limijiaoyin.com',], "增粉日报", mailContent)
 

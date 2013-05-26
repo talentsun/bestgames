@@ -12,3 +12,5 @@ class BGApp:
     wdj_app_secret = '6f503ed72723bacf9f4a0f4902b62c24'
     wdj_me_token = "2.00baJBTDqIR4cB04fca35e15ygoN_D"
 
+    weico_token = "2.00baJBTD06XASO35dcd07da0NOAOTC"
+

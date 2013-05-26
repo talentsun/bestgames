@@ -30,6 +30,8 @@ if __name__ == '__main__':
             if FriendShip.CheckFollow(client, BGApp.dev_uid, op.opUid):
                 logger.debug("unfollow %d" % op.opUid)
                 FriendShip.Unfollow(client, op.opUid)
+                op.state = 3#has been unfollowed
+                op.save()
             else:
                 logger.debug("%d not followed" % op.opUid)
         except:
