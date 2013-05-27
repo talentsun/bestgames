@@ -6,7 +6,7 @@ import time, datetime
 class Operation(models.Model):
     opUid = models.BigIntegerField()
     addTime = models.DateTimeField(auto_now_add=True)
-    state = models.IntegerField(default = 0)
+    state = models.IntegerField(default = 0) #0 not follow 1 follow 2 qiuguanzhu over 3 unfollow
     srcUid = models.BigIntegerField(default = 0)
     actionTime = models.DateTimeField(auto_now_add=True)
     followers = models.IntegerField(default = 0)
