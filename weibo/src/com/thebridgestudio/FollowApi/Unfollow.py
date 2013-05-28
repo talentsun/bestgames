@@ -23,7 +23,7 @@ if __name__ == '__main__':
     unfollowDay = datetime.date.today() - datetime.timedelta(days=3)
     ops = Operation.GetSomeDayOps(unfollowDay)
     client = APIClient(BGApp.app_key, BGApp.app_secret)
-    client.set_access_token(BGApp.dev_token, time.time() + 90 * 24 *3600)
+    client.set_access_token(BGApp.weico_token, time.time() + 90 * 24 *3600)
     for op in ops:
         logger.debug("unfollow %d state %d %s" % (op.opUid, op.state, op.actionTime))
         try:
