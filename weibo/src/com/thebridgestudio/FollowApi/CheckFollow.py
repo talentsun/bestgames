@@ -26,12 +26,12 @@ if __name__ == '__main__':
     unfollowDay = datetime.date.today()
     ops = Operation.GetSomeDayOps(unfollowDay)
     client = APIClient(BGApp.wdj_app_key, BGApp.wdj_app_secret)
-    client.set_access_token(BGApp.wdj_me_token, time.time() + 90 * 24 *3600)
+    client.set_access_token(BGApp.weico_token, time.time() + 90 * 24 *3600)
     allToFollow = 0
     allFollowers = 0
     followResult = {}
     for op in ops:
-        if op.state == 1:
+        if op.state != 0:
             allToFollow += 1
         else:
             continue
