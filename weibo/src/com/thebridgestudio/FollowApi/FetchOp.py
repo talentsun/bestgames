@@ -69,7 +69,7 @@ if __name__ == '__main__':
                                     if len(ops) < 105:
                                         op.state = 1
                                 else:
-                                    if len(ops) < 80:
+                                    if len(ops) < 90:
                                         op.state = 1
                             if op.state == 1:
                                 logger.debug("follow %d" % op.opUid)
