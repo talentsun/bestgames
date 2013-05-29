@@ -19,7 +19,7 @@ def Follow(request):
     uids = []
     if len(ops) == 1:
         if ops[0].addTime < datetime.now() - timedelta(days = 1):
-            return HttpResponse(json.dumps(ops[0]))
+            return HttpResponse(json.dumps(uids))
 
         uid = ops[0].opUid
         client = APIClient(BGApp.app_key, BGApp.app_secret)
@@ -28,6 +28,10 @@ def Follow(request):
             uids.append(uid)
             ops[0].state = 2
             ops[0].save()
+        else:
+            ops[0].state = 2
+            ops[0].save()
+
 
     return HttpResponse(json.dumps(uids))
 
