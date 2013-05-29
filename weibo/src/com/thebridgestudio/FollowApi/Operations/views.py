@@ -26,10 +26,10 @@ def Follow(request):
         client.set_access_token(BGApp.dev_token, time.time() + 90 * 24 *3600)
         if not FriendShip.CheckFollow(client, uid, BGApp.dev_uid):
             uids.append(uid)
-            ops[0].state = 2
+            ops[0].state = 2 #我们对其进行了求关注
             ops[0].save()
         else:
-            ops[0].state = 2
+            ops[0].state = 4 #已经关注了我们
             ops[0].save()
 
 

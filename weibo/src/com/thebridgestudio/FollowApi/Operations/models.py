@@ -1,3 +1,4 @@
+#coding: utf-8
 from django.db import models
 import time, datetime
 
@@ -6,7 +7,7 @@ import time, datetime
 class Operation(models.Model):
     opUid = models.BigIntegerField()
     addTime = models.DateTimeField(auto_now_add=True)
-    state = models.IntegerField(default = 0) #0 not follow 1 follow 2 qiuguanzhu over 3 unfollow
+    state = models.IntegerField(default = 0) #0 not follow 1 关注了他 2 对他进行了求关注 3 已经对其撤销了关注 4 自己回粉的
     srcUid = models.BigIntegerField(default = 0)
     actionTime = models.DateTimeField(auto_now_add=True)
     followers = models.IntegerField(default = 0)
