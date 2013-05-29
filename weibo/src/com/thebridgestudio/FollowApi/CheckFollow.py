@@ -85,7 +85,6 @@ if __name__ == '__main__':
             logger.debug(traceback.format_exc())
 
         time.sleep(1)
-    mailContent = ""
     mailContent += "昨日一共求关注了%d个人，%d个人回粉\n" % (allToFollow, allFollowers)
     mailContent += "其中：\n"
     for (k, v) in followResult.items():
