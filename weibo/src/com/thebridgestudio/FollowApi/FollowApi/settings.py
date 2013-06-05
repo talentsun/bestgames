@@ -52,16 +52,17 @@ MEDIA_ROOT = ''
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
 MEDIA_URL = ''
+PROJECT_FOLDER = os.path.dirname(os.path.dirname(os.path.normpath(__file__)))
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = ''
+STATIC_ROOT = PROJECT_FOLDER + "/Templates/"
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = '/static/'
+STATIC_URL = '/not_used/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -102,7 +103,6 @@ ROOT_URLCONF = 'FollowApi.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'FollowApi.wsgi.application'
-PROJECT_FOLDER = os.path.dirname(os.path.dirname(os.path.normpath(__file__)))
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -126,6 +126,7 @@ INSTALLED_APPS = (
     'Operations',
     "AccessInfo",
     "FollowMeTask",
+    "Statistic",
 )
 
 # A sample logging configuration. The only tangible logging
