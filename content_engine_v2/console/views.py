@@ -60,7 +60,9 @@ def add_edit_entity(request, entity_id=None):
             return _redirect_back(request)
     else:
         form = EntityForm(entity_type, entity)
-    return render(request, 'add_edit_entity.html', {'entity_type' : entity_type, 'form' : form})
+        wysiwyg_enabled = entity_type.properties.filter(type__name__in=['richtext']).exists()
+        print wysiwyg_enabled
+    return render(request, 'add_edit_entity.html', {'entity_type' : entity_type, 'form' : form, 'wysiwyg_enabled' : wysiwyg_enabled})
 
 def delete_entity(request, entity_id=None):
     entity = get_object_or_404(Entity, id=entity_id)

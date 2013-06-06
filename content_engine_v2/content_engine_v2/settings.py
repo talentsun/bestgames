@@ -133,7 +133,8 @@ INSTALLED_APPS = (
     'django_tables2',
     'ajax_upload',
     'django_select2',
-    'uuslug'
+    'uuslug',
+    'django_wysiwyg'
 )
 
 # A sample logging configuration. The only tangible logging

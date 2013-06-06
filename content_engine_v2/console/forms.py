@@ -9,7 +9,7 @@ from django_select2 import *
 from django.utils.translation import ugettext as _
 
 from console.fields import TagField
-from console.widgets import CountableTextarea
+from console.widgets import CountableTextarea, RichTextEditor
 from console.models import Entity, EntityType, Property, EntityType2Property
 
 class EntityForm(Form):
@@ -43,6 +43,8 @@ class EntityForm(Form):
 			return self._build_choices_field(prop, required, initial)
 		elif prop.type.name == 'tags':
 			return self._build_tags_field(prop, required, initial)
+		elif prop.type.name == 'richtext':
+			return self._build_richtext_field(prop, required, initial)
 
 		return None
 
@@ -133,6 +135,11 @@ class EntityForm(Form):
 
 	def _build_tags_field(self, prop, required, initial):
 		field = TagField(label=prop.verbose_name, required=required, initial=initial, max_length=100)
+		self._set_help_text(field, prop)
+		return field
+
+	def _build_richtext_field(self, prop, required, initial):
+		field = forms.CharField(label=prop.verbose_name, required=required, widget=RichTextEditor, initial=initial)
 		self._set_help_text(field, prop)
 		return field
 
