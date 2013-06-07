@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form method="get" class="form-horizontal">
+   <label class="control-label" for="download_url">iTunes 地址:</label>
+   <input id="id_name" type="text" name="download_url" value="" maxlength="100" style="margin:0px 20px;"/>
+   <input type="submit" value="下载" class="btn btn-primary" />
+ </form>
+
+{% if icon %}
+<div><img src="{{icon}}" /> </div>
+<div><img src="{{desc1}}" /> </div>
+<div><img src="{{desc2}}" /> </div>
+<div><img src="{{desc3}}" /> </div>
+<div><img src="{{desc4}}" /> </div>
+{% endif %}
+
+{% endblock %}
+
