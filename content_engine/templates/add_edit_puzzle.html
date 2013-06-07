@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>添加/编辑趣题</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}ajax_upload/css/ajax-upload-widget.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/main.css"/>
+    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}ajax_upload/js/jquery.iframe-transport.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}ajax_upload/js/ajax-upload-widget.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#cancel').click(function(){
+                history.back();
+                return false;
+            });
+            $('#save').click(function(){
+                $('#add_puzzle_form').submit();
+
+                return false;
+            });
+        });
+        $(function() {
+            AjaxUploadWidget.autoDiscover({
+                "changeButtonText" : "修改图片",
+                "removeButtonText" : "删除图片"
+            });
+        });
+    </script>
+    {{ form.media }}
+</head>
+<body>
+<div id="main" class="container edit-page">
+    {% include "header.html" %}
+
+    <ul class="breadcrumb">
+        <li><a href="/">内容引擎</a> <span class="divider">/</span></li>
+        <li class="active">添加/编辑趣题</li>
+    </ul>
+
+    <form id="add_puzzle_form" action="" method="post" enctype="multipart/form-data"> {% csrf_token %}
+        <div class="navbar" style="margin-bottom:0;">
+            <div class="navbar-inner">
+                <p class="navbar-text">趣题</p>
+            </div>
+        </div>
+        <table class="table">
+            <tbody>
+            <tr><th>{{ form.title.label }}</th><td>{{ form.title }}{{ form.title.errors }}</td></tr>
+            <tr><th>{{ form.picture1.label }}</th><td>{{ form.picture1 }}{{ form.picture1.errors }}</td></tr>
+            <tr><th>{{ form.picture2.label }}</th><td>{{ form.picture2 }}{{ form.picture2.errors }}</td></tr>
+            <tr><th>{{ form.picture3.label }}</th><td>{{ form.picture3 }}{{ form.picture3.errors }}</td></tr>
+            <tr><th>{{ form.picture4.label }}</th><td>{{ form.picture4 }}{{ form.picture4.errors }}</td></tr>
+            <tr><th>{{ form.presenter.label }}</th><td>{{ form.presenter}}{{ form.presenter.errors }}</td></tr>
+            <tr><th>{{ form.weibo_sync_timestamp.label }}</th><td>{{ form.weibo_sync_timestamp }}{{ form.weibo_sync_timestamp.errors }}</td></tr>
+            <tr><th>{{ form.description.label }}</th><td>{{ form.description }}{{ form.description.errors }}</td></tr>
+            <tr><th>{{ form.option1.label }}</th><td>{{ form.option1}}{{ form.option1.errors }}</td></tr>
+            <tr><th>{{ form.option2.label }}</th><td>{{ form.option2}}{{ form.option2.errors }}</td></tr>
+            <tr><th>{{ form.option3.label }}</th><td>{{ form.option3}}{{ form.option3.errors }}</td></tr>
+            <tr><th>{{ form.option4.label }}</th><td>{{ form.option4}}{{ form.option4.errors }}</td></tr>
+            <tr><th>{{ form.right.label }}</th><td>{{ form.right}}{{ form.right.errors }}</td></tr>
+            </tbody>
+        </table>
+        {% include "save_cancel_section.html"%}
+    </form>
+</div> </body>
