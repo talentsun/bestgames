@@ -183,4 +183,19 @@ class GameAdvicesTable(tables.Table):
         sequence = ("title", "presenter","weibo_sync_timestamp","status","ops")
         attrs = {'class' : 'table table-striped'}
 
+class PuzzleTable(tables.Table):
+    id = tables.Column(orderable=False, visible=False)
+    title = tables.Column(orderable=False)
+    presenter = tables.Column(orderable=False)
+    weibo_sync_timestamp = DateTimeColumn(verbose_name=u"微博同步时间",orderable=True)
+    status = TemplateColumn(template_name="sync_status_field.html",orderable=False,verbose_name=u"同步状态")
+    ops = TemplateColumn(template_name="puzzle_field_ops.html",verbose_name=u"操作",orderable=False,attrs={"class":"ops"})
 
+
+    class Meta:
+        model = GameAdvices
+        order_by = "-weibo_sync_timestamp"
+        empty_text = u"暂无\"趣题\""
+        fields = ("title", "presenter","weibo_sync_timestamp","status","ops")
+        sequence = ("title", "presenter","weibo_sync_timestamp","status","ops")
+        attrs = {'class' : 'table table-striped'}

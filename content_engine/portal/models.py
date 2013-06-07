@@ -13,6 +13,7 @@ class Entity(models.Model):
     WEIXIN = 5
     PLAYER = 6
     GAMEADVICE = 7
+    PUZZLE = 8
     type = models.IntegerField(verbose_name=u'类型', default=GAME, editable=False)
     tags = TaggableManager(verbose_name=u"标签",blank=True)
 
@@ -206,3 +207,35 @@ class Weixin(Entity):
             if self.weibo_sync_timestamp is not None:
                 self.status = Entity.STATUS_PENDING
         super(Weixin, self).save(args, kwargs)
+
+class Puzzle(Entity):
+    title = models.CharField(u"简短描述", max_length=20, blank=True)
+    picture1 = models.ImageField(u"问题图片1", upload_to='upload/', max_length=255, blank=True)
+    picture2 = models.ImageField(u"问题图片2", upload_to='upload/', max_length=255, blank=True)
+    picture3 = models.ImageField(u"问题图片3", upload_to='upload/', max_length=255, blank=True)
+    picture4 = models.ImageField(u"问题图片4", upload_to='upload/', max_length=255, blank=True)
+    description = models.CharField(u'题目描述', max_length=1000, blank=True)
+    option1 = models.CharField(u'选项1', max_length=200, blank=True)
+    option2 = models.CharField(u'选项2', max_length=200, blank=True)
+    option3 = models.CharField(u'选项3', max_length=200, blank=True)
+    option4 = models.CharField(u'选项4', max_length=200, blank=True)
+    right_choices = (
+        (0, '1'),
+        (1, '2'),
+        (2, '3'),
+        (3, '4'),
+    )
+    right = models.IntegerField(u'正确选项', choices=right_choices, default = 0)
+    
+    class Meta:
+        db_table = u'puzzles'
+        verbose_name = u'趣题'
+        verbose_name_plural = u'趣题'
+    def save(self, *args, **kwargs):
+        self.type = Entity.PUZZLE
+        if self.status == Entity.STATUS_DO_NOT_SYNC:
+            if self.weibo_sync_timestamp is not None:
+                self.status = Entity.STATUS_PENDING
+        super(Puzzle, self).save(args, kwargs)
+
+

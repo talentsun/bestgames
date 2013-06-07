@@ -17,9 +17,9 @@ import logging, traceback, time, struct, socket
 from taggit.models import Tag
 
 from weixin.models import BaseDialog
-from portal.models import Game, Redier, Collection, Problem,Entity,Weixin, Player,GameAdvices
-from portal.tables import GameTable, RedierTable, CollectionTable, ProblemTable, WeixinTable,PlayerTable,GameAdvicesTable, DialogTable
-from portal.forms import GameForm, RedierForm, CollectionForm, ProblemForm,WeixinForm,PlayerForm,GameAdvicesForm
+from portal.models import Game, Redier, Collection, Problem,Entity,Weixin, Player,GameAdvices, Puzzle
+from portal.tables import GameTable, RedierTable, CollectionTable, ProblemTable, WeixinTable,PlayerTable,GameAdvicesTable, DialogTable, PuzzleTable
+from portal.forms import GameForm, RedierForm, CollectionForm, ProblemForm,WeixinForm,PlayerForm,GameAdvicesForm, PuzzleForm
 from service import search_pb2
 
 import django_tables2 as tables
@@ -110,7 +110,11 @@ def index(request):
     gameAdvices.paginate(page=request.GET.get("ga-page",1), per_page=10)
     gameAdvices.data.verbose_name = u"游戏情报站"
 
-    return render(request, "index.html", {"games": games, "rediers":rediers, 'collections':collections, 'problems':problems, 'weixin':weixin,'player':player,'dialog': dialog, 'game_advices':gameAdvices})
+    puzzles = PuzzleTable(Puzzle.objects.all(), prefix="pu-")
+    puzzles.paginate(page=request.GET.get("pr-page",1), per_page=10)
+    puzzles.data.verbose_name = u"趣题"
+
+    return render(request, "index.html", {"games": games, "rediers":rediers, 'collections':collections, 'problems':problems, 'weixin':weixin,'player':player,'dialog': dialog, 'game_advices':gameAdvices, 'puzzles': puzzles})
 
 def logout(request):
     auth.logout(request)
@@ -434,4 +438,47 @@ def preview_game_advice(request, game_advice_id=None):
     game_advice = get_object_or_404(GameAdvices, entity_ptr_id=game_advice_id)
     return render(request, 'preview_game_advices.html', { 'gameadvice' : game_advice })
 
+@login_required
+def add_edit_puzzle(request, puzzle_id=None):
+    _auth_user(request)
+    weibo_sync_timestamp =''
+    if puzzle_id:
+        puzzle = get_object_or_404(Puzzle, entity_ptr_id=puzzle_id)
+        weibo_sync_timestamp = puzzle.weibo_sync_timestamp
+    else:
+        puzzle = None
+
+    if request.method == 'POST':
+        form = PuzzleForm(request.POST, request.FILES, instance=puzzle)
+        if form.is_valid():
+            puzzle = form.save()
+            if request.POST['picture1']:
+                puzzle.picture1 = request.POST['picture1'].replace(settings.MEDIA_URL, '', 1)
+            else:
+                puzzle.picture1 = request.POST['picture1']
+            if request.POST['picture2']:
+                puzzle.picture2 = request.POST['picture2'].replace(settings.MEDIA_URL, '', 1)
+            if request.POST['picture3']:
+                puzzle.picture3 = request.POST['picture3'].replace(settings.MEDIA_URL, '', 1)
+            if request.POST['picture4']:
+                puzzle.picture4 = request.POST['picture4'].replace(settings.MEDIA_URL, '', 1)
+            if weibo_sync_timestamp != puzzle.weibo_sync_timestamp:
+                if weibo_sync_timestamp != '':
+                    puzzle.status = Entity.STATUS_PENDING
+            puzzle.save()
+            return _redirect_back(request)
+    else:
+        if puzzle is None:
+            form = PuzzleForm(instance=puzzle, initial={'presenter' : request.user.username})
+        else:
+            form = PuzzleForm(instance=puzzle)
+
+    return render(request, 'add_edit_puzzle.html', {'form' : form})
+
+@login_required
+def delete_puzzle(request, puzzle_id=None):
+    _auth_user(request)
+    puzzle = get_object_or_404(Puzzle, entity_ptr_id=puzzle_id)
+    puzzle.delete()
+    return _redirect_back(request)
 

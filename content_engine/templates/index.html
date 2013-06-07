@@ -64,6 +64,7 @@
           <li><a href="/weixin/dialogs/add?next={{request.get_full_path}}">新增机器人对话</a></li>
         <li><a href="/player/add?next={{request.get_full_path}}">新增我是玩家</a></li>
         <li><a href="/gameAdvices/add?next={{request.get_full_path}}">新增游戏情报站</a></li>
+        <li><a href="/puzzles/add?next={{request.get_full_path}}">新增趣题</a></li>
       </ul>
     </div>
 
@@ -156,5 +157,13 @@
           </div>
       </div>
       {% render_table game_advices "django_tables2/table.html" %}
+      
+      <div class="navbar" style="margin-bottom:0;">
+          <div class="navbar-inner">
+              <p class="navbar-text">趣题</p>
+          </div>
+      </div>
+      {% render_table puzzles "django_tables2/table.html" %}
+
   </div>
 </body>

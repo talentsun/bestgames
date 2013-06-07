@@ -27,5 +27,8 @@ urlpatterns = patterns('portal.views',
     url(r'^gameAdvices/(?P<game_advice_id>\d+)/delete','delete_game_advice'),
     url(r'^gameAdvices/add','add_edit_game_advice'),
     url(r'^gameAdvices/(?P<game_advice_id>\d+)/edit','add_edit_game_advice'),
+    url(r'^puzzles/(?P<puzzle_id>\d+)/delete','delete_puzzle'),
+    url(r'^puzzles/add','add_edit_puzzle'),
+    url(r'^puzzles/(?P<puzzle_id>\d+)/edit','add_edit_puzzle'),
     url(r'^logout', 'logout')
 )
