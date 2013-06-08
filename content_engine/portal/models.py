@@ -214,7 +214,7 @@ class Puzzle(Entity):
     picture2 = models.ImageField(u"问题图片2", upload_to='upload/', max_length=255, blank=True)
     picture3 = models.ImageField(u"问题图片3", upload_to='upload/', max_length=255, blank=True)
     picture4 = models.ImageField(u"问题图片4", upload_to='upload/', max_length=255, blank=True)
-    description = models.CharField(u'题目描述', max_length=1000, blank=True)
+    description = models.TextField(u'题目描述')
     option1 = models.CharField(u'选项1', max_length=200, blank=True)
     option2 = models.CharField(u'选项2', max_length=200, blank=True)
     option3 = models.CharField(u'选项3', max_length=200, blank=True)
@@ -231,6 +231,7 @@ class Puzzle(Entity):
         db_table = u'puzzles'
         verbose_name = u'趣题'
         verbose_name_plural = u'趣题'
+        app_label = 'portal'
     def save(self, *args, **kwargs):
         self.type = Entity.PUZZLE
         if self.status == Entity.STATUS_DO_NOT_SYNC:

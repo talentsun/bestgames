@@ -14,9 +14,12 @@ from portal.views import _auth_user, _redirect_back
 from service import search_pb2
 import socket
 
+
 import rules
 #import rules_draw
 import rules_base_dialog
+from rules_answer_puzzle import *
+from rules_integral_exchange import *
 import rules_game_search
 from pyweixin import WeiXin
 from router import Router

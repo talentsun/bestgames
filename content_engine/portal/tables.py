@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from weixin.models import BaseDialog
-from portal.models import Game, Redier, Collection, Problem,Weixin,Player,GameAdvices
+from portal.models import Game, Redier, Collection, Problem,Weixin,Player,GameAdvices, Puzzle
 import django_tables2 as tables
 from django_tables2.columns import DateTimeColumn, TemplateColumn
 from taggit.utils import edit_string_for_tags
@@ -184,7 +184,7 @@ class GameAdvicesTable(tables.Table):
         attrs = {'class' : 'table table-striped'}
 
 class PuzzleTable(tables.Table):
-    id = tables.Column(orderable=False, visible=False)
+    id = tables.Column(orderable=False)
     title = tables.Column(orderable=False)
     presenter = tables.Column(orderable=False)
     weibo_sync_timestamp = DateTimeColumn(verbose_name=u"微博同步时间",orderable=True)
@@ -193,9 +193,9 @@ class PuzzleTable(tables.Table):
 
 
     class Meta:
-        model = GameAdvices
+        model = Puzzle
         order_by = "-weibo_sync_timestamp"
         empty_text = u"暂无\"趣题\""
-        fields = ("title", "presenter","weibo_sync_timestamp","status","ops")
-        sequence = ("title", "presenter","weibo_sync_timestamp","status","ops")
+        fields = ("id", "title", "presenter","weibo_sync_timestamp","status","ops")
+        sequence = ("id", "title", "presenter","weibo_sync_timestamp","status","ops")
         attrs = {'class' : 'table table-striped'}
