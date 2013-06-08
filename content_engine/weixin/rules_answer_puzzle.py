@@ -12,14 +12,17 @@ default_sorry_wording = u'小每真是太笨了，没有理解您的意思[流�
 def answer(rule, info):
     puzzleId = int(info.text[:-2])
     option = info.text[-1]
-    if option == 'A':
+    if option == 'A' || option == 'a':
         option = 0
-    elif option == 'B':
+    elif option == 'B' || option == 'b':
         option = 1
-    elif option == 'C':
+    elif option == 'C' || option == 'c':
         option = 2
-    elif option == 'D':
+    elif option == 'D' || option == 'd':
         option = 3
+    else:
+        text = u'非常抱歉，无法识别你的答案'
+        return BuildConfig(MessageBuilder.TYPE_RAW_TEXT, None, text)
 
     try:
         user = WeixinUser.objects.get(uid = info.user)
@@ -57,6 +60,6 @@ def answer(rule, info):
     
 Router.get_instance().set({
     'name' : u'答题',
-    'pattern': r'^[1-9]\d*#[A-D]$',
+    'pattern': r'^[1-9]\d*#[a-dA-D]$',
     'handler':answer
 })
