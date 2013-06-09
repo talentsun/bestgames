@@ -1,0 +1,45 @@
+#encoding=utf-8
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
+from weibo import APIClient
+from weixin import WeixinClient
+from portal.models import Entity
+from wordpress_xmlrpc import Client, WordPressPost
+from wordpress_xmlrpc.methods.posts import NewPost
+
+WEIBO_APP_ID = '1165281516'
+WEIBO_APP_SECRET = '4360e65b0e9de717dfe3a0c127bc96b3'
+weibo_client = APIClient(WEIBO_APP_ID, WEIBO_APP_SECRET, 'http://cow.bestgames7.com/token/login')
+weibo_client.set_access_token('2.00baJBTD06XASO9cd01cb598m7o2_B', '1363460399')
+
+weixin_client = WeixinClient()
+
+web_client = Client("http://www.bestgames7.com/xmlrpc.php", 'bestgames', 'nameLR9969')
+
+class MessageSender(object):
+	@classmethod
+	def send_weibo(self, weibo_message):
+		try:
+			weibo_client.statuses.upload.post(status=weibo_message.message, pic=open(weibo_message.image))
+			result = 2
+		except Exception, e:
+			result = 3
+
+		Entity.objects.filter(id=weibo_message.entity_id).update(status1=result)
+
+	@classmethod
+	def send_weixin(self, weixin_message):
+		result = 3
+		if weixin_client.send(weixin_message):
+			result = 2
+		Entity.objects.filter(id=weixin_message.entity_id).update(status2=result)
+
+	@classmethod
+	def send_web(self, web_message):
+		post_id = web_client.call(NewPost(web_message.post))
+		result = 3
+		if post_id != -1:
+			result = 2
+		Entity.objects.filter(id=web_message.entity_id).update(status3=result)

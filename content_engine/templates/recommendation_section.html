@@ -16,6 +16,14 @@
             });
         </script>
         <tr><th>{{ form.recommended_reason.label }}</th><td>{{ form.recommended_reason }}<span class="help-inline">{{ form.recommended_reason.help_text }}</span><p style="margin-top:8px;">你还可以输入 <span id="counter" class="safe">150</span> 字（包含下载链接150字以内，不包含下载链接120字以内）。</p>{{ form.recommended_reason.errors }}</td></tr>
-        <tr><th>{{ form.weibo_sync_timestamp.label }}</th><td>{{ form.weibo_sync_timestamp }}{{ form.weibo_sync_timestamp.errors }} </td></tr>
+        {% if form.sync_timestamp1 %}
+            <tr><th>{{ form.sync_timestamp1.label }}</th><td>{{ form.sync_timestamp1 }}{{ form.sync_timestamp1.errors }} </td></tr>
+        {% endif %}
+        {% if form.sync_timestamp2 %}
+            <tr><th>{{ form.sync_timestamp2.label }}</th><td>{{ form.sync_timestamp2 }}{{ form.sync_timestamp2.errors }} </td></tr>
+        {% endif %}
+        {% if form.sync_timestamp3 %}
+            <tr><th>{{ form.sync_timestamp3.label }}</th><td>{{ form.sync_timestamp3 }}{{ form.sync_timestamp3.errors }} </td></tr>
+        {% endif %}
     </tbody>
 </table>

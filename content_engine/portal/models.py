@@ -17,7 +17,9 @@ class Entity(models.Model):
     type = models.IntegerField(verbose_name=u'类型', default=GAME, editable=False)
     tags = TaggableManager(verbose_name=u"标签",blank=True)
 
-    weibo_sync_timestamp = models.DateTimeField(verbose_name=u"微博同步时间",blank=True)
+    sync_timestamp1 = models.DateTimeField(verbose_name=u"同步时间1",blank=True)
+    sync_timestamp2 = models.DateTimeField(verbose_name=u"同步时间2",blank=True)
+    sync_timestamp3 = models.DateTimeField(verbose_name=u"同步时间3",blank=True)
     STATUS_DO_NOT_SYNC =  0
     STATUS_PENDING = 1
     STATUS_COMPLETED = 2
@@ -27,7 +29,9 @@ class Entity(models.Model):
         (STATUS_PENDING, u"等待 同步"),
         (STATUS_COMPLETED, u"同步成功"),
         (STATUS_FAILED, u"同步失败"))
-    status = models.IntegerField(u"同步状态",max_length=20, choices=STATUS_CHOICES, default=STATUS_DO_NOT_SYNC, editable=False)
+    status1 = models.IntegerField(u"同步状态1",max_length=20, choices=STATUS_CHOICES, default=STATUS_DO_NOT_SYNC, editable=False)
+    status2 = models.IntegerField(u"同步状态2",max_length=20, choices=STATUS_CHOICES, default=STATUS_DO_NOT_SYNC, editable=False)
+    status3 = models.IntegerField(u"同步状态3",max_length=20, choices=STATUS_CHOICES, default=STATUS_DO_NOT_SYNC, editable=False)
     presenter = models.CharField(u"推荐人",max_length=100)
     brief_comment = models.CharField(u"一句话点评(同步到微信)", max_length=255,blank=True)
     recommended_reason = models.TextField(u"推荐理由(同步到微博)",blank=True)
@@ -91,6 +95,8 @@ class Game(Entity):
         (RATING_1, u"1"),
         (RATING_1, u"0.5"))
     rating = models.IntegerField(u"评分", choices=RATING_CHOICES, default=RATING_6)
+    size = models.CharField(u"大小", max_length=100)
+    video_url = models.URLField(u"视频地址", max_length=255, blank=True)
 
     def __unicode__(self):
         return force_unicode(self.name)
@@ -100,9 +106,15 @@ class Game(Entity):
         verbose_name_plural = u'精品游戏推荐'
     def save(self, *args, **kwargs):
         self.type = Entity.GAME
-        if self.status == Entity.STATUS_DO_NOT_SYNC:
-            if self.weibo_sync_timestamp is not None:
-                self.status = Entity.STATUS_PENDING
+        if self.status1 == Entity.STATUS_DO_NOT_SYNC:
+            if self.sync_timestamp1 is not None:
+                self.status1 = Entity.STATUS_PENDING
+        if self.status2 == Entity.STATUS_DO_NOT_SYNC:
+            if self.sync_timestamp2 is not None:
+                self.status2 = Entity.STATUS_PENDING
+        if self.status3 == Entity.STATUS_DO_NOT_SYNC:
+            if self.sync_timestamp3 is not None:
+                self.status3 = Entity.STATUS_PENDING
 
         super(Game, self).save(args, kwargs)
 
@@ -117,10 +129,15 @@ class Redier(Entity):
         verbose_name_plural = u'小兵变大咖'
     def save(self, *args, **kwargs):
         self.type = Entity.REDIER
-        if self.status == Entity.STATUS_DO_NOT_SYNC:
-            if self.weibo_sync_timestamp is not None:
-                self.status = Entity.STATUS_PENDING
-
+        if self.status1 == Entity.STATUS_DO_NOT_SYNC:
+            if self.sync_timestamp1 is not None:
+                self.status1 = Entity.STATUS_PENDING
+        if self.status2 == Entity.STATUS_DO_NOT_SYNC:
+            if self.sync_timestamp2 is not None:
+                self.status2 = Entity.STATUS_PENDING
+        if self.status3 == Entity.STATUS_DO_NOT_SYNC:
+            if self.sync_timestamp3 is not None:
+                self.status3 = Entity.STATUS_PENDING
 
         super(Redier, self).save(args, kwargs)
 
@@ -135,9 +152,16 @@ class Collection(Entity):
         verbose_name_plural = u'游戏合集'
     def save(self, *args, **kwargs):
         self.type = Entity.COLLECTION
-        if self.status == Entity.STATUS_DO_NOT_SYNC:
-            if self.weibo_sync_timestamp is not None:
-                self.status = Entity.STATUS_PENDING
+        if self.status1 == Entity.STATUS_DO_NOT_SYNC:
+            if self.sync_timestamp1 is not None:
+                self.status1 = Entity.STATUS_PENDING
+        if self.status2 == Entity.STATUS_DO_NOT_SYNC:
+            if self.sync_timestamp2 is not None:
+                self.status2 = Entity.STATUS_PENDING
+        if self.status3 == Entity.STATUS_DO_NOT_SYNC:
+            if self.sync_timestamp3 is not None:
+                self.status3 = Entity.STATUS_PENDING
+
         super(Collection, self).save(args, kwargs)
 
 
@@ -151,9 +175,16 @@ class Problem(Entity):
         verbose_name_plural = u'宅，必有一技'
     def save(self, *args, **kwargs):
         self.type = Entity.PROBLEM
-        if self.status == Entity.STATUS_DO_NOT_SYNC:
-            if self.weibo_sync_timestamp is not None:
-                self.status = Entity.STATUS_PENDING
+        if self.status1 == Entity.STATUS_DO_NOT_SYNC:
+            if self.sync_timestamp1 is not None:
+                self.status1 = Entity.STATUS_PENDING
+        if self.status2 == Entity.STATUS_DO_NOT_SYNC:
+            if self.sync_timestamp2 is not None:
+                self.status2 = Entity.STATUS_PENDING
+        if self.status3 == Entity.STATUS_DO_NOT_SYNC:
+            if self.sync_timestamp3 is not None:
+                self.status3 = Entity.STATUS_PENDING
+
         super(Problem, self).save(args, kwargs)
 
 class Player(Entity):
@@ -168,9 +199,16 @@ class Player(Entity):
         verbose_name_plural = u'我是玩家'
     def save(self, *args, **kwargs):
         self.type = Entity.PLAYER
-        if self.status == Entity.STATUS_DO_NOT_SYNC:
-            if self.weibo_sync_timestamp is not None:
-                self.status = Entity.STATUS_PENDING
+        if self.status1 == Entity.STATUS_DO_NOT_SYNC:
+            if self.sync_timestamp1 is not None:
+                self.status1 = Entity.STATUS_PENDING
+        if self.status2 == Entity.STATUS_DO_NOT_SYNC:
+            if self.sync_timestamp2 is not None:
+                self.status2 = Entity.STATUS_PENDING
+        if self.status3 == Entity.STATUS_DO_NOT_SYNC:
+            if self.sync_timestamp3 is not None:
+                self.status3 = Entity.STATUS_PENDING
+
         super(Player, self).save(args, kwargs)
 
 class GameAdvices(Entity):
@@ -185,9 +223,16 @@ class GameAdvices(Entity):
         verbose_name_plural = u'游戏情报站'
     def save(self, *args, **kwargs):
         self.type = Entity.GAMEADVICE
-        if self.status == Entity.STATUS_DO_NOT_SYNC:
-            if self.weibo_sync_timestamp is not None:
-                self.status = Entity.STATUS_PENDING
+        if self.status1 == Entity.STATUS_DO_NOT_SYNC:
+            if self.sync_timestamp1 is not None:
+                self.status1 = Entity.STATUS_PENDING
+        if self.status2 == Entity.STATUS_DO_NOT_SYNC:
+            if self.sync_timestamp2 is not None:
+                self.status2 = Entity.STATUS_PENDING
+        if self.status3 == Entity.STATUS_DO_NOT_SYNC:
+            if self.sync_timestamp3 is not None:
+                self.status3 = Entity.STATUS_PENDING
+
         super(GameAdvices, self).save(args, kwargs)
 
 class Weixin(Entity):
@@ -203,9 +248,16 @@ class Weixin(Entity):
         verbose_name_plural = u'微信合集'
     def save(self, *args, **kwargs):
         self.type = Entity.WEIXIN
-        if self.status == Entity.STATUS_DO_NOT_SYNC:
-            if self.weibo_sync_timestamp is not None:
-                self.status = Entity.STATUS_PENDING
+        if self.status1 == Entity.STATUS_DO_NOT_SYNC:
+            if self.sync_timestamp1 is not None:
+                self.status1 = Entity.STATUS_PENDING
+        if self.status2 == Entity.STATUS_DO_NOT_SYNC:
+            if self.sync_timestamp2 is not None:
+                self.status2 = Entity.STATUS_PENDING
+        if self.status3 == Entity.STATUS_DO_NOT_SYNC:
+            if self.sync_timestamp3 is not None:
+                self.status3 = Entity.STATUS_PENDING
+
         super(Weixin, self).save(args, kwargs)
 
 class Puzzle(Entity):
@@ -234,9 +286,14 @@ class Puzzle(Entity):
         app_label = 'portal'
     def save(self, *args, **kwargs):
         self.type = Entity.PUZZLE
-        if self.status == Entity.STATUS_DO_NOT_SYNC:
-            if self.weibo_sync_timestamp is not None:
-                self.status = Entity.STATUS_PENDING
+        if self.status1 == Entity.STATUS_DO_NOT_SYNC:
+            if self.sync_timestamp1 is not None:
+                self.status1 = Entity.STATUS_PENDING
+        if self.status2 == Entity.STATUS_DO_NOT_SYNC:
+            if self.sync_timestamp2 is not None:
+                self.status2 = Entity.STATUS_PENDING
+        if self.status3 == Entity.STATUS_DO_NOT_SYNC:
+            if self.sync_timestamp3 is not None:
+                self.status3 = Entity.STATUS_PENDING
+        
         super(Puzzle, self).save(args, kwargs)
-
-

@@ -50,17 +50,18 @@ class GameTable(tables.Table):
     id = tables.Column(orderable=False, visible=False)
     name = tables.Column(verbose_name=u'名称', orderable=False)
     presenter = tables.Column(verbose_name=u'推荐人', orderable=False)
-    weibo_sync_timestamp = DateTimeColumn(verbose_name=u"微博同步时间",orderable=True)
+    sync_timestamp1 = DateTimeColumn(verbose_name=u"微博同步时间",orderable=True)
+    sync_timestamp3 = DateTimeColumn(verbose_name=u"网站同步时间",orderable=True)
     status = TemplateColumn(template_name="sync_status_field.html",orderable=False,verbose_name=u"同步状态")
     tags = TagColumn(orderable=False,attrs={"class":"tags"}, verbose_name=u'标签')
     ops = TemplateColumn(template_name="game_field_ops.html",verbose_name=u"操作",orderable=False,attrs={"class":"ops"})
     
     class Meta:
         model = Game
-        order_by = "-weibo_sync_timestamp"
+        order_by = "-sync_timestamp1"
         empty_text = u"暂无精品游戏推荐"
-        fields = ("name","presenter","weibo_sync_timestamp","status","tags","ops")
-        sequence = ("name","presenter","weibo_sync_timestamp","status","tags","ops")
+        fields = ("name","presenter","sync_timestamp1","sync_timestamp3","status","tags","ops")
+        sequence = ("name","presenter","sync_timestamp1", "sync_timestamp3", "status","tags","ops")
         attrs = {'class' : 'table table-striped'}
 
 class RedierTable(tables.Table):
@@ -68,41 +69,40 @@ class RedierTable(tables.Table):
     game_name = tables.Column(verbose_name=u'游戏', orderable=False)
     title = tables.Column(verbose_name=u'标题', orderable=False)
     presenter = tables.Column(verbose_name=u'推荐人', orderable=False)
-    weibo_sync_timestamp = DateTimeColumn(verbose_name=u"微博同步时间",orderable=True)
+    sync_timestamp1 = DateTimeColumn(verbose_name=u"微博同步时间",orderable=True)
     status = TemplateColumn(template_name="sync_status_field.html",orderable=False,verbose_name=u"同步状态")
     tags = TagColumn(orderable=False,attrs={"class":"tags"})
     ops = TemplateColumn(template_name="redier_field_ops.html",verbose_name=u"操作",orderable=False,attrs={"class":"ops"})
 
     class Meta:
         model = Redier
-        order_by = "-weibo_sync_timestamp"
+        order_by = "-sync_timestamp1"
         empty_text = u"暂无小兵变大咖"
-        fields = ("game_name","title", "presenter","weibo_sync_timestamp","status","tags","ops")
-        sequence = ("game_name","title", "presenter","weibo_sync_timestamp","status","tags","ops")
+        fields = ("game_name","title", "presenter","sync_timestamp1","status","tags","ops")
+        sequence = ("game_name","title", "presenter","sync_timestamp1","status","tags","ops")
         attrs = {'class' : 'table table-striped'}
 
 class CollectionTable(tables.Table):
     id = tables.Column(orderable=False, visible=False)
     title = tables.Column(orderable=False)
     presenter = tables.Column(orderable=False)
-    weibo_sync_timestamp = DateTimeColumn(verbose_name=u"微博同步时间",orderable=True)
+    sync_timestamp1 = DateTimeColumn(verbose_name=u"微博同步时间",orderable=True)
     status = TemplateColumn(template_name="sync_status_field.html",orderable=False,verbose_name=u"同步状态")
     tags = TagColumn(orderable=False,attrs={"class":"tags"})
     ops = TemplateColumn(template_name="collection_field_ops.html",verbose_name=u"操作",orderable=False,attrs={"class":"ops"})
 
     class Meta:
         model = Collection
-        order_by = "-weibo_sync_timestamp"
+        order_by = "-sync_timestamp"
         empty_text = u"暂无游戏合集"
-        fields = ("title", "presenter","weibo_sync_timestamp","status","tags","ops")
-        sequence = ("title", "presenter","weibo_sync_timestamp","status","tags","ops")
+        fields = ("title", "presenter","sync_timestamp1","status","tags","ops")
+        sequence = ("title", "presenter","sync_timestamp1","status","tags","ops")
         attrs = {'class' : 'table table-striped'}
 
 class WeixinTable(tables.Table):
     id = tables.Column(orderable=False, visible=False)
-    title = tables.Column(orderable=False)
     presenter = tables.Column(orderable=False)
-    weibo_sync_timestamp = DateTimeColumn(verbose_name=u"微信同步时间",orderable=True)
+    sync_timestamp2 = DateTimeColumn(verbose_name=u"微信同步时间",orderable=True)
     status = TemplateColumn(template_name="sync_status_field.html",orderable=False,verbose_name=u"同步状态")
     games = GameColumn(verbose_name=u"游戏名称",orderable=False,attrs={"class":"games"})
     advices = GameAdviceColumn(verbose_name=u"游戏情报站",orderable=False,attrs={"class":"advices"})
@@ -113,10 +113,10 @@ class WeixinTable(tables.Table):
 
     class Meta:
         model = Weixin
-        order_by = "-weibo_sync_timestamp"
+        order_by = "-sync_timestamp2"
         empty_text = u"暂无微信消息"
-        fields = ("title", "presenter","weibo_sync_timestamp","status","games","advices","players","ops")
-        sequence = ("title", "presenter","weibo_sync_timestamp","status","games","advices","players","ops")
+        fields = ("presenter","sync_timestamp2","status","games","advices","players","ops")
+        sequence = ("presenter","sync_timestamp2","status","games","advices","players","ops")
         attrs = {'class' : 'table table-striped'}
 
 
@@ -124,17 +124,17 @@ class ProblemTable(tables.Table):
     id = tables.Column(orderable=False, visible=False)
     title = tables.Column(orderable=False)
     presenter = tables.Column(orderable=False)
-    weibo_sync_timestamp = DateTimeColumn(verbose_name=u"微博同步时间",orderable=True)
+    sync_timestamp1 = DateTimeColumn(verbose_name=u"微博同步时间",orderable=True)
     status = TemplateColumn(template_name="sync_status_field.html",orderable=False,verbose_name=u"同步状态")
     tags = TagColumn(orderable=False,attrs={"class":"tags"})
     ops = TemplateColumn(template_name="problem_field_ops.html",verbose_name=u"操作",orderable=False,attrs={"class":"ops"})
 
     class Meta:
         model = Problem
-        order_by = "-weibo_sync_timestamp"
+        order_by = "-sync_timestamp1"
         empty_text = u"暂无\"宅，必有一技\""
-        fields = ("title", "presenter","weibo_sync_timestamp","status","tags","ops")
-        sequence = ("title", "presenter","weibo_sync_timestamp","status","tags","ops")
+        fields = ("title", "presenter","sync_timestamp1","status","tags","ops")
+        sequence = ("title", "presenter","sync_timestamp1","status","tags","ops")
         attrs = {'class' : 'table table-striped'}
 
 
@@ -142,16 +142,16 @@ class PlayerTable(tables.Table):
     id = tables.Column(orderable=False, visible=False)
     title = tables.Column(orderable=False)
     presenter = tables.Column(orderable=False)
-    weibo_sync_timestamp = DateTimeColumn(verbose_name=u"微博同步时间",orderable=True)
+    sync_timestamp1 = DateTimeColumn(verbose_name=u"微博同步时间",orderable=True)
     status = TemplateColumn(template_name="sync_status_field.html",orderable=False,verbose_name=u"同步状态")
     ops = TemplateColumn(template_name="player_field_ops.html",verbose_name=u"操作",orderable=False,attrs={"class":"ops"})
 
     class Meta:
         model = Player
-        order_by = "-weibo_sync_timestamp"
+        order_by = "-sync_timestamp1"
         empty_text = u"暂无\"我是玩家\""
-        fields = ("title", "presenter","weibo_sync_timestamp","status","ops")
-        sequence = ("title", "presenter","weibo_sync_timestamp","status","ops")
+        fields = ("title", "presenter","sync_timestamp1","status","ops")
+        sequence = ("title", "presenter","sync_timestamp1","status","ops")
         attrs = {'class' : 'table table-striped'}
 
 class DialogTable(tables.Table):
@@ -171,16 +171,16 @@ class GameAdvicesTable(tables.Table):
     id = tables.Column(orderable=False, visible=False)
     title = tables.Column(orderable=False)
     presenter = tables.Column(orderable=False)
-    weibo_sync_timestamp = DateTimeColumn(verbose_name=u"微博同步时间",orderable=True)
+    sync_timestamp1 = DateTimeColumn(verbose_name=u"微博同步时间",orderable=True)
     status = TemplateColumn(template_name="sync_status_field.html",orderable=False,verbose_name=u"同步状态")
     ops = TemplateColumn(template_name="game_advices_field_ops.html",verbose_name=u"操作",orderable=False,attrs={"class":"ops"})
 
     class Meta:
         model = GameAdvices
-        order_by = "-weibo_sync_timestamp"
+        order_by = "-sync_timestamp1"
         empty_text = u"暂无\"游戏情报站\""
-        fields = ("title", "presenter","weibo_sync_timestamp","status","ops")
-        sequence = ("title", "presenter","weibo_sync_timestamp","status","ops")
+        fields = ("title", "presenter","sync_timestamp1","status","ops")
+        sequence = ("title", "presenter","sync_timestamp1","status","ops")
         attrs = {'class' : 'table table-striped'}
 
 class PuzzleTable(tables.Table):

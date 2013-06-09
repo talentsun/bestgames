@@ -70,8 +70,8 @@ MEDIA_URL = 'http://cow.bestgames7.com/media/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-projectPath = os.path.dirname(os.path.dirname(os.path.normpath(__file__)))
-STATIC_ROOT = projectPath + '/templates'
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.normpath(__file__)))
+STATIC_ROOT = PROJECT_ROOT + '/templates'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -124,7 +124,7 @@ LOGOUT_URL = '/logout'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'content_engine.wsgi.application'
 
-TEMPLATE_DIRS = (projectPath + '/templates',)
+TEMPLATE_DIRS = (PROJECT_ROOT + '/templates',)
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -147,7 +147,9 @@ INSTALLED_APPS = (
     'weixin',
     'scrapy_itunes',
     'dajaxice',
-    'dajax'
+    'dajax',
+    'cronjobs',
+    'sync'
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -191,7 +193,7 @@ LOGGING = {
         'default': {
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(projectPath + '/logs/','default.log'),
+            'filename': os.path.join(PROJECT_ROOT + '/logs/','default.log'),
             'maxBytes': 1024*1024*5,
             'backupCount': 5,
             'formatter':'standard',
@@ -199,7 +201,7 @@ LOGGING = {
         'build_index': {
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(projectPath + '/logs/','build_index.log'),
+            'filename': os.path.join(PROJECT_ROOT + '/logs/','build_index.log'),
             'maxBytes': 1024*1024*5,
             'backupCount': 5,
             'formatter':'standard',
@@ -207,7 +209,7 @@ LOGGING = {
         'search': {
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(projectPath + '/logs/','search.log'),
+            'filename': os.path.join(PROJECT_ROOT + '/logs/','search.log'),
             'maxBytes': 1024*1024*5,
             'backupCount': 5,
             'formatter':'standard',
@@ -215,7 +217,7 @@ LOGGING = {
         'weixin': {
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(projectPath + '/logs/','weixin.log'),
+            'filename': os.path.join(PROJECT_ROOT + '/logs/','weixin.log'),
             'maxBytes': 1024*1024*5,
             'backupCount': 5,
             'formatter':'standard',

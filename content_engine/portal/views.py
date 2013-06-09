@@ -74,27 +74,27 @@ def index(request):
         games = GameTable(_search_game(request.GET.get('hg_q')),prefix='hg-')
     else:
         games = GameTable(Game.objects.all(),prefix="hg-")
-    games.paginate(page=request.GET.get("hg-page",1), per_page=10)
+    games.paginate(page=request.GET.get("hg-page",1), per_page=5)
     games.data.verbose_name = u"精品游戏推荐"
 
     rediers = RedierTable(Redier.objects.all(),prefix="gr-")
-    rediers.paginate(page=request.GET.get("gr-page",1), per_page=10)
+    rediers.paginate(page=request.GET.get("gr-page",1), per_page=5)
     rediers.data.verbose_name = u"小兵变大咖"
 
     collections = CollectionTable(Collection.objects.all(),prefix="co-")
-    collections.paginate(page=request.GET.get("co-page",1), per_page=10)
+    collections.paginate(page=request.GET.get("co-page",1), per_page=5)
     collections.data.verbose_name = u"游戏合集"
 
     problems = ProblemTable(Problem.objects.all(),prefix="pb-")
-    problems.paginate(page=request.GET.get("pb-page",1), per_page=10)
+    problems.paginate(page=request.GET.get("pb-page",1), per_page=5)
     problems.data.verbose_name = u"宅，必有一技"
 
     weixin = WeixinTable(Weixin.objects.all(),prefix="wm-")
-    weixin.paginate(page=request.GET.get("wm-page",1), per_page=10)
+    weixin.paginate(page=request.GET.get("wm-page",1), per_page=5)
     weixin.data.verbose_name = u"微信消息"
 
     player = PlayerTable(Player.objects.all(),prefix="pr-")
-    player.paginate(page=request.GET.get("pr-page",1), per_page=10)
+    player.paginate(page=request.GET.get("pr-page",1), per_page=5)
     player.data.verbose_name = u"我是玩家"
 
 
@@ -102,12 +102,12 @@ def index(request):
         dialog = DialogTable(_search_dialog(request.GET.get("bd_q")), prefix="dia-")
     else:
         dialog = DialogTable(BaseDialog.objects.all(), prefix="dia-")
-    dialog.paginate(page=request.GET.get("dia-page",1), per_page=10)
+    dialog.paginate(page=request.GET.get("dia-page",1), per_page=5)
     dialog.data.verbose_name = u"基本对话"
 
 
-    gameAdvices = GameAdvicesTable(GameAdvices.objects.all(),prefix="pr-")
-    gameAdvices.paginate(page=request.GET.get("ga-page",1), per_page=10)
+    gameAdvices = GameAdvicesTable(GameAdvices.objects.all(),prefix="ga-")
+    gameAdvices.paginate(page=request.GET.get("ga-page",1), per_page=5)
     gameAdvices.data.verbose_name = u"游戏情报站"
 
     puzzles = PuzzleTable(Puzzle.objects.all(), prefix="pu-")
@@ -131,10 +131,10 @@ def _auth_user(request):
 @login_required
 def add_edit_problem(request, problem_id=None):
     _auth_user(request)
-    weibo_sync_timestamp = ''
+    sync_timestamp1 = ''
     if problem_id:
         problem = get_object_or_404(Problem, entity_ptr_id=problem_id)
-        weibo_sync_timestamp = problem.weibo_sync_timestamp
+        sync_timestamp = problem.sync_timestamp1
     else:
         problem = None
 
@@ -146,9 +146,9 @@ def add_edit_problem(request, problem_id=None):
                 problem.problem_image = request.POST['problem_image'].replace(settings.MEDIA_URL, '', 1)
             else:
                 problem.problem_image = request.POST['problem_image']
-            if weibo_sync_timestamp != problem.weibo_sync_timestamp:
-                if weibo_sync_timestamp != '':
-                    problem.status = Entity.STATUS_PENDING
+            if sync_timestamp1 != problem.sync_timestamp1:
+                if sync_timestamp1 != '':
+                    problem.status1 = Entity.STATUS_PENDING
             problem.save()
             return _redirect_back(request)
     else:
@@ -171,10 +171,10 @@ def delete_problem(request, problem_id=None):
 @login_required
 def add_edit_weixin(request, weixin_id=None):
     _auth_user(request)
-    weibo_sync_timestamp =''
+    sync_timestamp2 =''
     if weixin_id:
         weixin = get_object_or_404(Weixin, entity_ptr_id=weixin_id)
-        weibo_sync_timestamp = weixin.weibo_sync_timestamp
+        sync_timestamp2 = weixin.sync_timestamp2
     else:
         weixin = None
 
@@ -186,9 +186,9 @@ def add_edit_weixin(request, weixin_id=None):
                 weixin.cover = request.POST['cover'].replace(settings.MEDIA_URL, '', 1)
 #            else:
 #                weixin.cover = request.POST['cover']
-            if weibo_sync_timestamp != weixin.weibo_sync_timestamp:
-                if weibo_sync_timestamp != '':
-                    weixin.status = Entity.STATUS_PENDING
+            if sync_timestamp2 != weixin.sync_timestamp2:
+                if sync_timestamp2 != '':
+                    weixin.status2 = Entity.STATUS_PENDING
             weixin.save()
             return _redirect_back(request)
     else:
@@ -213,10 +213,10 @@ def preview_weixin(request, weixin_id=None):
 @login_required
 def add_edit_collection(request, collection_id=None):
     _auth_user(request)
-    weibo_sync_timestamp =''
+    sync_timestamp1 =''
     if collection_id:
         collection = get_object_or_404(Collection, entity_ptr_id=collection_id)
-        weibo_sync_timestamp = collection.weibo_sync_timestamp
+        sync_timestamp1 = collection.sync_timestamp1
     else:
         collection = None
 
@@ -228,9 +228,9 @@ def add_edit_collection(request, collection_id=None):
                 collection.cover = request.POST['cover'].replace(settings.MEDIA_URL, '', 1)
             else:
                 collection.cover = request.POST['cover']
-            if weibo_sync_timestamp != collection.weibo_sync_timestamp:
-                if weibo_sync_timestamp != '':
-                    collection.status = Entity.STATUS_PENDING
+            if sync_timestamp1 != collection.sync_timestamp1:
+                if sync_timestamp1 != '':
+                    collection.status1 = Entity.STATUS_PENDING
             collection.save()
             return _redirect_back(request)
     else:
@@ -255,10 +255,10 @@ def preview_collection(request, collection_id=None):
 @login_required
 def add_edit_redier(request, redier_id=None):
     _auth_user(request)
-    weibo_sync_timestamp = ''
+    sync_timestamp1 = ''
     if redier_id:
         redier = get_object_or_404(Redier, entity_ptr_id=redier_id)
-        weibo_sync_timestamp = redier.weibo_sync_timestamp
+        sync_timestamp1 = redier.sync_timestamp1
     else:
         redier = None
 
@@ -270,9 +270,9 @@ def add_edit_redier(request, redier_id=None):
                 redier.redier_image = request.POST['redier_image'].replace(settings.MEDIA_URL, '', 1)
             else:
                 redier.redier_image = request.POST['redier_image']
-            if weibo_sync_timestamp != redier.weibo_sync_timestamp:
-                if weibo_sync_timestamp != '':
-                    redier.status = Entity.STATUS_PENDING
+            if sync_timestamp1 != redier.sync_timestamp1:
+                if sync_timestamp1 != '':
+                    redier.status1 = Entity.STATUS_PENDING
             redier.save()
             return _redirect_back(request)
 
@@ -296,10 +296,12 @@ def delete_redier(request, redier_id=None):
 @login_required
 def add_edit_game(request, game_id=None):
     _auth_user(request)
-    weibo_sync_timestamp = ''
+    sync_timestamp1 = ''
+    sync_timestamp3 = ''
     if game_id:
         game = get_object_or_404(Game, entity_ptr_id=game_id)
-        weibo_sync_timestamp = game.weibo_sync_timestamp
+        sync_timestamp1 = game.sync_timestamp1
+        sync_timestamp3 = game.sync_timestamp3
     else:
         game = None
 
@@ -327,9 +329,12 @@ def add_edit_game(request, game_id=None):
                 game.screenshot_path_4 = request.POST['screenshot_path_4'].replace(settings.MEDIA_URL, '', 1)
             else:
                 game.screenshot_path_4 = request.POST['screenshot_path_4']
-            if weibo_sync_timestamp != game.weibo_sync_timestamp:
-                if weibo_sync_timestamp != '':
-                    game.status = Entity.STATUS_PENDING
+            if sync_timestamp1 != game.sync_timestamp1:
+                if sync_timestamp1 != '':
+                    game.status1 = Entity.STATUS_PENDING
+            if sync_timestamp3 != game.sync_timestamp3:
+                if sync_timestamp3 != '':
+                    game.status3 = Entity.STATUS_PENDING
             game.save()
             return _redirect_back(request)
 
@@ -356,10 +361,10 @@ def preview_game(request, game_id=None):
 @login_required
 def add_edit_player(request, player_id=None):
     _auth_user(request)
-    weibo_sync_timestamp =''
+    sync_timestamp1 =''
     if player_id:
         player = get_object_or_404(Player, entity_ptr_id=player_id)
-        weibo_sync_timestamp = player.weibo_sync_timestamp
+        sync_timestamp1 = player.sync_timestamp1
     else:
         player = None
 
@@ -371,9 +376,9 @@ def add_edit_player(request, player_id=None):
                 player.player_image = request.POST['player_image'].replace(settings.MEDIA_URL, '', 1)
             #            else:
             #                weixin.cover = request.POST['cover']
-            if weibo_sync_timestamp != player.weibo_sync_timestamp:
-                if weibo_sync_timestamp != '':
-                    player.status = Entity.STATUS_PENDING
+            if sync_timestamp1 != player.sync_timestamp1:
+                if sync_timestamp1 != '':
+                    player.status1 = Entity.STATUS_PENDING
             player.save()
             return _redirect_back(request)
     else:
@@ -399,10 +404,10 @@ def preview_player(request, player_id=None):
 @login_required
 def add_edit_game_advice(request, game_advice_id=None):
     _auth_user(request)
-    weibo_sync_timestamp =''
+    sync_timestamp1 =''
     if game_advice_id:
         game_advice = get_object_or_404(GameAdvices, entity_ptr_id=game_advice_id)
-        weibo_sync_timestamp = game_advice.weibo_sync_timestamp
+        sync_timestamp1 = game_advice.sync_timestamp1
     else:
         game_advice = None
 
@@ -414,9 +419,9 @@ def add_edit_game_advice(request, game_advice_id=None):
                 game_advice.advice_image = request.POST['advice_image'].replace(settings.MEDIA_URL, '', 1)
                 #            else:
             #                weixin.cover = request.POST['cover']
-            if weibo_sync_timestamp != game_advice.weibo_sync_timestamp:
-                if weibo_sync_timestamp != '':
-                    game_advice.status = Entity.STATUS_PENDING
+            if sync_timestamp1 != game_advice.sync_timestamp1:
+                if sync_timestamp1 != '':
+                    game_advice.status1 = Entity.STATUS_PENDING
             game_advice.save()
             return _redirect_back(request)
     else:
@@ -441,10 +446,10 @@ def preview_game_advice(request, game_advice_id=None):
 @login_required
 def add_edit_puzzle(request, puzzle_id=None):
     _auth_user(request)
-    weibo_sync_timestamp =''
+    sync_timestamp1 =''
     if puzzle_id:
         puzzle = get_object_or_404(Puzzle, entity_ptr_id=puzzle_id)
-        weibo_sync_timestamp = puzzle.weibo_sync_timestamp
+        sync_timestamp1 = puzzle.sync_timestamp1
     else:
         puzzle = None
 
@@ -462,9 +467,9 @@ def add_edit_puzzle(request, puzzle_id=None):
                 puzzle.picture3 = request.POST['picture3'].replace(settings.MEDIA_URL, '', 1)
             if request.POST['picture4']:
                 puzzle.picture4 = request.POST['picture4'].replace(settings.MEDIA_URL, '', 1)
-            if weibo_sync_timestamp != puzzle.weibo_sync_timestamp:
-                if weibo_sync_timestamp != '':
-                    puzzle.status = Entity.STATUS_PENDING
+            if sync_timestamp1 != puzzle.sync_timestamp1:
+                if sync_timestamp1 != '':
+                    puzzle.status1 = Entity.STATUS_PENDING
             puzzle.save()
             return _redirect_back(request)
     else:
@@ -481,4 +486,3 @@ def delete_puzzle(request, puzzle_id=None):
     puzzle = get_object_or_404(Puzzle, entity_ptr_id=puzzle_id)
     puzzle.delete()
     return _redirect_back(request)
-

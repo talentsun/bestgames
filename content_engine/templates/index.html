@@ -29,6 +29,27 @@
         });
       });
 
+      $('#tab1 a').click(function (e) {
+        e.preventDefault();
+        console.log('tab1');
+        $(this).tab('show');
+      });
+      $('#tab2 a').click(function (e) {
+        e.preventDefault();
+        console.log('tab2');
+        $(this).tab('show');
+      });
+      $('#tab3 a').click(function (e) {
+        e.preventDefault();
+        console.log('tab3');
+        $(this).tab('show');
+      });
+      $('#tab4 a').click(function (e) {
+        e.preventDefault();
+        console.log('tab4');
+        $(this).tab('show');
+      });
+
       {% if not user.is_authenticated %}
         bootbox.dialog("使用新浪微博登录之后，才能进行添加、删除、编辑操作。",[{
           "label": "不登录了，随便看看",
@@ -56,15 +77,36 @@
         <span class="caret"></span>
       </a>
       <ul class="dropdown-menu">
-        <li><a href="/games/add?next={{request.get_full_path}}">新增精品游戏推荐</a></li>
-        <li><a href="/rediers/add?next={{request.get_full_path}}">新增小兵变大咖</a></li>
-        <li><a href="/collections/add?next={{request.get_full_path}}">新增游戏合集</a></li>
-        <li><a href="/problems/add?next={{request.get_full_path}}">新增“宅，必有一技”</a></li>
-        <li><a href="/weixinmsg/add?next={{request.get_full_path}}">新增微信消息</a></li>
-          <li><a href="/weixin/dialogs/add?next={{request.get_full_path}}">新增机器人对话</a></li>
         <li><a href="/player/add?next={{request.get_full_path}}">新增我是玩家</a></li>
         <li><a href="/gameAdvices/add?next={{request.get_full_path}}">新增游戏情报站</a></li>
+        <li><a href="/weixinmsg/add?next={{request.get_full_path}}">新增微信消息</a></li>
+        <li><a href="/games/add?next={{request.get_full_path}}">新增精品游戏推荐</a></li>
+        <li><a href="/collections/add?next={{request.get_full_path}}">新增游戏合集</a></li>
+        <li><a href="/rediers/add?next={{request.get_full_path}}">新增小兵变大咖</a></li>
+        <li><a href="/problems/add?next={{request.get_full_path}}">新增“宅，必有一技”</a></li>
+      </ul>
+    </div>
+
+    <div class="btn-group" style="margin-bottom:20px;">
+      <a class="btn dropdown-toggle btn-large" data-toggle="dropdown" href="#">
+        <i class="icon-plus"></i>
+        新增营销活动
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu">
         <li><a href="/puzzles/add?next={{request.get_full_path}}">新增趣题</a></li>
+      </ul>
+    </div>
+
+    <div class="btn-group" style="margin-bottom:20px;">
+      <a class="btn dropdown-toggle btn-large" data-toggle="dropdown" href="#">
+        <i class="icon-plus"></i>
+        新增智能互动
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu">
+        <li><a href="/weixin/dialogs/add?next={{request.get_full_path}}">新增基本对话</a></li>
+        <li><a href="http://weixin.bestgames7.com/weixin/load" target="_blank">加载缓存数据</a></li>
       </ul>
     </div>
 
@@ -79,91 +121,95 @@
       </ul>
     </div>
 
-    <div class="btn-group" style="margin-bottom:20px;">
-      <a class="btn dropdown-toggle btn-large" data-toggle="dropdown" href="#">
-        <i class="icon-hdd"></i>
-        小每机器人
-        <span class="caret"></span>
-      </a>
-      <ul class="dropdown-menu">
-        <li><a href="http://weixin.bestgames7.com/weixin/load" target="_blank">加载小每机器人数据</a></li>
+    <div id="nav-tab" class="tabbable">
+      <ul class="nav nav-tabs">
+        <li id="nav-tab1" class="active"><a href="#tab1" data-toggle="tab">内容运营</a></li>
+        <li id="nav-tab2"><a href="#tab2" data-toggle="tab">营销活动</a></li>
+        <li id="nav-tab3"><a href="#tab3" data-toggle="tab">智能互动</a></li>
+        <li id="nav-tab4"><a href="#tab4" data-toggle="tab">其他</a></li>
       </ul>
-    </div>
-
-    <div class="navbar" style="margin-bottom:0;">
-      <div class="navbar-inner">
-        <span class="navbar-text">精品游戏推荐</span>
-        <form class="form-search navbar-search pull-right">
-          <div class="input-append">
-            <input type="text" class="span2 search-query" placeholder="搜索精品游戏推荐" name="hg_q" value="{{ request.GET.hg_q }}">
-            <button type="submit" class="btn"><i class="icon-search"></i></button>
-          </div>
-        </form>
-      </div>
-    </div>
-    {% render_table games "django_tables2/table.html" %}
-
-    <div class="navbar" style="margin-bottom:0;">
-      <div class="navbar-inner">
-        <p class="navbar-text">小兵变大咖</p>
-      </div>
-    </div>
-    {% render_table rediers "django_tables2/table.html" %}
-
-    <div class="navbar" style="margin-bottom:0;">
-      <div class="navbar-inner">
-        <p class="navbar-text">游戏合集</p>
-      </div>
-    </div>
-    {% render_table collections "django_tables2/table.html" %}
-
-    <div class="navbar" style="margin-bottom:0;">
-      <div class="navbar-inner">
-        <p class="navbar-text">宅，必有一技</p>
-      </div>
-    </div>
-    {% render_table problems "django_tables2/table.html" %}
-
-    <div class="navbar" style="margin-bottom:0;">
-       <div class="navbar-inner">
-            <p class="navbar-text">微信消息</p>
-       </div>
-     </div>
-     {% render_table weixin "django_tables2/table.html" %}
-
-      <div class="navbar" style="margin-bottom:0;">
-          <div class="navbar-inner">
+      <div class="tab-content">
+        <div class="tab-pane active" id="tab1">
+          <div class="navbar" style="margin-bottom:0;">
+            <div class="navbar-inner">
               <p class="navbar-text">我是玩家</p>
+            </div>
           </div>
-      </div>
-      {% render_table player "django_tables2/table.html" %}
-        <div class="navbar" style="margin-bottom:0;">
-          <div class="navbar-inner">
-            <span class="navbar-text">机器人基本对话</span>
-            <form class="form-search navbar-search pull-right">
-              <div class="input-append">
-                <input type="text" class="span2 search-query" placeholder="搜索机器人基本对话" name="bd_q" value="{{ request.GET.bd_q }}">
-                <button type="submit" class="btn"><i class="icon-search"></i></button>
-              </div>
-            </form>
-          </div>
-      </div>
-      {% render_table dialog "django_tables2/table.html" %}
+          {% render_table player "django_tables2/table.html" %}
 
-
-      <div class="navbar" style="margin-bottom:0;">
-          <div class="navbar-inner">
+          <div class="navbar" style="margin-bottom:0;">
+            <div class="navbar-inner">
               <p class="navbar-text">游戏情报站</p>
+            </div>
           </div>
-      </div>
-      {% render_table game_advices "django_tables2/table.html" %}
-      
-      <div class="navbar" style="margin-bottom:0;">
-          <div class="navbar-inner">
-              <p class="navbar-text">趣题</p>
+          {% render_table game_advices "django_tables2/table.html" %}
+          
+          <div class="navbar" style="margin-bottom:0;">
+            <div class="navbar-inner">
+              <p class="navbar-text">微信消息</p>
+            </div>
           </div>
-      </div>
-      {% render_table puzzles "django_tables2/table.html" %}
+          {% render_table weixin "django_tables2/table.html" %}
 
+          <div class="navbar" style="margin-bottom:0;">
+            <div class="navbar-inner">
+              <span class="navbar-text">精品游戏推荐</span>
+              <form class="form-search navbar-search pull-right">
+                <div class="input-append">
+                  <input type="text" class="span2 search-query" placeholder="搜索精品游戏推荐" name="hg_q" value="{{ request.GET.hg_q }}">
+                  <button type="submit" class="btn"><i class="icon-search"></i></button>
+                </div>
+              </form>
+            </div>
+          </div>
+          {% render_table games "django_tables2/table.html" %}
+
+          <div class="navbar" style="margin-bottom:0;">
+            <div class="navbar-inner">
+              <p class="navbar-text">游戏合集</p>
+            </div>
+          </div>
+          {% render_table collections "django_tables2/table.html" %}
+        </div>
+      
+        <div class="tab-pane" id="tab2">
+          <div class="navbar" style="margin-bottom:0;">
+            <div class="navbar-inner">
+                <p class="navbar-text">趣题</p>
+            </div>
+          </div>
+          {% render_table puzzles "django_tables2/table.html" %}
+        </div>
+        <div class="tab-pane" id="tab3">
+          <div class="navbar" style="margin-bottom:0;">
+            <div class="navbar-inner">
+              <span class="navbar-text">基本对话</span>
+              <form class="form-search navbar-search pull-right">
+                <div class="input-append">
+                  <input type="text" class="span2 search-query" placeholder="搜索机器人基本对话" name="bd_q" value="{{ request.GET.bd_q }}">
+                  <button type="submit" class="btn"><i class="icon-search"></i></button>
+                </div>
+              </form>
+            </div>
+          </div>
+          {% render_table dialog "django_tables2/table.html" %}
+        </div>
+        <div class="tab-pane" id="tab4">
+          <div class="navbar" style="margin-bottom:0;">
+            <div class="navbar-inner">
+              <p class="navbar-text">小兵变大咖</p>
+            </div>
+          </div>
+          {% render_table rediers "django_tables2/table.html" %}
+
+          <div class="navbar" style="margin-bottom:0;">
+            <div class="navbar-inner">
+              <p class="navbar-text">宅，必有一技</p>
+            </div>
+          </div>
+          {% render_table problems "django_tables2/table.html" %}
+        </div>
+      </div>
+    </div>
   </div>
 </body>

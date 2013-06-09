@@ -14,20 +14,21 @@ class EntityForm(ModelForm):
     tags = TagField(label=u"标签",required=False)
     brief_comment = forms.CharField(label=u"一句话点评", help_text=u"20字以内（作为图文消息的标题同步到微信）", required=False, max_length=20)
     recommended_reason = forms.CharField(label=u"推荐理由", help_text=u"150字以内（作为微博内容同步到新浪微博）", required=False, max_length=150, widget=forms.Textarea())
-    weibo_sync_timestamp = forms.DateTimeField(label=u"微博同步时间", required=False, widget=DateTimeWidget(options={
+
+class RedierForm(EntityForm):
+    sync_timestamp1 = forms.DateTimeField(label=u"微博同步时间", required=False, widget=DateTimeWidget(options={
                 'autoclose' : 'true',
                 'showMeridian' : 'true',
                 'startDate' : datetime.today().strftime('%Y-%m-%d %H:%M:%S')
                 }))
 
-class RedierForm(EntityForm):
     class Meta:
         model = Redier
         fields = ('game_name',
             'title', 
             'redier_image',
             'tags',
-            'weibo_sync_timestamp',
+            'sync_timestamp1',
             'presenter',
             'brief_comment',
             'recommended_reason')
@@ -36,6 +37,16 @@ class RedierForm(EntityForm):
 
 class GameForm(EntityForm):
     category = forms.ModelChoiceField(queryset=Category.objects.all(), empty_label=u"选择分类", label=u"分类")
+    sync_timestamp1 = forms.DateTimeField(label=u"微博同步时间", required=False, widget=DateTimeWidget(options={
+                'autoclose' : 'true',
+                'showMeridian' : 'true',
+                'startDate' : datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+                }))
+    sync_timestamp3 = forms.DateTimeField(label=u"网站同步时间", required=False, widget=DateTimeWidget(options={
+                'autoclose' : 'true',
+                'showMeridian' : 'true',
+                'startDate' : datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+                }))
 
     class Meta:
         model = Game
@@ -50,7 +61,8 @@ class GameForm(EntityForm):
             'screenshot_path_2', 
             'screenshot_path_3', 
             'screenshot_path_4', 
-            'weibo_sync_timestamp',
+            'sync_timestamp1',
+            'sync_timestamp3',
             'presenter',
             'rating',
             'brief_comment',
@@ -70,6 +82,11 @@ class GameChoices(AutoModelSelect2MultipleField):
 class CollectionForm(EntityForm):
     cover = forms.ImageField(label=u"封面图片", help_text=u"建议使用640x320大小的图片", widget=AjaxClearableFileInput())
     games = GameChoices(label=u"游戏")
+    sync_timestamp1 = forms.DateTimeField(label=u"微博同步时间", required=False, widget=DateTimeWidget(options={
+                'autoclose' : 'true',
+                'showMeridian' : 'true',
+                'startDate' : datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+                }))
 
     class Meta:
         model = Collection
@@ -77,7 +94,7 @@ class CollectionForm(EntityForm):
             'cover',
             'games',
             'tags',
-            'weibo_sync_timestamp',
+            'sync_timestamp1',
             'presenter',
             'brief_comment',
             'recommended_reason')
@@ -95,6 +112,11 @@ class WeixinForm(EntityForm):
     games = GameChoices(label=u"游戏",required = False)
     advices = GameAdviceChoices(label=u"游戏情报站",required = False)
     players = PlayerChoices(label=u"我是玩家",required = False)
+    sync_timestamp2 = forms.DateTimeField(label=u"微信同步时间", required=False, widget=DateTimeWidget(options={
+                'autoclose' : 'true',
+                'showMeridian' : 'true',
+                'startDate' : datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+                }))
 
     class Meta:
         model = Weixin
@@ -103,46 +125,59 @@ class WeixinForm(EntityForm):
                   'games',
                   'advices',
                   'players',
-                  'weibo_sync_timestamp',
+                  'sync_timestamp2',
                   'presenter',
                   'recommended_reason'
                   )
 
 class ProblemForm(EntityForm):
     problem_image = forms.ImageField(label=u"必有一技", help_text=u"建议图片宽度大于400像素", widget=AjaxClearableFileInput())
+    sync_timestamp1 = forms.DateTimeField(label=u"微博同步时间", required=False, widget=DateTimeWidget(options={
+                'autoclose' : 'true',
+                'showMeridian' : 'true',
+                'startDate' : datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+                }))
 
     class Meta:
         model = Problem
         fields = ('title',
             'problem_image',
             'tags',
-            'weibo_sync_timestamp',
+            'sync_timestamp1',
             'presenter',
             'brief_comment',
             'recommended_reason')
 
 class PlayerForm(EntityForm):
     player_image = forms.ImageField(label=u"我是玩家", help_text=u"建议图片宽度大于400像素", widget=AjaxClearableFileInput())
+    sync_timestamp1 = forms.DateTimeField(label=u"微博同步时间", required=False, widget=DateTimeWidget(options={
+                'autoclose' : 'true',
+                'showMeridian' : 'true',
+                'startDate' : datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+                }))
 
     class Meta:
         model = Player
         fields = ('title',
                   'player_image',
-                  'weibo_sync_timestamp',
+                  'sync_timestamp1',
                   'presenter',
                   'brief_comment',
                   'recommended_reason')
 
-
-
 class GameAdvicesForm(EntityForm):
     advice_image = forms.ImageField(label=u"游戏情报站", help_text=u"建议图片宽度大于400像素", widget=AjaxClearableFileInput())
+    sync_timestamp1 = forms.DateTimeField(label=u"微博同步时间", required=False, widget=DateTimeWidget(options={
+                'autoclose' : 'true',
+                'showMeridian' : 'true',
+                'startDate' : datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+                }))
 
     class Meta:
         model = GameAdvices
         fields = ('title',
                   'advice_image',
-                  'weibo_sync_timestamp',
+                  'sync_timestamp1',
                   'presenter',
                   'brief_comment',
                   'recommended_reason')
