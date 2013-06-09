@@ -49,5 +49,5 @@ def sync_web():
 		web_message = None
 		if entity.type == Entity.GAME:
 			web_message = web_message_builder.build_game_message(Game.objects.get(id=entity.id))
-		if weibo_message is not None:
+		if web_message is not None:
 			MessageSender.send_web(web_message)

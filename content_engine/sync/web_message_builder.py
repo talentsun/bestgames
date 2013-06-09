@@ -7,17 +7,29 @@ import string
 from wordpress_xmlrpc import WordPressPost
 from content_engine import settings
 
+class WebMessage(object):
+	def __init__(self, entity_id, post):
+		self.entity_id = entity_id
+		self.post = post
+
+def _normalize_content(content):
+    url_pos = content.find('http://')
+    normalized_content = content
+    if url_pos != -1:
+        normalized_content = normalized_content[5][:url_pos]
+    return normalized_content
+
 def build_game_message(game):
 	post = WordPressPost()
 	post.title = '%s - %s' % (game.name, game.brief_comment)
 	
-	post.content = '<p>%s<!--more--></p>' % game.recommended_reason
+	post.content = '<p>%s<!--more--></p>' % _normalize_content(game.recommended_reason)
 	
 	post.content += '[box style="rounded shadow"]'
 	post.content += '[col grid="4-1 first"]<img src="%s" class="img-rounded" />[/col]' % (settings.MEDIA_URL + game.icon.name)
 	post.content += '[col grid="4-2"]'
 	post.content += u'<p>分类：%s</p>' % game.category.name
-	post.content += u'<p>大小：%s</p>' % '123MB' #game.size
+	post.content += u'<p>大小：%s</p>' % game.size
 	platforms = []
 	tags = []
 	if game.android_download_url is not None:
@@ -43,8 +55,8 @@ def build_game_message(game):
 		post.content += '[slide]<img src="%s" class="img-rounded" />[/slide]' % (settings.MEDIA_URL + game.screenshot_path_4.name)
 	post.content += '[/slider][/box]'
 
-	#if game.video_url is not None:
-	#	post.content += '[box style="rounded shadow"]<p>游戏视频</p><div class="post-video"><iframe height=498 width=510 src="%s" frameborder=0 allowfullscreen></iframe></div>[/box]' % game.video_url
+	if game.video_url is not None:
+		post.content += '[box style="rounded shadow"]<p>游戏视频</p><div class="post-video"><iframe height=498 width=510 src="%s" frameborder=0 allowfullscreen></iframe></div>[/box]' % game.video_url
 
 	post.terms_names = {
 		'category' : game.category.name,
@@ -55,4 +67,6 @@ def build_game_message(game):
 		post.custom_fields = []
 		post.custom_fields.append({'key':'post_image','value':settings.MEDIA_URL + game.screenshot_path_1.name})
 
-	return post
+	post.post_status = 'publish'
+
+	return WebMessage(game.id, post)
