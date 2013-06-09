@@ -8,7 +8,7 @@ from weixin import WeixinClient
 from portal.models import Entity
 from wordpress_xmlrpc import Client, WordPressPost
 from wordpress_xmlrpc.methods.posts import NewPost
-import sys
+import logging
 sys.path.append("..")
 
 from django.core.management import setup_environ
