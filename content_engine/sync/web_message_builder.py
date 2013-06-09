@@ -59,7 +59,7 @@ def build_game_message(game):
 		post.content += '[box style="rounded shadow"]<p>游戏视频</p><div class="post-video"><iframe height=498 width=510 src="%s" frameborder=0 allowfullscreen></iframe></div>[/box]' % game.video_url
 
 	post.terms_names = {
-		'category' : game.category.name,
+		'category' : [game.category.name],
 		'post_tag' : tags
 	}
 
