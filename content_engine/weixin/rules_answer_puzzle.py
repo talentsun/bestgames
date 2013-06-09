@@ -12,13 +12,13 @@ default_sorry_wording = u'小每真是太笨了，没有理解您的意思[流�
 def answer(rule, info):
     puzzleId = int(info.text[:-2])
     option = info.text[-1]
-    if option == 'A' || option == 'a':
+    if option == 'A' or option == 'a':
         option = 0
-    elif option == 'B' || option == 'b':
+    elif option == 'B' or option == 'b':
         option = 1
-    elif option == 'C' || option == 'c':
+    elif option == 'C' or option == 'c':
         option = 2
-    elif option == 'D' || option == 'd':
+    elif option == 'D' or option == 'd':
         option = 3
     else:
         text = u'非常抱歉，无法识别你的答案'

@@ -443,9 +443,9 @@ def preview_game_advice(request, game_advice_id=None):
     game_advice = get_object_or_404(GameAdvices, entity_ptr_id=game_advice_id)
     return render(request, 'preview_game_advices.html', { 'gameadvice' : game_advice })
 
-@login_required
+#@login_required
 def add_edit_puzzle(request, puzzle_id=None):
-    _auth_user(request)
+ #   _auth_user(request)
     sync_timestamp1 =''
     if puzzle_id:
         puzzle = get_object_or_404(Puzzle, entity_ptr_id=puzzle_id)

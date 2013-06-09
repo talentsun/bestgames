@@ -188,6 +188,11 @@ class PuzzleForm(EntityForm):
     picture2 = forms.ImageField(label=u'图片2', widget=AjaxClearableFileInput(), required = False)
     picture3 = forms.ImageField(label=u'图片3', widget=AjaxClearableFileInput(), required = False)
     picture4 = forms.ImageField(label=u'图片4', widget=AjaxClearableFileInput(), required = False)
+    sync_timestamp1 = forms.DateTimeField(label=u"微博同步时间", required=False, widget=DateTimeWidget(options={
+                'autoclose' : 'true',
+                'showMeridian' : 'true',
+                'startDate' : datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+                }))
     class Meta:
         model = Puzzle
         fields = (
@@ -196,7 +201,7 @@ class PuzzleForm(EntityForm):
             'picture2',
             'picture3',
             'picture4',
-            'weibo_sync_timestamp',
+            'sync_timestamp1',
             'presenter',
             'description',
             'option1',

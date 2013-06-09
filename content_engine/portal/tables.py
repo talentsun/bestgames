@@ -187,15 +187,15 @@ class PuzzleTable(tables.Table):
     id = tables.Column(orderable=False)
     title = tables.Column(orderable=False)
     presenter = tables.Column(orderable=False)
-    weibo_sync_timestamp = DateTimeColumn(verbose_name=u"微博同步时间",orderable=True)
+    sync_timestamp1 = DateTimeColumn(verbose_name=u"微博同步时间",orderable=True)
     status = TemplateColumn(template_name="sync_status_field.html",orderable=False,verbose_name=u"同步状态")
     ops = TemplateColumn(template_name="puzzle_field_ops.html",verbose_name=u"操作",orderable=False,attrs={"class":"ops"})
 
 
     class Meta:
         model = Puzzle
-        order_by = "-weibo_sync_timestamp"
+        order_by = "-sync_timestamp1"
         empty_text = u"暂无\"趣题\""
-        fields = ("id", "title", "presenter","weibo_sync_timestamp","status","ops")
-        sequence = ("id", "title", "presenter","weibo_sync_timestamp","status","ops")
+        fields = ("id", "title", "presenter","sync_timestamp1","status","ops")
+        sequence = ("id", "title", "presenter","sync_timestamp1","status","ops")
         attrs = {'class' : 'table table-striped'}
