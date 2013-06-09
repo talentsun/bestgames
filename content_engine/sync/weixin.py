@@ -18,6 +18,8 @@ LOGIN_URL = "http://mp.weixin.qq.com/cgi-bin/login?lang=zh_CN"
 CREATE_MSG_URL = "http://mp.weixin.qq.com/cgi-bin/operate_appmsg?token=%s&lang=zh_CN&t=ajax-response&sub=create"
 CREATE_MSG_REFERER_URL = "http://mp.weixin.qq.com/cgi-bin/operate_appmsg?token=%s&lang=zh_CN&sub=edit&t=wxm-appmsgs"
 
+logger = logging.getLogger("sync")
+
 class WeixinClient(object):
 	cert = ''
 	slave_user = ''
@@ -71,6 +73,8 @@ class WeixinClient(object):
 		index_start = error_msg.find('&token')
 		self.token = error_msg[index_start + 7:len(error_msg)]
 
+		logger.info('cert:%s, slave_user:%s, slave_sid:%s, token:%s', (self.cert, self.slave_user, self.slave_sid, self.token))
+
 	def _post_image(self, image):
 		c = pycurl.Curl()
 		c.setopt(pycurl.POST, 1)
@@ -88,6 +92,7 @@ class WeixinClient(object):
 		index_end = buff.getvalue().find('\'',index_start + 1)
 		image_id = buff.getvalue()[index_start + 1:index_end]
 
+		logger.info('post %s to weixin and get image_id %s' % (image, image_id))
 		return image_id
 
 	def _create_msg(self, weixin_message):
@@ -104,14 +109,14 @@ class WeixinClient(object):
 			index += 1
 		post_params = post_params + '&ajax=1';
 
-		print post_params
 		c.setopt(pycurl.POSTFIELDS, post_params)
 		buff = cStringIO.StringIO()
 		hdr = cStringIO.StringIO()
 		c.setopt(c.WRITEFUNCTION, buff.write)
 		c.setopt(c.HEADERFUNCTION, hdr.write)
-		c.setopt(c.VERBOSE, True)
 		c.perform()
+
+		logger.info('create weixin message')
 
 	def _find_msg_by_title(self, msg_title):
 		c = pycurl.Curl()
@@ -140,6 +145,7 @@ class WeixinClient(object):
 			if found:
 				break
 
+		logger.info('found %s and msg_id %s' % (msg_title, msg_id))
 		return msg_id
 
 	def _post_msg(self, msg_id):
@@ -155,4 +161,5 @@ class WeixinClient(object):
 		c.setopt(pycurl.HEADERFUNCTION, hdr.write)
 		c.perform()
 
+		logger.info('send msg_id %s' % (msg_id))
 		return buff.getvalue().find('''"ret":"0"''') != -1

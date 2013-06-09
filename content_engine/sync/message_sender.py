@@ -18,6 +18,8 @@ weixin_client = WeixinClient()
 
 web_client = Client("http://www.bestgames7.com/xmlrpc.php", 'bestgames', 'nameLR9969')
 
+logger = logging.getLogger("sync")
+
 class MessageSender(object):
 	@classmethod
 	def send_weibo(self, weibo_message):
@@ -27,6 +29,7 @@ class MessageSender(object):
 		except Exception, e:
 			result = 3
 
+		logger.info('send weibo result: %s' % result)
 		Entity.objects.filter(id=weibo_message.entity_id).update(status1=result)
 
 	@classmethod
@@ -34,6 +37,8 @@ class MessageSender(object):
 		result = 3
 		if weixin_client.send(weixin_message):
 			result = 2
+
+		logger.info('send weixin result: %s' % result)
 		Entity.objects.filter(id=weixin_message.entity_id).update(status2=result)
 
 	@classmethod
@@ -42,4 +47,6 @@ class MessageSender(object):
 		result = 3
 		if post_id != -1:
 			result = 2
+
+		logger.info('send web result: %s' % result)
 		Entity.objects.filter(id=web_message.entity_id).update(status3=result)

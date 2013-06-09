@@ -221,6 +221,14 @@ LOGGING = {
             'maxBytes': 1024*1024*5,
             'backupCount': 5,
             'formatter':'standard',
+        },
+        'sync': {
+            'level':'DEBUG',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(PROJECT_ROOT + '/logs/','sync.log'),
+            'maxBytes': 1024*1024*5,
+            'backupCount': 5,
+            'formatter':'standard',
         }
 
     },
@@ -247,6 +255,11 @@ LOGGING = {
         },
         'weixin': {
             'handlers': ['weixin'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'sync': {
+            'handlers': ['sync'],
             'level': 'DEBUG',
             'propagate': False,
         }
