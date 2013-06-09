@@ -26,26 +26,21 @@ class WeixinClient(object):
 
 	def send(self, weixin_message):
 		self._login()
-		print 'login done'
 
 		# post images to mp.weixin.qq.com
 		for item in weixin_message.items:
 			print item.image
 			item.image_id = self._post_image(item.image)
-		print 'upload images done'
 
 		# create msg
 		self._create_msg(weixin_message)
-		print 'create msg done'
 
 		# send msg
 		msg_id = self._find_msg_by_title(weixin_message.title)
-		print 'query msg id done'
-		print msg_id
-		#if msg_id != -1:
-		#	return self._post_msg(msg_id)
-		#else:
-		#	return False
+		if msg_id != -1:
+			return self._post_msg(msg_id)
+		else:
+			return False
 
 
 	def _login(self):
