@@ -16,7 +16,7 @@ def sync():
 @cronjobs.register
 def sync_weibo():
 	# query entities needed to sync
-	entities = Entity.objects.filter(sync_timestamp1__range=(datetime.datetime.now(), datetime.datetime.now()+datetime.timedelta(hours=4)), status1=1)
+	entities = Entity.objects.filter(sync_timestamp1__range=(datetime.datetime.now(), datetime.datetime.now()+datetime.timedelta(minutes=5)), status1=1)
 	for entity in entities:
 		weibo_message = None
 		if entity.type == Entity.GAME:
