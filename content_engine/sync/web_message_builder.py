@@ -32,10 +32,10 @@ def build_game_message(game):
 	post.content += u'<p>大小：%s</p>' % game.size
 	platforms = []
 	tags = []
-	if game.android_download_url is not None:
+	if game.android_download_url != '':
 		platforms.append('Android')
 		tags.append(u'安卓')
-	if game.iOS_download_url is not None:
+	if game.iOS_download_url != '':
 		platforms.append('iOS')
 		tags.append(u'苹果')
 	if len(platforms) > 0:
