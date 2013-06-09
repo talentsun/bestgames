@@ -56,12 +56,14 @@
             <td>{{ form.tags }}<span class="help-inline">{{ form.tags.help_text }}</span>{{ form.tags.errors }}
             </td></tr>
           <tr><th>{{ form.rating.label }}</th><td>{{ form.rating }}{{ form.rating.errors }}</td></tr>
+          <tr><th>{{ form.size.label }}</th><td>{{ form.size }}{{ form.size.errors }}</td></tr>
           <tr><th>{{ form.android_download_url.label }}</th><td>{{ form.android_download_url }}{{ form.android_download_url.errors }}</td></tr>
           <tr><th>{{ form.iOS_download_url.label }}</th><td>{{ form.iOS_download_url }}{{ form.iOS_download_url.errors }}</td></tr>
           <tr><th>{{ form.screenshot_path_1.label }}</th><td>{{ form.screenshot_path_1 }}{{ form.screenshot_path_1.errors }}</td></tr>
           <tr><th>{{ form.screenshot_path_2.label }}</th><td>{{ form.screenshot_path_2 }}{{ form.screenshot_path_2.errors }}</td></tr>
           <tr><th>{{ form.screenshot_path_3.label }}</th><td>{{ form.screenshot_path_3 }}{{ form.screenshot_path_3.errors }}</td></tr>
           <tr><th>{{ form.screenshot_path_4.label }}</th><td>{{ form.screenshot_path_4 }}{{ form.screenshot_path_4.errors }}</td></tr>
+          <tr><th>{{ form.video_url.label }}</th><td>{{ form.video_url }}{{ form.video_url.errors }}</td></tr>
         </tbody>
       </table>
       {% include "recommendation_section.html"%}

@@ -7,6 +7,13 @@ import weibo_message_builder
 import weixin_message_builder
 import web_message_builder
 import logging
+import sys
+
+sys.path.append("..")
+
+from django.core.management import setup_environ
+from content_engine import settings
+setup_environ(settings)
 
 logger = logging.getLogger("sync")
 

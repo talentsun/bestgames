@@ -65,6 +65,8 @@ class GameForm(EntityForm):
             'sync_timestamp3',
             'presenter',
             'rating',
+            'size',
+            'video_url',
             'brief_comment',
             'recommended_reason')
         widgets = {

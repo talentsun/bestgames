@@ -16,7 +16,7 @@ def _normalize_content(content):
     url_pos = content.find('http://')
     normalized_content = content
     if url_pos != -1:
-        normalized_content = normalized_content[5][:url_pos]
+        normalized_content = normalized_content[:url_pos]
     return normalized_content
 
 def build_game_message(game):

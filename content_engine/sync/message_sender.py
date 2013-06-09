@@ -8,6 +8,12 @@ from weixin import WeixinClient
 from portal.models import Entity
 from wordpress_xmlrpc import Client, WordPressPost
 from wordpress_xmlrpc.methods.posts import NewPost
+import sys
+sys.path.append("..")
+
+from django.core.management import setup_environ
+from content_engine import settings
+setup_environ(settings)
 
 WEIBO_APP_ID = '1165281516'
 WEIBO_APP_SECRET = '4360e65b0e9de717dfe3a0c127bc96b3'

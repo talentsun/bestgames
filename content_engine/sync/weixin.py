@@ -8,6 +8,13 @@ import pycurl
 import cStringIO
 import json
 import time
+import logging
+import sys
+sys.path.append("..")
+
+from django.core.management import setup_environ
+from content_engine import settings
+setup_environ(settings)
 
 GET_MSG_LIST_URL = "http://mp.weixin.qq.com/cgi-bin/operate_appmsg?token=%s&lang=zh_CN&sub=list&t=ajax-appmsgs-fileselect&type=10&r=0.9663556832875031&pageIdx=0&pagesize=10&formid=file_from_1366447908777&subtype=3"
 GET_MSG_REFERER_URL = 'http://mp.weixin.qq.com/cgi-bin/masssendpage?t=wxm-send&token=%s&lang=zh_CN'
