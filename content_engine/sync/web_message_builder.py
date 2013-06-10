@@ -28,21 +28,29 @@ def _convert_youku_video_url(origin_url):
 	else:
 		return origin_url
 
+def _get_game_tags(game):
+	tags = []
+	if game.android_download_url != '':
+		tags.append(u'安卓')
+	if game.iOS_download_url != '':
+		tags.append(u'苹果')
+	return tags
+
+def _get_game_platforms(game):
+	platforms = []
+	if game.android_download_url != '':
+		platforms.append('Android')
+	if game.iOS_download_url != '':
+		platforms.append('iOS')
+	platforms_str = ''
+	if len(platforms) > 0:
+		return string.join(platforms, ', ')
+	else:
+		return ''
+
 def build_game_message(game):
 	post = WordPressPost()
 	post.title = '%s - %s' % (game.name, game.brief_comment)
-
-	platforms = []
-	tags = []
-	if game.android_download_url != '':
-		platforms.append('Android')
-		tags.append(u'安卓')
-	if game.iOS_download_url != '':
-		platforms.append('iOS')
-		tags.append(u'苹果')
-	platforms_str = ''
-	if len(platforms) > 0:
-		platforms_str += string.join(platforms, ', ')
 	
 	converted_video_url = None
 	if game.video_url is not None:
@@ -52,7 +60,7 @@ def build_game_message(game):
 		'icon' : settings.MEDIA_URL + game.icon.name,
 		'category' : game.category.name,
 		'size' : game.size,
-		'platforms' : platforms_str,
+		'platforms' : _get_game_platforms(game),
 		'id' : game.id,
 		'screenshot_path_1' : settings.MEDIA_URL + game.screenshot_path_1.name,
 		'screenshot_path_2' : settings.MEDIA_URL + game.screenshot_path_2.name,
@@ -63,7 +71,7 @@ def build_game_message(game):
 
 	post.terms_names = {
 		'category' : [game.category.name],
-		'post_tag' : tags
+		'post_tag' : _get_game_tags(game)
 	}
 
 	if game.screenshot_path_1._file is not None:
@@ -98,3 +106,35 @@ def build_news_message(news):
 	post.post_status = 'publish'
 
 	return WebMessage(news.id, post)
+
+def build_collection_message(collection):
+	post = WordPressPost()
+	post.title = collection.title
+	
+	games = []
+	for game in collection.games.all():
+		games.append({
+			'name' : game.name,
+			'brief_comment' : game.brief_comment,
+			'icon' : settings.MEDIA_URL + game.icon.name,
+			'category' : game.category.name,
+			'size' : game.size,
+			'platforms' : _get_game_platforms(game),
+			'id' : game.id,
+			'rating' : game.rating,
+			'recommended_reason' : _normalize_content(game.recommended_reason)
+			})
+
+	post.content = str(render_to_string('collection_web.tpl', {
+		'content' : _normalize_content(collection.recommended_reason),
+		'cover' : settings.MEDIA_URL + collection.cover.name,
+		'games' : games
+	}))
+
+	post.terms_names = {
+		'category' : [u'游戏合集']
+	}
+
+	post.post_status = 'publish'
+
+	return WebMessage(collection.id, post)
