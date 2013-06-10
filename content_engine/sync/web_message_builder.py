@@ -7,6 +7,7 @@ import string
 from wordpress_xmlrpc import WordPressPost
 from content_engine import settings
 import re
+from django.template.loader import render_to_string
 
 class WebMessage(object):
 	def __init__(self, entity_id, post):
@@ -30,14 +31,7 @@ def _convert_youku_video_url(origin_url):
 def build_game_message(game):
 	post = WordPressPost()
 	post.title = '%s - %s' % (game.name, game.brief_comment)
-	
-	post.content = '<p>%s<!--more--></p>' % _normalize_content(game.recommended_reason)
-	
-	post.content += '[box style="rounded shadow"]'
-	post.content += '[col grid="4-1 first"]<img src="%s" class="img-rounded" />[/col]' % (settings.MEDIA_URL + game.icon.name)
-	post.content += '[col grid="4-2"]'
-	post.content += u'<p>分类：%s</p>' % game.category.name
-	post.content += u'<p>大小：%s</p>' % game.size
+
 	platforms = []
 	tags = []
 	if game.android_download_url != '':
@@ -46,35 +40,61 @@ def build_game_message(game):
 	if game.iOS_download_url != '':
 		platforms.append('iOS')
 		tags.append(u'苹果')
+	platforms_str = ''
 	if len(platforms) > 0:
-		post.content += u'<p>平台：%s</p>' % string.join(platforms, ', ')
-	post.content += '[/col]'
-	post.content += '[col grid="4-1"]<a class="btn btn-success" rel="lightbox" href="http://qrickit.com/api/qr?qrsize=300&d=http://cow.bestgames7.com/games/%d/preview"><i class="icon-qrcode icon-white"></i>二维码下载</a>[/col]' % game.id
-	post.content += '[/box]'
-
-	post.content += '[box style="rounded shadow"]<p>游戏截图</p>[slider class="screenshots"]'
-	if game.screenshot_path_1 is not None:
-		post.content += '[slide]<img src="%s" class="img-rounded" />[/slide]' % (settings.MEDIA_URL + game.screenshot_path_1.name)
-	if game.screenshot_path_2 is not None:
-		post.content += '[slide]<img src="%s" class="img-rounded" />[/slide]' % (settings.MEDIA_URL + game.screenshot_path_2.name)
-	if game.screenshot_path_3 is not None:
-		post.content += '[slide]<img src="%s" class="img-rounded" />[/slide]' % (settings.MEDIA_URL + game.screenshot_path_3.name)
-	if game.screenshot_path_4 is not None:
-		post.content += '[slide]<img src="%s" class="img-rounded" />[/slide]' % (settings.MEDIA_URL + game.screenshot_path_4.name)
-	post.content += '[/slider][/box]'
-
+		platforms_str += string.join(platforms, ', ')
+	
+	converted_video_url = None
 	if game.video_url is not None:
-		post.content += '[box style="rounded shadow"]<p>游戏视频</p><div class="post-video"><iframe height=498 width=510 src="%s" frameborder=0 allowfullscreen></iframe></div>[/box]' % _convert_youku_video_url(game.video_url)
+		converted_video_url = _convert_youku_video_url(game.video_url)
+	post.content = str(render_to_string('game_web.tpl', {
+		'content' : _normalize_content(game.recommended_reason),
+		'icon' : settings.MEDIA_URL + game.icon.name,
+		'category' : game.category.name,
+		'size' : game.size,
+		'platforms' : platforms_str,
+		'id' : game.id,
+		'screenshot_path_1' : settings.MEDIA_URL + game.screenshot_path_1.name,
+		'screenshot_path_2' : settings.MEDIA_URL + game.screenshot_path_2.name,
+		'screenshot_path_3' : settings.MEDIA_URL + game.screenshot_path_3.name,
+		'screenshot_path_4' : settings.MEDIA_URL + game.screenshot_path_4.name,
+		'video_url' : converted_video_url
+	}))
 
 	post.terms_names = {
 		'category' : [game.category.name],
 		'post_tag' : tags
 	}
 
-	if game.screenshot_path_1 is not None:
+	if game.screenshot_path_1._file is not None:
 		post.custom_fields = []
 		post.custom_fields.append({'key':'post_image','value':settings.MEDIA_URL + game.screenshot_path_1.name})
 
 	post.post_status = 'publish'
 
 	return WebMessage(game.id, post)
+
+def build_news_message(news):
+	post = WordPressPost()
+	post.title = news.brief_comment
+	
+	converted_video_url = None
+	if news.video_url is not None:
+		converted_video_url = _convert_youku_video_url(news.video_url)
+	post.content = str(render_to_string('news_web.tpl', {
+		'content' : _normalize_content(news.recommended_reason),
+		'image_url' : settings.MEDIA_URL + news.image_url.name,
+		'video_url' : converted_video_url
+	}))
+
+	post.terms_names = {
+		'category' : [u'新游预告']
+	}
+
+	if news.image_url.name != '':
+		post.custom_fields = []
+		post.custom_fields.append({'key':'post_image','value':settings.MEDIA_URL + news.image_url.name})
+
+	post.post_status = 'publish'
+
+	return WebMessage(news.id, post)

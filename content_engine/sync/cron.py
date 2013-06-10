@@ -71,5 +71,8 @@ def sync_web():
 		if entity.type == Entity.GAME:
 			web_message = web_message_builder.build_game_message(Game.objects.get(id=entity.id))
 			logger.info('sync game %s to web' % entity.id)
+		if entity.type == Entity.NEWS:
+			web_message = web_message_builder.build_news_message(News.objects.get(id=entity.id))
+			logger.info('sync news %s to web' % entity.id)
 		if web_message is not None:
 			MessageSender.send_web(web_message)

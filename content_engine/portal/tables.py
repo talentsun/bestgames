@@ -218,5 +218,5 @@ class PuzzleTable(tables.Table):
         order_by = "-sync_timestamp1"
         empty_text = u"暂无\"趣题\""
         fields = ("id", "title", "presenter","sync_timestamp1","sync_timestamp3","status","ops")
-        sequence = ("id", "title", "presenter","sync_timestamp1","status","sync_timestamp3","ops")
+        sequence = ("id", "title", "presenter","sync_timestamp1","sync_timestamp3","status","ops")
         attrs = {'class' : 'table table-striped'}
