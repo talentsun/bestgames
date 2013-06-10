@@ -6,6 +6,7 @@ sys.setdefaultencoding('utf-8')
 import string
 from wordpress_xmlrpc import WordPressPost
 from content_engine import settings
+import re
 
 class WebMessage(object):
 	def __init__(self, entity_id, post):
@@ -18,6 +19,13 @@ def _normalize_content(content):
     if url_pos != -1:
         normalized_content = normalized_content[:url_pos]
     return normalized_content
+
+def _convert_youku_video_url(origin_url):
+	match = re.search('id_(\w+)\.html', origin_url)
+	if match is not None:
+		return 'http://player.youku.com/embed/%s' % match.group(1)
+	else:
+		return origin_url
 
 def build_game_message(game):
 	post = WordPressPost()
@@ -56,7 +64,7 @@ def build_game_message(game):
 	post.content += '[/slider][/box]'
 
 	if game.video_url is not None:
-		post.content += '[box style="rounded shadow"]<p>游戏视频</p><div class="post-video"><iframe height=498 width=510 src="%s" frameborder=0 allowfullscreen></iframe></div>[/box]' % game.video_url
+		post.content += '[box style="rounded shadow"]<p>游戏视频</p><div class="post-video"><iframe height=498 width=510 src="%s" frameborder=0 allowfullscreen></iframe></div>[/box]' % _convert_youku_video_url(game.video_url)
 
 	post.terms_names = {
 		'category' : [game.category.name],
