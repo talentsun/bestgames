@@ -28,10 +28,10 @@ class WeixinMessage(object):
 
 def _build_game_image(game):
     content = t.render('screenshots', dict(
-        screenshot_path_1 = game.screenshot_path_1,
-        screenshot_path_2 = game.screenshot_path_2,
-        screenshot_path_3 = game.screenshot_path_3,
-        screenshot_path_4 = game.screenshot_path_4
+        screenshot_path_1 = game.screenshot_path_1.path,
+        screenshot_path_2 = game.screenshot_path_2.path,
+        screenshot_path_3 = game.screenshot_path_3.path,
+        screenshot_path_4 = game.screenshot_path_4.path
         ))
     return make_image(game.id, content)
 
@@ -50,11 +50,11 @@ def build_weixin_message(weixin):
         message_title = weixin.title
         items.append(WeixinMessageItem(image=weixin.cover.path, title=weixin.title, digest=weixin.title, content=weixin.recommended_reason))
         index += 1
-    for news in weixin.advices.all():
+    for news in weixin.news.all():
         title = u'游戏情报站  -  %s' % news.brief_comment
         if index == 0:
             message_title = title
-        items.append(WeixinMessageItem(image=news.advice_image.path, title=title, digest=title, content=news.recommended_reason))
+        items.append(WeixinMessageItem(image=news.image_url.path, title=title, digest=title, content=news.recommended_reason))
         index += 1
     for game in weixin.games.all():
         title = u'%s  -  %s' % (game.name, game.brief_comment)
@@ -69,6 +69,6 @@ def build_weixin_message(weixin):
         title = u'我是玩家  -  %s' % player.brief_comment
         if index == 0:
             message_title = title
-        items.append(WeixinMessageItem(image=player.player_image.path, title=title, digest=title, content=player.recommended_reason))
+        items.append(WeixinMessageItem(image=player.image_url.path, title=title, digest=title, content=player.recommended_reason))
         index += 1
     return WeixinMessage(weixin.id, message_title, items)

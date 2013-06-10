@@ -17,9 +17,9 @@ import logging, traceback, time, struct, socket
 from taggit.models import Tag
 
 from weixin.models import BaseDialog
-from portal.models import Game, Redier, Collection, Problem,Entity,Weixin, Player,GameAdvices, Puzzle
-from portal.tables import GameTable, RedierTable, CollectionTable, ProblemTable, WeixinTable,PlayerTable,GameAdvicesTable, DialogTable, PuzzleTable
-from portal.forms import GameForm, RedierForm, CollectionForm, ProblemForm,WeixinForm,PlayerForm,GameAdvicesForm, PuzzleForm
+from portal.models import Game, Redier, Collection, Problem, Entity, Weixin, Player, News, Puzzle
+from portal.tables import GameTable, RedierTable, CollectionTable, ProblemTable, WeixinTable, PlayerTable, NewsTable, DialogTable, PuzzleTable
+from portal.forms import GameForm, RedierForm, CollectionForm, ProblemForm, WeixinForm, PlayerForm, NewsForm, PuzzleForm
 from service import search_pb2
 
 import django_tables2 as tables
@@ -106,15 +106,15 @@ def index(request):
     dialog.data.verbose_name = u"基本对话"
 
 
-    gameAdvices = GameAdvicesTable(GameAdvices.objects.all(),prefix="ga-")
-    gameAdvices.paginate(page=request.GET.get("ga-page",1), per_page=5)
-    gameAdvices.data.verbose_name = u"游戏情报站"
+    news = NewsTable(News.objects.all(),prefix="gn-")
+    news.paginate(page=request.GET.get("gn-page",1), per_page=5)
+    news.data.verbose_name = u"游戏情报站"
 
     puzzles = PuzzleTable(Puzzle.objects.all(), prefix="pu-")
     puzzles.paginate(page=request.GET.get("pr-page",1), per_page=10)
     puzzles.data.verbose_name = u"趣题"
 
-    return render(request, "index.html", {"games": games, "rediers":rediers, 'collections':collections, 'problems':problems, 'weixin':weixin,'player':player,'dialog': dialog, 'game_advices':gameAdvices, 'puzzles': puzzles})
+    return render(request, "index.html", {"games": games, "rediers":rediers, 'collections':collections, 'problems':problems, 'weixin':weixin, 'player':player, 'dialog': dialog, 'news':news, 'puzzles': puzzles})
 
 def logout(request):
     auth.logout(request)
@@ -128,13 +128,15 @@ def _auth_user(request):
         c = Context({'noauth':noauth})
         return HttpResponse(t.render(c))
 
-@login_required
+#@login_required
 def add_edit_problem(request, problem_id=None):
-    _auth_user(request)
+    #_auth_user(request)
     sync_timestamp1 = ''
+    sync_timestamp3 = ''
     if problem_id:
         problem = get_object_or_404(Problem, entity_ptr_id=problem_id)
         sync_timestamp = problem.sync_timestamp1
+        sync_timestamp3 = problem.sync_timestamp3
     else:
         problem = None
 
@@ -142,13 +144,16 @@ def add_edit_problem(request, problem_id=None):
         form = ProblemForm(request.POST, request.FILES, instance=problem)
         if form.is_valid():
             problem = form.save()
-            if request.POST['problem_image']:
-                problem.problem_image = request.POST['problem_image'].replace(settings.MEDIA_URL, '', 1)
+            if request.POST['image_url']:
+                problem.image_url = request.POST['image_url'].replace(settings.MEDIA_URL, '', 1)
             else:
-                problem.problem_image = request.POST['problem_image']
+                problem.image_url = request.POST['image_url']
             if sync_timestamp1 != problem.sync_timestamp1:
                 if sync_timestamp1 != '':
                     problem.status1 = Entity.STATUS_PENDING
+            if sync_timestamp3 != problem.sync_timestamp3:
+                if sync_timestamp3 != '':
+                    problem.status3 = Entity.STATUS_PENDING
             problem.save()
             return _redirect_back(request)
     else:
@@ -168,9 +173,9 @@ def delete_problem(request, problem_id=None):
             problem.delete()
             return _redirect_back(request)
 
-@login_required
+#@login_required
 def add_edit_weixin(request, weixin_id=None):
-    _auth_user(request)
+    #_auth_user(request)
     sync_timestamp2 =''
     if weixin_id:
         weixin = get_object_or_404(Weixin, entity_ptr_id=weixin_id)
@@ -184,8 +189,6 @@ def add_edit_weixin(request, weixin_id=None):
             weixin = form.save()
             if request.POST['cover']:
                 weixin.cover = request.POST['cover'].replace(settings.MEDIA_URL, '', 1)
-#            else:
-#                weixin.cover = request.POST['cover']
             if sync_timestamp2 != weixin.sync_timestamp2:
                 if sync_timestamp2 != '':
                     weixin.status2 = Entity.STATUS_PENDING
@@ -210,13 +213,15 @@ def preview_weixin(request, weixin_id=None):
     weixin = get_object_or_404(Collection, entity_ptr_id=weixin_id)
     return render(request, 'preview_weixin.html', { 'weixin' : weixin })
 
-@login_required
+#@login_required
 def add_edit_collection(request, collection_id=None):
-    _auth_user(request)
-    sync_timestamp1 =''
+ #   _auth_user(request)
+    sync_timestamp1 = ''
+    sync_timestamp3 = ''
     if collection_id:
         collection = get_object_or_404(Collection, entity_ptr_id=collection_id)
         sync_timestamp1 = collection.sync_timestamp1
+        sync_timestamp3 = collection.sync_timestamp3
     else:
         collection = None
 
@@ -231,6 +236,9 @@ def add_edit_collection(request, collection_id=None):
             if sync_timestamp1 != collection.sync_timestamp1:
                 if sync_timestamp1 != '':
                     collection.status1 = Entity.STATUS_PENDING
+            if sync_timestamp3 != collection.sync_timestamp3:
+                if sync_timestamp3 != '':
+                    collection.status3 = Entity.STATUS_PENDING
             collection.save()
             return _redirect_back(request)
     else:
@@ -252,13 +260,15 @@ def preview_collection(request, collection_id=None):
     collection = get_object_or_404(Collection, entity_ptr_id=collection_id)
     return render(request, 'preview_collection.html', { 'collection' : collection })
 
-@login_required
+#@login_required
 def add_edit_redier(request, redier_id=None):
-    _auth_user(request)
+    #_auth_user(request)
     sync_timestamp1 = ''
+    sync_timestamp3 = ''
     if redier_id:
         redier = get_object_or_404(Redier, entity_ptr_id=redier_id)
         sync_timestamp1 = redier.sync_timestamp1
+        sync_timestamp3 = redier.sync_timestamp3
     else:
         redier = None
 
@@ -266,13 +276,16 @@ def add_edit_redier(request, redier_id=None):
         form = RedierForm(request.POST, request.FILES,instance=redier)
         if form.is_valid():
             redier = form.save()
-            if request.POST['redier_image']:
-                redier.redier_image = request.POST['redier_image'].replace(settings.MEDIA_URL, '', 1)
+            if request.POST['image_url']:
+                redier.image_url = request.POST['image_url'].replace(settings.MEDIA_URL, '', 1)
             else:
-                redier.redier_image = request.POST['redier_image']
+                redier.image_url = request.POST['image_url']
             if sync_timestamp1 != redier.sync_timestamp1:
                 if sync_timestamp1 != '':
                     redier.status1 = Entity.STATUS_PENDING
+            if sync_timestamp3 != redier.sync_timestamp3:
+                if sync_timestamp3 != '':
+                    redier.status3 = Entity.STATUS_PENDING
             redier.save()
             return _redirect_back(request)
 
@@ -357,14 +370,15 @@ def preview_game(request, game_id=None):
     game = get_object_or_404(Game, entity_ptr_id=game_id)
     return render(request, 'preview_game.html', {'game' : game})
 
-
-@login_required
+#@login_required
 def add_edit_player(request, player_id=None):
-    _auth_user(request)
-    sync_timestamp1 =''
+    #_auth_user(request)
+    sync_timestamp1 = ''
+    sync_timestamp3 = ''
     if player_id:
         player = get_object_or_404(Player, entity_ptr_id=player_id)
         sync_timestamp1 = player.sync_timestamp1
+        sync_timestamp3 = player.sync_timestamp3
     else:
         player = None
 
@@ -372,13 +386,14 @@ def add_edit_player(request, player_id=None):
         form = PlayerForm(request.POST, request.FILES, instance=player)
         if form.is_valid():
             player = form.save()
-            if request.POST['player_image']:
-                player.player_image = request.POST['player_image'].replace(settings.MEDIA_URL, '', 1)
-            #            else:
-            #                weixin.cover = request.POST['cover']
+            if request.POST['image_url']:
+                player.image_url = request.POST['image_url'].replace(settings.MEDIA_URL, '', 1)
             if sync_timestamp1 != player.sync_timestamp1:
                 if sync_timestamp1 != '':
                     player.status1 = Entity.STATUS_PENDING
+            if sync_timestamp3 != player.sync_timestamp3:
+                if sync_timestamp3 != '':
+                    player.status3 = Entity.STATUS_PENDING
             player.save()
             return _redirect_back(request)
     else:
@@ -400,56 +415,60 @@ def preview_player(request, player_id=None):
     player = get_object_or_404(Player, entity_ptr_id=player_id)
     return render(request, 'preview_player.html', { 'player' : player })
 
-
-@login_required
-def add_edit_game_advice(request, game_advice_id=None):
-    _auth_user(request)
-    sync_timestamp1 =''
-    if game_advice_id:
-        game_advice = get_object_or_404(GameAdvices, entity_ptr_id=game_advice_id)
-        sync_timestamp1 = game_advice.sync_timestamp1
+#@login_required
+def add_edit_news(request, news_id=None):
+    #_auth_user(request)
+    sync_timestamp1 = ''
+    sync_timestamp3 = ''
+    if news_id:
+        news = get_object_or_404(News, entity_ptr_id=news_id)
+        sync_timestamp1 = news.sync_timestamp1
+        sync_timestamp3 = news.sync_timestamp3
     else:
-        game_advice = None
+        news = None
 
     if request.method == 'POST':
-        form = GameAdvicesForm(request.POST, request.FILES, instance=game_advice)
+        form = NewsForm(request.POST, request.FILES, instance=news)
         if form.is_valid():
-            game_advice = form.save()
-            if request.POST['advice_image']:
-                game_advice.advice_image = request.POST['advice_image'].replace(settings.MEDIA_URL, '', 1)
-                #            else:
-            #                weixin.cover = request.POST['cover']
-            if sync_timestamp1 != game_advice.sync_timestamp1:
+            news = form.save()
+            if request.POST['image_url']:
+                news.image_url = request.POST['image_url'].replace(settings.MEDIA_URL, '', 1)
+            if sync_timestamp1 != news.sync_timestamp1:
                 if sync_timestamp1 != '':
-                    game_advice.status1 = Entity.STATUS_PENDING
-            game_advice.save()
+                    news.status1 = Entity.STATUS_PENDING
+            if sync_timestamp3 != news.sync_timestamp3:
+                if sync_timestamp3 != '':
+                    news.status3 = Entity.STATUS_PENDING
+            news.save()
             return _redirect_back(request)
     else:
-        if game_advice is None:
-            form = GameAdvicesForm(instance=game_advice, initial={'presenter' : request.user.username})
+        if news is None:
+            form = NewsForm(instance=news, initial={'presenter' : request.user.username})
         else:
-            form = GameAdvicesForm(instance=game_advice)
+            form = NewsForm(instance=news)
 
-    return render(request, 'add_edit_game_advices.html', {'form' : form})
+    return render(request, 'add_edit_news.html', {'form' : form})
 
 @login_required
-def delete_game_advice(request, game_advice_id=None):
+def delete_news(request, news_id=None):
     _auth_user(request)
-    game_advice = get_object_or_404(GameAdvices, entity_ptr_id=game_advice_id)
-    game_advice.delete()
+    news = get_object_or_404(News, entity_ptr_id=news_id)
+    news.delete()
     return _redirect_back(request)
 
-def preview_game_advice(request, game_advice_id=None):
-    game_advice = get_object_or_404(GameAdvices, entity_ptr_id=game_advice_id)
-    return render(request, 'preview_game_advices.html', { 'gameadvice' : game_advice })
+def preview_news(request, news_id=None):
+    news = get_object_or_404(News, entity_ptr_id=news_id)
+    return render(request, 'preview_news.html', { 'news' : news })
 
 #@login_required
 def add_edit_puzzle(request, puzzle_id=None):
  #   _auth_user(request)
-    sync_timestamp1 =''
+    sync_timestamp1 = ''
+    sync_timestamp3 = ''
     if puzzle_id:
         puzzle = get_object_or_404(Puzzle, entity_ptr_id=puzzle_id)
         sync_timestamp1 = puzzle.sync_timestamp1
+        sync_timestamp3 = puzzle.sync_timestamp3
     else:
         puzzle = None
 
@@ -457,19 +476,16 @@ def add_edit_puzzle(request, puzzle_id=None):
         form = PuzzleForm(request.POST, request.FILES, instance=puzzle)
         if form.is_valid():
             puzzle = form.save()
-            if request.POST['picture1']:
-                puzzle.picture1 = request.POST['picture1'].replace(settings.MEDIA_URL, '', 1)
+            if request.POST['image_url']:
+                puzzle.image_url = request.POST['image_url'].replace(settings.MEDIA_URL, '', 1)
             else:
-                puzzle.picture1 = request.POST['picture1']
-            if request.POST['picture2']:
-                puzzle.picture2 = request.POST['picture2'].replace(settings.MEDIA_URL, '', 1)
-            if request.POST['picture3']:
-                puzzle.picture3 = request.POST['picture3'].replace(settings.MEDIA_URL, '', 1)
-            if request.POST['picture4']:
-                puzzle.picture4 = request.POST['picture4'].replace(settings.MEDIA_URL, '', 1)
+                puzzle.image_url = request.POST['image_url']
             if sync_timestamp1 != puzzle.sync_timestamp1:
                 if sync_timestamp1 != '':
                     puzzle.status1 = Entity.STATUS_PENDING
+            if sync_timestamp3 != puzzle.sync_timestamp3:
+                if sync_timestamp3 != '':
+                    puzzle.status3 = Entity.STATUS_PENDING
             puzzle.save()
             return _redirect_back(request)
     else:

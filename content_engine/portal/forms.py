@@ -8,7 +8,7 @@ from datetime import datetime
 from taggit.forms import TagField
 from django_select2 import *
 
-from portal.models import Redier, Game, Category, Collection, Problem,Weixin,Player,GameAdvices, Puzzle
+from portal.models import Redier, Game, Category, Collection, Problem, Weixin, Player, News, Puzzle
 
 class EntityForm(ModelForm):
     tags = TagField(label=u"标签",required=False)
@@ -16,7 +16,13 @@ class EntityForm(ModelForm):
     recommended_reason = forms.CharField(label=u"推荐理由", help_text=u"150字以内（作为微博内容同步到新浪微博）", required=False, max_length=150, widget=forms.Textarea())
 
 class RedierForm(EntityForm):
+    image_url = forms.ImageField(label=u"图片", help_text=u"建议图片宽度大于400像素", widget=AjaxClearableFileInput())
     sync_timestamp1 = forms.DateTimeField(label=u"微博同步时间", required=False, widget=DateTimeWidget(options={
+                'autoclose' : 'true',
+                'showMeridian' : 'true',
+                'startDate' : datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+                }))
+    sync_timestamp3 = forms.DateTimeField(label=u"网站同步时间", required=False, widget=DateTimeWidget(options={
                 'autoclose' : 'true',
                 'showMeridian' : 'true',
                 'startDate' : datetime.today().strftime('%Y-%m-%d %H:%M:%S')
@@ -26,14 +32,14 @@ class RedierForm(EntityForm):
         model = Redier
         fields = ('game_name',
             'title', 
-            'redier_image',
+            'image_url',
+            'video_url',
             'tags',
             'sync_timestamp1',
+            'sync_timestamp3',
             'presenter',
             'brief_comment',
             'recommended_reason')
-        widgets = {
-            'redier_image' : AjaxClearableFileInput()}
 
 class GameForm(EntityForm):
     category = forms.ModelChoiceField(queryset=Category.objects.all(), empty_label=u"选择分类", label=u"分类")
@@ -89,31 +95,43 @@ class CollectionForm(EntityForm):
                 'showMeridian' : 'true',
                 'startDate' : datetime.today().strftime('%Y-%m-%d %H:%M:%S')
                 }))
+    sync_timestamp3 = forms.DateTimeField(label=u"网站同步时间", required=False, widget=DateTimeWidget(options={
+                'autoclose' : 'true',
+                'showMeridian' : 'true',
+                'startDate' : datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+                }))
 
     class Meta:
         model = Collection
         fields = ('title',
             'cover',
+            'video_url',
             'games',
             'tags',
             'sync_timestamp1',
+            'sync_timestamp3',
             'presenter',
             'brief_comment',
             'recommended_reason')
 
-class GameAdviceChoices(AutoModelSelect2MultipleField):
-    queryset = GameAdvices.objects
+class NewsChoices(AutoModelSelect2MultipleField):
+    queryset = News.objects
     search_fields = ['title__icontains',]
 
 class PlayerChoices(AutoModelSelect2MultipleField):
     queryset = Player.objects
     search_fields = ['title__icontains',]
 
+class PuzzleChoices(AutoModelSelect2MultipleField):
+    queryset = Puzzle.objects
+    search_fields = ['title__icontains',]
+
 class WeixinForm(EntityForm):
     cover = forms.ImageField(label=u"封面图片", help_text=u"建议使用640x320大小的图片", widget=AjaxClearableFileInput(),required=False)
-    games = GameChoices(label=u"游戏",required = False)
-    advices = GameAdviceChoices(label=u"游戏情报站",required = False)
-    players = PlayerChoices(label=u"我是玩家",required = False)
+    games = GameChoices(label=u"游戏推荐", required = False)
+    news = NewsChoices(label=u"游戏情报站", required = False)
+    players = PlayerChoices(label=u"我是玩家", required = False)
+    puzzles = PuzzleChoices(label=u'趣题', required = False)
     sync_timestamp2 = forms.DateTimeField(label=u"微信同步时间", required=False, widget=DateTimeWidget(options={
                 'autoclose' : 'true',
                 'showMeridian' : 'true',
@@ -125,16 +143,22 @@ class WeixinForm(EntityForm):
         fields = ('title',
                   'cover',
                   'games',
-                  'advices',
+                  'news',
                   'players',
+                  'puzzles',
                   'sync_timestamp2',
                   'presenter',
                   'recommended_reason'
                   )
 
 class ProblemForm(EntityForm):
-    problem_image = forms.ImageField(label=u"必有一技", help_text=u"建议图片宽度大于400像素", widget=AjaxClearableFileInput())
+    image_url = forms.ImageField(label=u"图片", help_text=u"建议图片宽度大于400像素", widget=AjaxClearableFileInput())
     sync_timestamp1 = forms.DateTimeField(label=u"微博同步时间", required=False, widget=DateTimeWidget(options={
+                'autoclose' : 'true',
+                'showMeridian' : 'true',
+                'startDate' : datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+                }))
+    sync_timestamp3 = forms.DateTimeField(label=u"网站同步时间", required=False, widget=DateTimeWidget(options={
                 'autoclose' : 'true',
                 'showMeridian' : 'true',
                 'startDate' : datetime.today().strftime('%Y-%m-%d %H:%M:%S')
@@ -143,16 +167,23 @@ class ProblemForm(EntityForm):
     class Meta:
         model = Problem
         fields = ('title',
-            'problem_image',
+            'image_url',
+            'video_url',
             'tags',
             'sync_timestamp1',
+            'sync_timestamp3',
             'presenter',
             'brief_comment',
             'recommended_reason')
 
 class PlayerForm(EntityForm):
-    player_image = forms.ImageField(label=u"我是玩家", help_text=u"建议图片宽度大于400像素", widget=AjaxClearableFileInput())
+    image_url = forms.ImageField(label=u"图片", help_text=u"建议图片宽度大于400像素", widget=AjaxClearableFileInput())
     sync_timestamp1 = forms.DateTimeField(label=u"微博同步时间", required=False, widget=DateTimeWidget(options={
+                'autoclose' : 'true',
+                'showMeridian' : 'true',
+                'startDate' : datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+                }))
+    sync_timestamp3 = forms.DateTimeField(label=u"网站同步时间", required=False, widget=DateTimeWidget(options={
                 'autoclose' : 'true',
                 'showMeridian' : 'true',
                 'startDate' : datetime.today().strftime('%Y-%m-%d %H:%M:%S')
@@ -161,49 +192,59 @@ class PlayerForm(EntityForm):
     class Meta:
         model = Player
         fields = ('title',
-                  'player_image',
+                  'image_url',
+                  'video_url',
                   'sync_timestamp1',
+                  'sync_timestamp3',
                   'presenter',
                   'brief_comment',
                   'recommended_reason')
 
-class GameAdvicesForm(EntityForm):
-    advice_image = forms.ImageField(label=u"游戏情报站", help_text=u"建议图片宽度大于400像素", widget=AjaxClearableFileInput())
+class NewsForm(EntityForm):
+    image_url = forms.ImageField(label=u"图片", help_text=u"建议图片宽度大于400像素", widget=AjaxClearableFileInput())
     sync_timestamp1 = forms.DateTimeField(label=u"微博同步时间", required=False, widget=DateTimeWidget(options={
+                'autoclose' : 'true',
+                'showMeridian' : 'true',
+                'startDate' : datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+                }))
+    sync_timestamp3 = forms.DateTimeField(label=u"网站同步时间", required=False, widget=DateTimeWidget(options={
                 'autoclose' : 'true',
                 'showMeridian' : 'true',
                 'startDate' : datetime.today().strftime('%Y-%m-%d %H:%M:%S')
                 }))
 
     class Meta:
-        model = GameAdvices
+        model = News
         fields = ('title',
-                  'advice_image',
+                  'image_url',
+                  'video_url',
                   'sync_timestamp1',
+                  'sync_timestamp3',
                   'presenter',
                   'brief_comment',
                   'recommended_reason')
 
 
 class PuzzleForm(EntityForm):
-    picture1 = forms.ImageField(label=u'图片1', widget=AjaxClearableFileInput(), required = False)
-    picture2 = forms.ImageField(label=u'图片2', widget=AjaxClearableFileInput(), required = False)
-    picture3 = forms.ImageField(label=u'图片3', widget=AjaxClearableFileInput(), required = False)
-    picture4 = forms.ImageField(label=u'图片4', widget=AjaxClearableFileInput(), required = False)
+    image_url = forms.ImageField(label=u'题目图片', widget=AjaxClearableFileInput(), required = False)
     sync_timestamp1 = forms.DateTimeField(label=u"微博同步时间", required=False, widget=DateTimeWidget(options={
                 'autoclose' : 'true',
                 'showMeridian' : 'true',
                 'startDate' : datetime.today().strftime('%Y-%m-%d %H:%M:%S')
                 }))
+    sync_timestamp3 = forms.DateTimeField(label=u"网站同步时间", required=False, widget=DateTimeWidget(options={
+                'autoclose' : 'true',
+                'showMeridian' : 'true',
+                'startDate' : datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+                }))
+
     class Meta:
         model = Puzzle
         fields = (
             "title",
-            'picture1',
-            'picture2',
-            'picture3',
-            'picture4',
+            'image_url',
             'sync_timestamp1',
+            'sync_timestamp3',
             'presenter',
             'description',
             'option1',
@@ -211,7 +252,3 @@ class PuzzleForm(EntityForm):
             'option3',
             'option4',
             'right')
-           
-
-
-    

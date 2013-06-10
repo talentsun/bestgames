@@ -17,7 +17,7 @@
                 return false;
             });
             $('#save').click(function(){
-                $('#add_game_advice_form').submit();
+                $('#add_news_form').submit();
 
                 return false;
             });
@@ -40,7 +40,7 @@
         <li class="active">添加/编辑“游戏情报站”</li>
     </ul>
 
-    <form id="add_game_advice_form" action="" method="post" enctype="multipart/form-data"> {% csrf_token %}
+    <form id="add_news_form" action="" method="post" enctype="multipart/form-data"> {% csrf_token %}
         <div class="navbar" style="margin-bottom:0;">
             <div class="navbar-inner">
                 <p class="navbar-text">游戏情报站</p>
@@ -49,11 +49,12 @@
         <table class="table">
             <tbody>
             <tr><th>{{ form.title.label }}</th><td>{{ form.title }}{{ form.title.errors }}</td></tr>
-            <tr><th>{{ form.advice_image.label }}</th><td>{{ form.advice_image }}<span class="help-inline">{{ form.advice_image.help_text }}</span>{{ form.advice_image.errors }}</td></tr>
+            <tr><th>{{ form.image_url.label }}</th><td>{{ form.image_url }}<span class="help-inline">{{ form.image_url.help_text }}</span>{{ form.image_url.errors }}</td></tr>
+            <tr><th>{{ form.video_url.label }}</th><td>{{ form.video_url }}<span class="help-inline">{{ form.video_url.help_text }}</span>{{ form.video_url.errors }}</td></tr>
             </tbody>
         </table>
-        {% include "game_advices_section.html"%}
-        {% include "save_cancel_section.html"%}
+        {% include "recommendation_section.html" %}
+        {% include "save_cancel_section.html" %}
     </form>
 </div>
 </body>

@@ -1,15 +1,4 @@
-<div>
-<span>微博：</span>
-{% if record.status1 == 0 %}
-<span>不同步</span>
-{% elif record.status1 == 1 %}
-<span class="pending">准备同步</span>
-{% elif record.status1 == 2 %}
-<span class="completed">同步成功</span>
-{% else %}
-<span class="failed">同步失败</span>
-{% endif %}
-</div>
+{% if record.type == 5 %}
 <div>
 <span>微信：</span>
 {% if record.status2 == 0 %}
@@ -17,6 +6,19 @@
 {% elif record.status2 == 1 %}
 <span class="pending">准备同步</span>
 {% elif record.status2 == 2 %}
+<span class="completed">同步成功</span>
+{% else %}
+<span class="failed">同步失败</span>
+{% endif %}
+</div>
+{% else %}
+<div>
+<span>微博：</span>
+{% if record.status1 == 0 %}
+<span>不同步</span>
+{% elif record.status1 == 1 %}
+<span class="pending">准备同步</span>
+{% elif record.status1 == 2 %}
 <span class="completed">同步成功</span>
 {% else %}
 <span class="failed">同步失败</span>
@@ -34,3 +36,4 @@
 <span class="failed">同步失败</span>
 {% endif %}
 </div>
+{% endif %}

@@ -4,7 +4,6 @@ from django.utils.encoding import force_unicode
 from taggit.managers import TaggableManager
 from django.shortcuts import get_object_or_404
 
-
 class Entity(models.Model):
     GAME = 1
     REDIER = 2
@@ -12,7 +11,7 @@ class Entity(models.Model):
     PROBLEM = 4
     WEIXIN = 5
     PLAYER = 6
-    GAMEADVICE = 7
+    NEWS = 7
     PUZZLE = 8
     type = models.IntegerField(verbose_name=u'类型', default=GAME, editable=False)
     tags = TaggableManager(verbose_name=u"标签",blank=True)
@@ -96,14 +95,14 @@ class Game(Entity):
         (RATING_1, u"0.5"))
     rating = models.IntegerField(u"评分", choices=RATING_CHOICES, default=RATING_6)
     size = models.CharField(u"大小", max_length=100)
-    video_url = models.URLField(u"视频地址", max_length=255, blank=True)
+    video_url = models.URLField(u"视频", max_length=255, blank=True, help_text=u"目前只支持优酷的视频地址")
 
     def __unicode__(self):
         return force_unicode(self.name)
     class Meta:
         db_table = u'games'
-        verbose_name = u'精品游戏推荐'
-        verbose_name_plural = u'精品游戏推荐'
+        verbose_name = u'游戏推荐'
+        verbose_name_plural = u'游戏推荐'
     def save(self, *args, **kwargs):
         self.type = Entity.GAME
         if self.status1 == Entity.STATUS_DO_NOT_SYNC:
@@ -121,7 +120,8 @@ class Game(Entity):
 class Redier(Entity):
     game_name = models.CharField(u'游戏', max_length=255)
     title = models.CharField(u"标题", max_length=100)
-    redier_image = models.ImageField(u"攻略", upload_to='upload/', max_length=255, blank=True)
+    image_url = models.ImageField(u"图片", upload_to='upload/', max_length=255, blank=True)
+    video_url = models.URLField(u"视频", max_length=255, blank=True, help_text=u"目前只支持优酷的视频地址")
 
     class Meta:
         db_table = u'rediers'
@@ -144,6 +144,7 @@ class Redier(Entity):
 class Collection(Entity):
     title = models.CharField(u"标题", max_length=20)
     cover = models.ImageField(u"封面图片", upload_to='upload/', max_length=255, blank=True)
+    video_url = models.URLField(u"视频", max_length=255, blank=True, help_text=u"目前只支持优酷的视频地址")
     games = models.ManyToManyField(Game, verbose_name=u"游戏")
 
     class Meta:
@@ -167,7 +168,8 @@ class Collection(Entity):
 
 class Problem(Entity):
     title = models.CharField(u"标题", max_length=50)
-    problem_image = models.ImageField(u"必有一技", upload_to='upload/', max_length=255, blank=True) 
+    image_url = models.ImageField(u"图片", upload_to='upload/', max_length=255, blank=True)
+    video_url = models.URLField(u"视频", max_length=255, blank=True, help_text=u"目前只支持优酷的视频地址")
 
     class Meta:
         db_table = u'problems'
@@ -189,7 +191,8 @@ class Problem(Entity):
 
 class Player(Entity):
     title = models.CharField(u"标题", max_length=50)
-    player_image = models.ImageField(u"我是玩家", upload_to='upload/', max_length=255, blank=True)
+    image_url = models.ImageField(u"图片", upload_to='upload/', max_length=255, blank=True)
+    video_url = models.URLField(u"视频", max_length=255, blank=True, help_text=u"目前只支持优酷的视频地址")
 
     def __unicode__(self):
         return force_unicode(self.title)
@@ -211,18 +214,19 @@ class Player(Entity):
 
         super(Player, self).save(args, kwargs)
 
-class GameAdvices(Entity):
+class News(Entity):
     title = models.CharField(u"标题", max_length=50)
-    advice_image = models.ImageField(u"游戏情报站", upload_to='upload/', max_length=255, blank=True)
+    image_url = models.ImageField(u"图片", upload_to='upload/', max_length=255, blank=True)
+    video_url = models.URLField(u"视频", max_length=255, blank=True, help_text=u"目前只支持优酷的视频地址")
 
     def __unicode__(self):
         return force_unicode(self.title)
     class Meta:
-        db_table = u'game_advices'
+        db_table = u'news'
         verbose_name = u'游戏情报站'
         verbose_name_plural = u'游戏情报站'
     def save(self, *args, **kwargs):
-        self.type = Entity.GAMEADVICE
+        self.type = Entity.NEWS
         if self.status1 == Entity.STATUS_DO_NOT_SYNC:
             if self.sync_timestamp1 is not None:
                 self.status1 = Entity.STATUS_PENDING
@@ -233,39 +237,11 @@ class GameAdvices(Entity):
             if self.sync_timestamp3 is not None:
                 self.status3 = Entity.STATUS_PENDING
 
-        super(GameAdvices, self).save(args, kwargs)
-
-class Weixin(Entity):
-    title = models.CharField(u"标题", max_length=20,blank=True)
-    cover = models.ImageField(u"封面图片", upload_to='upload/', max_length=255, blank=True)
-    games = models.ManyToManyField(Game, verbose_name=u"游戏")
-    advices = models.ManyToManyField(GameAdvices, verbose_name=u"游戏情报站")
-    players = models.ManyToManyField(Player,verbose_name=u"我是玩家")
-
-    class Meta:
-        db_table = u'weixin2'
-        verbose_name = u'微信合集'
-        verbose_name_plural = u'微信合集'
-    def save(self, *args, **kwargs):
-        self.type = Entity.WEIXIN
-        if self.status1 == Entity.STATUS_DO_NOT_SYNC:
-            if self.sync_timestamp1 is not None:
-                self.status1 = Entity.STATUS_PENDING
-        if self.status2 == Entity.STATUS_DO_NOT_SYNC:
-            if self.sync_timestamp2 is not None:
-                self.status2 = Entity.STATUS_PENDING
-        if self.status3 == Entity.STATUS_DO_NOT_SYNC:
-            if self.sync_timestamp3 is not None:
-                self.status3 = Entity.STATUS_PENDING
-
-        super(Weixin, self).save(args, kwargs)
+        super(News, self).save(args, kwargs)
 
 class Puzzle(Entity):
     title = models.CharField(u"简短描述", max_length=20, blank=True)
-    picture1 = models.ImageField(u"问题图片1", upload_to='upload/', max_length=255, blank=True)
-    picture2 = models.ImageField(u"问题图片2", upload_to='upload/', max_length=255, blank=True)
-    picture3 = models.ImageField(u"问题图片3", upload_to='upload/', max_length=255, blank=True)
-    picture4 = models.ImageField(u"问题图片4", upload_to='upload/', max_length=255, blank=True)
+    image_url = models.ImageField(u"问题图片", upload_to='upload/', max_length=255, blank=True)
     description = models.TextField(u'题目描述')
     option1 = models.CharField(u'选项1', max_length=200, blank=True)
     option2 = models.CharField(u'选项2', max_length=200, blank=True)
@@ -297,3 +273,29 @@ class Puzzle(Entity):
                 self.status3 = Entity.STATUS_PENDING
         
         super(Puzzle, self).save(args, kwargs)
+
+class Weixin(Entity):
+    title = models.CharField(u"标题", max_length=20,blank=True)
+    cover = models.ImageField(u"封面图片", upload_to='upload/', max_length=255, blank=True)
+    games = models.ManyToManyField(Game, verbose_name=u"游戏推荐")
+    news = models.ManyToManyField(News, verbose_name=u"游戏情报站")
+    players = models.ManyToManyField(Player, verbose_name=u"我是玩家")
+    puzzles = models.ManyToManyField(Puzzle, verbose_name=u"趣题")
+
+    class Meta:
+        db_table = u'weixins'
+        verbose_name = u'微信合集'
+        verbose_name_plural = u'微信合集'
+    def save(self, *args, **kwargs):
+        self.type = Entity.WEIXIN
+        if self.status1 == Entity.STATUS_DO_NOT_SYNC:
+            if self.sync_timestamp1 is not None:
+                self.status1 = Entity.STATUS_PENDING
+        if self.status2 == Entity.STATUS_DO_NOT_SYNC:
+            if self.sync_timestamp2 is not None:
+                self.status2 = Entity.STATUS_PENDING
+        if self.status3 == Entity.STATUS_DO_NOT_SYNC:
+            if self.sync_timestamp3 is not None:
+                self.status3 = Entity.STATUS_PENDING
+
+        super(Weixin, self).save(args, kwargs)
