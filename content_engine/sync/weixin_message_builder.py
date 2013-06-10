@@ -4,13 +4,11 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 import shutil
-from breve import Template, flatten
-from breve.tags.html import tags
 from utils import make_image
 import os
+from django.template.loader import render_to_string
 
 current_file_dir = os.path.split(os.path.realpath(__file__))[0]
-t = Template(tags, root=current_file_dir + '/templates/')
 
 class WeixinMessageItem(object):
     def __init__(self, image, title, digest, content):
@@ -27,12 +25,12 @@ class WeixinMessage(object):
         self.items = items
 
 def _build_game_image(game):
-    content = t.render('screenshots', dict(
-        screenshot_path_1 = game.screenshot_path_1.path,
-        screenshot_path_2 = game.screenshot_path_2.path,
-        screenshot_path_3 = game.screenshot_path_3.path,
-        screenshot_path_4 = game.screenshot_path_4.path
-        ))
+    content = str(render_to_string('screenshots_weixin.tpl', {
+        'screenshot_path_1' : game.screenshot_path_1.path,
+        'screenshot_path_2' : game.screenshot_path_2.path,
+        'screenshot_path_3' : game.screenshot_path_3.path,
+        'screenshot_path_4' : game.screenshot_path_4.path
+        }))
     return make_image(game.id, content)
 
 def _normalize_content(content):
