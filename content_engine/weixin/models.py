@@ -15,10 +15,10 @@ class BaseDialog(models.Model):
     
 
 class WeixinUser(models.Model):
-    uid = models.CharField(u"统一id", max_length=100)
+    uid = models.CharField(u"统一id", max_length=100, db_index=True)
     integral = models.IntegerField(u"积分")
     phone = models.CharField(u"电话号码", max_length=20)
-    addTime = models.DateTimeField(u"添加时间")
+    addTime = models.DateTimeField(u"添加时间", auto_now=True)
     class Meta:
         db_table = u'weixin_user'
         verbose_name = u'微信用户'

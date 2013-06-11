@@ -1,56 +1,59 @@
 #!/usr/local/bin/python
 #coding:utf8
 
+from router import Router
 from django.core.cache import cache
+import time
 
 
 
 class StateMachine(object):
     stateRoute = {}
-
     def __init__(self):
         self.timeout = 15 * 60
     @classmethod
-    def Register(cls, stateId, smObj)
+    def register(cls, stateId, smObj):
         if stateId in cls.stateRoute:
             raise Exception, "%d already registered" % stateId
-        stateRoute = smObj
-
-    @classmethod
-    def matchState(cls, rule, info):
-        stateInfo = cache.get('state_%s' % info.user)
-        if stateInfo == None or stateInfo[0] not in cls.stateRoute:
-            return False
-
-        smObj = cls.stateRoute[stateInfo[0]]
-        return smObj.match(stateInfo[1])
-
-    @classmethod
-    def dealState(cls, rule, info):
-        stateInfo = cache.get('state_%s' % info.user)
-        smObj = StateMachine.stateRoute[stateInfo[0]]
-        return smObj.deal(stateInfo[1])
-
+        cls.stateRoute[stateId] = smObj
 
     def store(self, userId, value):
-        cache.set('state_%s' % userId, value, self.timeout)
+        stateInfo = (self.stateId, value)
+        cache.set('state_%s' % userId, stateInfo, 1000)
+        print userId
 
+    @classmethod
     def end(self, userId):
         cache.delete("state_%s" % userId)
 
-    def deal(self, value):
+    def deal(self, value, info):
         raise Exception, "not implemented"
 
-    def match(self, value):
+    def match(self, value, info):
         raise Exception, "not implemented"
 
     def start(self):
         raise Exception, "not implemented"
+def matchState(rule, info):
+    print time.time(), info.user
+    stateInfo = cache.get('state_%s' % info.user)
+    print stateInfo
+    if stateInfo == None or stateInfo[0] not in StateMachine.stateRoute:
+        return False
+
+    smObj = StateMachine.stateRoute[stateInfo[0]]
+    print time.time()
+    return smObj.match(stateInfo[1], info)
+
+def dealState(rule, info):
+    stateInfo = cache.get('state_%s' % info.user)
+    smObj = StateMachine.stateRoute[stateInfo[0]]
+    return smObj.deal(stateInfo[1], info)
 
 Router.get_instance().set({
     'name' :u"状态机",
-    'patterm' : StateMachine.matchState,
-    'handler' : StateMachine.dealState
+    'pattern' : matchState,
+    'handler' : dealState
 })
 
 

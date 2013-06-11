@@ -82,7 +82,7 @@ class Index:
         }
         self.db = leveldb.LevelDB(self.path, **options)
         self.logger = logging.getLogger("build_index") 
-        SegUtil.Init(self.path + "/../")
+        SegUtil.Init(workPath + "/../")
 
 
     @classmethod
