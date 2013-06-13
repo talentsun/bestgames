@@ -74,7 +74,7 @@ def build_game_message(game):
 		'post_tag' : _get_game_tags(game)
 	}
 
-	if game.screenshot_path_1._file is not None:
+	if game.screenshot_path_1 is not None:
 		post.custom_fields = []
 		post.custom_fields.append({'key':'post_image','value':settings.MEDIA_URL + game.screenshot_path_1.name})
 

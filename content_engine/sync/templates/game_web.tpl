@@ -3,7 +3,7 @@
 [box style="rounded shadow"]
 [col grid="4-1 first"]<img src="{{ icon }}" class="img-rounded" />[/col]
 [col grid="4-2"]<p>分类：{{ category }}</p><p>大小：{{ size }}</p><p>平台：{{ platforms }}</p>[/col]
-[col grid="4-1"]<a class="btn btn-success" rel="lightbox" href="http://qrickit.com/api/qr?qrsize=300&d=http://cow.bestgames7.com/games/{{id}}/preview"><i class="icon-qrcode icon-white"></i>二维码下载</a>[/col]
+[col grid="4-1"]<a class="btn btn-success" rel="lightbox" href="http://qrickit.com/api/qr?qrsize=300&d=http://cow.bestgames7.com/games/{{id}}/preview" onclick="_gaq.push(['_trackEvent', 'game', 'download', '{{ id }}']);"><i class="icon-qrcode icon-white"></i>二维码下载</a>[/col]
 [/box]
 
 [box style="rounded shadow"]
