@@ -1,7 +1,7 @@
 #encoding=utf-8
 import cronjobs
 import datetime
-from portal.models import Game, Redier, Collection, Problem, Entity, Weixin, Player, News
+from portal.models import Game, Redier, Collection, Problem, Entity, Weixin, Player, News, Puzzle
 from message_sender import MessageSender
 import weibo_message_builder
 import weixin_message_builder
@@ -80,5 +80,8 @@ def sync_web():
 		if entity.type == Entity.COLLECTION:
 			web_message = web_message_builder.build_collection_message(Collection.objects.get(id=entity.id))
 			logger.info('sync collection %s to web' % entity.id)
+		if entity.type == Entity.PUZZLE:
+			web_message = web_message_builder.build_puzzle_message(Puzzle.objects.get(id=entity.id))
+			logger.info('sync puzzle %s to web' % entity.id)
 		if web_message is not None:
 			MessageSender.send_web(web_message)

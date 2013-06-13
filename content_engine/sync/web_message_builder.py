@@ -138,3 +138,25 @@ def build_collection_message(collection):
 	post.post_status = 'publish'
 
 	return WebMessage(collection.id, post)
+
+def build_puzzle_message(puzzle):
+	post = WordPressPost()
+	post.title = puzzle.title
+
+	post.content = str(render_to_string('puzzle_web.tpl', {
+		'id' : puzzle.id,
+		'image_url' : settings.MEDIA_URL + puzzle.image_url.name,
+		'description' : puzzle.description,
+		'optiona' : puzzle.option1,
+		'optionb' : puzzle.option2,
+		'optionc' : puzzle.option3,
+		'optiond' : puzzle.option4
+	}))
+
+	post.terms_names = {
+		'category' : [u'趣味答题']
+	}
+
+	post.post_status = 'publish'
+
+	return WebMessage(puzzle.id, post)
