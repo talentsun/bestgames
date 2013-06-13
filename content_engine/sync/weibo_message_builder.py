@@ -40,7 +40,7 @@ def build_puzzle_message(puzzle):
     content = str(render_to_string('puzzle_weibo.tpl', {
         'puzzle_id' : puzzle.id,
         'template_path' : TEMPLATE_ROOT,
-        'puzzle_pic' : settings.MEDIA_URL +  puzzle.image_url.name,
+        'puzzle_pic' : puzzle.image_url.path,
         'puzzle_content' : puzzle.description,
         'optiona' : puzzle.option1,
         'optionb' : puzzle.option2,
