@@ -128,9 +128,9 @@ def _auth_user(request):
         c = Context({'noauth':noauth})
         return HttpResponse(t.render(c))
 
-#@login_required
+@login_required
 def add_edit_problem(request, problem_id=None):
-    #_auth_user(request)
+    _auth_user(request)
     sync_timestamp1 = ''
     sync_timestamp3 = ''
     if problem_id:
@@ -173,9 +173,9 @@ def delete_problem(request, problem_id=None):
             problem.delete()
             return _redirect_back(request)
 
-#@login_required
+@login_required
 def add_edit_weixin(request, weixin_id=None):
-    #_auth_user(request)
+    _auth_user(request)
     sync_timestamp2 =''
     if weixin_id:
         weixin = get_object_or_404(Weixin, entity_ptr_id=weixin_id)
@@ -213,9 +213,9 @@ def preview_weixin(request, weixin_id=None):
     weixin = get_object_or_404(Collection, entity_ptr_id=weixin_id)
     return render(request, 'preview_weixin.html', { 'weixin' : weixin })
 
-#@login_required
+@login_required
 def add_edit_collection(request, collection_id=None):
- #   _auth_user(request)
+    _auth_user(request)
     sync_timestamp1 = ''
     sync_timestamp3 = ''
     if collection_id:
@@ -260,9 +260,9 @@ def preview_collection(request, collection_id=None):
     collection = get_object_or_404(Collection, entity_ptr_id=collection_id)
     return render(request, 'preview_collection.html', { 'collection' : collection })
 
-#@login_required
+@login_required
 def add_edit_redier(request, redier_id=None):
-    #_auth_user(request)
+    _auth_user(request)
     sync_timestamp1 = ''
     sync_timestamp3 = ''
     if redier_id:
@@ -370,9 +370,9 @@ def preview_game(request, game_id=None):
     game = get_object_or_404(Game, entity_ptr_id=game_id)
     return render(request, 'preview_game.html', {'game' : game})
 
-#@login_required
+@login_required
 def add_edit_player(request, player_id=None):
-    #_auth_user(request)
+    _auth_user(request)
     sync_timestamp1 = ''
     sync_timestamp3 = ''
     if player_id:
@@ -415,9 +415,9 @@ def preview_player(request, player_id=None):
     player = get_object_or_404(Player, entity_ptr_id=player_id)
     return render(request, 'preview_player.html', { 'player' : player })
 
-#@login_required
+@login_required
 def add_edit_news(request, news_id=None):
-    #_auth_user(request)
+    _auth_user(request)
     sync_timestamp1 = ''
     sync_timestamp3 = ''
     if news_id:
@@ -460,9 +460,9 @@ def preview_news(request, news_id=None):
     news = get_object_or_404(News, entity_ptr_id=news_id)
     return render(request, 'preview_news.html', { 'news' : news })
 
-#@login_required
+@login_required
 def add_edit_puzzle(request, puzzle_id=None):
- #   _auth_user(request)
+    _auth_user(request)
     sync_timestamp1 = ''
     sync_timestamp3 = ''
     if puzzle_id:
