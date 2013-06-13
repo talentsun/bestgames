@@ -17,9 +17,12 @@ import socket
 
 import rules
 #import rules_draw
-import rules_base_dialog
 from rules_answer_puzzle import *
+from rules_integral_exchange import *
 from state_machine import *
+from state_verify import *
+from state_exchange import *
+import rules_base_dialog
 import rules_game_search
 from pyweixin import WeiXin
 from router import Router

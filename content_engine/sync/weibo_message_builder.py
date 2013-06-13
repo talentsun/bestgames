@@ -36,6 +36,19 @@ def build_game_message(game):
         weibo_status = _shorten_text(game.recommended_reason, 133)
     return WeiboMessage(u'#游戏推荐# ' + weibo_status, make_image(game.id, content), game.id)
 
+def build_puzzle_message(puzzle):
+    content = str(render_to_string('puzzle_weibo.tpl', {
+        'puzzle_id' : puzzle.id,
+        'template_path' : TEMPLATE_ROOT,
+        'puzzle_pic' : settings.MEDIA_URL +  puzzle.image_url.name,
+        'puzzle_content' : puzzle.description,
+        'optiona' : puzzle.option1,
+        'optionb' : puzzle.option2,
+        'optionc' : puzzle.option3,
+        'optiond' : puzzle.option4,
+    }))
+    
+    return WeiboMessage(u'#看图猜游戏# ' + puzzle.title, make_image(puzzle.id, content))
 def build_redier_message(redier):
     content = str(render_to_string('redier_weibo.tpl', {
         'template_path' : TEMPLATE_ROOT,

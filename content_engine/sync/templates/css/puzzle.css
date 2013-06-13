@@ -1,0 +1,58 @@
+body{
+    background-color: #f7f7f7;
+    width:580px;
+    font-size:20px;
+}
+.puzzle_pic {
+    margin: 0 auto;
+    text-align: center;
+    border-width: 5px;
+    border-color: #ffffff;
+}
+p#description {
+    margin-left: 10px;
+    color: #2d2d2d;
+}
+
+p.puzzle_num {
+    margin-left: 10px;
+    font-size:20px;
+    color: #0081a1;
+}
+
+.option_id {
+    color: #0081a1;
+    font-size:20px;
+}
+
+table {
+    border-collapse:collapse;
+    width:560px;
+    margin: 10 auto;
+    border-top: 1px solid #d8d8d8;
+}
+
+tr {
+    border-bottom: 1px solid #d8d8d8;
+}
+
+td {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    width:50%;
+    font-size:20px;
+}
+
+.head {
+    background:url("../img/head-puzzle.png") no-repeat;
+    width: 580px;
+    height: 64px;
+}
+.bottom {
+    bottom-top: 5px;
+    background:url("../img/bottom-puzzle.png") no-repeat;
+    width: 580px;
+    height: 420px;
+}
+
+
