@@ -91,6 +91,8 @@
       </a>
       <ul class="dropdown-menu">
         <li><a href="/puzzles/add?next={{request.get_full_path}}">新增趣题</a></li>
+        <li><a href="/gift/add?next={{request.get_full_path}}">新增礼品分类</a></li>
+        <li><a href="/gift_item/add?next={{request.get_full_path}}">新增礼品</a></li>
       </ul>
     </div>
 
@@ -175,6 +177,38 @@
             </div>
           </div>
           {% render_table puzzles "django_tables2/table.html" %}
+          <div class="navbar" style="margin-bottom:0;">
+            <div class="navbar-inner">
+                <p class="navbar-text">礼品类型</p>
+            </div>
+          </div>
+          {% render_table gift "django_tables2/table.html" %}
+          <div class="navbar" style="margin-bottom:0;">
+            <div class="navbar-inner">
+                <p class="navbar-text">礼品</p>
+            </div>
+          </div>
+          {% render_table gift_item "django_tables2/table.html" %}
+          <div class="navbar" style="margin-bottom:0;">
+            <div class="navbar-inner">
+                <p class="navbar-text">用户领礼品记录</p>
+            </div>
+          </div>
+          {% render_table user_gift "django_tables2/table.html" %}
+
+          <div class="navbar" style="margin-bottom:0;">
+            <div class="navbar-inner">
+                <p class="navbar-text">微信用户</p>
+            </div>
+          </div>
+          {% render_table weixin_user "django_tables2/table.html" %}
+
+          <div class="navbar" style="margin-bottom:0;">
+            <div class="navbar-inner">
+                <p class="navbar-text">用户答题记录</p>
+            </div>
+          </div>
+          {% render_table user_answer "django_tables2/table.html" %}
         </div>
         <div class="tab-pane" id="tab3">
           <div class="navbar" style="margin-bottom:0;">

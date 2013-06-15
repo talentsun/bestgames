@@ -16,17 +16,18 @@ import logging, traceback, time, struct, socket
 
 from taggit.models import Tag
 
-from weixin.models import BaseDialog
+from weixin.models import BaseDialog, Gift, GiftItem, UserGift, WeixinUser, UserAnswer
 from portal.models import Game, Redier, Collection, Problem, Entity, Weixin, Player, News, Puzzle
-from portal.tables import GameTable, RedierTable, CollectionTable, ProblemTable, WeixinTable, PlayerTable, NewsTable, DialogTable, PuzzleTable
-from portal.forms import GameForm, RedierForm, CollectionForm, ProblemForm, WeixinForm, PlayerForm, NewsForm, PuzzleForm
+from weixin.tables import UserGiftTable, WeixinUserTable, UserAnswerTable
+from portal.tables import GameTable, RedierTable, CollectionTable, ProblemTable, WeixinTable, PlayerTable, NewsTable, DialogTable, PuzzleTable, GiftTable, GiftItemTable
+from portal.forms import GameForm, RedierForm, CollectionForm, ProblemForm, WeixinForm, PlayerForm, NewsForm, PuzzleForm, GiftForm, GiftItemForm
 from service import search_pb2
 
 import django_tables2 as tables
 
 def _redirect_back(request):
     next_url = request.GET.get('next', None)
-    if next_url is None:
+    if next_url is None or len(next_url) == 0:
         return redirect('/')
     try:
         return redirect(next_url)
@@ -97,6 +98,13 @@ def index(request):
     player.paginate(page=request.GET.get("pr-page",1), per_page=5)
     player.data.verbose_name = u"我是玩家"
 
+    gift = GiftTable(Gift.objects.all(), prefix="gift-")
+    gift.paginate(page=request.GET.get("gift-page", 1), per_page = 5)
+    gift.data.verbose_name = u"礼物类型"
+
+    giftItem = GiftItemTable(GiftItem.objects.all(), prefix="gift-item-")
+    giftItem.paginate(page=request.GET.get("gift-item-page", 1), per_page = 5)
+    giftItem.data.verbose_name = u"礼物"
 
     if request.GET.get('bd_q', None):
         dialog = DialogTable(_search_dialog(request.GET.get("bd_q")), prefix="dia-")
@@ -114,7 +122,18 @@ def index(request):
     puzzles.paginate(page=request.GET.get("pr-page",1), per_page=10)
     puzzles.data.verbose_name = u"趣题"
 
-    return render(request, "index.html", {"games": games, "rediers":rediers, 'collections':collections, 'problems':problems, 'weixin':weixin, 'player':player, 'dialog': dialog, 'news':news, 'puzzles': puzzles})
+    userGift = UserGiftTable(UserGift.objects.all(), prefix="ug-")
+    userGift.paginate(page=request.GET.get("ug-page", 1), per_page=10)
+    userGift.data.verbose_name = u"用户领奖记录"
+
+    weixinUser = WeixinUserTable(WeixinUser.objects.all(), prefix="wu-")
+    weixinUser.paginate(page=request.GET.get("wu-page", 1), per_page=10)
+    weixinUser.data.verbose_name = u"微信用户"
+
+    userAnswer = UserAnswerTable(UserAnswer.objects.all(), prefix="ua-")
+    userAnswer.paginate(page=request.GET.get("ua-page", 1), per_page=10)
+    userAnswer.data.verbose_name = u"用户答题记录"
+    return render(request, "index.html", {"games": games, "rediers":rediers, 'collections':collections, 'problems':problems, 'weixin':weixin, 'player':player, 'dialog': dialog, 'news':news, 'puzzles': puzzles, 'gift': gift, 'gift_item': giftItem, 'user_gift':userGift, 'weixin_user':weixinUser, 'user_answer' : userAnswer})
 
 def logout(request):
     auth.logout(request)
@@ -497,8 +516,65 @@ def add_edit_puzzle(request, puzzle_id=None):
     return render(request, 'add_edit_puzzle.html', {'form' : form})
 
 @login_required
+def add_edit_gift(request, gift_id=None):
+    if gift_id:
+        gift = get_object_or_404(Gift, id=gift_id)
+    else:
+        gift = None
+
+    if request.method == 'POST':
+        form = GiftForm(request.POST, request.FILES, instance=gift)
+        if form.is_valid():
+            gift = form.save()
+            if request.POST['picture']:
+                gift.picture = request.POST['picture'].replace(settings.MEDIA_URL, '', 1)
+            else:
+                gift.picture = request.POST['picture']
+            gift.save()
+            return _redirect_back(request)
+    else:
+        if gift is None:
+            form = GiftForm(instance=gift)
+        else:
+            form = GiftForm(instance=gift)
+
+    return render(request, 'add_edit_gift.html', {'form' : form})
+
+@login_required
+def delete_gift(request, gift_id=None):
+    gift = get_object_or_404(Gift, id=gift_id)
+    gift.delete()
+    return _redirect_back(request)
+@login_required
 def delete_puzzle(request, puzzle_id=None):
     _auth_user(request)
     puzzle = get_object_or_404(Puzzle, entity_ptr_id=puzzle_id)
     puzzle.delete()
     return _redirect_back(request)
+@login_required
+def add_edit_gift_item(request, gift_item_id=None):
+    if gift_item_id:
+        gift = get_object_or_404(GiftItem, id=gift_item_id)
+    else:
+        gift = None
+
+    if request.method == 'POST':
+        form = GiftItemForm(request.POST, request.FILES, instance=gift)
+        if form.is_valid():
+            gift = form.save()
+            gift.save()
+            return _redirect_back(request)
+    else:
+        if gift is None:
+            form = GiftItemForm(instance=gift)
+        else:
+            form = GiftItemForm(instance=gift)
+
+    return render(request, 'add_edit_gift_item.html', {'form' : form})
+
+@login_required
+def delete_gift_item(request, gift_item_id=None):
+    gift = get_object_or_404(GiftItem, id=gift_item_id)
+    gift.delete()
+    return _redirect_back(request)
+

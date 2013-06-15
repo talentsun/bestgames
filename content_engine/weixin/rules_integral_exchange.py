@@ -17,6 +17,7 @@ def start_exchange(rule, info):
     except:
         traceback.print_exc()
         user = WeixinUser()
+        user.src = info.sp
         user.uid = info.user
         user.integral = 0
         user.save()

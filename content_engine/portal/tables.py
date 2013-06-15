@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from weixin.models import BaseDialog
+from weixin.models import BaseDialog, Gift, GiftItem
 from portal.models import Game, Redier, Collection, Problem, Weixin, Player, News, Puzzle
 import django_tables2 as tables
 from django_tables2.columns import DateTimeColumn, TemplateColumn
@@ -203,6 +203,7 @@ class NewsTable(tables.Table):
         sequence = ("title", "presenter","sync_timestamp1","sync_timestamp3","status","ops")
         attrs = {'class' : 'table table-striped'}
 
+
 class PuzzleTable(tables.Table):
     id = tables.Column(orderable=False)
     title = tables.Column(orderable=False)
@@ -220,3 +221,24 @@ class PuzzleTable(tables.Table):
         fields = ("id", "title", "presenter","sync_timestamp1","sync_timestamp3","status","ops")
         sequence = ("id", "title", "presenter","sync_timestamp1","sync_timestamp3","status","ops")
         attrs = {'class' : 'table table-striped'}
+
+class GiftTable(tables.Table):
+    ops = TemplateColumn(template_name="gift_field_ops.html",verbose_name=u"操作",orderable=False,attrs={"class":"ops"})
+    class Meta:
+        model = Gift
+        attrs = {'class' : 'table table-striped'}
+        fields = ('name', 'show', 'integral', 'cost')
+        orderable = False
+
+
+
+class GiftItemTable(tables.Table):
+    grade = tables.Column(verbose_name=u"礼品类型", accessor='grade.name')
+    ops = TemplateColumn(template_name="gift_item_field_ops.html",verbose_name=u"操作",orderable=False,attrs={"class":"ops"})
+    class Meta:
+        model = GiftItem
+        order_by = '-state'
+        attrs = {'class' : 'table table-striped'}
+        orderable = False
+        exclude = ('id',)
+

@@ -1,4 +1,4 @@
-Metadata-Version: 1.1
+Metadata-Version: 1.0
 Name: django-ajax-upload-widget
 Version: 0.5.3
 Summary: Provides AJAX file upload functionality for FileFields and ImageFields with a simple widget replacement in the form.

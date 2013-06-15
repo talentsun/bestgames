@@ -69,4 +69,16 @@ def build_weixin_message(weixin):
             message_title = title
         items.append(WeixinMessageItem(image=player.image_url.path, title=title, digest=title, content=player.recommended_reason))
         index += 1
+    for puzzle in weixin.puzzles.all():
+        title = u'趣题  -  %s' % puzzle.title
+        if index == 0:
+            message_title = title
+        content = puzzle.description + '\n'
+        content += 'A.' + puzzle.option1 + '\n'
+        content += 'B.' + puzzle.option2 + '\n'
+        content += 'C.' + puzzle.option3 + '\n'
+        content += 'D.' + puzzle.option4 + '\n'
+        content += u'回复"%d#你的答案"，参与答题得积分换礼品的活动吧\n' % puzzle.id
+        items.append(WeixinMessageItem(image=image_url.path, title=title, digest=title, content=content))
+        index += 1
     return WeixinMessage(weixin.id, message_title, items)

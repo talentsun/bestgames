@@ -3,6 +3,10 @@ from state_machine import StateMachine
 from message_builder import MessageBuilder, BuildConfig
 import random, traceback, time
 from models import WeixinUser
+from utils import send_sms
+
+import logging
+logger = logging.getLogger('weixin')
 
 
 
@@ -41,8 +45,9 @@ class VerifyPhone(StateMachine):
             except:
                 user = None
             if user == None:
-                #verifyCode = random.randint(100000, 1000000)
-                verifyCode = '123321'
+                verifyCode = str(random.randint(100000, 1000000))
+                ret = send_sms(info.text, u"验证码是%s，15分钟内有效" % verifyCode)
+                logger.debug("send sms return %s" % ret)
                 value = {'state':2, 'phone':info.text, 'verifyCode':verifyCode, "sendTime":time.time(), 'sendNum':value['sendNum'] + 1}
                 self.store(info.user, value)
                 text = u"我们已经将验证码发送到%s，请将收到的验证码发送给我们就完成验证，如果2分钟内没有收到短信就请输入'重新发送'，我们将重新给你发送新的验证码，如果想换手机号，就请输入'换手机号'" % info.text
@@ -51,7 +56,7 @@ class VerifyPhone(StateMachine):
         return text
 
     def checkState2(self, value, info):
-        if info.text == value['verifyCode']:
+        if info.text == str(value['verifyCode']):
             StateMachine.end(info.user)
             user = WeixinUser.objects.filter(uid=info.user)[0]
             user.phone = value['phone']
@@ -65,8 +70,10 @@ class VerifyPhone(StateMachine):
                 self.timeout = 12 * 3600
                 self.store(info.user, value)
             else:
-                verifyCode = "123456"
+                verifyCode = random.randint(100000, 1000000)
                 value['verifyCode'] = verifyCode
+                ret = send_sms(info.text, u"验证码是%d，15分钟内有效" % verifyCode)
+                logger.debug("send sms return %s" % ret)
                 value['sendTime'] = time.time()
                 value['sendNum'] += 1
                 self.store(info.user, value)

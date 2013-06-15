@@ -7,6 +7,7 @@ from ajax_upload.widgets import AjaxClearableFileInput
 from datetime import datetime
 from taggit.forms import TagField
 from django_select2 import *
+from weixin.models import Gift, GiftItem
 
 from portal.models import Redier, Game, Category, Collection, Problem, Weixin, Player, News, Puzzle
 
@@ -252,3 +253,22 @@ class PuzzleForm(EntityForm):
             'option3',
             'option4',
             'right')
+
+class GiftForm(ModelForm):
+    picture = forms.ImageField(label=u'礼物图片', widget=AjaxClearableFileInput(), required = False)
+    class Meta:
+        model = Gift
+
+class GiftItemForm(ModelForm):
+    """
+    grade = forms.ChoiceField()
+    def __init__(self, *args, **kwargs):
+        super(GiftItemForm, self).__init__(*args, **kwargs)
+        self.fields['grade'].choices = []
+        for i in Gift.objects.all():
+            self.fields['grade'].choices.append((i.id, i.name))
+
+    """
+    class Meta:
+        model = GiftItem
+        fields = ("grade", 'value')

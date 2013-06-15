@@ -33,5 +33,11 @@ urlpatterns = patterns('portal.views',
     url(r'^puzzles/(?P<puzzle_id>\d+)/delete','delete_puzzle'),
     url(r'^puzzles/add','add_edit_puzzle'),
     url(r'^puzzles/(?P<puzzle_id>\d+)/edit','add_edit_puzzle'),
+    url(r'^gift/(?P<gift_id>\d+)/delete','delete_gift'),
+    url(r'^gift/add','add_edit_gift'),
+    url(r'^gift/(?P<gift_id>\d+)/edit','add_edit_gift'),
+    url(r'^gift_item/(?P<gift_item_id>\d+)/delete','delete_gift_item'),
+    url(r'^gift_item/add','add_edit_gift_item'),
+    url(r'^gift_item/(?P<gift_item_id>\d+)/edit','add_edit_gift_item'),
     url(r'^logout', 'logout')
 )

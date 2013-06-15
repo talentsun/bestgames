@@ -5,15 +5,14 @@ import os
 import time
 
 def get_media_upload_dir(instance,filename):
-    extension = filename.split('.')[-1]
     today = time.strftime('%Y-%m-%d',time.localtime(time.time()))
-    if os.path.exists(settings.MEDIA_ROOT + today):
-        pass
-    else:
-        os.makedirs(settings.MEDIA_ROOT + today)
+    #if os.path.exists(settings.MEDIA_ROOT + today):
+    #    pass
+    #else:
+    #    os.makedirs(settings.MEDIA_ROOT + today)
 
-    upload_dir = "%s/%s.%s" % (settings.MEDIA_ROOT + today, filename,extension)
-    print "Upload dir set to: %s" % upload_dir
+    upload_dir = "%s/%s" % ('best_games/' + today, filename)
+    #print "Upload dir set to: %s" % upload_dir
     return upload_dir
 
 class UploadedFile(models.Model):

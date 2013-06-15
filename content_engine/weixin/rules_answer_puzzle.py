@@ -28,6 +28,7 @@ def answer(rule, info):
         user = WeixinUser.objects.get(uid = info.user)
     except:
         user = WeixinUser()
+        user.src = info.sp
         user.uid = info.user
         user.integral = 0
         user.save()
