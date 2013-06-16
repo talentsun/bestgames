@@ -16,10 +16,10 @@ class BaseDialog(models.Model):
 
 class WeixinUser(models.Model):
     src = models.CharField(u"来源账号", max_length=100, db_index=True)
-    uid = models.CharField(u"统一id", max_length=100, db_index=True)
+    uid = models.CharField(u"微信id", max_length=100, db_index=True)
     integral = models.IntegerField(u"积分")
     phone = models.CharField(u"电话号码", max_length=20)
-    addTime = models.DateTimeField(u"添加时间", auto_now=True)
+    addTime = models.DateTimeField(u"加入时间", auto_now=True)
     class Meta:
         db_table = u'weixin_user'
         verbose_name = u'微信用户'
@@ -51,12 +51,12 @@ class Gift(models.Model):
         return self.name
 
 class GiftItem(models.Model):
-    grade = models.ForeignKey(Gift)
+    grade = models.ForeignKey(Gift, verbose_name=u'类别')
     state_choices = (
         (0, '未兑换'),
         (1, '已兑换'),)
     state = models.SmallIntegerField(u"状态", choices=state_choices, default = 0) #=1 shows it is sold out 0: it is available
-    value = models.CharField(u"具体的奖品内容", max_length=1000)
+    value = models.CharField(u"礼品内容", max_length=1000)
 
     class Meta:
         db_table = u'gift_item'
@@ -64,22 +64,22 @@ class GiftItem(models.Model):
         app_label = 'weixin'
 
 class UserGift(models.Model):
-    user = models.ForeignKey(WeixinUser)
-    gift = models.ForeignKey(Gift)
-    getTime = models.DateTimeField(u"领奖时间", auto_now=True)
+    user = models.ForeignKey(WeixinUser, verbose_name=u'用户')
+    gift = models.ForeignKey(Gift, verbose_name=u'礼品')
+    getTime = models.DateTimeField(u"兑奖时间", auto_now=True)
 
     class Meta:
         db_table = u"user_gift"
-        verbose_name = u"用户领奖记录"
+        verbose_name = u"兑奖记录"
         app_label = 'weixin'
 
 class UserAnswer(models.Model):
-    questionId = models.ForeignKey(Puzzle)
-    userId = models.ForeignKey(WeixinUser)
-    answerTime = models.DateTimeField(auto_now=True)
-    userOption = models.SmallIntegerField(u'用户提交的答案')
+    questionId = models.ForeignKey(Puzzle, verbose_name=u'题号')
+    userId = models.ForeignKey(WeixinUser, verbose_name=u'用户')
+    answerTime = models.DateTimeField(auto_now=True, verbose_name=u'答题时间')
+    userOption = models.SmallIntegerField(u'答案')
 
     class Meta:
         db_table = u"user_answer"
-        verbose_name = u'用户答题历史'
+        verbose_name = u'答题历史'
         app_label = 'weixin'

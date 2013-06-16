@@ -19,7 +19,7 @@ class StateMachine(object):
 
     def store(self, userId, value):
         stateInfo = (self.stateId, value)
-        cache.set('state_%s' % userId, stateInfo, 1000)
+        cache.set('state_%s' % userId, stateInfo, self.timeout)
         print userId
 
     @classmethod
