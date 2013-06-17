@@ -47,7 +47,7 @@ class Exchange(StateMachine):
                 itemId = int(info.text)
                 gift = Gift.objects.get(id=itemId)
                 if user.integral >= gift.integral:
-                    giftItem = GiftItem.objects.get(grade = gift, state = 0)
+                    giftItem = GiftItem.objects.filter(grade = gift, state = 0)[0]
                     text = u"恭喜你兑换到了%s，礼品码是%s" % (gift.name, giftItem.value)
                     giftItem.state = 1
                     giftItem.save()

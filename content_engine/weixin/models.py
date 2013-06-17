@@ -63,6 +63,9 @@ class GiftItem(models.Model):
         verbose_name = u'具体礼品'
         app_label = 'weixin'
 
+    def __unicode__(self):
+        return self.grade.name
+
 class UserGift(models.Model):
     user = models.ForeignKey(WeixinUser, verbose_name=u'用户')
     gift = models.ForeignKey(GiftItem, verbose_name=u'礼品')

@@ -40,5 +40,5 @@ urlpatterns = patterns('portal.views',
     url(r'^gift_item/add','add_edit_gift_item'),
     url(r'^gift_item/(?P<gift_item_id>\d+)/edit','add_edit_gift_item'),
     url(r'^logout', 'logout'),
-    url(r'^gifts', 'gifts')
+    url(r'^gifts/(?P<user_id>\d+)', 'gifts')
 )

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+	<title>积分商城</title>
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/gifts.css"/>
+	<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="http://cow.bestgames7.com/static/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+    	$(document).ready(function(){
+    		$('#nav-gifts a').click(function (e) {
+				e.preventDefault();
+				$(this).tab('show');
+			});
+			$('#nav-my-gifts a').click(function (e) {
+				e.preventDefault();
+				$(this).tab('show');
+			});
+		});
+
+		var exchange = function(giftId) {
+			$('#gift_id').val(giftId);
+			$('#exchange_form').submit();
+		};
+	</script>
+  	{{ form.media }}
+</head>
+<body>
+	<div class="alert alert-success">您当前的积分：{{ credit }}</div>
+	<div id="nav-tab" class="tabbable">
+		<ul class="nav nav-tabs">
+  			<li id="nav-gifts" class="active"><a href="#tab-gifts">礼品列表</a></li>
+  			<li id="nav-my-gifts"><a href="#tab-my-gifts">已兑换礼品<span style="margin-top:-8px;" class="badge badge-success">{{ user_gifts|length }}</span></a></li>
+		</ul>
+		<div class="tab-content">
+			<div class="tab-pane active" id="tab-gifts">
+				{% for gift in gifts %}
+				<div id="gift-{{ gift.id }}" class="gift">
+					<div class="gift-img" style="background-image:url('{{ gift.picture }}');"></div>
+					<div style="margin-left:128px;">
+						<h4>{{ gift.name }}</h4>
+						<p>所需积分：{{ gift.integral }}，库存：{{ gift.item_count }}</p>
+						{% if gift.item_count > 0 and gift.integral <= credit %}
+						<a class="btn" href="#" onclick="exchange({{ gift.id }})">兑换</a>
+						{% else %}
+						<a class="btn disabled" href="#">兑换</a>
+						{% endif %}
+					</div>
+				</div>
+				{% empty %}
+				<div style="text-align:center;line-height:120px;">现在还没有礼品，等待小每添加给力的奖品吧！</div>
+				{% endfor %}
+			</div>
+			<div class="tab-pane" id="tab-my-gifts">
+				{% for user_gift in user_gifts %}
+				<div class="gift">
+					<div class="gift-img" style="background-image:url('{{ user_gift.picture }}');"></div>
+					<div style="margin-left:128px;">
+						<h4>{{ user_gift.name }}</h4>
+						<p>礼品内容：{{ user_gift.value }}</p>
+						<p>兑换时间：{{ user_gift.get_time }}</p>
+					</div>
+				</div>
+				{% empty %}
+				<div style="text-align:center;line-height:120px;">您还没有兑奖呢，努力回答问题赚积分吧！</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+	<form id="exchange_form" action="" method="post" enctype="multipart/form-data"> {% csrf_token %}
+		<input id="gift_id" type="hidden" name="gift_id" value="" />
+	</form>
+</body>
+</html>

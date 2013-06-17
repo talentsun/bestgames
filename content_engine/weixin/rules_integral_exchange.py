@@ -8,8 +8,6 @@ from state_verify import *
 from state_exchange import *
 
 default_sorry_wording = u'小每真是太笨了，没有理解您的意思[流泪]，求您一口盐汽水喷死小每吧'
-rewardA = ('itune gift card', 40)
-rewardB = ('android gift card', 40)
 def start_exchange(rule, info):
     print "start db", time.time()
     try:
