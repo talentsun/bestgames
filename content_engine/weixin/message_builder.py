@@ -77,6 +77,11 @@ def _build_weixin_games(context, data):
     logger.debug("len %d %s" % (len(resp), resp))
     return resp
 
+def _build_weixin_gift_shop(context, data):
+    articles = []
+    articles.append({'title' : u'积分商城', 'description' : u'使用积分在积分商城兑换礼品', 'pic_url' : 'http://pic5.qiyipic.com/common/20130513/2b55c3075f864f6d8178beca3ad9e972.jpg', 'url' : 'http://cow.bestgames7.com/gifts/%d' % data})
+    return WeiXin.to_news_xml(context.get('FromUserName', None), context.get('ToUserName', None), articles)
+
 
 def _build_weixin_game_collection(context, data):
     articles = []
@@ -109,6 +114,7 @@ class MessageBuilder:
     TYPE_RAW_TEXT = 'type_raw_text'
     TYPE_GAMES = 'type_games'
     TYPE_GAME_COLLECTION = 'type_game_collection'
+    TYPE_GIFT_SHOP = 'type_gift_shop'
     TYPE_NO_RESPONSE = 'no_response'
 
     # platforms
@@ -130,6 +136,9 @@ class MessageBuilder:
         },
         TYPE_GAME_COLLECTION : {
             PLATFORM_WEIXIN : _build_weixin_game_collection
+        },
+        TYPE_GIFT_SHOP : {
+            PLATFORM_WEIXIN : _build_weixin_gift_shop
         }
     }
 
