@@ -4,9 +4,21 @@ from message_builder import MessageBuilder, BuildConfig
 
 from models import WeixinUser, UserAnswer
 from portal.models import Puzzle
+import datetime
 
 default_sorry_wording = u'小每真是太笨了，没有理解您的意思[流泪]，求您一口盐汽水喷死小每吧'
 
+def check_integral(rule, info):
+    try:
+        user = WeixinUser.objects.get(uid = info.user)
+    except:
+        user = WeixinUser()
+        user.src = info.sp
+        user.uid = info.user
+        user.integral = 0
+        user.save()
+    text = u'您当前的积分：%d' % user.integral
+    return BuildConfig(MessageBuilder.TYPE_RAW_TEXT, None, text)
 
 
 def answer(rule, info):
@@ -39,28 +51,39 @@ def answer(rule, info):
     if puzzle == None:
         text = u"非常抱歉没找到第%d题" % puzzleId
     else:
-        try:
-            userAnswer = UserAnswer.objects.get(questionId = puzzleId, userId = user.pk)
-        except:
-            userAnswer = None
-        if userAnswer:
-            text = u'第%d题你已经答过了，再回答其他的题吧' % puzzleId
+        #one user only can answer two question
+        today = datetime.date.today()
+        userAnswers = UserAnswer.objects.filter(userId = user.pk, answerTime__gte=datetime.datetime(today.year, today.month, today.day))
+        if len(userAnswers) >= 2:
+            text = u'您今天已经答了两道了，明天再来吧'
         else:
-            userAnswer = UserAnswer()
-            userAnswer.questionId = puzzle
-            userAnswer.userId = user
-            userAnswer.userOption = option
-            if option == puzzle.right:
-                user.integral += 5
-                text = u'恭喜你，你答对了，太牛了，你现在的积分是%d, 回复"换礼品"换取礼品吧' % user.integral
-                user.save()
+            try:
+                userAnswer = UserAnswer.objects.get(questionId = puzzleId, userId = user.pk)
+            except:
+                userAnswer = None
+            if userAnswer:
+                text = u'第%d题你已经答过了，再回答其他的题吧' % puzzleId
             else:
-                text = u"非常抱歉，你没有答对，继续努力吧少年！"
-            userAnswer.save()
+                userAnswer = UserAnswer()
+                userAnswer.questionId = puzzle
+                userAnswer.userId = user
+                userAnswer.userOption = option
+                if option == puzzle.right:
+                    user.integral += 5
+                    text = u'恭喜您，答对了，您当前的积分是%d，\n回复"积分"查看当前积分，回复"礼品"可以换取礼品' % user.integral
+                    user.save()
+                else:
+                    text = u'这不科学，答错了，您当前的积分是%d\n回复"积分"查看当前积分，回复"礼品"可以换取礼品' % user.integral
+                userAnswer.save()
     return BuildConfig(MessageBuilder.TYPE_RAW_TEXT, None, text)
     
 Router.get_instance().set({
     'name' : u'答题',
     'pattern': r'^[1-9]\d*#[a-dA-D]$',
     'handler':answer
+})
+Router.get_instance().set({
+    'name' : u'查积分',
+    'pattern': r'^积分$',
+    'handler':check_integral
 })
