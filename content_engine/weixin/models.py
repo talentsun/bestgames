@@ -65,7 +65,7 @@ class GiftItem(models.Model):
 
 class UserGift(models.Model):
     user = models.ForeignKey(WeixinUser, verbose_name=u'用户')
-    gift = models.ForeignKey(Gift, verbose_name=u'礼品')
+    gift = models.ForeignKey(GiftItem, verbose_name=u'礼品')
     getTime = models.DateTimeField(u"兑奖时间", auto_now=True)
 
     class Meta:

@@ -55,7 +55,7 @@ class Exchange(StateMachine):
                     user.save()
 
                     userGift = UserGift()
-                    userGift.gift = gift
+                    userGift.gift = giftItem
                     userGift.user = user
                     userGift.save()
 

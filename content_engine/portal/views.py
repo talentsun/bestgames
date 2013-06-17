@@ -22,6 +22,7 @@ from weixin.tables import UserGiftTable, WeixinUserTable, UserAnswerTable
 from portal.tables import GameTable, RedierTable, CollectionTable, ProblemTable, WeixinTable, PlayerTable, NewsTable, DialogTable, PuzzleTable, GiftTable, GiftItemTable
 from portal.forms import GameForm, RedierForm, CollectionForm, ProblemForm, WeixinForm, PlayerForm, NewsForm, PuzzleForm, GiftForm, GiftItemForm
 from service import search_pb2
+from content_engine import settings
 
 import django_tables2 as tables
 
@@ -578,3 +579,22 @@ def delete_gift_item(request, gift_item_id=None):
     gift.delete()
     return _redirect_back(request)
 
+def gifts(request, user_id=None):
+    gifts = []
+    for gift in Gift.objects.filter(show=1):
+        gifts.append({
+            'id' : gift.id,
+            'name' : gift.name,
+            'integral' : gift.integral,
+            'item_count' : gift.giftitem_set.count(),
+            'picture' : settings.MEDIA_URL + gift.picture.name
+            })
+    user_gifts = []
+    for user_gift in UserGift.objects.filter(user__id=user_id).order_by('-getTime'):
+        user_gifts.append({
+            'name' : user_gift.gift.grade.name,
+            'picture' : settings.MEDIA_URL + user_gift.gift.grade.picture.name,
+            'value' : user_gift.gift.value,
+            'get_time' : user_gift.getTime
+            })
+    return render(request, 'gifts.html', {'credit' : 0, 'gifts' : gifts, 'user_gifts' : user_gifts})
