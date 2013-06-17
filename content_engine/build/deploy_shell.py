@@ -5,52 +5,60 @@ app_names=['django_tables2','django-datetime-widget', 'django-select2', \
            'pycURL', 'sinaweibopy','django-cronjobs','python-wordpress-xmlrpc', \
            'python-memcached', 'django-memcached','django-social-auth', 'django-dajax']
 
+failed_apps = []
+
 cmd1 = 'sudo apt-get install python-setuptools'
 cmd2 = 'sudo easy_install pip'
 cmd3 = 'sudo pip install'
+cmd4 = 'sudo python setup.py install'
 
-def ToolInstall():
+#install pip
+def install_tool():
     for cmd in [cmd1, cmd2]:
-        p = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell = True)
+        p = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
         p.wait()
         if p.returncode != 0:
-            print '%s failed'%cmd.split(' ')[1:]
-    print '######Tools installation finished!######'
+            failed_apps.append(cmd.split(' ')[1:])
+    print '##########Tools Installation Finished!##########'
 
-def AppInstall():
-    for name in app_names:
-        p =  subprocess.Popen(cmd3+' '+name, stdout=subprocess.PIPE, shell = True)
+#install apps from PyPI
+def install_app():
+    for app_name in app_names:
+        p =  subprocess.Popen(cmd3+' '+app_name, stdout=subprocess.PIPE, shell=True)
         p.wait()
         if p.returncode == 0:
-            print'%s installed successfully'%name
+            print'#%s installed successfully'% app_name
         else:
-            print '%s is not installed'%name
-    return True
+            failed_apps.append(app_name)
 
-def LibsInstall():
+#install apps of /bestgames/content_engine/libs
+def install_libs():
     path = '../libs/'
     names = os.listdir(path)
-    #找到所有子文件夹
-    AllDirNames = [x for x in names if os.path.isdir(path+x)]
+    #find all folders
+    all_dir_names = [x for x in names if os.path.isdir(path+x)]
+    
+    #find all folders which within setup.py
     dirnames=[]
-    #找到所有存在setup.py的文件夹
-    for dirname in AllDirNames:
+    for dirname in all_dir_names:
         filenames = os.listdir(path+dirname)
         for filename in filenames:
             if filename == 'setup.py':
                 dirnames.append(dirname)
-    #执行命令
+    
+    #shell commands
     for dirname in dirnames:
-        cmd4 = 'sudo python setup.py install'
-        p = subprocess.Popen(cmd4, stdout=subprocess.PIPE, cwd=path+dirname, shell = True)
+        p = subprocess.Popen(cmd4, stdout=subprocess.PIPE, cwd=path+dirname, shell=True)
         p.wait()
         if p.returncode == 0:
-            print '%s installed successfully'%dirname
+            print '#%s installed successfully'% dirname
         else:
-            print '%s is not installed'%dirname
-    return True
+             failed_apps.append(dirname)
 
 if __name__ == '__main__':
-    ToolInstall()
-    if AppInstall() and LibsInstall():
-        print '######Apps installation finished!######'
+    install_tool()
+    install_app() 
+    install_libs()
+    print '##########Installation Finished!##########'
+    for name in failed_apps:
+        print '#%s is failed to install'% name
