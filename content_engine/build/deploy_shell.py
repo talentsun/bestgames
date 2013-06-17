@@ -1,7 +1,7 @@
 #usr/bin/env python
 #! -*- coding:utf-8 -*-
 import os, subprocess
-app_names=['django_tables2','django-datetime-widget', 'django-select2', \
+app_names = ['django_tables2','django-datetime-widget', 'django-select2', \
            'pycURL', 'sinaweibopy','django-cronjobs','python-wordpress-xmlrpc', \
            'python-memcached', 'django-memcached','django-social-auth', 'django-dajax']
 
