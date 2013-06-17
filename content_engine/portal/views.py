@@ -119,7 +119,7 @@ def index(request):
     news.data.verbose_name = u"游戏情报站"
 
     puzzles = PuzzleTable(Puzzle.objects.all(), prefix="pu-")
-    puzzles.paginate(page=request.GET.get("pr-page",1), per_page=10)
+    puzzles.paginate(page=request.GET.get("pu-page",1), per_page=10)
     puzzles.data.verbose_name = u"趣题"
 
     userGift = UserGiftTable(UserGift.objects.all(), prefix="ug-")
