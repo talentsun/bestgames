@@ -1,9 +1,12 @@
 #usr/bin/env python
 #! -*- coding:utf-8 -*-
 import os, subprocess
-app_names = ['django_tables2','django-datetime-widget', 'django-select2', \
-           'pycURL', 'sinaweibopy','django-cronjobs','python-wordpress-xmlrpc', \
-           'python-memcached', 'django-memcached','django-social-auth', 'django-dajax']
+app_names = [
+            'django_tables2','django-datetime-widget', 'django-select2', \
+            'pycURL', 'django-cronjobs','python-wordpress-xmlrpc', \
+            'python-memcached', 'django-memcached','django-social-auth', \
+            'django-dajax'
+            ]
 
 failed_apps = []
 
@@ -37,7 +40,7 @@ def install_libs():
     names = os.listdir(path)
     #find all folders
     all_dir_names = [x for x in names if os.path.isdir(path+x)]
-    
+
     #find all folders which within setup.py
     dirnames=[]
     for dirname in all_dir_names:
@@ -45,7 +48,7 @@ def install_libs():
         for filename in filenames:
             if filename == 'setup.py':
                 dirnames.append(dirname)
-    
+
     #shell commands
     for dirname in dirnames:
         p = subprocess.Popen(cmd4, stdout=subprocess.PIPE, cwd=path+dirname, shell=True)
@@ -57,7 +60,7 @@ def install_libs():
 
 if __name__ == '__main__':
     install_tool()
-    install_app() 
+    install_app()
     install_libs()
     print '##########Installation Finished!##########'
     for name in failed_apps:
