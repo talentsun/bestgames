@@ -8,19 +8,6 @@ import datetime
 
 default_sorry_wording = u'小每真是太笨了，没有理解您的意思[流泪]，求您一口盐汽水喷死小每吧'
 
-def check_integral(rule, info):
-    try:
-        user = WeixinUser.objects.get(uid = info.user)
-    except:
-        user = WeixinUser()
-        user.src = info.sp
-        user.uid = info.user
-        user.integral = 0
-        user.save()
-    text = u'您当前的积分：%d' % user.integral
-    return BuildConfig(MessageBuilder.TYPE_RAW_TEXT, None, text)
-
-
 def answer(rule, info):
     puzzleId = int(info.text[:-2])
     option = info.text[-1]
@@ -81,9 +68,4 @@ Router.get_instance().set({
     'name' : u'答题',
     'pattern': r'^[1-9]\d*#[a-dA-D]$',
     'handler':answer
-})
-Router.get_instance().set({
-    'name' : u'查积分',
-    'pattern': r'^积分$',
-    'handler':check_integral
 })
