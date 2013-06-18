@@ -47,7 +47,7 @@ def sync_weibo():
 			weibo_message = weibo_message_builder.build_player_message(Player.objects.get(id=entity.id))
 			logger.info('sync player %s to weibo' % weibo_message.entity_id)
 		elif entity.type == Entity.PUZZLE:
-			weibo_message = weibo_message_builder.build_player_message(Puzzle.objects.get(id=entity.id))
+			weibo_message = weibo_message_builder.build_puzzle_message(Puzzle.objects.get(id=entity.id))
 			logger.info('sync puzzle %s to weibo' % weibo_message.entity_id)
 		elif entity.type == Entity.NEWS:
 			weibo_message = weibo_message_builder.build_news_message(News.objects.get(id=entity.id))

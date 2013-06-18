@@ -48,7 +48,7 @@ def build_puzzle_message(puzzle):
         'optiond' : puzzle.option4,
     }))
     
-    return WeiboMessage(u'#看图猜游戏# ' + puzzle.title, make_image(puzzle.id, content))
+    return WeiboMessage(u'#趣味答题# ' + _shorten_text(puzzle.title, 133), make_image(puzzle.id, content), puzzle.id)
 def build_redier_message(redier):
     content = str(render_to_string('redier_weibo.tpl', {
         'template_path' : TEMPLATE_ROOT,

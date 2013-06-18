@@ -9,6 +9,9 @@ body{
     border-width: 5px;
     border-color: #ffffff;
 }
+.puzzle_pic img {
+    width: 580px;
+}
 p#description {
     margin-left: 10px;
     color: #2d2d2d;
