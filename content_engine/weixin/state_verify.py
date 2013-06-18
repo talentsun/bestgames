@@ -22,7 +22,7 @@ class VerifyPhone(StateMachine):
     def start(self, info):
         value = {'state': 1, 'sendNum':0}
         self.store(info.user, value)
-        return BuildConfig(MessageBuilder.TYPE_RAW_TEXT, None, u"为了保证礼品能平等的发放到游戏玩家手中，我们需要用户进行真实性确认，请输入你的手机号，我们会给这个手机号发送一个验证码，每个手机号只能用一次")
+        return BuildConfig(MessageBuilder.TYPE_RAW_TEXT, None, u"使用积分商城进行积分换礼品需要进行身份验证。请输入您的手机号，小每会给您的手机号发送一个验证码，每个手机号只能验证一次")
 
     def checkPhoneNum(self, numStr):
         try:
@@ -41,7 +41,7 @@ class VerifyPhone(StateMachine):
         elif self.checkPhoneNum(info.text):
             try:
                 user = WeixinUser.objects.get(phone=info.text)
-                text = "这个电话号码已经被使用了，请使用其他号码"
+                text = "这个手机号已经被使用了，请使用其他号码"
             except:
                 user = None
             if user == None:
@@ -50,7 +50,7 @@ class VerifyPhone(StateMachine):
                 logger.debug("send sms return %s" % ret)
                 value = {'state':2, 'phone':info.text, 'verifyCode':verifyCode, "sendTime":time.time(), 'sendNum':value['sendNum'] + 1}
                 self.store(info.user, value)
-                text = u"我们已经将验证码发送到%s，请将收到的验证码发送给我们就完成验证，如果2分钟内没有收到短信就请输入'重新发送'，我们将重新给你发送新的验证码，如果想换手机号，就请输入'换手机号'" % info.text
+                text = u'我们已经将验证码发送到%s，请将收到的验证码发送给我们就完成验证，如果2分钟内没有收到短信就请输入“重新发送”，我们将重新给你发送新的验证码，如果想换手机号，就请输入“换手机号”' % info.text
         else:
             text = u"请输入正确的手机号"
         return text
@@ -61,12 +61,12 @@ class VerifyPhone(StateMachine):
             user = WeixinUser.objects.filter(uid=info.user)[0]
             user.phone = value['phone']
             user.save()
-            text = u"恭喜您，已经完成了验证，赶快回复'换礼品'去选择礼品吧"
+            text = u'恭喜您，已经完成了验证，赶快回复“礼品”去积分商城选择礼品吧'
         elif info.text == u"重新发送":
             if time.time() < value['sendTime'] + 2 * 60:
-                text = u"刚给你发送了短信，请耐心等候"
+                text = u"刚给您发送了短信，请耐心等候"
             elif value['sendNum'] > 5:
-                text = u"今天已经给你发送了太多短信了，请明天再来吧"
+                text = u"今天已经给您发送了太多短信了，请明天再来吧"
                 self.timeout = 12 * 3600
                 self.store(info.user, value)
             else:
@@ -77,12 +77,12 @@ class VerifyPhone(StateMachine):
                 value['sendTime'] = time.time()
                 value['sendNum'] += 1
                 self.store(info.user, value)
-                text = u"亲，又给你发送了一条短信，请查收"
+                text = u"已经给您发送了一条短信，请查收"
         elif info.text == u"换手机号" or info.text == u"换手机":
             if time.time() < value['sendTime'] + 2 * 60:
-                text = u"刚给你发送了短信，请2分钟后没收到，再换手机号"
+                text = u'刚给你发送了短信，请2分钟后没收到，再“换手机号”'
             elif value['sendNum'] > 5:
-                text = u"今天已经给你发送了太多短信了，请明天再来吧"
+                text = u'今天已经给你发送了太多短信了，请明天再来吧'
                 self.timeout = 12 * 3600
                 self.store(info.user, value)
             else:

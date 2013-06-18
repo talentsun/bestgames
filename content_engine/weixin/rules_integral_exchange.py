@@ -29,6 +29,6 @@ def start_exchange(rule, info):
 
 Router.get_instance().set({
     'name' : u'换礼品',
-    'pattern': u'^(换礼品|礼品|换奖品|奖品|积分)$',
+    'pattern': u'^(换礼品|礼品|换奖品|奖品)$',
     'handler':start_exchange
 })

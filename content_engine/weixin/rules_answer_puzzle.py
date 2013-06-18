@@ -70,10 +70,10 @@ def answer(rule, info):
                 userAnswer.userOption = option
                 if option == puzzle.right:
                     user.integral += 5
-                    text = u'恭喜您，答对了，您当前的积分是%d，\n回复"积分"查看当前积分，回复"礼品"可以换取礼品' % user.integral
+                    text = u'恭喜您，答对了，您当前的积分：%d\n回复"礼品"进入积分商城兑换礼品' % user.integral
                     user.save()
                 else:
-                    text = u'这不科学，答错了，您当前的积分是%d\n回复"积分"查看当前积分，回复"礼品"可以换取礼品' % user.integral
+                    text = u'这不科学，答错了，您当前的积分：%d\n回复"礼品"进入积分商城兑换礼品' % user.integral
                 userAnswer.save()
     return BuildConfig(MessageBuilder.TYPE_RAW_TEXT, None, text)
     
