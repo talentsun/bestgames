@@ -240,5 +240,5 @@ class GiftItemTable(tables.Table):
         order_by = '-state'
         attrs = {'class' : 'table table-striped'}
         orderable = False
-        exclude = ('id',)
+        exclude = ('id', 'value')
 
