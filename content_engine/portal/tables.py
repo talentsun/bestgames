@@ -53,12 +53,15 @@ class PuzzleColumn(tables.Column):
         else:
             return u'—'
 
+class ValueColumn(tables.Column):
+    def render(self,value):
+        return value[:-12]+'*'*12
 
 class SearchResultTable(tables.Table):
     id = tables.Column(orderable=False, visible=False)
     name = tables.Column(orderable=False)
     tags = TagColumn(orderable=False,attrs={"class":"tags"})
-    
+
     class Meta:
         model = Game
         empty_text = u"暂无精品游戏推荐"
@@ -74,7 +77,7 @@ class GameTable(tables.Table):
     sync_timestamp3 = DateTimeColumn(verbose_name=u"网站同步时间",orderable=False)
     status = TemplateColumn(template_name="sync_status_field.html",orderable=False,verbose_name=u"同步状态")
     ops = TemplateColumn(template_name="game_field_ops.html",verbose_name=u"操作",orderable=False,attrs={"class":"ops"})
-    
+
     class Meta:
         model = Game
         order_by = "-id"
@@ -180,7 +183,7 @@ class DialogTable(tables.Table):
     presenter = tables.Column(orderable=False)
     ops = TemplateColumn(template_name="dialog_field_ops.html",verbose_name=u"操作",orderable=False,attrs={"class":"ops"})
     class Meta:
-        model = BaseDialog 
+        model = BaseDialog
         empty_text = u"暂无\"基本对话\""
         fields = ("id", "question", "answer", "presenter" ,"ops")
         sequence = ("id", "question", "answer", "presenter" ,"ops")
@@ -233,6 +236,7 @@ class GiftTable(tables.Table):
 
 
 class GiftItemTable(tables.Table):
+    value = ValueColumn(attrs={"class":"value"})
     grade = tables.Column(verbose_name=u"礼品类型", accessor='grade.name')
     ops = TemplateColumn(template_name="gift_item_field_ops.html",verbose_name=u"操作",orderable=False,attrs={"class":"ops"})
     class Meta:
