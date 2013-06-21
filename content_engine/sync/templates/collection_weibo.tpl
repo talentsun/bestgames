@@ -10,10 +10,6 @@
         <div class="head"></div>
         <div>
             <img src="{{ cover }}" class="cover" />
-            <div class="title">
-                <span style="margin-left:40px;">游戏合集 之</span>
-                <span style="margin-left:20px;">{{ title }}</span>
-            </div>
         </div>
         <div class="games">
             {% for game in games %}
