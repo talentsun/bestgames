@@ -70,7 +70,8 @@ def build_collection_message(collection):
             'rating' : game.rating,
             'size' : game.size,
             'category' : game.category.name,
-            'brief_comment' : game.brief_comment
+            'brief_comment' : game.brief_comment,
+            'recommended_reason' : game.recommended_reason
             })
     content = str(render_to_string('collection_weibo.tpl', {
         'template_path' : TEMPLATE_ROOT,
