@@ -75,7 +75,7 @@ img{
 	background-color: white;
 	margin-bottom: 8px;
     border: solid 1px #d2d2d2;
-    height: 150px;
+    height: 200px;
 }
 
 .game-info .meta-info {
@@ -84,7 +84,7 @@ img{
 
 .game-info .screenshot{
     width: 300px;
-    height: 150px;
+    height: 200px;
     background-position: center;
     background-size: 300px auto;
     float:left;
