@@ -10,6 +10,7 @@
 	<script type="text/javascript" src="http://cow.bestgames7.com/static/js/bootstrap.min.js"></script>
 	<script type="text/javascript">
 		var answer = function(option) {
+			$('.btn').addClass('disabled');
 			$('#answer').val(option);
 			$('#answer_form').submit();
 		};
@@ -29,10 +30,10 @@
 		<img width="100%" src="{{ puzzle.image }}" />
 		<p style="margin-top:8px;">{{ puzzle.description }}</p>
 		
-		<a style="text-align:left;padding-left:8px;" class="btn btn-large btn-block {% if puzzle.answered %}{% if puzzle.userOption == 0 %}btn-primary{% endif %} disabled{% endif %}" href="javascript:void(0);"  onclick="answer(0)">A.{{ puzzle.option1 }}</a>
-		<a style="text-align:left;padding-left:8px;" class="btn btn-large btn-block {% if puzzle.answered %}{% if puzzle.userOption == 1 %}btn-primary{% endif %} disabled{% endif %}" href="javascript:void(0);"  onclick="answer(1)">B.{{ puzzle.option2 }}</a>
-		<a style="text-align:left;padding-left:8px;" class="btn btn-large btn-block {% if puzzle.answered %}{% if puzzle.userOption == 2 %}btn-primary{% endif %} disabled{% endif %}" href="javascript:void(0);"  onclick="answer(2)">C.{{ puzzle.option3 }}</a>
-		<a style="text-align:left;padding-left:8px;" class="btn btn-large btn-block {% if puzzle.answered %}{% if puzzle.userOption == 3 %}btn-primary{% endif %} disabled{% endif %}" href="javascript:void(0);"  onclick="answer(3)">D.{{ puzzle.option4 }}</a>
+		<a style="text-align:left;padding-left:8px;" class="btn btn-large btn-block {% if puzzle.answered %}{% if puzzle.userOption == 0 %}btn-primary{% endif %} disabled{% endif %}" href="javascript:void(0);" {% if not puzzle.answered %}onclick="answer(0)"{% endif %}>A.{{ puzzle.option1 }}</a>
+		<a style="text-align:left;padding-left:8px;" class="btn btn-large btn-block {% if puzzle.answered %}{% if puzzle.userOption == 1 %}btn-primary{% endif %} disabled{% endif %}" href="javascript:void(0);" {% if not puzzle.answered %}onclick="answer(1)"{% endif %}>B.{{ puzzle.option2 }}</a>
+		<a style="text-align:left;padding-left:8px;" class="btn btn-large btn-block {% if puzzle.answered %}{% if puzzle.userOption == 2 %}btn-primary{% endif %} disabled{% endif %}" href="javascript:void(0);" {% if not puzzle.answered %}onclick="answer(2)"{% endif %}>C.{{ puzzle.option3 }}</a>
+		<a style="text-align:left;padding-left:8px;" class="btn btn-large btn-block {% if puzzle.answered %}{% if puzzle.userOption == 3 %}btn-primary{% endif %} disabled{% endif %}" href="javascript:void(0);" {% if not puzzle.answered %}onclick="answer(3)"{% endif %}>D.{{ puzzle.option4 }}</a>
 	</div>
 	<form id="answer_form" action="" method="post" enctype="multipart/form-data"> {% csrf_token %}
 		<input id="answer" type="hidden" name="answer" value="" />

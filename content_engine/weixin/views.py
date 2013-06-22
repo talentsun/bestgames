@@ -185,7 +185,7 @@ def puzzles(request, puzzle_id=None):
             user_answer = UserAnswer(questionId=puzzle, userId=user, userOption=request.POST.get('answer', 0))
             user_answer.save()
             
-            if user_answer.userOption == puzzle.right:
+            if int(user_answer.userOption) == puzzle.right:
                 user.integral += 5
                 user.save()
         

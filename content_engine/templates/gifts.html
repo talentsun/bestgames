@@ -21,6 +21,7 @@
 		});
 
 		var exchange = function(giftId) {
+			$('.btn').addClass('disabled');
 			$('#gift_id').val(giftId);
 			$('#exchange_form').submit();
 		};
