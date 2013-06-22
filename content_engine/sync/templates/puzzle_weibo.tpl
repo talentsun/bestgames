@@ -7,7 +7,7 @@
 <body>
     <div id="container">
         <div class="head"></div>
-        <div class="puzzle_pic" style="margin-top:16px;">
+        <div class="puzzle_pic">
             <img src="{{ puzzle_pic }}" />
         </div>
         <p id="description">{{ puzzle_content }}</p>
