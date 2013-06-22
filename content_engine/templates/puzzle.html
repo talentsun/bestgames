@@ -20,9 +20,9 @@
 <body>
 	{% if puzzle.answered %}
 	{% if puzzle.correct %}
-		<div class="alert alert-success">恭喜您，答对了，您当前的积分：{{ credit }}。发送“礼品”可以兑换礼品。</div>
+		<div class="alert alert-success">恭喜您，答对了，您当前的积分：{{ credit }}。发送“礼品”使用积分换礼品。</div>
 	{% else %}
-		<div class="alert alert-error">这不科学，答错了，您当前的积分：{{ credit }}。发送“礼品”可以兑换礼品。</div>
+		<div class="alert alert-error">这不科学，答错了，您当前的积分：{{ credit }}。发送“礼品”使用积分换礼品。</div>
 	{% endif %}
 	{% endif %}
 	<div>
