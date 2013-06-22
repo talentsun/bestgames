@@ -18,7 +18,7 @@ def answer(rule, info):
         user.integral = 0
         user.save()
 
-    return BuildConfig(MessageBuilder.TYPE_RAW_TEXT, None, text)
+    return BuildConfig(MessageBuilder.TYPE_ANSWER, None, user.id)
     
 Router.get_instance().set({
     'name' : u'答题',

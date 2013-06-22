@@ -119,6 +119,7 @@ class MessageBuilder:
     TYPE_GAMES = 'type_games'
     TYPE_GAME_COLLECTION = 'type_game_collection'
     TYPE_GIFT_SHOP = 'type_gift_shop'
+    TYPE_ANSWER = 'type_answer'
     TYPE_NO_RESPONSE = 'no_response'
 
     # platforms
@@ -143,6 +144,9 @@ class MessageBuilder:
         },
         TYPE_GIFT_SHOP : {
             PLATFORM_WEIXIN : _build_weixin_gift_shop
+        },
+        TYPE_ANSWER : {
+            PLATFORM_WEIXIN : _build_weixin_answer
         }
     }
 
