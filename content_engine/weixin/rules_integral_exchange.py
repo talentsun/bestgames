@@ -24,7 +24,6 @@ def start_exchange(rule, info):
     if len(user.phone) == 0:
         return StateMachine.stateRoute[1].start(info)
     else:
-        #return StateMachine.stateRoute[2].start(info)
         return BuildConfig(MessageBuilder.TYPE_GIFT_SHOP, None, user.id)
 
 Router.get_instance().set({

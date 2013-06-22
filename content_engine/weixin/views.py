@@ -21,7 +21,6 @@ from rules_answer_puzzle import *
 from rules_integral_exchange import *
 from state_machine import *
 from state_verify import *
-from state_exchange import *
 import rules_base_dialog
 import rules_game_search
 from pyweixin import WeiXin

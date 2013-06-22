@@ -5,8 +5,6 @@ from router import Router
 from django.core.cache import cache
 import time
 
-
-
 class StateMachine(object):
     stateRoute = {}
     def __init__(self):
