@@ -184,6 +184,10 @@ def puzzles(request, puzzle_id=None):
         if request.method == 'POST':
             user_answer = UserAnswer(questionId=puzzle, userId=user, userOption=request.POST.get('answer', 0))
             user_answer.save()
+            
+            if user_answer.userOption == puzzle.right:
+                user.integral += 5
+                user.save()
         
         user_answer = UserAnswer.objects.filter(questionId=puzzle, userId=user)
         if user_answer is not None and user_answer.count() > 0:
