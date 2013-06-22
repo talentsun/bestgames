@@ -579,42 +579,29 @@ def delete_gift_item(request, gift_item_id=None):
     gift.delete()
     return _redirect_back(request)
 
-def gifts(request, user_id=None):
-    user = get_object_or_404(WeixinUser, id=user_id)
 
+@login_required
+def add_edit_dialog(request, dialog_id=None):
+    _auth_user(request)
+    dialog = None
+    if dialog_id:
+        dialog = get_object_or_404(BaseDialog, id=dialog_id)
     if request.method == 'POST':
-        gift_id = request.POST.get('gift_id', None)
-        if gift_id is not None:
-            gift = Gift.objects.get(id=int(gift_id))
-            if gift.integral <= user.integral:
-                giftItem = GiftItem.objects.filter(grade=gift, state=0)[0]
-                giftItem.state = 1
-                giftItem.save()
-                user.integral -= gift.integral
-                user.save()
+        form = DialogForm(request.POST, instance=dialog)
+        if form.is_valid():
+            form.save()
+            return _redirect_back(request)
+    else:
+        if dialog == None:
+            form = DialogForm(instance=dialog, initial={'presenter': request.user.username})
+        else:
+            form = DialogForm(instance=dialog)
 
-                userGift = UserGift()
-                userGift.gift = giftItem
-                userGift.user = user
-                userGift.save()
-    
-    gifts = []
-    for gift in Gift.objects.filter(show=1):
-        gifts.append({
-            'id' : gift.id,
-            'name' : gift.name,
-            'integral' : gift.integral,
-            'item_count' : gift.giftitem_set.filter(state=0).count(),
-            'picture' : settings.MEDIA_URL + gift.picture.name
-            })
 
-    user_gifts = []
-    for user_gift in UserGift.objects.filter(user=user).order_by('-getTime'):
-        user_gifts.append({
-            'name' : user_gift.gift.grade.name,
-            'picture' : settings.MEDIA_URL + user_gift.gift.grade.picture.name,
-            'value' : user_gift.gift.value,
-            'get_time' : user_gift.getTime
-            })
+    return render(request, "add_edit_dialog.html", {"form": form})
 
-    return render(request, 'gifts.html', {'credit' : user.integral, 'gifts' : gifts, 'user_gifts' : user_gifts})
+@login_required
+def delete_dialog(request, dialog_id):
+    dialog = get_object_or_404(BaseDialog, id=dialog_id)
+    dialog.delete()
+    return _redirect_back(request)

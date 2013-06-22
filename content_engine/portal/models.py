@@ -34,6 +34,7 @@ class Entity(models.Model):
     presenter = models.CharField(u"推荐人",max_length=100)
     brief_comment = models.CharField(u"一句话点评(同步到微信)", max_length=255,blank=True)
     recommended_reason = models.TextField(u"推荐理由(同步到微博)",blank=True)
+    created_time = models.DateTimeField(u"创建时间", auto_now_add=True)
 
     def __unicode__(self):
         if self.type == 1:

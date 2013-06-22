@@ -8,12 +8,12 @@ import logging, traceback, time, struct, socket
 from django.views.decorators.csrf import csrf_exempt
 
 logger = logging.getLogger('default')
+from content_engine import settings
 from portal.tables import SearchResultTable
-from portal.models import Game
+from portal.models import Game, Puzzle
 from portal.views import _auth_user, _redirect_back
 from service import search_pb2
 import socket
-
 
 import rules
 #import rules_draw
@@ -30,10 +30,12 @@ from message_builder import MessageBuilder, BuildConfig
 from data_loader import load_games_for_today, load_shorten_urls
 
 from weixin.forms import DialogForm
-from weixin.models import BaseDialog
+from weixin.models import WeixinUser, Gift, GiftItem, UserGift, UserAnswer
 
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
+
+from datetime import date, timedelta
 
 TOKEN = "itv"
 
@@ -117,29 +119,97 @@ def search(request):
             games.append(game)
         return render(request, "search.html", {"games": SearchResultTable(games)})
 
-@login_required
-def add_edit_dialog(request, dialog_id=None):
-    _auth_user(request)
-    dialog = None
-    if dialog_id:
-        dialog = get_object_or_404(BaseDialog, id=dialog_id)
+def gifts(request, user_id=None):
+    user = get_object_or_404(WeixinUser, id=user_id)
+
     if request.method == 'POST':
-        form = DialogForm(request.POST, instance=dialog)
-        if form.is_valid():
-            form.save()
-            return _redirect_back(request)
+        gift_id = request.POST.get('gift_id', None)
+        if gift_id is not None:
+            gift = Gift.objects.get(id=int(gift_id))
+            if gift.integral <= user.integral:
+                giftItem = GiftItem.objects.filter(grade=gift, state=0)[0]
+                giftItem.state = 1
+                giftItem.save()
+                user.integral -= gift.integral
+                user.save()
+
+                userGift = UserGift()
+                userGift.gift = giftItem
+                userGift.user = user
+                userGift.save()
+    
+    gifts = []
+    for gift in Gift.objects.filter(show=1):
+        gifts.append({
+            'id' : gift.id,
+            'name' : gift.name,
+            'integral' : gift.integral,
+            'item_count' : gift.giftitem_set.filter(state=0).count(),
+            'picture' : settings.MEDIA_URL + gift.picture.name
+            })
+
+    user_gifts = []
+    for user_gift in UserGift.objects.filter(user=user).order_by('-getTime'):
+        user_gifts.append({
+            'name' : user_gift.gift.grade.name,
+            'picture' : settings.MEDIA_URL + user_gift.gift.grade.picture.name,
+            'value' : user_gift.gift.value,
+            'get_time' : user_gift.getTime
+            })
+
+    return render(request, 'gifts.html', {'credit' : user.integral, 'gifts' : gifts, 'user_gifts' : user_gifts})
+
+def puzzles(request, puzzle_id=None):
+    user = get_object_or_404(WeixinUser, id=request.GET.get('user_id', None))
+
+    if puzzle_id is None:
+        puzzles = []
+        for puzzle in Puzzle.objects.filter(created_time__gt=date.today()-timedelta(days=6)):
+            user_answer = UserAnswer.objects.filter(questionId=puzzle, userId=user)
+            answered = False
+            correct = False
+            if user_answer is not None and user_answer.count() > 0:
+                answered = True
+                correct = user_answer[0].userOption == puzzle.right
+            puzzles.append({
+                'id' : puzzle.id,
+                'title' : puzzle.title,
+                'end_time' : (puzzle.created_time + timedelta(days=7)).strftime('%Y-%m-%d 00:00:00'),
+                'answered' : answered,
+                'correct' : correct
+                })
+        return render(request, 'puzzles.html', {'credit' : user.integral, 'user_id' : user.id, 'puzzles' : puzzles})
     else:
-        if dialog == None:
-            form = DialogForm(instance=dialog, initial={'presenter': request.user.username})
+        puzzle = get_object_or_404(Puzzle, id=puzzle_id)
+        
+        if request.method == 'POST':
+            user_answer = UserAnswer(questionId=puzzle, userId=user, userOption=request.POST.get('answer', 0))
+            user_answer.save()
+        
+        user_answer = UserAnswer.objects.filter(questionId=puzzle, userId=user)
+        if user_answer is not None and user_answer.count() > 0:
+            puzzle_data = {
+            'title' : puzzle.title,
+            'answered' : True,
+            'correct' : user_answer[0].userOption == puzzle.right,
+            'description' : puzzle.description,
+            'userOption' : user_answer[0].userOption,
+            'image' : settings.MEDIA_URL + puzzle.image_url.name,
+            'option1' : puzzle.option1,
+            'option2' : puzzle.option2,
+            'option3' : puzzle.option3,
+            'option4' : puzzle.option4
+            }
         else:
-            form = DialogForm(instance=dialog)
-
-
-    return render(request, "add_edit_dialog.html", {"form": form})
-
-@login_required
-def delete_dialog(request, dialog_id):
-    dialog = get_object_or_404(BaseDialog, id=dialog_id)
-    dialog.delete()
-    return _redirect_back(request)
-
+            puzzle_data = {
+            'title' : puzzle.title,
+            'answered' : False,
+            'correct' : False,
+            'description' : puzzle.description,
+            'image' : settings.MEDIA_URL + puzzle.image_url.name,
+            'option1' : puzzle.option1,
+            'option2' : puzzle.option2,
+            'option3' : puzzle.option3,
+            'option4' : puzzle.option4
+            }
+        return render(request, 'puzzle.html', {'credit' : user.integral, 'puzzle' : puzzle_data})
