@@ -163,7 +163,7 @@ def puzzles(request, puzzle_id=None):
 
     if puzzle_id is None:
         puzzles = []
-        for puzzle in Puzzle.objects.filter(created_time__gt=date.today()-timedelta(days=6)):
+        for puzzle in Puzzle.objects.filter(created_time__gt=date.today()-timedelta(days=6)).order_by('-id'):
             user_answer = UserAnswer.objects.filter(questionId=puzzle, userId=user)
             answered = False
             correct = False
