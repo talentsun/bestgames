@@ -55,7 +55,11 @@ class PuzzleColumn(tables.Column):
 
 class ValueColumn(tables.Column):
     def render(self,value):
-        return value[:-12]+'*'*12
+        try:
+            position = value.index(u'密码')
+            return value[:position+3]+'*'*(len(value)- position - 3)
+        except ValueError:
+            return value
 
 class SearchResultTable(tables.Table):
     id = tables.Column(orderable=False, visible=False)

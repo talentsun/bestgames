@@ -3,7 +3,7 @@ from models import UserGift, WeixinUser, UserAnswer
 
 class PhoneColumn(tables.Column):
     def render(self, value):
-        return '*'*11
+        return value[:-4]+'*'*4
 
 class UserGiftTable(tables.Table):
     class Meta:
