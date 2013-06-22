@@ -56,8 +56,8 @@ class PuzzleColumn(tables.Column):
 class ValueColumn(tables.Column):
     def render(self,value):
         try:
-            position = value.index(u'密码')
-            return value[:position+3]+'*'*(len(value)- position - 3)
+            position = value.index(u"密码")
+            return value[:position + 3] + '*' * (len(value) - position - 3)
         except ValueError:
             return value
 
