@@ -84,7 +84,7 @@ def _build_weixin_gift_shop(context, data):
 
 def _build_weixin_answer(context, data):
     articles = []
-    articles.append({'title' : u'趣味答题', 'description' : u'每天一道题，答对一题得5分，积分可以换奖品。', 'pic_url' : 'http://cow.bestgames7.com/static/img/giftstore.png', 'url' : 'http://cow.bestgames7.com/weixin/puzzles?user_id=%d' % data})
+    articles.append({'title' : u'趣味答题', 'description' : u'每天一道题，答对一题得5分，积分可以换奖品。', 'pic_url' : 'http://cow.bestgames7.com/static/img/puzzle.png', 'url' : 'http://cow.bestgames7.com/weixin/puzzles?user_id=%d' % data})
     return WeiXin.to_news_xml(context.get('FromUserName', None), context.get('ToUserName', None), articles)
 
 def _build_weixin_game_collection(context, data):
