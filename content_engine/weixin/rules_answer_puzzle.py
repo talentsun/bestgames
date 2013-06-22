@@ -22,6 +22,6 @@ def answer(rule, info):
     
 Router.get_instance().set({
     'name' : u'答题',
-    'pattern': r'^(答题|趣味答题)$',
-    'handler':answer
+    'pattern': u'^(答题|趣味答题)$',
+    'handler': answer
 })
