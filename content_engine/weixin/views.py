@@ -6,6 +6,7 @@ import hashlib
 
 import logging, traceback, time, struct, socket
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Q
 
 logger = logging.getLogger('default')
 from content_engine import settings
@@ -34,7 +35,7 @@ from weixin.models import WeixinUser, Gift, GiftItem, UserGift, UserAnswer
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 
 TOKEN = "itv"
 
@@ -164,19 +165,20 @@ def puzzles(request, puzzle_id=None):
     if puzzle_id is None:
         puzzles = []
         for puzzle in Puzzle.objects.filter(created_time__gt=date.today()-timedelta(days=6)).order_by('-id'):
-            user_answer = UserAnswer.objects.filter(questionId=puzzle, userId=user)
-            answered = False
-            correct = False
-            if user_answer is not None and user_answer.count() > 0:
-                answered = True
-                correct = user_answer[0].userOption == puzzle.right
-            puzzles.append({
-                'id' : puzzle.id,
-                'title' : puzzle.title,
-                'end_time' : (puzzle.created_time + timedelta(days=7)).strftime('%Y-%m-%d 00:00:00'),
-                'answered' : answered,
-                'correct' : correct
-                })
+            if puzzle.status1 == 2 or puzzle.weixin_set.filter(sync_timestamp2__lt=datetime.today(), status2=2).exists():
+                user_answer = UserAnswer.objects.filter(questionId=puzzle, userId=user)
+                answered = False
+                correct = False
+                if user_answer is not None and user_answer.count() > 0:
+                    answered = True
+                    correct = user_answer[0].userOption == puzzle.right
+                puzzles.append({
+                    'id' : puzzle.id,
+                    'title' : puzzle.title,
+                    'end_time' : (puzzle.created_time + timedelta(days=7)).strftime('%Y-%m-%d 00:00:00'),
+                    'answered' : answered,
+                    'correct' : correct
+                    })
         return render(request, 'puzzles.html', {'credit' : user.integral, 'user_id' : user.id, 'puzzles' : puzzles})
     else:
         puzzle = get_object_or_404(Puzzle, id=puzzle_id)

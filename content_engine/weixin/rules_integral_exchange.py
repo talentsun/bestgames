@@ -5,7 +5,6 @@ import traceback, time
 
 from models import WeixinUser
 from state_verify import *
-from state_exchange import *
 
 default_sorry_wording = u'小每真是太笨了，没有理解您的意思[流泪]，求您一口盐汽水喷死小每吧'
 def start_exchange(rule, info):
