@@ -10,7 +10,7 @@ body{
     border-color: #ffffff;
 }
 .puzzle_pic img {
-    width: 580px;
+    width: 100%;
 }
 p#description {
     margin-left: 10px;
@@ -42,13 +42,13 @@ td {
 
 .head {
     background:url("../img/head-puzzle.png") no-repeat;
-    width: 580px;
+    width: 100%;
     height: 225px;
 }
 .bottom {
     bottom-top: 5px;
     background:url("../img/bottom-puzzle.png") no-repeat;
-    width: 580px;
+    width: 100%;
     height: 299px;
 }
 
