@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-	<title>答题</title>
+	<title>{{ puzzle.title }}</title>
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.min.css"/>
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/puzzles.css"/>
 	<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js"></script>
@@ -24,6 +24,8 @@
 	{% else %}
 		<div class="alert alert-error">这不科学，答错了，您当前的积分：{{ credit }}。发送“礼品”使用积分换礼品。</div>
 	{% endif %}
+	{% else %}
+		<div class="alert alert-success">点击右上角分享按钮，可以将题目发给好友或朋友圈，请朋友们帮忙回答。</div>
 	{% endif %}
 	<div>
 		<h4>{{ puzzle.title }}</h4>
