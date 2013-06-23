@@ -7,8 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/main.css"/>
+    {% include "ga.html" %}
+</head>
 <body style="padding:10px;">
 <h4>我是玩家 - {{ player.title }}</h4>
 <img src="http://cow.bestgames7.com/media/{{ player.image_url }}" alt="" style="width:100%">
 <p style="margin:10px 0;">{{player.recommended_reason|del_link}}</p>
 </body>
+</html>
