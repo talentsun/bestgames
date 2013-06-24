@@ -314,7 +314,7 @@ def add_edit_redier(request, redier_id=None):
             form = RedierForm(instance=redier, initial={'presenter' : request.user.username})
         else:
             form = RedierForm(instance=redier)
-        
+
     return render(request, "add_edit_redier.html", { "form" : form})
 
 @login_required
@@ -376,7 +376,7 @@ def add_edit_game(request, game_id=None):
             form = GameForm(instance=game, initial={'presenter' : request.user.username})
         else:
             form = GameForm(instance=game)
-        
+
     return render(request, "add_edit_game.html", { "form" : form})
 
 @login_required
@@ -451,8 +451,22 @@ def add_edit_news(request, news_id=None):
         form = NewsForm(request.POST, request.FILES, instance=news)
         if form.is_valid():
             news = form.save()
-            if request.POST['image_url']:
-                news.image_url = request.POST['image_url'].replace(settings.MEDIA_URL, '', 1)
+            if request.POST['screenshot_path_1']:
+                news.screenshot_path_1 = request.POST['screenshot_path_1'].replace(settings.MEDIA_URL, '', 1)
+            else:
+                news.screenshot_path_1 = request.POST['screenshot_path_1']
+            if request.POST['screenshot_path_2']:
+                news.screenshot_path_2 = request.POST['screenshot_path_2'].replace(settings.MEDIA_URL, '', 1)
+            else:
+                news.screenshot_path_2 = request.POST['screenshot_path_2']
+            if request.POST['screenshot_path_3']:
+                news.screenshot_path_3 = request.POST['screenshot_path_3'].replace(settings.MEDIA_URL, '', 1)
+            else:
+                news.screenshot_path_3 = request.POST['screenshot_path_3']
+            if request.POST['screenshot_path_4']:
+                news.screenshot_path_4 = request.POST['screenshot_path_4'].replace(settings.MEDIA_URL, '', 1)
+            else:
+                news.screenshot_path_4 = request.POST['screenshot_path_4']
             if sync_timestamp1 != news.sync_timestamp1:
                 if sync_timestamp1 != '':
                     news.status1 = Entity.STATUS_PENDING
