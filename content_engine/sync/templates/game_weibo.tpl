@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
     <title>game</title>
     <link rel="stylesheet" type="text/css" href="{{ template_path }}css/game.css" />
-    <script type="text/javascript" src="{{ template_path }}js/game.js"></script>
+    <script type="text/javascript" src="{{ template_path }}js/screenshots.js"></script>
 </head>
 <body onload="load()">
     <div id="container">
