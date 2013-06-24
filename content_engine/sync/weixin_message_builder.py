@@ -52,7 +52,7 @@ def build_weixin_message(weixin):
         title = u'游戏情报站  -  %s' % news.brief_comment
         if index == 0:
             message_title = title
-        items.append(WeixinMessageItem(image=news.image_url.path, title=title, digest=title, content=news.recommended_reason))
+        items.append(WeixinMessageItem(image=news.screenshot_path_1.path, title=title, digest=title, content=news.recommended_reason))
         index += 1
     for game in weixin.games.all():
         title = u'%s  -  %s' % (game.name, game.brief_comment)
