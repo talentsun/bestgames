@@ -7,9 +7,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/main.css"/>
-    {% include "ga.html" %}
-<body style="padding:10px;">
-<h4>游戏情报站 - {{ news.title }}</h4>
-<img src="http://cow.bestgames7.com/media/{{ news.image_url }}" alt="" style="width:100%">
+  <style type="text/css">
+    .portrait .screenshots img{
+        width: 50%;
+    }
+
+    .landscape .screenshots img{
+        width: 100%;
+    }
+
+    .portrait .screenshots img:nth-child(even){
+      margin-left: -4px;
+    }
+  </style>
+  <script>
+    var load = function() {
+      var image1 = document.getElementById("screenshot_1");
+      var image2 = document.getElementById("screenshot_2");
+      var image3 = document.getElementById("screenshot_3");
+      var image4 = document.getElementById("screenshot_4");
+      var img1 = new Image();
+      var img2 = new Image();
+      var img3 = new Image();
+      var img4 = new Image();
+      var container = document.getElementById('container');
+      img1.src = image1.src;
+      img2.src = image2.src;
+      img3.src = image3.src;
+      img4.src = image4.src;
+
+      if(img1.width > img1.height){
+          container.className = 'landscape';
+      } else {
+          container.className = 'portrait'
+      }
+    };
+  </script>
+</head>
+<body onload="load()" id="container" style="padding:10px;">
+  <h4>游戏情报站 - {{ news.title }}</h4>
+  <div class="screenshots">
+    <img id="screenshot_1" src="http://weixin.bestgames7.com/media/{{news.screenshot_path_1}}" alt="">
+    <img id="screenshot_2" src="http://weixin.bestgames7.com/media/{{news.screenshot_path_2}}" alt="">
+    <img id="screenshot_3" src="http://weixin.bestgames7.com/media/{{news.screenshot_path_3}}" alt="">
+    <img id="screenshot_4" src="http://weixin.bestgames7.com/media/{{news.screenshot_path_4}}" alt="">
+  </div>
 <p style="margin:10px 0;">{{news.recommended_reason|del_link}}</p>
 </body>

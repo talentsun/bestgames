@@ -217,7 +217,10 @@ class Player(Entity):
 
 class News(Entity):
     title = models.CharField(u"标题", max_length=50)
-    image_url = models.ImageField(u"图片", upload_to='upload/', max_length=255, blank=True)
+    screenshot_path_1 = models.ImageField(u"截图1", upload_to='upload/', max_length=255, blank=True)
+    screenshot_path_2 = models.ImageField(u"截图2", upload_to='upload/', max_length=255, blank=True)
+    screenshot_path_3 = models.ImageField(u"截图3", upload_to='upload/', max_length=255, blank=True)
+    screenshot_path_4 = models.ImageField(u"截图4", upload_to='upload/', max_length=255, blank=True)
     video_url = models.URLField(u"视频", max_length=255, blank=True, help_text=u"目前只支持优酷的视频地址")
 
     def __unicode__(self):
@@ -255,7 +258,7 @@ class Puzzle(Entity):
         (3, '4'),
     )
     right = models.IntegerField(u'正确选项', choices=right_choices, default = 0)
-    
+
     class Meta:
         db_table = u'puzzles'
         verbose_name = u'趣题'
@@ -272,7 +275,7 @@ class Puzzle(Entity):
         if self.status3 == Entity.STATUS_DO_NOT_SYNC:
             if self.sync_timestamp3 is not None:
                 self.status3 = Entity.STATUS_PENDING
-        
+
         super(Puzzle, self).save(args, kwargs)
 
 class Weixin(Entity):

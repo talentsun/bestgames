@@ -51,7 +51,7 @@ def _get_game_platforms(game):
 def build_game_message(game):
 	post = WordPressPost()
 	post.title = '%s - %s' % (game.name, game.brief_comment)
-	
+
 	converted_video_url = None
 	if game.video_url is not None:
 		converted_video_url = _convert_youku_video_url(game.video_url)
@@ -85,13 +85,16 @@ def build_game_message(game):
 def build_news_message(news):
 	post = WordPressPost()
 	post.title = news.brief_comment
-	
+
 	converted_video_url = None
 	if news.video_url is not None:
 		converted_video_url = _convert_youku_video_url(news.video_url)
 	post.content = str(render_to_string('news_web.tpl', {
 		'content' : _normalize_content(news.recommended_reason),
-		'image_url' : settings.MEDIA_URL + news.image_url.name,
+		'screenshot_path_1' : settings.MEDIA_URL + news.screenshot_path_1.name,
+		'screenshot_path_2' : settings.MEDIA_URL + news.screenshot_path_2.name,
+		'screenshot_path_3' : settings.MEDIA_URL + news.screenshot_path_3.name,
+		'screenshot_path_4' : settings.MEDIA_URL + news.screenshot_path_4.name,
 		'video_url' : converted_video_url
 	}))
 
@@ -99,9 +102,9 @@ def build_news_message(news):
 		'category' : [u'新游预告']
 	}
 
-	if news.image_url.name != '':
+	if news.screenshot_path_1 is not None:
 		post.custom_fields = []
-		post.custom_fields.append({'key':'post_image','value':settings.MEDIA_URL + news.image_url.name})
+		post.custom_fields.append({'key':'post_image','value':settings.MEDIA_URL + news.screenshot_path_1.name})
 
 	post.post_status = 'publish'
 
@@ -110,7 +113,7 @@ def build_news_message(news):
 def build_collection_message(collection):
 	post = WordPressPost()
 	post.title = collection.title
-	
+
 	games = []
 	for game in collection.games.all():
 		games.append({
