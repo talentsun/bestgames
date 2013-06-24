@@ -32,7 +32,7 @@ class RedierForm(EntityForm):
     class Meta:
         model = Redier
         fields = ('game_name',
-            'title', 
+            'title',
             'image_url',
             'video_url',
             'tags',
@@ -57,17 +57,17 @@ class GameForm(EntityForm):
 
     class Meta:
         model = Game
-        fields = ('name', 
-            'icon', 
-            'description', 
+        fields = ('name',
+            'icon',
+            'description',
             'category',
             'tags',
-            'android_download_url', 
-            'iOS_download_url', 
-            'screenshot_path_1', 
-            'screenshot_path_2', 
-            'screenshot_path_3', 
-            'screenshot_path_4', 
+            'android_download_url',
+            'iOS_download_url',
+            'screenshot_path_1',
+            'screenshot_path_2',
+            'screenshot_path_3',
+            'screenshot_path_4',
             'sync_timestamp1',
             'sync_timestamp3',
             'presenter',
@@ -202,7 +202,6 @@ class PlayerForm(EntityForm):
                   'recommended_reason')
 
 class NewsForm(EntityForm):
-    image_url = forms.ImageField(label=u"图片", help_text=u"建议图片宽度大于400像素", widget=AjaxClearableFileInput())
     sync_timestamp1 = forms.DateTimeField(label=u"微博同步时间", required=False, widget=DateTimeWidget(options={
                 'autoclose' : 'true',
                 'showMeridian' : 'true',
@@ -216,15 +215,23 @@ class NewsForm(EntityForm):
 
     class Meta:
         model = News
-        fields = ('title',
-                  'image_url',
-                  'video_url',
-                  'sync_timestamp1',
-                  'sync_timestamp3',
-                  'presenter',
-                  'brief_comment',
-                  'recommended_reason')
-
+        fields = (
+            'title',
+            'screenshot_path_1',
+            'screenshot_path_2',
+            'screenshot_path_3',
+            'screenshot_path_4',
+            'video_url',
+            'sync_timestamp1',
+            'sync_timestamp3',
+            'presenter',
+            'brief_comment',
+            'recommended_reason')
+        widgets = {
+            'screenshot_path_1' : AjaxClearableFileInput(),
+            'screenshot_path_2' : AjaxClearableFileInput(),
+            'screenshot_path_3' : AjaxClearableFileInput(),
+            'screenshot_path_4' : AjaxClearableFileInput()}
 
 class PuzzleForm(EntityForm):
     image_url = forms.ImageField(label=u'题目图片', widget=AjaxClearableFileInput(), required = False)

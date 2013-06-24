@@ -47,7 +47,7 @@ def build_puzzle_message(puzzle):
         'optionc' : puzzle.option3,
         'optiond' : puzzle.option4,
     }))
-    
+
     return WeiboMessage(u'#趣味答题# ' + _shorten_text(puzzle.title, 133), make_image(puzzle.id, content), puzzle.id)
 def build_redier_message(redier):
     content = str(render_to_string('redier_weibo.tpl', {
@@ -100,8 +100,15 @@ def build_player_message(player):
     return WeiboMessage(weibo_status, player.image_url.path, player.id)
 
 def build_news_message(news):
+    content = str(render_to_string('news_weibo.tpl', {
+        'template_path' : TEMPLATE_ROOT,
+        'screenshot_path_1' : news.screenshot_path_1.path,
+        'screenshot_path_2' : news.screenshot_path_2.path,
+        'screenshot_path_3' : news.screenshot_path_3.path,
+        'screenshot_path_4' : news.screenshot_path_4.path
+        }))
     if news.video_url is not None and news.video_url != '':
         weibo_status = _shorten_text(news.recommended_reason, 112) + news.video_url
     else:
         weibo_status = _shorten_text(news.recommended_reason, 132)
-    return WeiboMessage(u'#游戏情报站# ' + weibo_status, news.image_url.path, news.id)
+    return WeiboMessage(u'#游戏情报站# ' + weibo_status, make_image(news.id, content), news.id)
