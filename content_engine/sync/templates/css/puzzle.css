@@ -17,12 +17,6 @@ p#description {
     color: #2d2d2d;
 }
 
-p.puzzle_num {
-    margin-left: 10px;
-    font-size:20px;
-    color: #0081a1;
-}
-
 .option_id {
     color: #0081a1;
     font-size:20px;
@@ -48,14 +42,14 @@ td {
 
 .head {
     background:url("../img/head-puzzle.png") no-repeat;
-    width: 580px;
-    height: 64px;
+    width: 580;
+    height: 225px;
 }
 .bottom {
     bottom-top: 5px;
     background:url("../img/bottom-puzzle.png") no-repeat;
-    width: 580px;
-    height: 420px;
+    width: 580;
+    height: 299px;
 }
 
 

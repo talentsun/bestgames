@@ -21,10 +21,12 @@
 		});
 
 		var exchange = function(giftId) {
+			$('.btn').addClass('disabled');
 			$('#gift_id').val(giftId);
 			$('#exchange_form').submit();
 		};
 	</script>
+	{% include "ga.html" %}
   	{{ form.media }}
 </head>
 <body>
@@ -43,9 +45,9 @@
 						<h4>{{ gift.name }}</h4>
 						<p>所需积分：{{ gift.integral }}，库存：{{ gift.item_count }}</p>
 						{% if gift.item_count > 0 and gift.integral <= credit %}
-						<a class="btn" href="#" onclick="exchange({{ gift.id }})">兑换</a>
+						<a class="btn" href="javascript:void(0);" onclick="exchange({{ gift.id }})">兑换</a>
 						{% else %}
-						<a class="btn disabled" href="#">兑换</a>
+						<a class="btn disabled" href="javascript:void(0);">兑换</a>
 						{% endif %}
 					</div>
 				</div>

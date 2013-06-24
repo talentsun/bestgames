@@ -78,7 +78,7 @@ def build_weixin_message(weixin):
         content += 'B.' + puzzle.option2 + '<br>'
         content += 'C.' + puzzle.option3 + '<br>'
         content += 'D.' + puzzle.option4 + '<br></br>'
-        content += u'<font color="gray">回复"%d#你的答案"，参与答题得积分换礼品的活动吧</font><br>' % puzzle.id
+        content += u'<font color="gray">回复"答题"，参与答题得积分换礼品的活动吧</font><br>'
         items.append(WeixinMessageItem(image=puzzle.image_url.path, title=title, digest=title, content=content))
         index += 1
     return WeixinMessage(weixin.id, message_title, items)

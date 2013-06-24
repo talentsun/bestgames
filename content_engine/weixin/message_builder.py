@@ -79,9 +79,13 @@ def _build_weixin_games(context, data):
 
 def _build_weixin_gift_shop(context, data):
     articles = []
-    articles.append({'title' : u'积分商城', 'description' : u'使用积分在积分商城兑换您心仪的礼品。', 'pic_url' : 'http://cow.bestgames7.com/media/best_games/2013-06-18/2013-06-18-gift_shop.png', 'url' : 'http://cow.bestgames7.com/gifts/%d' % data})
+    articles.append({'title' : u'积分商城', 'description' : u'使用积分在积分商城兑换您心仪的礼品。', 'pic_url' : 'http://cow.bestgames7.com/static/img/giftshop.png', 'url' : 'http://cow.bestgames7.com/weixin/gifts/%d' % data})
     return WeiXin.to_news_xml(context.get('FromUserName', None), context.get('ToUserName', None), articles)
 
+def _build_weixin_answer(context, data):
+    articles = []
+    articles.append({'title' : u'趣味答题', 'description' : u'每天一道题，答对一题得5分，积分可以换奖品。', 'pic_url' : 'http://cow.bestgames7.com/static/img/puzzle.png', 'url' : 'http://cow.bestgames7.com/weixin/puzzles?user_id=%d' % data})
+    return WeiXin.to_news_xml(context.get('FromUserName', None), context.get('ToUserName', None), articles)
 
 def _build_weixin_game_collection(context, data):
     articles = []
@@ -115,6 +119,7 @@ class MessageBuilder:
     TYPE_GAMES = 'type_games'
     TYPE_GAME_COLLECTION = 'type_game_collection'
     TYPE_GIFT_SHOP = 'type_gift_shop'
+    TYPE_ANSWER = 'type_answer'
     TYPE_NO_RESPONSE = 'no_response'
 
     # platforms
@@ -139,6 +144,9 @@ class MessageBuilder:
         },
         TYPE_GIFT_SHOP : {
             PLATFORM_WEIXIN : _build_weixin_gift_shop
+        },
+        TYPE_ANSWER : {
+            PLATFORM_WEIXIN : _build_weixin_answer
         }
     }
 

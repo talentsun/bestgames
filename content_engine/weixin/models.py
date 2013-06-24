@@ -19,7 +19,7 @@ class WeixinUser(models.Model):
     uid = models.CharField(u"微信id", max_length=100, db_index=True)
     integral = models.IntegerField(u"积分")
     phone = models.CharField(u"电话号码", max_length=20)
-    addTime = models.DateTimeField(u"加入时间", auto_now=True)
+    addTime = models.DateTimeField(u"加入时间", auto_now_add=True)
     class Meta:
         db_table = u'weixin_user'
         verbose_name = u'微信用户'

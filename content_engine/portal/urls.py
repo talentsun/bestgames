@@ -1,5 +1,3 @@
-__author__ = 'huwei'
-
 from django.conf.urls.defaults import *
 
 urlpatterns = patterns('portal.views',
@@ -39,6 +37,8 @@ urlpatterns = patterns('portal.views',
     url(r'^gift_item/(?P<gift_item_id>\d+)/delete','delete_gift_item'),
     url(r'^gift_item/add','add_edit_gift_item'),
     url(r'^gift_item/(?P<gift_item_id>\d+)/edit','add_edit_gift_item'),
+    url(r'^dialogs/add','add_edit_dialog'),
+    url(r'^dialogs/(?P<dialog_id>\d+)/edit','add_edit_dialog'),
+    url(r'^dialogs/(?P<dialog_id>\d+)/delete','delete_dialog'),
     url(r'^logout', 'logout'),
-    url(r'^gifts/(?P<user_id>\d+)', 'gifts')
 )

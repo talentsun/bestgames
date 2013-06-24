@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+	<title>{{ puzzle.title }}</title>
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/puzzles.css"/>
+	<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="http://cow.bestgames7.com/static/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		var answer = function(option) {
+			$('.btn').addClass('disabled');
+			$('#answer').val(option);
+			$('#answer_form').submit();
+		};
+	</script>
+	{% include "ga.html" %}
+  	{{ form.media }}
+</head>
+<body>
+	{% if puzzle.answered %}
+	{% if puzzle.correct %}
+		<div class="alert alert-success">恭喜您，答对了，您当前的积分：{{ credit }}。发送“礼品”使用积分换礼品。</div>
+	{% else %}
+		<div class="alert alert-error">这不科学，答错了，您当前的积分：{{ credit }}。发送“礼品”使用积分换礼品。</div>
+	{% endif %}
+	{% else %}
+		<div class="alert alert-success">点击右上角分享按钮，可以将题目发给好友或朋友圈，请朋友们帮忙回答。</div>
+	{% endif %}
+	<div>
+		<h4>{{ puzzle.title }}</h4>
+		<img width="100%" src="{{ puzzle.image }}" />
+		<p style="margin-top:8px;">{{ puzzle.description }}</p>
+		
+		<a style="text-align:left;padding-left:8px;" class="btn btn-large btn-block {% if puzzle.answered %}{% if puzzle.userOption == 0 %}btn-primary{% endif %} disabled{% endif %}" href="javascript:void(0);" {% if not puzzle.answered %}onclick="answer(0)"{% endif %}>A.{{ puzzle.option1 }}</a>
+		<a style="text-align:left;padding-left:8px;" class="btn btn-large btn-block {% if puzzle.answered %}{% if puzzle.userOption == 1 %}btn-primary{% endif %} disabled{% endif %}" href="javascript:void(0);" {% if not puzzle.answered %}onclick="answer(1)"{% endif %}>B.{{ puzzle.option2 }}</a>
+		<a style="text-align:left;padding-left:8px;" class="btn btn-large btn-block {% if puzzle.answered %}{% if puzzle.userOption == 2 %}btn-primary{% endif %} disabled{% endif %}" href="javascript:void(0);" {% if not puzzle.answered %}onclick="answer(2)"{% endif %}>C.{{ puzzle.option3 }}</a>
+		<a style="text-align:left;padding-left:8px;" class="btn btn-large btn-block {% if puzzle.answered %}{% if puzzle.userOption == 3 %}btn-primary{% endif %} disabled{% endif %}" href="javascript:void(0);" {% if not puzzle.answered %}onclick="answer(3)"{% endif %}>D.{{ puzzle.option4 }}</a>
+	</div>
+	<form id="answer_form" action="" method="post" enctype="multipart/form-data"> {% csrf_token %}
+		<input id="answer" type="hidden" name="answer" value="" />
+	</form>
+</body>
+</html>
