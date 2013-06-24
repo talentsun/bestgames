@@ -100,13 +100,16 @@ def build_player_message(player):
     return WeiboMessage(weibo_status, player.image_url.path, player.id)
 
 def build_news_message(news):
-    content = str(render_to_string('news_weibo.tpl', {
-        'template_path' : TEMPLATE_ROOT,
-        'screenshot_path_1' : news.screenshot_path_1.path,
-        'screenshot_path_2' : news.screenshot_path_2.path,
-        'screenshot_path_3' : news.screenshot_path_3.path,
-        'screenshot_path_4' : news.screenshot_path_4.path
-        }))
+    content_items = {'template_path' : TEMPLATE_ROOT}
+    if news.screenshot_path_1.path:
+        content_items['screenshot_path_1'] = news.screenshot_path_1
+    if news.screenshot_path_1.path:
+        content_items['screenshot_path_2'] = news.screenshot_path_2
+    if news.screenshot_path_1.path:
+        content_items['screenshot_path_3'] = news.screenshot_path_3
+    if news.screenshot_path_1.path:
+        content_items['screenshot_path_4'] = news.screenshot_path_4
+    content = str(render_to_string('news_weibo.tpl', content_items))
     if news.video_url is not None and news.video_url != '':
         weibo_status = _shorten_text(news.recommended_reason, 112) + news.video_url
     else:

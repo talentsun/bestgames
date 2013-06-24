@@ -6,7 +6,8 @@ body{
 img{
 	padding:0;
 	margin:0;
-    margin-left: -4px
+    margin-left: -4px;
+    margin-right: -4px;
 }
 
 #container.portrait{
@@ -19,32 +20,6 @@ img{
 	margin: auto;
 }
 
-.portrait .head{
-	width: 640px;
-	height: 116px;
-    margin-left: -4px
-}
-
-.landscape .head{
-	width: 480px;
-	height: 116px;
-    margin-left: -4px
-}
-
-.portrait .bottom{
-	width: 640px;
-	height: 89px;
-	margin-top: -2px;
-    margin-left: -4px
-}
-
-.landscape .bottom{
-	width: 480px;
-	height: 89px;
-	margin-top: -2px;
-    margin-left: -4px
-}
-
 .portrait .screenshots img{
     width: 49%;
 }
@@ -55,6 +30,7 @@ img{
 
 .portrait .screenshots img:nth-child(even){
 	margin-left: -4px;
+	margin-right: -4px;
 }
 
 
