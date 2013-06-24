@@ -92,11 +92,11 @@ def build_news_message(news):
 
 	content_items = {'content' : _normalize_content(news.recommended_reason)}
 	if news.screenshot_path_1:
-		content_items['screenshot_path_1'] = settings.MEDIA_URL + news.screenshot_path_1.name
+		content_items['screenshot_path_1'] = settings.MEDIA_URL + news.screenshot_path_2.name
 	if news.screenshot_path_2:
-		content_items['screenshot_path_2'] = settings.MEDIA_URL + news.screenshot_path_1.name
+		content_items['screenshot_path_2'] = settings.MEDIA_URL + news.screenshot_path_3.name
 	if news.screenshot_path_3:
-        content_items['screenshot_path_3'] = settings.MEDIA_URL + news.screenshot_path_1.name
+        content_items['screenshot_path_3'] = settings.MEDIA_URL + news.screenshot_path_4.name
     if news.screenshot_path_4:
         content_items['screenshot_path_4'] = settings.MEDIA_URL + news.screenshot_path_1.name
     content_items['video_url'] = converted_video_url
