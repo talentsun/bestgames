@@ -22,7 +22,7 @@ def send_sms(user_no, content):
 
 
 if __name__ == '__main__':
-    send_sms("13488684891", "你好！发短信成功！")
+    send_sms("13488684891", u"你好！发短信成功！")
 
 
     
