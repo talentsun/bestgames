@@ -96,10 +96,10 @@ def build_news_message(news):
 	if news.screenshot_path_2:
 		content_items['screenshot_path_2'] = settings.MEDIA_URL + news.screenshot_path_2.name
 	if news.screenshot_path_3:
-        content_items['screenshot_path_3'] = settings.MEDIA_URL + news.screenshot_path_3.name
-    if news.screenshot_path_4:
-        content_items['screenshot_path_4'] = settings.MEDIA_URL + news.screenshot_path_4.name
-    content_items['video_url'] = converted_video_url
+		content_items['screenshot_path_3'] = settings.MEDIA_URL + news.screenshot_path_3.name
+	if news.screenshot_path_4:
+		content_items['screenshot_path_4'] = settings.MEDIA_URL + news.screenshot_path_4.name
+	content_items['video_url'] = converted_video_url
 	post.content = str(render_to_string('news_web.tpl', content_items))
 
 	post.terms_names = {
