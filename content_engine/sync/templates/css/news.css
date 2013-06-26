@@ -4,36 +4,59 @@ body{
 }
 
 img{
-	padding:0;
-	margin:0;
-    margin-left: -4px;
-    margin-right: -4px;
+	padding: 0 0;
+    margin: 1px 1px;
 }
 
-#container.portrait{
-	width: 640px;
-	margin: auto;
+#container.portrait1{
+	width: 480px;
+	margin: 0 0;
+	position: relative;
+}
+
+#container.portrait2{
+	width: 960px;
+	margin: 0 0;
+	position: relative;
+}
+
+#container.portraint3{
+	width: 480px;
+	margin: 0 0;
+	position: relative;
+}
+
+#container.portraint4{
+	width: 960px;
+	margin: 0;
+	position: relative;
 }
 
 #container.landscape{
 	width: 480px;
-	margin: auto;
+	margin: 0 0;
+	position: relative;
 }
 
-.portrait .screenshots img{
-    width: 49%;
+.portrait1 .screenshots img{
+    width: 100%;
+}
+
+.portrait2 .screenshots img{
+	width: 100%;
+	margin: 2px 2px;
+}
+
+.portrait3 .screenshots img{
+	width: 100%;
+}
+
+.portrait4 .screenshots img{
+	width: 49%;
+	height: 100%;
 }
 
 .landscape .screenshots img{
     width: 100%;
+    height: 100%;
 }
-
-.portrait .screenshots img:nth-child(even){
-	margin-left: -4px;
-	margin-right: -4px;
-}
-
-
-
-
-
