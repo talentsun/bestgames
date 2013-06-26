@@ -31,27 +31,43 @@
       var img2 = new Image();
       var img3 = new Image();
       var img4 = new Image();
-      var container = document.getElementById('container');
-      img1.src = image1.src;
-      img2.src = image2.src;
-      img3.src = image3.src;
-      img4.src = image4.src;
-
+      var container = document.getElementById("container");
+      if(image1 != null){
+          img1.src = image1.src;
+      }
+      if(image2 != null){
+          img2.src = image2.src;
+      }
+      if(image3 != null){
+          img3.src = image3.src;
+      }
+      if(image4 != null){
+          img4.src = image4.src;
+      }
       if(img1.width > img1.height){
-          container.className = 'landscape';
+          container.className = "landscape";
       } else {
-          container.className = 'portrait'
+          container.className = "portrait";
       }
     };
+
   </script>
 </head>
 <body onload="load()" id="container" style="padding:10px;">
   <h4>游戏情报站 - {{ news.title }}</h4>
   <div class="screenshots">
+    {% if news.screenshot_path_1 %}
     <img id="screenshot_1" src="http://weixin.bestgames7.com/media/{{news.screenshot_path_1}}" alt="">
+    {% endif %}
+    {% if news.screenshot_path_2 %}
     <img id="screenshot_2" src="http://weixin.bestgames7.com/media/{{news.screenshot_path_2}}" alt="">
+    {% endif %}
+    {% if news.screenshot_path_3 %}
     <img id="screenshot_3" src="http://weixin.bestgames7.com/media/{{news.screenshot_path_3}}" alt="">
+    {% endif %}
+    {% if news.screenshot_path_4 %}
     <img id="screenshot_4" src="http://weixin.bestgames7.com/media/{{news.screenshot_path_4}}" alt="">
+    {% endif %}
   </div>
 <p style="margin:10px 0;">{{news.recommended_reason|del_link}}</p>
 </body>
