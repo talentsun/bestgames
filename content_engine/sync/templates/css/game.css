@@ -9,7 +9,7 @@ img{
     margin-left: -4px
 }
 
-#container.portrait{
+#container.portrait4{
 	width: 640px;
 	margin: auto;
 }
@@ -19,7 +19,7 @@ img{
 	margin: auto;
 }
 
-.portrait .head{
+.portrait4 .head{
 	background: url(../img/head-portrait.jpg) no-repeat;
 	width: 640px;
 	height: 116px;
@@ -33,7 +33,7 @@ img{
     margin-left: -4px
 }
 
-.portrait .bottom{
+.portrait4 .bottom{
 	background: url(../img/bottom-portrait.jpg) no-repeat;
 	width: 640px;
 	height: 89px;
@@ -49,7 +49,7 @@ img{
     margin-left: -4px
 }
 
-.portrait .screenshots img{
+.portrait4 .screenshots img{
     width: 49%;
 }
 
@@ -57,7 +57,7 @@ img{
     width: 100%;
 }
 
-.portrait .screenshots img:nth-child(even){
+.portrait4 .screenshots img:nth-child(even){
 	margin-left: -4px;
 }
 

@@ -7,14 +7,8 @@
 </head>
 <body onload="load()">
     <div id="container">
-        <div class="head">
-            <img src="{{ template_path }}img/redier_head_min.jpg" />
-        </div>
         <div class="problem">
             <img src="{{ image }}" id="redier_img" />
-        </div>
-        <div class="bottom">
-            <img src="{{ template_path }}img/redier_bottom_min.jpg" />
         </div>
     </div>
 </body>
