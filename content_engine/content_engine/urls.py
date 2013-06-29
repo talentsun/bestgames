@@ -24,6 +24,7 @@ urlpatterns = patterns('',
     url(r'', include('scrapy_itunes.urls')),
     url(r'', include('social_auth.urls')),
     url(r'^weixin/', include('weixin.urls')),
+    url(r'^analyse/', include('analyse.urls')),
     url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
 )
 

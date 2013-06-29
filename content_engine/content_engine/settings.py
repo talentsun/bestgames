@@ -149,7 +149,9 @@ INSTALLED_APPS = (
     'dajaxice',
     'dajax',
     'cronjobs',
-    'sync'
+    'sync',
+    'analyse',
+    'chartit'
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (

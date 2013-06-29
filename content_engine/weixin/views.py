@@ -68,6 +68,14 @@ def index(request):
             weixin = WeiXin.on_message(smart_str(request.raw_post_data))
             message = weixin.to_json()
             weixinlogger.info("receive one message %s" % str(message))
+            try:
+                user = WeixinUser.objects.get(uid=message.user)
+            except:
+                user = WeixinUser()
+                user.src = message.sp
+                user.uid = message.user
+                user.integral = 0
+                user.save()
 
             Router.get_instance().reply(message, _route_callback)
             
