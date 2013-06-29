@@ -20,12 +20,12 @@ urlpatterns = patterns('',
     url(r'^media/(?P<path>.*)$','django.views.static.serve',{'document_root': settings.MEDIA_ROOT}),
     url(r'^ajax-upload/', include('ajax_upload.urls')),
     url(r'^ext/', include('django_select2.urls')),
+    url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
     url(r'', include('portal.urls')),
     url(r'', include('scrapy_itunes.urls')),
     url(r'', include('social_auth.urls')),
     url(r'^weixin/', include('weixin.urls')),
-    url(r'^analyse/', include('analyse.urls')),
-    url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
+    url(r'^analyse/', include('analyse.urls'))
 )
 
 urlpatterns += staticfiles_urlpatterns()

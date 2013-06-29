@@ -171,58 +171,28 @@ def puzzles(request, puzzle_id=None):
     user = get_object_or_404(WeixinUser, id=request.GET.get('user_id', None))
 
     if puzzle_id is None:
-        puzzles = []
-        for puzzle in Puzzle.objects.filter(created_time__gt=date.today()-timedelta(days=6)).order_by('-id'):
-            if puzzle.status1 == 2 or puzzle.weixin_set.filter(sync_timestamp2__lt=datetime.today(), status2=2).exists():
-                user_answer = UserAnswer.objects.filter(questionId=puzzle, userId=user)
-                answered = False
-                correct = False
-                if user_answer is not None and user_answer.count() > 0:
-                    answered = True
-                    correct = user_answer[0].userOption == puzzle.right
-                puzzles.append({
-                    'id' : puzzle.id,
-                    'title' : puzzle.title,
-                    'end_time' : (puzzle.created_time + timedelta(days=7)).strftime('%Y-%m-%d 00:00:00'),
-                    'answered' : answered,
-                    'correct' : correct
-                    })
-        return render(request, 'puzzles.html', {'credit' : user.integral, 'user_id' : user.id, 'puzzles' : puzzles})
+        puzzle = Puzzle.objects.filter(Q(status1=2) | Q(weixin__status2=2)).latest('sync_timestamp1')
     else:
         puzzle = get_object_or_404(Puzzle, id=puzzle_id)
-        
-        if request.method == 'POST':
-            user_answer = UserAnswer(questionId=puzzle, userId=user, userOption=request.POST.get('answer', 0))
-            user_answer.save()
-            
-            if int(user_answer.userOption) == puzzle.right:
-                user.integral += 5
-                user.save()
-        
-        user_answer = UserAnswer.objects.filter(questionId=puzzle, userId=user)
-        if user_answer is not None and user_answer.count() > 0:
-            puzzle_data = {
-            'title' : puzzle.title,
-            'answered' : True,
-            'correct' : user_answer[0].userOption == puzzle.right,
-            'description' : puzzle.description,
-            'userOption' : user_answer[0].userOption,
-            'image' : settings.MEDIA_URL + puzzle.image_url.name,
-            'option1' : puzzle.option1,
-            'option2' : puzzle.option2,
-            'option3' : puzzle.option3,
-            'option4' : puzzle.option4
-            }
-        else:
-            puzzle_data = {
-            'title' : puzzle.title,
-            'answered' : False,
-            'correct' : False,
-            'description' : puzzle.description,
-            'image' : settings.MEDIA_URL + puzzle.image_url.name,
-            'option1' : puzzle.option1,
-            'option2' : puzzle.option2,
-            'option3' : puzzle.option3,
-            'option4' : puzzle.option4
-            }
-        return render(request, 'puzzle.html', {'credit' : user.integral, 'puzzle' : puzzle_data})
+    
+    user_answer = UserAnswer.objects.filter(questionId=puzzle, userId=user)
+    puzzle_data = {
+    'id' : puzzle.id,
+    'title' : puzzle.title,
+    'image' : settings.MEDIA_URL + puzzle.image_url.name,
+    'option1' : puzzle.option1,
+    'option2' : puzzle.option2,
+    'option3' : puzzle.option3,
+    'option4' : puzzle.option4,
+    'right' : puzzle.right,
+    'description' : puzzle.description
+    }
+    if user_answer is not None and user_answer.count() > 0:
+        puzzle_data['answered'] = True
+        puzzle_data['correct'] = user_answer[0].userOption == puzzle.right
+        puzzle_data['userOption'] = user_answer[0].userOption
+    else:
+        puzzle_data['answered'] = False
+        puzzle_data['correct'] = False
+
+    return render(request, 'puzzle.html', {'user' : user, 'puzzle' : puzzle_data})

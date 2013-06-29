@@ -1,12 +1,5 @@
 
 var Dajaxice = {
-
-    
-    
-
-    
-
-    
     weixin: {
     
     load_games_for_today: function(callback_function, argv, custom_settings){
@@ -15,10 +8,19 @@ var Dajaxice = {
 
     begin_load_shorten_urls: function(callback_function, argv, custom_settings){
         return Dajaxice.call('weixin.begin_load_shorten_urls', 'POST', callback_function, argv, custom_settings);
+    },
+
+    answer_puzzle: function(callback_function, argv, custom_settings){
+        return Dajaxice.call('weixin.answer_puzzle', 'POST', callback_function, argv, custom_settings);
+    },
+
+    load_puzzle: function(callback_function, argv, custom_settings){
+        return Dajaxice.call('weixin.load_puzzle', 'POST', callback_function, argv, custom_settings);
+    },
+
+    load_puzzles: function(callback_function, argv, custom_settings){
+        return Dajaxice.call('weixin.load_puzzles', 'POST', callback_function, argv, custom_settings);
     }
-
-
-    
     
     }
     
