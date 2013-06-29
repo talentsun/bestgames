@@ -45,7 +45,7 @@
 	var load_puzzles_callback = function(data) {
 		for (var index in data.puzzles) {
 			puzzle = data.puzzles[index];
-			puzzle_html = '<a id="puzzle-' + puzzle.id + '" class="puzzle btn btn-block" href="javascript:void(0);" onclick="load_puzzle(' + puzzle.id+ ')" data-dismiss="modal" aria-hidden="true">';
+			puzzle_html = '<a id="puzzle-' + puzzle.id + '" class="puzzle btn btn-block" href="javascript:void(0);" onclick="load_puzzle(' + puzzle.id+ ')" data-dismiss="modal" aria-hidden="true" style="text-align:left;padding:8px;">';
 			if (puzzle.answered) {
 				if (puzzle.correct) {
 					puzzle_html += '<i class="icon-ok"></i>';
@@ -92,10 +92,10 @@
 		<img width="100%" src="{{ puzzle.image }}" />
 		<p style="margin-top:8px;">{{ puzzle.description }}</p>
 		
-		<a id="option0" class="option btn btn-large btn-block {% if puzzle.answered %}{% if puzzle.right == 0 %}btn-success{% endif %}{% if puzzle.userOption == 0 %}{% if not puzzle.correct %}btn-danger{% endif %}{% endif %} disabled{% endif %}" href="javascript:void(0);" {% if not puzzle.answered %}onclick="answer_puzzle(0)"{% endif %}>A.{{ puzzle.option1 }}</a>
-		<a id="option1" class="option btn btn-large btn-block {% if puzzle.answered %}{% if puzzle.right == 1 %}btn-success{% endif %}{% if puzzle.userOption == 1 %}{% if not puzzle.correct %}btn-danger{% endif %}{% endif %} disabled{% endif %}" href="javascript:void(0);" {% if not puzzle.answered %}onclick="answer_puzzle(1)"{% endif %}>B.{{ puzzle.option2 }}</a>
-		<a id="option2" class="option btn btn-large btn-block {% if puzzle.answered %}{% if puzzle.right == 2 %}btn-success{% endif %}{% if puzzle.userOption == 2 %}{% if not puzzle.correct %}btn-danger{% endif %}{% endif %} disabled{% endif %}" href="javascript:void(0);" {% if not puzzle.answered %}onclick="answer_puzzle(2)"{% endif %}>C.{{ puzzle.option3 }}</a>
-		<a id="option3" class="option btn btn-large btn-block {% if puzzle.answered %}{% if puzzle.right == 3 %}btn-success{% endif %}{% if puzzle.userOption == 3 %}{% if not puzzle.correct %}btn-danger{% endif %}{% endif %} disabled{% endif %}" href="javascript:void(0);" {% if not puzzle.answered %}onclick="answer_puzzle(3)"{% endif %}>D.{{ puzzle.option4 }}</a>
+		<a id="option0" style="text-align:left;padding-left:8px;" class="option btn btn-large btn-block {% if puzzle.answered %}{% if puzzle.right == 0 %}btn-success{% endif %}{% if puzzle.userOption == 0 %}{% if not puzzle.correct %}btn-danger{% endif %}{% endif %} disabled{% endif %}" href="javascript:void(0);" {% if not puzzle.answered %}onclick="answer_puzzle(0)"{% endif %}>A.{{ puzzle.option1 }}</a>
+		<a id="option1" style="text-align:left;padding-left:8px;" class="option btn btn-large btn-block {% if puzzle.answered %}{% if puzzle.right == 1 %}btn-success{% endif %}{% if puzzle.userOption == 1 %}{% if not puzzle.correct %}btn-danger{% endif %}{% endif %} disabled{% endif %}" href="javascript:void(0);" {% if not puzzle.answered %}onclick="answer_puzzle(1)"{% endif %}>B.{{ puzzle.option2 }}</a>
+		<a id="option2" style="text-align:left;padding-left:8px;" class="option btn btn-large btn-block {% if puzzle.answered %}{% if puzzle.right == 2 %}btn-success{% endif %}{% if puzzle.userOption == 2 %}{% if not puzzle.correct %}btn-danger{% endif %}{% endif %} disabled{% endif %}" href="javascript:void(0);" {% if not puzzle.answered %}onclick="answer_puzzle(2)"{% endif %}>C.{{ puzzle.option3 }}</a>
+		<a id="option3" style="text-align:left;padding-left:8px;" class="option btn btn-large btn-block {% if puzzle.answered %}{% if puzzle.right == 3 %}btn-success{% endif %}{% if puzzle.userOption == 3 %}{% if not puzzle.correct %}btn-danger{% endif %}{% endif %} disabled{% endif %}" href="javascript:void(0);" {% if not puzzle.answered %}onclick="answer_puzzle(3)"{% endif %}>D.{{ puzzle.option4 }}</a>
 	</div>
 
 	<div id="puzzles" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true" style="width:80%;left:10%;margin-left:0;">
