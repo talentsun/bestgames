@@ -4,7 +4,7 @@ from django import forms
 
 from .models import UploadedFile
 
-import time
+import time, random
 
 
 class UploadedFileForm(forms.ModelForm):
@@ -18,5 +18,6 @@ class UploadedFileForm(forms.ModelForm):
         # Change the name of the file to something unguessable
         # Construct the new name as <unique-hex>-<original>.<ext>
         today = time.strftime('%Y-%m-%d',time.localtime(time.time()))
-        data.name = u'%s-%s' % (today, data.name)
+        name = random.randint(10000, 20000)
+        data.name = u'%s-%s' % (today, name)
         return data
