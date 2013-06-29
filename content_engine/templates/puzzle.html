@@ -45,7 +45,7 @@
 	var load_puzzles_callback = function(data) {
 		for (var index in data.puzzles) {
 			puzzle = data.puzzles[index];
-			puzzle_html = '<a id="puzzle-' + puzzle.id + '" class="puzzle btn btn-block btn-large" href="javascript:void(0);" onclick="load_puzzle(' + puzzle.id+ ')" data-dismiss="modal" aria-hidden="true">';
+			puzzle_html = '<a id="puzzle-' + puzzle.id + '" class="puzzle btn btn-block" href="javascript:void(0);" onclick="load_puzzle(' + puzzle.id+ ')" data-dismiss="modal" aria-hidden="true">';
 			if (puzzle.answered) {
 				if (puzzle.correct) {
 					puzzle_html += '<i class="icon-ok"></i>';
@@ -85,7 +85,7 @@
 	<div>
 		<table width="100%" style="margin-bottom:4px;">
 			<tr>
-				<td valign="top"><h4 style="margin:0;line-height:32px;">{{ puzzle.title }}</h4></td>
+				<td valign="top"><h4>{{ puzzle.title }}</h4></td>
 				<td valign="top" width="72px;"><a href="#puzzles" onclick="load_puzzles()" class="btn" style="margin-left:4px;" data-toggle="modal"><i class="icon-th-list"></i>更多</a></td>
 			</tr>
 		</table>
@@ -98,7 +98,7 @@
 		<a id="option3" class="option btn btn-large btn-block {% if puzzle.answered %}{% if puzzle.right == 3 %}btn-success{% endif %}{% if puzzle.userOption == 3 %}{% if not puzzle.correct %}btn-danger{% endif %}{% endif %} disabled{% endif %}" href="javascript:void(0);" {% if not puzzle.answered %}onclick="answer_puzzle(3)"{% endif %}>D.{{ puzzle.option4 }}</a>
 	</div>
 
-	<div id="puzzles" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+	<div id="puzzles" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true" style="width:80%;">
   		<div class="modal-header">
     		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
     		<h4>更多趣题</h4>
