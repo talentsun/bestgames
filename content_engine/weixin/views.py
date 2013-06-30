@@ -69,11 +69,11 @@ def index(request):
             message = weixin.to_json()
             weixinlogger.info("receive one message %s" % str(message))
             try:
-                user = WeixinUser.objects.get(uid=message.user)
+                user = WeixinUser.objects.get(uid=message['FromUserName'])
             except:
                 user = WeixinUser()
-                user.src = message.sp
-                user.uid = message.user
+                user.src = message['ToUserName']
+                user.uid = message['FromUserName']
                 user.integral = 0
                 user.save()
 
