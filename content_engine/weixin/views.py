@@ -196,3 +196,6 @@ def puzzles(request, puzzle_id=None):
         puzzle_data['correct'] = False
 
     return render(request, 'puzzle.html', {'user' : user, 'puzzle' : puzzle_data})
+
+def intro(request):
+    return render(request, 'weixin_intro.html', {})

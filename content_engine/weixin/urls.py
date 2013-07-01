@@ -6,5 +6,6 @@ urlpatterns = patterns('weixin.views',
     url(r'^load/$', 'load'),
     url(r'^gifts/(?P<user_id>\d+)', 'gifts'),
     url(r'^puzzles/(?P<puzzle_id>\d+)', 'puzzles'),
-    url(r'^puzzles', 'puzzles')
+    url(r'^puzzles', 'puzzles'),
+    url(r'^intro','intro')
 )

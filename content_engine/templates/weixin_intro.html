@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+	<title>每日精品游戏 - 您身边的手机游戏砖家</title>
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/weixin.css"/>
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.min.css"/>
+	<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+  	{{ form.media }}
+	{% include "ga.html" %}
+</head>
+<body>
+	<img src="{{ STATIC_URL }}img/weixin-intro.jpg" width="100%"/>
+	<p>小每立志成为<big><strong>您身边的手机游戏砖家</strong></big>，和小每对话您能找游戏、找攻略、参与活动赢积分换礼品。</p>
+	<h4>找游戏</h4>
+	<img src="{{ STATIC_URL }}img/findgames-intro.png" width="100%"/>
+	<ul>
+		<li>发送”<big><strong>推荐</strong></big>“，推荐小每精选的好玩游戏，一次推荐不满意可以再次“推荐”。</li>
+		<li>发送<big><strong>描述游戏的词</strong></big>，根据您的喜好推荐好玩游戏，例如“赛车”，“恐怖”。</li>
+		<li>发送<big><strong>游戏名</strong></big>，小每帮您找到游戏的下载地址，例如“被错过的天堂”。</li>
+	</ul>
+	<h4>趣味答题</h4>
+	<img src="{{ STATIC_URL }}img/puzzles-intro.png" width="100%"/>
+	<p>发送”<big><strong>答题</strong></big>“参与趣味答题，每天一道题，答对一题得5分，积分可以换礼品。</p>
+	<h4>积分商城</h4>
+	<img src="{{ STATIC_URL }}img/giftshop-intro.png" width="100%"/>
+	<p>发送”<big><strong>积分</strong></big>“进入积分商城，使用积分兑换礼品。</p>
+</body>
+</html>

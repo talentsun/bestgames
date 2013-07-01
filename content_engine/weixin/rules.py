@@ -37,15 +37,7 @@ def voice_message(rule, info):
     return BuildConfig(MessageBuilder.TYPE_RAW_TEXT, None, u"非常抱歉，小每还不能理解语音信息，现在你可以用文字和小每交流")
 
 def get_welcome(rule, info):
-    return BuildConfig(MessageBuilder.TYPE_RAW_TEXT, None, u"""您好，小每立志成为一个您身边的手机游戏砖家，您可以和小每对话，让小每来帮您：
-1. 找游戏的下载地址
-回复游戏的名字，例如“滑雪大冒险”
-2. 推荐好玩的游戏
-回复“推荐”，每次回复都有不同的游戏哟，
-3. 根据您的喜好找好玩的游戏
-回复描述游戏的词，例如“赛车”，“恐怖”
-4. 参加趣味答题活动，得积分换礼品
-回复“答题”参与活动""")
+    return BuildConfig(MessageBuilder.TYPE_INTRO, None, None)
 
 def unsubscribe(rule, info):
     return BuildConfig(MessageBuilder.TYPE_NO_RESPONSE, None, u"%s unsubscribe" % info.user)
@@ -84,28 +76,12 @@ Router.get_instance().set({
 Router.get_instance().set({
         'name' : u'打招呼',
         'pattern' : u'^(你好|hi|hello|您好).*',
-        'handler' : ['''你好，小每立志成为一个您身边的手机游戏砖家，您可以和小每对话，让小每来帮您：
-1. 找游戏的下载地址
-回复游戏的名字，例如“滑雪大冒险”
-2. 推荐好玩的游戏
-回复“推荐”，每次回复都有不同的游戏哟，
-3. 根据您的喜好找好玩的游戏
-回复描述游戏的词，例如“赛车”，“恐怖”
-4. 参加趣味答题活动，得积分换礼品
-回复“答题”参与活动''']
+        'handler' : get_welcome
     })
 Router.get_instance().set({
         'name' : u'自我介绍',
         'pattern' : u'(^你是谁.*)|(小每)',
-        'handler' : ['''我是小每呀，立志成为一个您身边的手机游戏砖家，您可以和小每对话，让小每来帮您：
-1. 找游戏的下载地址
-回复游戏的名字，例如“滑雪大冒险”
-2. 推荐好玩的游戏
-回复“推荐”，每次回复都有不同的游戏哟，
-3. 根据您的喜好找好玩的游戏
-回复描述游戏的词，例如“赛车”，“恐怖”
-4. 参加趣味答题活动，得积分换礼品
-回复“答题”参与活动''']
+        'handler' : get_welcome
     })
 """
 Router.get_instance().set({
@@ -130,17 +106,8 @@ Router.get_instance().set({
         'handler' : voice_message
     })
 
-help_wording = u"""小每立志成为一个您身边的手机游戏砖家，您可以和小每对话，让小每来帮您：
-1. 找游戏的下载地址
-回复游戏的名字，例如“滑雪大冒险”
-2. 推荐好玩的游戏
-回复“推荐”，每次回复都有不同的游戏哟，
-3. 根据您的喜好找好玩的游戏
-回复描述游戏的词，例如“赛车”，“恐怖”
-4. 参加趣味答题活动，得积分换礼品
-回复“答题”参与活动"""
 Router.get_instance().set({
     'name' : u'帮助说明',
     'pattern' : u'^(帮助|使用说明)$',
-    'handler' : help_wording
+    'handler' : get_welcome
 })
