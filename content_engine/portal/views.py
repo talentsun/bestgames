@@ -24,8 +24,101 @@ from portal.forms import GameForm, RedierForm, CollectionForm, ProblemForm, Weix
 from service import search_pb2
 from content_engine import settings
 
+from chartit import DataPool, Chart
+from analyse.models import *
+
 import django_tables2 as tables
 
+def get_all_puzzle_user_day():
+    data = DataPool(series=[
+        {
+            'options': {
+                'source': AllPuzzleUserByDay.objects.filter().order_by('day')
+            },
+            'terms': ['daystr', 'answer_num', 'phone_num']
+        }])
+    cht = Chart(
+        datasource = data,
+        series_options = [
+            {
+                'options': {
+                    'type': 'line',
+                    'stacking': False
+                },
+                'terms': {
+                    'daystr': ['answer_num', 'phone_num']
+                }
+            }],
+        chart_options = {
+            'title': {
+                'text': u'参与过答题的用户'},
+            'xAxis': {
+                'title': {
+                    'text': u'日期'}},
+            'colors':['#2f7ed8', 
+               '#AA4643']})
+    return cht
+
+def get_delta_puzzle_user_day():
+    data = DataPool(series=[
+        {
+            'options': {
+                'source': DeltaPuzzleUserByDay.objects.filter().order_by('day')
+            },
+            'terms': ['daystr', 'new_user', 'old_user']
+        }])
+    cht = Chart(
+        datasource = data,
+        series_options = [
+            {
+                'options': {
+                    'type': 'column',
+                    'stacking': True
+                },
+                'terms': {
+                    'daystr': ['new_user', 'old_user']
+                }
+            }],
+        chart_options = {
+            'title': {
+                'text': u'答题人数by日期'},
+            'xAxis': {
+                'title': {
+                    'text': u'日期'}},
+            'colors':['#2f7ed8', 
+               '#AA4643']})
+    return cht
+def get_puzzle_user_puzzle():
+    data = DataPool(series=[
+        {
+            'options': {
+                'source': PuzzleUserByPuzzle.objects.filter().order_by('puzzle')
+            },
+            'terms': ['puzzle', 'new_user', 'old_user']
+        }])
+    cht = Chart(
+        datasource = data,
+        series_options = [
+            {
+                'options': {
+                    'type': 'column',
+                    'stacking': True
+                },
+                'terms': {
+                    'puzzle': ['new_user', 'old_user']
+                }
+            }],
+        chart_options = {
+            'title': {
+                'text': u'答题人数by题目'},
+            'xAxis': {
+                'title': {
+                    'text': u'题目'}},
+            'colors':['#2f7ed8', 
+               '#AA4643']})
+    return cht
+
+ 
 def _redirect_back(request):
     next_url = request.GET.get('next', None)
     if next_url is None or len(next_url) == 0:
@@ -134,7 +227,12 @@ def index(request):
     userAnswer = UserAnswerTable(UserAnswer.objects.all(), prefix="ua-")
     userAnswer.paginate(page=request.GET.get("ua-page", 1), per_page=10)
     userAnswer.data.verbose_name = u"用户答题记录"
-    return render(request, "index.html", {"games": games, "rediers":rediers, 'collections':collections, 'problems':problems, 'weixin':weixin, 'player':player, 'dialog': dialog, 'news':news, 'puzzles': puzzles, 'gift': gift, 'gift_item': giftItem, 'user_gift':userGift, 'weixin_user':weixinUser, 'user_answer' : userAnswer})
+
+    all_puzzle_chart = get_all_puzzle_user_day()    
+    delta_puzzle_chart = get_delta_puzzle_user_day()
+    puzzle_chart = get_puzzle_user_puzzle()
+
+    return render(request, "index.html", {"games": games, "rediers":rediers, 'collections':collections, 'problems':problems, 'weixin':weixin, 'player':player, 'dialog': dialog, 'news':news, 'puzzles': puzzles, 'gift': gift, 'gift_item': giftItem, 'user_gift':userGift, 'weixin_user':weixinUser, 'user_answer' : userAnswer, 'charts': [all_puzzle_chart, delta_puzzle_chart, puzzle_chart]})
 
 def logout(request):
     auth.logout(request)
@@ -619,3 +717,5 @@ def delete_dialog(request, dialog_id):
     dialog = get_object_or_404(BaseDialog, id=dialog_id)
     dialog.delete()
     return _redirect_back(request)
+
+
