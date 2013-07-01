@@ -51,7 +51,7 @@ def get_all_puzzle_user_day():
             }],
         chart_options = {
             'title': {
-                'text': u'参与过答题的用户'},
+                'text': u'使用过趣味答题的用户'},
             'xAxis': {
                 'title': {
                     'text': u'日期'}},
@@ -81,7 +81,7 @@ def get_delta_puzzle_user_day():
             }],
         chart_options = {
             'title': {
-                'text': u'答题人数by日期'},
+                'text': u'答题人数 by 日期'},
             'xAxis': {
                 'title': {
                     'text': u'日期'}},
@@ -110,7 +110,7 @@ def get_puzzle_user_puzzle():
             }],
         chart_options = {
             'title': {
-                'text': u'答题人数by题目'},
+                'text': u'答题人数 by 题目'},
             'xAxis': {
                 'title': {
                     'text': u'题目'}},
