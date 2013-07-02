@@ -1,3 +1,4 @@
+{% load dajaxice_templatetags %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,41 +6,105 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
 	<title>{{ puzzle.title }}</title>
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.min.css"/>
-	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/puzzles.css"/>
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/weixin.css"/>
+	<link rel="stylesheet" type="text/css" media="all" href="{{ STATIC_URL }}css/jquery.pnotify.default.css"/>
+	<link rel="stylesheet" type="text/css" media="all" href="{{ STATIC_URL }}css/jquery.pnotify.default.icons.css"/>
 	<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js"></script>
-	<script type="text/javascript" src="http://cow.bestgames7.com/static/js/bootstrap.min.js"></script>
-	<script type="text/javascript">
-		var answer = function(option) {
-			$('.btn').addClass('disabled');
-			$('#answer').val(option);
-			$('#answer_form').submit();
-		};
+	<script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.pnotify.min.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}dajax/jquery.dajax.core.js"></script>
+  	{{ form.media }}
+  	{% dajaxice_js_import %}
+  	<script type="text/javascript">
+  	var answer_puzzle = function(option) {
+		if(!$('.option').hasClass('disabled')) {
+			$('.option').addClass('disabled');
+			Dajaxice.weixin.answer_puzzle(Dajax.process, {'user_id' : {{ user.id }}, 'puzzle_id' : {{ puzzle.id }}, 'option' : option});
+		}
+	};
+
+	var answer_puzzle_callback = function(data) {
+		if (data.correct) {
+			toast('success', '恭喜您，答对了！您当前的积分：' + data.credit + '，发送“积分”使用积分换礼品。');
+		} else {
+			toast('error', '这不科学，答错了！您当前的积分：' + data.credit + '，发送“积分”使用积分换礼品。');
+			$('#option'+data.user_option).addClass('btn-danger');
+		}
+		$('#option{{ puzzle.right }}').addClass('btn-success');
+	};
+
+	var load_puzzle = function(puzzle_id) {
+		Dajaxice.weixin.load_puzzle(Dajax.process, {'user_id' : {{ user.id }}, 'puzzle_id' : puzzle_id });
+	};
+
+	var load_puzzles = function() {
+		$('#puzzles .modal-body').empty();
+		Dajaxice.weixin.load_puzzles(Dajax.process, {'user_id' : {{ user.id }} });
+	}
+
+	var load_puzzles_callback = function(data) {
+		for (var index in data.puzzles) {
+			puzzle = data.puzzles[index];
+			puzzle_html = '<a id="puzzle-' + puzzle.id + '" class="puzzle btn btn-block" href="javascript:void(0);" onclick="load_puzzle(' + puzzle.id+ ')" data-dismiss="modal" aria-hidden="true" style="text-align:left;padding:8px;">';
+			if (puzzle.answered) {
+				if (puzzle.correct) {
+					puzzle_html += '<i class="icon-ok"></i>';
+				} else {
+					puzzle_html += '<i class="icon-remove"></i>';
+				}
+			} else {
+				puzzle_html += '<i class="icon-pencil"></i>';
+			}
+			puzzle_html += puzzle.title;
+			puzzle_html += '</a>';
+			$('#puzzles .modal-body').append(puzzle_html);
+		}
+	}
+
+	function toast(type, text) {
+	   	$.pnotify({
+			text: text,
+			type: type,
+			delay: 3000,
+			history: false,
+			stack: false,
+			closer: false,
+			sticker: false,
+			before_open: function(pnotify) {
+				pnotify.css({
+					"top": ($(window).height() / 2) - (pnotify.height() / 2),
+					"left": ($(window).width() / 2) - (pnotify.width() / 2)
+				});
+			}
+		});
+	};
 	</script>
 	{% include "ga.html" %}
-  	{{ form.media }}
 </head>
 <body>
-	{% if puzzle.answered %}
-	{% if puzzle.correct %}
-		<div class="alert alert-success">恭喜您，答对了，您当前的积分：{{ credit }}。发送“礼品”使用积分换礼品。</div>
-	{% else %}
-		<div class="alert alert-error">这不科学，答错了，您当前的积分：{{ credit }}。发送“礼品”使用积分换礼品。</div>
-	{% endif %}
-	{% else %}
-		<div class="alert alert-success">点击右上角分享按钮，可以将题目发给好友或朋友圈，请朋友们帮忙回答。</div>
-	{% endif %}
 	<div>
-		<h4>{{ puzzle.title }}</h4>
+		<table width="100%" style="margin-bottom:4px;">
+			<tr>
+				<td ><h4>{{ puzzle.title }}</h4></td>
+				<td width="72px;"><a href="#puzzles" onclick="load_puzzles()" class="btn" style="margin-left:4px;" data-toggle="modal"><i class="icon-th-list"></i>更多</a></td>
+			</tr>
+		</table>
 		<img width="100%" src="{{ puzzle.image }}" />
 		<p style="margin-top:8px;">{{ puzzle.description }}</p>
 		
-		<a style="text-align:left;padding-left:8px;" class="btn btn-large btn-block {% if puzzle.answered %}{% if puzzle.userOption == 0 %}btn-primary{% endif %} disabled{% endif %}" href="javascript:void(0);" {% if not puzzle.answered %}onclick="answer(0)"{% endif %}>A.{{ puzzle.option1 }}</a>
-		<a style="text-align:left;padding-left:8px;" class="btn btn-large btn-block {% if puzzle.answered %}{% if puzzle.userOption == 1 %}btn-primary{% endif %} disabled{% endif %}" href="javascript:void(0);" {% if not puzzle.answered %}onclick="answer(1)"{% endif %}>B.{{ puzzle.option2 }}</a>
-		<a style="text-align:left;padding-left:8px;" class="btn btn-large btn-block {% if puzzle.answered %}{% if puzzle.userOption == 2 %}btn-primary{% endif %} disabled{% endif %}" href="javascript:void(0);" {% if not puzzle.answered %}onclick="answer(2)"{% endif %}>C.{{ puzzle.option3 }}</a>
-		<a style="text-align:left;padding-left:8px;" class="btn btn-large btn-block {% if puzzle.answered %}{% if puzzle.userOption == 3 %}btn-primary{% endif %} disabled{% endif %}" href="javascript:void(0);" {% if not puzzle.answered %}onclick="answer(3)"{% endif %}>D.{{ puzzle.option4 }}</a>
+		<a id="option0" style="text-align:left;padding-left:8px;" class="option btn btn-large btn-block {% if puzzle.answered %}{% if puzzle.right == 0 %}btn-success{% endif %}{% if puzzle.userOption == 0 %}{% if not puzzle.correct %}btn-danger{% endif %}{% endif %} disabled{% endif %}" href="javascript:void(0);" {% if not puzzle.answered %}onclick="answer_puzzle(0)"{% endif %}>A.{{ puzzle.option1 }}</a>
+		<a id="option1" style="text-align:left;padding-left:8px;" class="option btn btn-large btn-block {% if puzzle.answered %}{% if puzzle.right == 1 %}btn-success{% endif %}{% if puzzle.userOption == 1 %}{% if not puzzle.correct %}btn-danger{% endif %}{% endif %} disabled{% endif %}" href="javascript:void(0);" {% if not puzzle.answered %}onclick="answer_puzzle(1)"{% endif %}>B.{{ puzzle.option2 }}</a>
+		<a id="option2" style="text-align:left;padding-left:8px;" class="option btn btn-large btn-block {% if puzzle.answered %}{% if puzzle.right == 2 %}btn-success{% endif %}{% if puzzle.userOption == 2 %}{% if not puzzle.correct %}btn-danger{% endif %}{% endif %} disabled{% endif %}" href="javascript:void(0);" {% if not puzzle.answered %}onclick="answer_puzzle(2)"{% endif %}>C.{{ puzzle.option3 }}</a>
+		<a id="option3" style="text-align:left;padding-left:8px;" class="option btn btn-large btn-block {% if puzzle.answered %}{% if puzzle.right == 3 %}btn-success{% endif %}{% if puzzle.userOption == 3 %}{% if not puzzle.correct %}btn-danger{% endif %}{% endif %} disabled{% endif %}" href="javascript:void(0);" {% if not puzzle.answered %}onclick="answer_puzzle(3)"{% endif %}>D.{{ puzzle.option4 }}</a>
 	</div>
-	<form id="answer_form" action="" method="post" enctype="multipart/form-data"> {% csrf_token %}
-		<input id="answer" type="hidden" name="answer" value="" />
-	</form>
+
+	<div id="puzzles" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true" style="width:80%;left:10%;margin-left:0;">
+  		<div class="modal-header">
+    		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    		<h4>更多趣题</h4>
+  		</div>
+  		<div class="modal-body">
+  		</div>
+	</div>
 </body>
 </html>

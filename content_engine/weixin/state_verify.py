@@ -70,9 +70,9 @@ class VerifyPhone(StateMachine):
                 self.timeout = 12 * 3600
                 self.store(info.user, value)
             else:
-                verifyCode = random.randint(100000, 1000000)
+                verifyCode = str(random.randint(100000, 1000000))
                 value['verifyCode'] = verifyCode
-                ret = send_sms(info.text, u"验证码是%d，15分钟内有效" % verifyCode)
+                ret = send_sms(value['phone'], u"验证码是%s，15分钟内有效" % verifyCode)
                 logger.debug("send sms return %s" % ret)
                 value['sendTime'] = time.time()
                 value['sendNum'] += 1

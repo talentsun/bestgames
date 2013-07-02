@@ -105,6 +105,11 @@ def _build_weixin_game_collection(context, data):
 
     return WeiXin.to_news_xml(context.get('FromUserName', None), context.get('ToUserName', None), articles) 
 
+def _build_weixin_intro(context, data):
+    articles = []
+    articles.append({'title' : u'小每 - 您身边的手机游戏砖家', 'description' : u'发现好玩的手机游戏，了解最新的手机游戏资讯，参与趣味答题赢积分换礼品。', 'pic_url' : 'http://cow.bestgames7.com/static/img/weixin-intro.jpg', 'url' : 'http://cow.bestgames7.com/weixin/intro'})
+    return WeiXin.to_news_xml(context.get('FromUserName', None), context.get('ToUserName', None), articles)
+
 def _build_weixin_raw_text(context, data):
     # FIXME
     return WeiXin.to_text_xml(to_user_name=context.get('FromUserName', None),
@@ -121,6 +126,7 @@ class MessageBuilder:
     TYPE_GIFT_SHOP = 'type_gift_shop'
     TYPE_ANSWER = 'type_answer'
     TYPE_NO_RESPONSE = 'no_response'
+    TYPE_INTRO = 'intro'
 
     # platforms
     PLATFORM_WEIXIN = 'weixin'
@@ -147,6 +153,9 @@ class MessageBuilder:
         },
         TYPE_ANSWER : {
             PLATFORM_WEIXIN : _build_weixin_answer
+        },
+        TYPE_INTRO : {
+            PLATFORM_WEIXIN : _build_weixin_intro
         }
     }
 

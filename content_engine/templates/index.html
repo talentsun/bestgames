@@ -8,6 +8,10 @@
   <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/main.css"/>
   <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.min.css"/>
   <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js"></script>
+  <script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>
+  {% load chartit %}
+  {{ charts|load_charts:"allcontainer,deltacontainer,puzzlecontainer" }}
+  <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/bootbox.min.js"></script>
   <script type="text/javascript">
@@ -125,7 +129,8 @@
         <li id="nav-tab1" class="active"><a href="#tab1" data-toggle="tab">内容运营</a></li>
         <li id="nav-tab2"><a href="#tab2" data-toggle="tab">营销活动</a></li>
         <li id="nav-tab3"><a href="#tab3" data-toggle="tab">智能互动</a></li>
-        <li id="nav-tab4"><a href="#tab4" data-toggle="tab">其他</a></li>
+        <li id="nav-tab4"><a href="#tab4" data-toggle="tab">数据分析</a></li>
+        <li id="nav-tab5"><a href="#tab5" data-toggle="tab">其他</a></li>
       </ul>
       <div class="tab-content">
         <div class="tab-pane active" id="tab1">
@@ -226,6 +231,11 @@
           {% render_table dialog "django_tables2/table.html" %}
         </div>
         <div class="tab-pane" id="tab4">
+            <div id='allcontainer'> Chart will be rendered here </div>
+            <div id='deltacontainer'> Chart will be rendered here </div>
+            <div id='puzzlecontainer'> Chart will be rendered here </div>
+        </div>
+        <div class="tab-pane" id="tab5">
           <div class="navbar" style="margin-bottom:0;">
             <div class="navbar-inner">
               <p class="navbar-text">小兵变大咖</p>

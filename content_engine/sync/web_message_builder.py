@@ -110,7 +110,7 @@ def build_news_message(news):
 		post.custom_fields = []
 		post.custom_fields.append({'key':'post_image','value':settings.MEDIA_URL + news.screenshot_path_1.name})
 
-	post.post_status = 'publish'
+	#post.post_status = 'publish'
 
 	return WebMessage(news.id, post)
 
@@ -164,6 +164,6 @@ def build_puzzle_message(puzzle):
 		'category' : [u'趣味答题']
 	}
 
-	post.post_status = 'publish'
+	#post.post_status = 'publish'
 
 	return WebMessage(puzzle.id, post)
