@@ -18,7 +18,7 @@ class AllPuzzleUserByDay(models.Model):
         app_label = "analyse"
 
     def save(self, *args, **kwargs):
-        self.daystr = self.day.strftime("%m-%d")
+        self.daystr = self.day.strftime("%Y-%m-%d")
         super(AllPuzzleUserByDay, self).save(args, kwargs)
 
 
@@ -35,7 +35,7 @@ class DeltaPuzzleUserByDay(models.Model):
         app_label = "analyse"
 
     def save(self, *args, **kwargs):
-        self.daystr = self.day.strftime("%m-%d")
+        self.daystr = self.day.strftime("%Y-%m-%d")
         super(DeltaPuzzleUserByDay, self).save(args, kwargs)
 
 class PuzzleUserByPuzzle(models.Model):
