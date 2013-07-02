@@ -18,6 +18,7 @@ class UploadedFileForm(forms.ModelForm):
         # Change the name of the file to something unguessable
         # Construct the new name as <unique-hex>-<original>.<ext>
         today = time.strftime('%Y-%m-%d',time.localtime(time.time()))
-        name = random.randint(10000, 20000)
+        mimetype = data.name.split('.')[-1]
+        name = random.randint(10000, 20000) + '.' + mimetype
         data.name = u'%s-%s' % (today, name)
         return data
