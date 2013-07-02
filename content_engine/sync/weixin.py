@@ -83,9 +83,18 @@ class WeixinClient(object):
 		logger.info('cert:%s, slave_user:%s, slave_sid:%s, token:%s', (self.cert, self.slave_user, self.slave_sid, self.token))
 
 	def _post_image(self, image):
+		mimetype_list = {
+		        'gif'  :  'image/gif',
+		        'jpeg' :  'image/jpeg',
+		        'jpg'  :  'image/jpeg',
+		        'png'  :  'image/png'
+		        }
+		filetype = str(image).split('.')[-1]
+		if filetype in mimetype_list.keys():
+			mimetype = mimetype_list[filetype]
 		c = pycurl.Curl()
 		c.setopt(pycurl.POST, 1)
-		c.setopt(pycurl.HTTPPOST, [('filename', str(image)), ('uploadfile', (pycurl.FORM_FILE, str(image)))])
+		c.setopt(pycurl.HTTPPOST, [('filename', str(image)), ('uploadfile', (pycurl.FORM_FILE, str(image), pycurl.FORM_CONTENTTYPE, mimetype))])
 		c.setopt(pycurl.URL, str(POST_IMAGE_URL % self.token))
 		c.setopt(pycurl.COOKIE,'hasWarningUer=1;remember_act=bestgames_;hasWarningUer=1;remember_act=bestgames_' + self.cert +';' + self.slave_user + ';' + self.slave_sid + ';')
 		buff = cStringIO.StringIO()

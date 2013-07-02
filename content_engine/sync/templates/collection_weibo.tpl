@@ -7,7 +7,6 @@
 </head>
 <body>
     <div id="container">
-        <div class="head"></div>
         <div>
             <img src="{{ cover }}" class="cover" />
         </div>
@@ -32,7 +31,6 @@
             </div>
             {% endfor %}
         </div>
-        <div class="bottom"></div>
     </div>
 </body>
 </html>
