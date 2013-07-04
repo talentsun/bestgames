@@ -19,6 +19,6 @@ class UploadedFileForm(forms.ModelForm):
         # Construct the new name as <unique-hex>-<original>.<ext>
         today = time.strftime('%Y-%m-%d',time.localtime(time.time()))
         mimetype = data.name.split('.')[-1]
-        name = random.randint(10000, 20000) + '.' + mimetype
-        data.name = u'%s-%s' % (today, name)
+        filename = unicode(str(random.randint(10000, 20000)) + '.' + mimetype)
+        data.name = u'%s-%s' % (today, filename)
         return data

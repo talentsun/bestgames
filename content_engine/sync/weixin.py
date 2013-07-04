@@ -90,6 +90,7 @@ class WeixinClient(object):
 		        'png'  :  'image/png'
 		        }
 		filetype = str(image).split('.')[-1]
+		filetype = filetype.lower()
 		if filetype in mimetype_list.keys():
 			mimetype = mimetype_list[filetype]
 		c = pycurl.Curl()
