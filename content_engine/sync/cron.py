@@ -1,4 +1,5 @@
 #encoding=utf-8
+#! usr/local/bin/python
 import cronjobs
 import datetime
 from portal.models import Game, Redier, Collection, Problem, Entity, Weixin, Player, News, Puzzle
