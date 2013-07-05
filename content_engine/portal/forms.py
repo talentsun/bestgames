@@ -128,7 +128,7 @@ class PuzzleChoices(AutoModelSelect2MultipleField):
     search_fields = ['title__icontains',]
 
 class WeixinForm(EntityForm):
-    cover = forms.ImageField(label=u"封面图片", help_text=u"建议使用640x320大小的图片", widget=AjaxClearableFileInput(),required=False)
+    cover = forms.ImageField(label=u"封面图片", help_text=u"建议使用640x320大小的图片(如添加封面图片，“标题”和“封面故事”也必须填写内容)", widget=AjaxClearableFileInput(),required=False)
     games = GameChoices(label=u"游戏推荐", required = False)
     news = NewsChoices(label=u"游戏情报站", required = False)
     players = PlayerChoices(label=u"我是玩家", required = False)
