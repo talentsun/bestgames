@@ -18,7 +18,7 @@ DATABASES = {
         'NAME': 'content_engine',                      # Or path to database file if using sqlite3.
         'USER': 'root',                      # Not used with sqlite3.
         'PASSWORD': 'nameLR9969',                  # Not used with sqlite3.
-        'HOST': '118.244.225.222',                      # Set to empty string for localhost. Not used with sqlite3.
+        'HOST': '118.144.94.183',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '3306',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
@@ -59,7 +59,7 @@ USE_TZ = False
 # Example: "/home/media/media.lawrence.com/media/"
 MEDIA_ROOT = '/data/media/'
 
-GAME_PIC_ROOT = '/home/app_bestgames/content_engine/scrapy_itunes/'
+GAME_PIC_ROOT = '/opt/bestgames/content_engine/scrapy_itunes/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -195,7 +195,7 @@ LOGGING = {
         'default': {
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(PROJECT_ROOT + '/logs/','default.log'),
+            'filename': os.path.join('/data' + '/logs/','default.log'),
             'maxBytes': 1024*1024*5,
             'backupCount': 5,
             'formatter':'standard',
@@ -203,7 +203,7 @@ LOGGING = {
         'build_index': {
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(PROJECT_ROOT + '/logs/','build_index.log'),
+            'filename': os.path.join('/data' + '/logs/','build_index.log'),
             'maxBytes': 1024*1024*5,
             'backupCount': 5,
             'formatter':'standard',
@@ -211,7 +211,7 @@ LOGGING = {
         'search': {
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(PROJECT_ROOT + '/logs/','search.log'),
+            'filename': os.path.join('/data' + '/logs/','search.log'),
             'maxBytes': 1024*1024*5,
             'backupCount': 5,
             'formatter':'standard',
@@ -219,7 +219,7 @@ LOGGING = {
         'weixin': {
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(PROJECT_ROOT + '/logs/','weixin.log'),
+            'filename': os.path.join('/data' + '/logs/','weixin.log'),
             'maxBytes': 1024*1024*5,
             'backupCount': 5,
             'formatter':'standard',
@@ -227,7 +227,7 @@ LOGGING = {
         'sync': {
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(PROJECT_ROOT + '/logs/','sync.log'),
+            'filename': os.path.join('/data' + '/logs/','sync.log'),
             'maxBytes': 1024*1024*5,
             'backupCount': 5,
             'formatter':'standard',
