@@ -23,7 +23,7 @@ def Follow(request):
 
         uid = ops[0].opUid
         client = APIClient(BGApp.app_key, BGApp.app_secret)
-        client.set_access_token(BGApp.dev_token, time.time() + 90 * 24 *3600)
+        client.set_access_token(BGApp.weico_token, time.time() + 90 * 24 *3600)
         if not FriendShip.CheckFollow(client, uid, BGApp.dev_uid):
             uids.append(uid)
             ops[0].state = 2 #我们对其进行了求关注
