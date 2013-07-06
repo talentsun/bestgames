@@ -11,7 +11,7 @@ def get_media_upload_dir(instance,filename):
     #else:
     #    os.makedirs(settings.MEDIA_ROOT + today)
 
-    upload_dir = "%s/%s" % ('best_games/' + today, filename)
+    upload_dir = "%s/%s" % ('bestgames/' + today, filename)
     #print "Upload dir set to: %s" % upload_dir
     return upload_dir
 

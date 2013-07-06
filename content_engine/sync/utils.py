@@ -4,7 +4,7 @@ import os
 from content_engine import settings
 
 #FIXME
-MAKING_IMAGES_PATH = '/data/media/best_games/making_images/'
+MAKING_IMAGES_PATH = '/data/media/bestgames/making_images/'
 
 def make_image(content_id, content):
     folder_path = MAKING_IMAGES_PATH + time.strftime('%Y-%m-%d',time.localtime(time.time()))
