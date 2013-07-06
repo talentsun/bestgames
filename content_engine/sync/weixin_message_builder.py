@@ -44,7 +44,7 @@ def build_weixin_message(weixin):
     items = []
     index = 0
     message_title = ''
-    if weixin.cover._file is not None and weixin.title is not None and weixin.recommended_reason is not None:
+    if weixin.cover.name != u'' and weixin.title != u'' and weixin.recommended_reason != u'':
         message_title = weixin.title
         items.append(WeixinMessageItem(image=weixin.cover.path, title=weixin.title, digest=weixin.title, content=weixin.recommended_reason))
         index += 1
