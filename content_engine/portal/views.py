@@ -31,7 +31,7 @@ import django_tables2 as tables
 
 import re
 
-def direct(request, id = None):
+def direct(request, id=None):
     mobile_platform = 'Android|SymbianOS|iPhone|iPod|Windows Phone|BlackBerry|UCWEB'
     if id is not None:
         entity = get_object_or_404(Entity, id=id)
@@ -47,7 +47,7 @@ def direct(request, id = None):
             message_id = entity.message_id3
             if message_id == -1:
                 message_id =''
-            return redirect('http://www.bestgames7.com/?p=%s' %message_id)
+            return redirect('http://www.bestgames7.com/?p=%s' % message_id)
 
 def get_all_puzzle_user_day():
     data = DataPool(series=[
