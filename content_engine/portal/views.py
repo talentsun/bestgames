@@ -29,6 +29,26 @@ from analyse.models import *
 
 import django_tables2 as tables
 
+import re
+
+def direct(request, id = None):
+    mobile_platform = 'Android|SymbianOS|iPhone|iPod|Windows Phone|BlackBerry|UCWEB'
+    if id is not None:
+        entity = get_object_or_404(Entity, id=id)
+        type = entity.type
+        user_agent = request.META.get('HTTP_USER_AGENT', 'unknown')
+        is_mobile = re.search(mobile_platform, user_agent)
+        if is_mobile is not None:
+            if type == 1:
+                return redirect('http://cow.bestgames7.com/games/%s/preview' % entity.id)
+            elif type == 7:
+                return redirect('http://cow.bestgames7.com/news/%s/preview' % entity.id)
+        else:
+            message_id = entity.message_id3
+            if message_id == -1:
+                message_id =''
+            return redirect('http://www.bestgames7.com/?p=%s' %message_id)
+
 def get_all_puzzle_user_day():
     data = DataPool(series=[
         {
@@ -55,7 +75,7 @@ def get_all_puzzle_user_day():
             'xAxis': {
                 'title': {
                     'text': u'日期'}},
-            'colors':['#2f7ed8', 
+            'colors':['#2f7ed8',
                '#AA4643']})
     return cht
 
@@ -85,7 +105,7 @@ def get_delta_puzzle_user_day():
             'xAxis': {
                 'title': {
                     'text': u'日期'}},
-            'colors':['#2f7ed8', 
+            'colors':['#2f7ed8',
                '#AA4643']})
     return cht
 def get_puzzle_user_puzzle():
@@ -114,11 +134,11 @@ def get_puzzle_user_puzzle():
             'xAxis': {
                 'title': {
                     'text': u'题目'}},
-            'colors':['#2f7ed8', 
+            'colors':['#2f7ed8',
                '#AA4643']})
     return cht
 
- 
+
 def _redirect_back(request):
     next_url = request.GET.get('next', None)
     if next_url is None or len(next_url) == 0:
@@ -228,7 +248,7 @@ def index(request):
     userAnswer.paginate(page=request.GET.get("ua-page", 1), per_page=10)
     userAnswer.data.verbose_name = u"用户答题记录"
 
-    all_puzzle_chart = get_all_puzzle_user_day()    
+    all_puzzle_chart = get_all_puzzle_user_day()
     delta_puzzle_chart = get_delta_puzzle_user_day()
     puzzle_chart = get_puzzle_user_puzzle()
 

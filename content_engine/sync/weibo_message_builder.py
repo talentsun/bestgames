@@ -30,10 +30,15 @@ def build_game_message(game):
         'screenshot_path_3' : game.screenshot_path_3.path,
         'screenshot_path_4' : game.screenshot_path_4.path
         }))
-    if game.video_url is not None and game.video_url != '':
-        weibo_status = _shorten_text(game.recommended_reason, 113) + game.video_url
+    entity = Entity.objects.get(id=game.id)
+    if entity.status3 == 2:
+        message_link = u'【下载】' + 'http://cow.bestgames7.com/direct/%s/' % game.id
     else:
-        weibo_status = _shorten_text(game.recommended_reason, 133)
+        message_link = ''
+    if game.video_url is not None and game.video_url != '':
+        weibo_status = _shorten_text(game.recommended_reason, 113) + message_link +' '+ u'【视频】' + game.video_url
+    else:
+        weibo_status = _shorten_text(game.recommended_reason, 133) + message_link
     return WeiboMessage(u'#游戏推荐# ' + weibo_status, make_image(game.id, content), game.id)
 
 def build_puzzle_message(puzzle):
