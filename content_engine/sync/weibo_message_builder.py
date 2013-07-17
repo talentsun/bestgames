@@ -36,9 +36,9 @@ def build_game_message(game):
     else:
         message_link = ''
     if game.video_url is not None and game.video_url != '':
-        weibo_status = _shorten_text(game.recommended_reason, 113) + message_link +' '+ u'【视频】' + game.video_url
+        weibo_status = _shorten_text(game.recommended_reason, 85) + message_link +' '+ u'【视频】' + game.video_url
     else:
-        weibo_status = _shorten_text(game.recommended_reason, 133) + message_link
+        weibo_status = _shorten_text(game.recommended_reason, 110) + message_link
     return WeiboMessage(u'#游戏推荐# ' + weibo_status, make_image(game.id, content), game.id)
 
 def build_puzzle_message(puzzle):
