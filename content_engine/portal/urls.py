@@ -41,5 +41,5 @@ urlpatterns = patterns('portal.views',
     url(r'^dialogs/(?P<dialog_id>\d+)/edit','add_edit_dialog'),
     url(r'^dialogs/(?P<dialog_id>\d+)/delete','delete_dialog'),
     url(r'^logout', 'logout'),
-    url(r'^direct/(?P<id>\d+)/$', 'direct'),
+    url(r'^d/(?P<id>\d+)/$', 'd'),
 )
