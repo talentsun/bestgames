@@ -6,8 +6,8 @@ sys.setdefaultencoding('utf-8')
 import string
 from wordpress_xmlrpc import WordPressPost
 from content_engine import settings
-import re
 from django.template.loader import render_to_string
+from utils import convert_youku_video_url
 
 class WebMessage(object):
 	def __init__(self, entity_id, post):
@@ -20,13 +20,6 @@ def _normalize_content(content):
     if url_pos != -1:
         normalized_content = normalized_content[:url_pos]
     return normalized_content
-
-def _convert_youku_video_url(origin_url):
-	match = re.search('id_(\w+)\.html', origin_url)
-	if match is not None:
-		return 'http://player.youku.com/embed/%s' % match.group(1)
-	else:
-		return origin_url
 
 def _get_game_tags(game):
 	tags = []
@@ -54,7 +47,7 @@ def build_game_message(game):
 
 	converted_video_url = None
 	if game.video_url is not None:
-		converted_video_url = _convert_youku_video_url(game.video_url)
+		converted_video_url = convert_youku_video_url(game.video_url)
 	post.content = str(render_to_string('game_web.tpl', {
 		'content' : _normalize_content(game.recommended_reason),
 		'icon' : settings.MEDIA_URL + game.icon.name,
@@ -88,7 +81,7 @@ def build_news_message(news):
 
 	converted_video_url = None
 	if news.video_url is not None:
-		converted_video_url = _convert_youku_video_url(news.video_url)
+		converted_video_url = convert_youku_video_url(news.video_url)
 
 	content_items = {'content' : _normalize_content(news.recommended_reason)}
 	if news.screenshot_path_1:

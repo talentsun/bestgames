@@ -29,7 +29,9 @@ from analyse.models import *
 
 import django_tables2 as tables
 
-import re, copy
+import re
+import copy
+from sync.utils import convert_youku_video_url
 
 def d(request, id=None):
     mobile_platform = 'Android|SymbianOS|iPhone|iPod|Windows Phone|BlackBerry|UCWEB'
@@ -48,13 +50,6 @@ def d(request, id=None):
             if message_id == -1:
                 message_id =''
             return redirect('http://www.bestgames7.com/?p=%s' % message_id)
-
-def _convert_youku_video_url(origin_url):
-    match = re.search('id_(\w+)\.html', origin_url)
-    if match is not None:
-        return 'http://player.youku.com/embed/%s' % match.group(1)
-    else:
-        return origin_url
 
 def get_all_puzzle_user_day():
     data = DataPool(series=[
@@ -516,7 +511,7 @@ def preview_game(request, game_id=None):
     game_copy = copy.deepcopy(game)
     converted_video_url = None
     if game.video_url is not None:
-        converted_video_url = _convert_youku_video_url(game.video_url)
+        converted_video_url = convert_youku_video_url(game.video_url)
     game_copy.video_url = converted_video_url
     return render(request, 'preview_game.html', {'game' : game_copy})
 
@@ -625,7 +620,7 @@ def preview_news(request, news_id=None):
     news_copy = copy.deepcopy(news)
     converted_video_url = None
     if news.video_url is not None:
-        converted_video_url = _convert_youku_video_url(news.video_url)
+        converted_video_url = convert_youku_video_url(news.video_url)
     news_copy.video_url = converted_video_url
     return render(request, 'preview_news.html', { 'news' : news_copy })
 
