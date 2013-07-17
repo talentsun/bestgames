@@ -31,7 +31,7 @@ import django_tables2 as tables
 
 import re
 
-def direct(request, id=None):
+def d(request, id=None):
     mobile_platform = 'Android|SymbianOS|iPhone|iPod|Windows Phone|BlackBerry|UCWEB'
     if id is not None:
         entity = get_object_or_404(Entity, id=id)
