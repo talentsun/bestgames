@@ -32,7 +32,7 @@ def build_game_message(game):
         }))
     entity = Entity.objects.get(id=game.id)
     if entity.status3 == 2:
-        message_link = u'【下载】' + 'http://cow.bestgames7.com/direct/%s/' % game.id
+        message_link = u'【下载】' + 'http://cow.bestgames7.com/d/%s/' % game.id
     else:
         message_link = ''
     if game.video_url is not None and game.video_url != '':
