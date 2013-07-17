@@ -39,7 +39,7 @@ def _normalize_content(content):
     normalized_content = content
     if url_pos != -1:
         normalized_content = normalized_content[5][:url_pos]
-    return normalized_content + u'<br><br><font color="gray">回复游戏名获得该游戏的下载地址</font>'
+    return normalized_content + u'<br><br><font color="gray">点击“阅读原文”下载游戏</font>'
 
 def build_weixin_message(weixin):
     items = []
@@ -53,7 +53,7 @@ def build_weixin_message(weixin):
         title = u'游戏情报站  -  %s' % news.brief_comment
         if index == 0:
             message_title = title
-        items.append(WeixinMessageItem(image=news.screenshot_path_1.path, title=title, digest=title, content=news.recommended_reason, sourceurl=u'http://cow.bestgames7.com/news/%s/preview' % news.id))
+        items.append(WeixinMessageItem(image=news.screenshot_path_1.path, title=title, digest=title, content=news.recommended_reason + u'<br><br><font color="gray">点击“阅读原文”查看更多</font>', sourceurl=u'http://cow.bestgames7.com/news/%s/preview' % news.id))
         index += 1
     for game in weixin.games.all():
         title = u'%s  -  %s' % (game.name, game.brief_comment)
