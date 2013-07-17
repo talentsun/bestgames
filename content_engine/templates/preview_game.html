@@ -53,6 +53,10 @@
     <img id="screenshot_3" src="http://weixin.bestgames7.com/media/{{game.screenshot_path_3}}" alt="">
     <img id="screenshot_4" src="http://weixin.bestgames7.com/media/{{game.screenshot_path_4}}" alt="">
   </div>
+  {% if game.video_url %}
+  <br />
+  <iframe height=498 width=510 src="{{ game.video_url }}" frameborder=0 allowfullscreen></iframe>
+  {% endif %}
   <p style="margin:10px 0;">{{game.recommended_reason|del_link}}</p>
   <div style="margin:20px 0;text-align:center">
     {% if game.android_download_url %}
