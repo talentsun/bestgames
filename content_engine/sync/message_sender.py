@@ -55,4 +55,5 @@ class MessageSender(object):
 			result = 2
 
 		logger.info('send web result: %s' % result)
-		Entity.objects.filter(id=web_message.entity_id).update(status3=result)
+		Entity.objects.filter(id=web_message.entity_id).update(status3=result, message_id3=post_id)
+

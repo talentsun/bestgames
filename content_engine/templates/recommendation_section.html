@@ -7,15 +7,15 @@
 	<tbody>
     	<tr><th>{{ form.presenter.label }}</th><td>{{ form.presenter }}{{ form.presenter.errors }}</td></tr>
         <tr><th>{{ form.brief_comment.label }}</th><td>{{ form.brief_comment }}<span class="help-inline">{{ form.brief_comment.help_text }}</span>{{ form.brief_comment.errors }}</td></tr>
-        <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.simplyCountable.js"></script> 
+        <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.simplyCountable.js"></script>
         <script type="text/javascript">
             $(document).ready(function(){
                 $('#id_recommended_reason').simplyCountable({
-                    maxCount : 150
+                    maxCount : 120
                 });
             });
         </script>
-        <tr><th>{{ form.recommended_reason.label }}</th><td>{{ form.recommended_reason }}<span class="help-inline">{{ form.recommended_reason.help_text }}</span><p style="margin-top:8px;">你还可以输入 <span id="counter" class="safe">150</span> 字（包含下载链接150字以内，不包含下载链接120字以内）。</p>{{ form.recommended_reason.errors }}</td></tr>
+        <tr><th>{{ form.recommended_reason.label }}</th><td>{{ form.recommended_reason }}<span class="help-inline">{{ form.recommended_reason.help_text }}</span><p style="margin-top:8px;">你还可以输入 <span id="counter" class="safe">120</span> 字。</p>{{ form.recommended_reason.errors }}</td></tr>
         {% if form.sync_timestamp1 %}
             <tr><th>{{ form.sync_timestamp1.label }}</th><td>{{ form.sync_timestamp1 }}{{ form.sync_timestamp1.errors }} </td></tr>
         {% endif %}
