@@ -71,7 +71,7 @@
   </div>
   {% if news.video_url %}
   <br />
-  <iframe height=498 width=510 src="{{ news.video_url }}" frameborder=0 allowfullscreen></iframe>
+  <iframe style="padding:10px 0;" src="{{ news.video_url }}" frameborder=0 allowfullscreen></iframe>
   {% endif %}
 <p style="margin:10px 0;">{{news.recommended_reason|del_link}}</p>
 </body>
