@@ -69,5 +69,9 @@
     <img id="screenshot_4" src="http://weixin.bestgames7.com/media/{{news.screenshot_path_4}}" alt="">
     {% endif %}
   </div>
+  {% if news.video_url %}
+  <br />
+  <iframe height=498 width=510 src="{{ news.video_url }}" frameborder=0 allowfullscreen></iframe>
+  {% endif %}
 <p style="margin:10px 0;">{{news.recommended_reason|del_link}}</p>
 </body>

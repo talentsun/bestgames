@@ -30,6 +30,8 @@ from analyse.models import *
 import django_tables2 as tables
 
 import re
+import copy
+from sync.utils import convert_youku_video_url
 
 def d(request, id=None):
     mobile_platform = 'Android|SymbianOS|iPhone|iPod|Windows Phone|BlackBerry|UCWEB'
@@ -41,8 +43,8 @@ def d(request, id=None):
         if is_mobile is not None:
             if type == 1:
                 return redirect('http://cow.bestgames7.com/games/%s/preview' % entity.id)
-            elif type == 7:
-                return redirect('http://cow.bestgames7.com/news/%s/preview' % entity.id)
+            else:
+                return redirect('http://www.bestgames7.com/')
         else:
             message_id = entity.message_id3
             if message_id == -1:
@@ -506,7 +508,12 @@ def delete_game(request, game_id=None):
 
 def preview_game(request, game_id=None):
     game = get_object_or_404(Game, entity_ptr_id=game_id)
-    return render(request, 'preview_game.html', {'game' : game})
+    game_copy = copy.deepcopy(game)
+    converted_video_url = None
+    if game.video_url is not None:
+        converted_video_url = convert_youku_video_url(game.video_url)
+    game_copy.video_url = converted_video_url
+    return render(request, 'preview_game.html', {'game' : game_copy})
 
 @login_required
 def add_edit_player(request, player_id=None):
@@ -610,7 +617,12 @@ def delete_news(request, news_id=None):
 
 def preview_news(request, news_id=None):
     news = get_object_or_404(News, entity_ptr_id=news_id)
-    return render(request, 'preview_news.html', { 'news' : news })
+    news_copy = copy.deepcopy(news)
+    converted_video_url = None
+    if news.video_url is not None:
+        converted_video_url = convert_youku_video_url(news.video_url)
+    news_copy.video_url = converted_video_url
+    return render(request, 'preview_news.html', { 'news' : news_copy })
 
 @login_required
 def add_edit_puzzle(request, puzzle_id=None):

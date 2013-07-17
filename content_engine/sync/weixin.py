@@ -122,7 +122,10 @@ class WeixinClient(object):
 		index = 0
 		post_params = 'error=false&count=' + str(len(weixin_message.items)) + '&AppMsgId='
 		for item in weixin_message.items:
-			post_params = post_params + '&title' + str(index) + '=' + str(item.title) + '&digest' + str(index) + '=' + str(item.digest) + '&content' + str(index) + '=' + str(item.content) + '&fileid' + str(index) + '=' + str(item.image_id)
+			if item.sourceurl is not None:
+				post_params = post_params + '&title' + str(index) + '=' + str(item.title) + '&digest' + str(index) + '=' + str(item.digest) + '&content' + str(index) + '=' + str(item.content) + '&fileid' + str(index) + '=' + str(item.image_id) + '&sourceurl' + str(index) + '=' + str(item.sourceurl)
+			else:
+				post_params = post_params + '&title' + str(index) + '=' + str(item.title) + '&digest' + str(index) + '=' + str(item.digest) + '&content' + str(index) + '=' + str(item.content) + '&fileid' + str(index) + '=' + str(item.image_id)
 			index += 1
 		post_params = post_params + '&ajax=1';
 

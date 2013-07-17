@@ -1,6 +1,7 @@
 #encoding=utf-8
 import time
 import os
+import re
 from content_engine import settings
 
 #FIXME
@@ -24,3 +25,10 @@ def make_image(content_id, content):
     os.system(command)
 
     return output_file_path
+
+def convert_youku_video_url(origin_url):
+    match = re.search('id_(\w+)\.html', origin_url)
+    if match is not None:
+        return 'http://player.youku.com/embed/%s' % match.group(1)
+    else:
+        return origin_url
