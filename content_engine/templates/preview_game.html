@@ -17,7 +17,11 @@
     }
 
     .portrait .screenshots img:nth-child(even){
-      margin-left: -4px;
+        margin-left: -4px;
+    }
+
+    .video iframe{
+        width: 100%;
     }
   </style>
   <script>
@@ -27,9 +31,8 @@
       var image3 = document.getElementById("screenshot_3");
       var image4 = document.getElementById("screenshot_4");
       var video = document.getElementById("video");
-      width = document.body.clientWidth
-      video.style.width = (width - 28) + "px"
-      video.style.height = width * 0.6 + "px"
+      width = document.body.clientWidth;
+      video.style.height = width * 0.6 + "px";
       var img1 = new Image();
       var img2 = new Image();
       var img3 = new Image();
@@ -58,8 +61,10 @@
     <img id="screenshot_4" src="http://weixin.bestgames7.com/media/{{game.screenshot_path_4}}" alt="">
   </div>
   {% if game.video_url %}
-  <br />
-  <iframe id="video" style="padding:10px 0;" src="{{ game.video_url }}" frameborder=0 allowfullscreen></iframe>
+  <div class="video">
+    <br />
+    <iframe id="video" style="padding:10px 0;" src="{{ game.video_url }}" frameborder=0 allowfullscreen></iframe>
+  </div>
   {% endif %}
   <p style="margin:10px 0;">{{game.recommended_reason|del_link}}</p>
   <div style="margin:20px 0;text-align:center">
