@@ -43,6 +43,8 @@ def d(request, id=None):
         if is_mobile is not None:
             if type == 1:
                 return redirect('http://cow.bestgames7.com/games/%s/preview' % entity.id)
+            elif type == 7:
+                return redirect('http://cow.bestgames7.com/news/%s/preview' % entity.id)
             else:
                 return redirect('http://www.bestgames7.com/')
         else:
