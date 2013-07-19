@@ -402,7 +402,8 @@ def delete_collection(request, collection_id=None):
 
 def preview_collection(request, collection_id=None):
     collection = get_object_or_404(Collection, entity_ptr_id=collection_id)
-    return render(request, 'preview_collection.html', { 'collection' : collection })
+    games = collection.games.all()
+    return render(request, 'preview_collection.html', { 'collection' : collection, 'games' : games})
 
 @login_required
 def add_edit_redier(request, redier_id=None):
