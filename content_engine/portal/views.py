@@ -45,6 +45,8 @@ def d(request, id=None):
                 return redirect('http://cow.bestgames7.com/games/%s/preview' % entity.id)
             elif type == 7:
                 return redirect('http://cow.bestgames7.com/news/%s/preview' % entity.id)
+            elif type == 3:
+                return redirect('http://cow.bestgames7.com/collections/%s/preview' % entity.id)
             else:
                 return redirect('http://www.bestgames7.com/')
         else:
