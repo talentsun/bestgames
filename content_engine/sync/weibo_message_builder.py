@@ -84,7 +84,12 @@ def build_collection_message(collection):
         'cover' : collection.cover.path,
         'title' : collection.title
         }))
-    return WeiboMessage(u'#游戏合集# ' + _shorten_text(collection.recommended_reason, 133), make_image(collection.id, content), collection.id)
+    entity = Entity.objects.get(id=collection.id)
+    if entity.status3 == 2:
+        message_link = u'【下载】' + 'http://cow.bestgames7.com/d/%s/' % collection.id
+    else:
+        message_link = ''
+    return WeiboMessage(u'#游戏合集# ' + _shorten_text(collection.recommended_reason, 110) + message_link, make_image(collection.id, content), collection.id)
 
 def build_problem_message(problem):
     content = str(render_to_string('problem_weibo.tpl', {
