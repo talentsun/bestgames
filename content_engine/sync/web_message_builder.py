@@ -55,6 +55,8 @@ def build_game_message(game):
 		'size' : game.size,
 		'platforms' : _get_game_platforms(game),
 		'id' : game.id,
+		'android_download_url' : game.android_download_url,
+		'iOS_download_url' : game.iOS_download_url,
 		'screenshot_path_1' : settings.MEDIA_URL + game.screenshot_path_1.name,
 		'screenshot_path_2' : settings.MEDIA_URL + game.screenshot_path_2.name,
 		'screenshot_path_3' : settings.MEDIA_URL + game.screenshot_path_3.name,
@@ -121,6 +123,8 @@ def build_collection_message(collection):
 			'size' : game.size,
 			'platforms' : _get_game_platforms(game),
 			'id' : game.id,
+			'android_download_url' : game.android_download_url,
+			'iOS_download_url' : game.iOS_download_url,
 			'rating' : game.rating,
 			'recommended_reason' : _normalize_content(game.recommended_reason)
 			})
