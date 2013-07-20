@@ -19,14 +19,14 @@
   <div class='shortcode col4-1 first'><img src="{{ MEDIA_URL }}{{ game.icon }}" class="img-rounded" /></div>
   <div class='shortcode col4-2'><p>分类：{{ game.category }}</p><p>大小：{{ game.size }}</p><p>推荐指数：{{ game.rating|rate_stars }}</p></div>
   {% if game.android_download_url %}
-  <div sytle="float: right"><a class="btn" href="{{game.android_download_url}}" style="margin-top:10px;"><i class="icon-download-alt"></i>下载安卓版</a></div>
+  <div style="clear:both;padding-top:8px;"><a class="btn" href="{{game.android_download_url}}" style="margin-top:10px;"><i class="icon-download-alt"></i>下载安卓版</a>
   {% else %}
-  <div sytle="float: right"><a class="btn disabled" href="#" style="margin-top:10px;"><i class="icon-download-alt icon-white"></i>无安卓版</a></div>
+  <div style="clear:both;padding-top:8px;"><a class="btn disabled" href="#" style="margin-top:10px;"><i class="icon-download-alt icon-white"></i>无安卓版</a>
   {% endif %}
   {% if game.iOS_download_url %}
-  <div sytle="float: right"><a class="btn" href="{{game.iOS_download_url}}" style="margin-top:10px;"><i class="icon-download-alt"></i>下载苹果版</a></div>
+  <a class="btn" href="{{game.iOS_download_url}}" style="margin-top:10px;"><i class="icon-download-alt"></i>下载苹果版</a></div>
   {% else %}
-  <div sytle="float: right"><a class="btn disabled" href="#" sytle="margin-top:10px;"><i class="icon-download-alt icon-white"></i>无苹果版</a></div>
+  <a class="btn disabled" href="#" sytle="margin-top:10px;"><i class="icon-download-alt icon-white"></i>无苹果版</a></div>
   {% endif %}
 </div>
 {% endfor %}
