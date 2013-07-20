@@ -1,3 +1,4 @@
+#encoding=utf-8
 from django import template
 from django.template.defaultfilters import stringfilter
 
@@ -11,3 +12,10 @@ def del_link(value):
 		if index != -1:
 			return value[:index]
 	return value
+
+@register.filter
+def rate_stars(value):
+	interger_part = value / 2
+	decimal_part = value % 2
+	stars = u'★' * interger_part + u'☆' * decimal_part
+	return stars

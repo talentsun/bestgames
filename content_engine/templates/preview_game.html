@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
   <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.min.css"/>
   <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/main.css"/>
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/shortcodes.css"/>
   <style type="text/css">
     .portrait .screenshots img{
         width: 50%;
@@ -14,14 +15,19 @@
 
     .landscape .screenshots img{
         width: 100%;
+        margin-top:10px;
     }
 
     .portrait .screenshots img:nth-child(even){
-        margin-left: -4px;
+      margin-left: -4px;
     }
 
     .video iframe{
-        width: 100%;
+      width: 100%;
+    }
+    .items p{
+      float: left;
+      margin-left: 10px;
     }
   </style>
   <script>
@@ -54,19 +60,27 @@
 </head>
 <body onload="load()" id="container" style="padding:10px;">
   <h4>{{game.brief_comment}} - {{game.name}}</h4>
-  <div class="screenshots">
-    <img id="screenshot_1" src="http://weixin.bestgames7.com/media/{{game.screenshot_path_1}}" alt="">
-    <img id="screenshot_2" src="http://weixin.bestgames7.com/media/{{game.screenshot_path_2}}" alt="">
-    <img id="screenshot_3" src="http://weixin.bestgames7.com/media/{{game.screenshot_path_3}}" alt="">
-    <img id="screenshot_4" src="http://weixin.bestgames7.com/media/{{game.screenshot_path_4}}" alt="">
+  <div class="shortcode clearfix box rounded shadow">
+    <p>游戏截图</p>
+    <div class="screenshots">
+      <img id="screenshot_1" src="http://weixin.bestgames7.com/media/{{game.screenshot_path_1}}" alt="">
+      <img id="screenshot_2" src="http://weixin.bestgames7.com/media/{{game.screenshot_path_2}}" alt="">
+      <img id="screenshot_3" src="http://weixin.bestgames7.com/media/{{game.screenshot_path_3}}" alt="">
+      <img id="screenshot_4" src="http://weixin.bestgames7.com/media/{{game.screenshot_path_4}}" alt="">
+    </div>
   </div>
   {% if game.video_url %}
-  <div class="video">
-    <br />
-    <iframe id="video" style="padding:10px 0;" src="{{ game.video_url }}" frameborder=0 allowfullscreen></iframe>
+  <div class="shortcode clearfix box rounded shadow">
+    <p>游戏视频</p>
+    <div class="video">
+      <iframe id="video" style="padding:10px 0;" src="{{ game.video_url }}" frameborder=0 allowfullscreen></iframe>
+    </div>
   </div>
   {% endif %}
-  <p style="margin:10px 0;">{{game.recommended_reason|del_link}}</p>
+  <div class="shortcode clearfix box rounded shadow">
+    <p style="margin-left:10px;">{{game.recommended_reason|del_link}}</p>
+    <div class="items"><p><b>分类：</b>{{game.category.name}}</p><p><b>大小：</b> {{game.size}}</p><p><b>推荐指数：</b> {{game.rating|rate_stars}}</p></div>
+  </div>
   <div style="margin:20px 0;text-align:center">
     {% if game.android_download_url %}
       <a class="btn btn-large" href="{{game.android_download_url}}" style="margin-right:10px;">下载安卓版</a>

@@ -34,12 +34,16 @@ def _build_game_image(game):
         }))
     return make_image(game.id, content)
 
-def _normalize_content(content):
+def _normalize_content(game):
+    content = game.recommended_reason
     url_pos = content.find('http://')
     normalized_content = content
     if url_pos != -1:
         normalized_content = normalized_content[5][:url_pos]
-    return normalized_content + u'<br><br><font color="gray">点击“阅读原文”下载游戏</font>'
+    interger_part = game.rating / 2
+    decimal_part = game.rating % 2
+    stars = u'★' * interger_part + u'☆' * decimal_part
+    return normalized_content + u'<br><br>推荐指数: %s<br>分类: %s<br>大小: %s<br><br><font color="gray">点击“阅读原文”下载游戏</font>' % (stars, game.category.name, game.size)
 
 def build_weixin_message(weixin):
     items = []
@@ -60,9 +64,9 @@ def build_weixin_message(weixin):
         if index == 0:
             message_title = title
         if index > 0:
-            items.append(WeixinMessageItem(image=game.icon.path, title=title, digest=title, content=_normalize_content(game.recommended_reason), sourceurl=u'http://cow.bestgames7.com/d/%s/' % game.id))
+            items.append(WeixinMessageItem(image=game.icon.path, title=title, digest=title, content=_normalize_content(game), sourceurl=u'http://cow.bestgames7.com/d/%s/' % game.id))
         else:
-            items.append(WeixinMessageItem(image=_build_game_image(game), title=title, digest=title, content=_normalize_content(game.recommended_reason), sourceurl=u'http://cow.bestgames7.com/d/%s/' % game.id))
+            items.append(WeixinMessageItem(image=_build_game_image(game), title=title, digest=title, content=_normalize_content(game), sourceurl=u'http://cow.bestgames7.com/d/%s/' % game.id))
         index += 1
     for player in weixin.players.all():
         title = u'我是玩家  -  %s' % player.brief_comment

@@ -13,24 +13,21 @@
   <h4>游戏合集之{{ collection.title }}</h4>
   <img src="http://weixin.bestgames7.com/media/{{ collection.cover }}" alt="" style="width:100%">
   <p style="margin:10px 0;">游戏合集{{collection.recommended_reason|del_link}}</p>
-{% for game in games %}
+  {% for game in games %}
 <div class="shortcode clearfix box rounded shadow">
   <h3 style="padding-bottom:4px;">{{ forloop.counter }}. {{ game.name }} - {{ game.brief_comment}}</h3>
   <div class='shortcode col4-1 first'><img src="{{ MEDIA_URL }}{{ game.icon }}" class="img-rounded" /></div>
-  <div class='shortcode col4-2'><p>分类：{{ game.category }}</p><p>大小：{{ game.size }}</p></div>
+  <div class='shortcode col4-2'><p>分类：{{ game.category }}</p><p>大小：{{ game.size }}</p><p>推荐指数：{{ game.rating|rate_stars }}</p></div>
   {% if game.android_download_url %}
-  <div class='shortcode col4-1'><a class="btn" href="{{game.android_download_url}}" style="margin-top:10px;"><i class="icon-download-alt"></i>下载安卓版</a></div>
+  <div sytle="float: right"><a class="btn" href="{{game.android_download_url}}" style="margin-top:10px;"><i class="icon-download-alt"></i>下载安卓版</a></div>
   {% else %}
-  <div class='shortcode col4-1'><a class="btn disabled" href="#" style="margin-top:10px;"><i class="icon-download-alt icon-white"></i>无安卓版</a></div>
+  <div sytle="float: right"><a class="btn disabled" href="#" style="margin-top:10px;"><i class="icon-download-alt icon-white"></i>无安卓版</a></div>
   {% endif %}
   {% if game.iOS_download_url %}
-  <div class='shortcode col4-1'><a class="btn" href="{{game.iOS_download_url}}" style="margin-top:10px;"><i class="icon-download-alt"></i>下载苹果版</a></div>
+  <div sytle="float: right"><a class="btn" href="{{game.iOS_download_url}}" style="margin-top:10px;"><i class="icon-download-alt"></i>下载苹果版</a></div>
   {% else %}
-  <div class='shortcode col4-1'><a class="btn disabled" href="#" sytle="margin-top:10px;"><i class="icon-download-alt icon-white"></i>无苹果版</a></div>
+  <div sytle="float: right"><a class="btn disabled" href="#" sytle="margin-top:10px;"><i class="icon-download-alt icon-white"></i>无苹果版</a></div>
   {% endif %}
-  <div class='shortcode col1-4'>
-  <div class="rating rating-{{ game.rating }}"></div>
-  </div>
 </div>
 {% endfor %}
 </body>
