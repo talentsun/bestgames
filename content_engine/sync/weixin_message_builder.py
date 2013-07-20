@@ -43,7 +43,7 @@ def _normalize_content(game):
     integer_part = game.rating / 2
     decimal_part = game.rating % 2
     stars = u'★' * integer_part + u'☆' * decimal_part
-    return normalized_content + u'<br><br>推荐指数: %s<br>分类: %s<br>大小: %s<br><br><font color="gray">点击“阅读原文”下载游戏</font>' % (stars, game.category.name, game.size)
+    return u'推荐指数: %s<br>分类: %s<br>大小: %s<br><br>' % (stars, game.category.name, game.size) + normalized_content + u'<br><br><font color="gray">点击“阅读原文”下载游戏</font>'
 
 def build_weixin_message(weixin):
     items = []
