@@ -40,9 +40,9 @@ def _normalize_content(game):
     normalized_content = content
     if url_pos != -1:
         normalized_content = normalized_content[5][:url_pos]
-    interger_part = game.rating / 2
+    integer_part = game.rating / 2
     decimal_part = game.rating % 2
-    stars = u'★' * interger_part + u'☆' * decimal_part
+    stars = u'★' * integer_part + u'☆' * decimal_part
     return normalized_content + u'<br><br>推荐指数: %s<br>分类: %s<br>大小: %s<br><br><font color="gray">点击“阅读原文”下载游戏</font>' % (stars, game.category.name, game.size)
 
 def build_weixin_message(weixin):

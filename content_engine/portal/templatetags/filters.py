@@ -15,7 +15,7 @@ def del_link(value):
 
 @register.filter
 def rate_stars(value):
-	interger_part = value / 2
+	integer_part = value / 2
 	decimal_part = value % 2
-	stars = u'★' * interger_part + u'☆' * decimal_part
+	stars = u'★' * integer_part + u'☆' * decimal_part
 	return stars
