@@ -7,6 +7,7 @@ import shutil
 from utils import make_image
 import os
 from django.template.loader import render_to_string
+from utils import make_gif
 
 current_file_dir = os.path.split(os.path.realpath(__file__))[0]
 
@@ -57,16 +58,16 @@ def build_weixin_message(weixin):
         title = u'游戏情报站  -  %s' % news.brief_comment
         if index == 0:
             message_title = title
-        items.append(WeixinMessageItem(image=news.screenshot_path_1.path, title=title, digest=title, content=news.recommended_reason + u'<br><br><font color="gray">点击“阅读原文”查看更多</font>', sourceurl=u'http://cow.bestgames7.com/d/%s/' % news.id))
+        items.append(WeixinMessageItem(image=make_gif(news), title=title, digest=title, content=news.recommended_reason + u'<br><br><font color="gray">点击“阅读原文”查看更多</font>', sourceurl=u'http://cow.bestgames7.com/d/%s/' % news.id))
         index += 1
     for game in weixin.games.all():
         title = u'%s  -  %s' % (game.name, game.brief_comment)
         if index == 0:
             message_title = title
         if index > 0:
-            items.append(WeixinMessageItem(image=game.icon.path, title=title, digest=title, content=_normalize_content(game), sourceurl=u'http://cow.bestgames7.com/d/%s/' % game.id))
+            items.append(WeixinMessageItem(image=make_gif(game), title=title, digest=title, content=_normalize_content(game), sourceurl=u'http://cow.bestgames7.com/d/%s/' % game.id))
         else:
-            items.append(WeixinMessageItem(image=_build_game_image(game), title=title, digest=title, content=_normalize_content(game), sourceurl=u'http://cow.bestgames7.com/d/%s/' % game.id))
+            items.append(WeixinMessageItem(image=make_gif(game), title=title, digest=title, content=_normalize_content(game), sourceurl=u'http://cow.bestgames7.com/d/%s/' % game.id))
         index += 1
     for player in weixin.players.all():
         title = u'我是玩家  -  %s' % player.brief_comment
