@@ -33,14 +33,14 @@ body{
 
 .portrait2 .bottom{
 	background: #e96b55 center url(../img/bottom.png) no-repeat;
-	width: 480px;
+	width: 100%;
 	height: 350px;
 	margin-top: -2px;
 }
 
 .portrait3 .bottom{
 	background: #e96b55 center url(../img/bottom.png) no-repeat;
-	width: 480px;
+	width: 100%;
 	height: 350px;
 	margin-top: -2px;
 }
