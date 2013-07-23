@@ -21,6 +21,7 @@
             <img src="{{ screenshot_path_4 }}" id="screenshot_4" />
             {% endif %}
         </div>
+        <div class="bottom"></div>
     </div>
 </body>
 </html>

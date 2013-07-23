@@ -22,7 +22,7 @@ if (system.args.length < 3 || system.args.length > 5) {
             console.log('Unable to load the address!');
             phantom.exit();
         } else {
-            page.viewportSize = {width: 0, height: 0};
+            page.viewportSize = {width: 480, height: 0};
             window.setTimeout(function () {
                 page.render(output);
                 phantom.exit();

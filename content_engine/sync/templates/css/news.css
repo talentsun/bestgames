@@ -1,41 +1,61 @@
 body{
     background-color: #eee;
     color: #444;
-}
-
-img{
-	padding: 0 0;
-    margin: 1px 1px;
+    margin: 0;
 }
 
 #container.portrait1{
 	width: 480px;
-	margin: 0 0;
-	position: relative;
 }
 
 #container.portrait2{
-	width: 960px;
-	margin: 0 0;
-	position: relative;
+	width: 480px;
 }
 
 #container.portraint3{
 	width: 480px;
-	margin: 0 0;
-	position: relative;
 }
 
 #container.portraint4{
 	width: 960px;
-	margin: 0;
-	position: relative;
 }
 
 #container.landscape{
 	width: 480px;
-	margin: 0 0;
-	position: relative;
+}
+
+.portrait1 .bottom{
+	background: #e96b55 center url(../img/bottom.png) no-repeat;
+	width: 100%;
+	height: 350px;
+	margin-top: -2px;
+}
+
+.portrait2 .bottom{
+	background: #e96b55 center url(../img/bottom.png) no-repeat;
+	width: 480px;
+	height: 350px;
+	margin-top: -2px;
+}
+
+.portrait3 .bottom{
+	background: #e96b55 center url(../img/bottom.png) no-repeat;
+	width: 480px;
+	height: 350px;
+	margin-top: -2px;
+}
+
+.portrait4 .bottom{
+	background: #e96b55 center url(../img/bottom.png) no-repeat;
+	width: 100%;
+	height: 350px;
+	margin-top: -2px;
+}
+.landscape .bottom{
+	background: #e96b55 center url(../img/bottom.png) no-repeat;
+	width: 100%;
+	height: 350px;
+	margin-top: -2px;
 }
 
 .portrait1 .screenshots img{
@@ -44,7 +64,6 @@ img{
 
 .portrait2 .screenshots img{
 	width: 100%;
-	margin: 2px 2px;
 }
 
 .portrait3 .screenshots img{
@@ -53,10 +72,8 @@ img{
 
 .portrait4 .screenshots img{
 	width: 49%;
-	height: 100%;
 }
 
 .landscape .screenshots img{
     width: 100%;
-    height: 100%;
 }
