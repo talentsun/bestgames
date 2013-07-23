@@ -1,52 +1,35 @@
 body{
     background-color: #eee;
     color: #444;
-}
-
-img{
-	padding:0;
-	margin:0;
-    margin-left: -4px
+    margin: 0;
 }
 
 #container.portrait4{
 	width: 640px;
-	margin: auto;
 }
 
 #container.landscape{
 	width: 480px;
-	margin: auto;
-}
-
-.portrait4 .head{
-	background: url(../img/head-portrait.jpg) no-repeat;
-	width: 640px;
-	height: 116px;
-    margin-left: -4px
 }
 
 .landscape .head{
 	background: url(../img/head-landscape.jpg) no-repeat;
 	width: 480px;
 	height: 116px;
-    margin-left: -4px
 }
 
 .portrait4 .bottom{
-	background: url(../img/bottom-portrait.jpg) no-repeat;
-	width: 640px;
-	height: 89px;
+	background: #e96b55 center url(../img/bottom.png) no-repeat;
+	width: 100%;
+	height: 350px;
 	margin-top: -2px;
-    margin-left: -4px
 }
 
 .landscape .bottom{
-	background: url(../img/bottom-landscape.jpg) no-repeat;
-	width: 480px;
-	height: 89px;
+	background: #e96b55 center url(../img/bottom.png) no-repeat;
+	width: 100%;
+	height: 350px;
 	margin-top: -2px;
-    margin-left: -4px
 }
 
 .portrait4 .screenshots img{
@@ -56,12 +39,3 @@ img{
 .landscape .screenshots img{
     width: 100%;
 }
-
-.portrait4 .screenshots img:nth-child(even){
-	margin-left: -4px;
-}
-
-
-
-
-

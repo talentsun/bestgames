@@ -64,6 +64,9 @@ def make_gif(content):
     if content.screenshot_path_4.name:
         src_images.append(content.screenshot_path_4.path)
 
+    if len(src_images) == 1:
+        return src_images[0]
+
     for image in src_images:
         image_file = open(image, 'rb')
         width, height = Image.open(image_file).size
