@@ -13,6 +13,7 @@
             <img src="{{ screenshot_path_3 }}" id="screenshot_3" />
             <img src="{{ screenshot_path_4 }}" id="screenshot_4" />
         </div>
+        <div class ="bottom"></div>
     </div>
 </body>
 </html>
