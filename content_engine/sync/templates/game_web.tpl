@@ -12,7 +12,7 @@
 {% if iOS_download_url %}
 [col grid="4-1"]<a class="btn" href="{{ iOS_download_url }}" style="margin-top:10px;"><i class="icon-download-alt"></i>下载苹果版</a>[/col]
 {% else %}
-[col grid="4-1"]<a class="btn disabled" href="#" sytle="margin-top:10px;"><i class="icon-download-alt icon-white"></i>无苹果版</a>[/col]
+[col grid="4-1"]<a class="btn disabled" href="#" style="margin-top:10px;"><i class="icon-download-alt icon-white"></i>无苹果版</a>[/col]
 {% endif %}
 [/box]
 
