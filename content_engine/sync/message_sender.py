@@ -6,6 +6,7 @@ sys.setdefaultencoding('utf-8')
 from weibo import APIClient
 from weixin import WeixinClient
 from portal.models import Entity
+from analyse.models import Weibo_count
 from wordpress_xmlrpc import Client, WordPressPost
 from wordpress_xmlrpc.methods.posts import NewPost
 import logging
@@ -30,13 +31,18 @@ class MessageSender(object):
 	@classmethod
 	def send_weibo(self, weibo_message):
 		try:
-			weibo_client.statuses.upload.post(status=weibo_message.message, pic=open(weibo_message.image))
+			post_id=weibo_client.statuses.upload.post(status=weibo_message.message, pic=open(weibo_message.image))['id']
 			result = 2
 		except Exception, e:
 			result = 3
 
 		logger.info('send weibo result: %s' % result)
-		Entity.objects.filter(id=weibo_message.entity_id).update(status1=result)
+		#Entity.objects.filter(id=weibo_message.entity_id).update(status1=result)
+                entity = Entity.objects.get(pk=weibo_message.entity_id)
+		entity.status1 = result
+		entity.message_id1 = post_id
+		entity.save()
+                Weibo_count.objects.create(entity_id=weibo_message.entity_id,comments=0,reposts=0,sync_timestamp1=entity.sync_timestamp1)
 
 	@classmethod
 	def send_weixin(self, weixin_message):
