@@ -14,16 +14,16 @@ weibo_client.set_access_token('2.00_WfRrC06XASOb0e30929c0ZKmYeC',time.time() + 9
 
 @cronjobs.register
 def update_weibo_count():
-        weibos=Weibo_count.objects.all()
- 	for weibo in weibos:
-            entity=Entity.objects.get(pk = weibo.entity_id)
-            if (datetime.datetime.now()-entity.sync_timestamp1).days<=7: 
-               message_id=entity.message_id1
-               myweibo= weibo_client.get.statuses__count(ids=message_id)[0]
-               comments=myweibo['comments']
-               reposts=myweibo['reposts']
-               weibo_in_database=Weibo_count.objects.get(entity_id=weibo.entity_id)
-               weibo_in_database.comments=comments
-               weibo_in_database.reposts=reposts
-               weibo_in_database.sync_timestamp1=entity.sync_timestamp1
-               weibo_in_database.save()
+    weibos=Weibo_count.objects.all()
+    for weibo in weibos:
+        entity=Entity.objects.get(pk = weibo.entity_id)
+        if (datetime.datetime.now()-entity.sync_timestamp1).days<=7: 
+            message_id=entity.message_id1
+            myweibo= weibo_client.get.statuses__count(ids=message_id)[0]
+            comments=myweibo['comments']
+            reposts=myweibo['reposts']
+            weibo_in_database=Weibo_count.objects.get(entity_id=weibo.entity_id)
+            weibo_in_database.comments=comments
+            weibo_in_database.reposts=reposts
+            weibo_in_database.sync_timestamp1=entity.sync_timestamp1
+            weibo_in_database.save()
