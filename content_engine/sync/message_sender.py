@@ -39,9 +39,9 @@ class MessageSender(object):
 		logger.info('send weibo result: %s' % result)
 		entity = Entity.objects.get(pk=weibo_message.entity_id)
 		entity.status1 = result
-                if result == 2:
-		        entity.message_id1 = post_id
-                        WeiboCount.objects.create(entity_id=weibo_message.entity_id,comments=0,reposts=0,sync_timestamp1=entity.sync_timestamp1)
+		if result == 2:
+			entity.message_id1 = post_id
+			WeiboCount.objects.create(entity_id=weibo_message.entity_id,comments=0,reposts=0,sync_timestamp1=entity.sync_timestamp1)
 		entity.save()
 		
 

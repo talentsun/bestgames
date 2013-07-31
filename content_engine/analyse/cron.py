@@ -16,7 +16,7 @@ weibo_client.set_access_token('2.00_WfRrC06XASOb0e30929c0ZKmYeC',time.time() + 9
 @cronjobs.register
 def update_weibo_count():
     weibos = WeiboCount.objects.all()
- 	for weibo in weibos:
+        for weibo in weibos:
             if (datetime.datetime.now()-weibo.sync_timestamp1).days < 7: 
                 weibo_get = weibo_client.get.statuses__count(ids=weibo.entity.message_id1)[0]
                 comments = weibo_get['comments']
