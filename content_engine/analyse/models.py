@@ -1,7 +1,6 @@
 #coding:utf-8
 from django.db import models
 from portal.models import Entity
-
 from weixin.models import Puzzle
 from django.utils import simplejson
 
@@ -51,16 +50,16 @@ class PuzzleUserByPuzzle(models.Model):
         app_label = "analyse"
 
 
-class Weibo_count(models.Model):
-    entity=models.ForeignKey(Entity)
-    comments=models.IntegerField()
-    reposts=models.IntegerField()
-    sync_timestamp1 = models.DateTimeField(verbose_name=u"同步时间1",blank=True)
+class WeiboCount(models.Model):
+    entity = models.ForeignKey(Entity)
+    comments = models.IntegerField()
+    reposts = models.IntegerField()
+    sync_timestamp1 = models.DateTimeField(verbose_name=u"同步时间1")
 
     class Meta:
-        db_table=u'weibo_count'
-        verbose_name=u'微博评论转发数统计'
-        app_label='analyse'
+        db_table = u"weibo_count"
+        verbose_name = u"微博评论转发数统计"
+        app_label = "analyse"
 
 
 
