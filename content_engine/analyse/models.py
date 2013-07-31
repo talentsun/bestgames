@@ -1,6 +1,6 @@
 #coding:utf-8
 from django.db import models
-
+from portal.models import Entity
 from weixin.models import Puzzle
 from django.utils import simplejson
 
@@ -48,5 +48,18 @@ class PuzzleUserByPuzzle(models.Model):
         db_table = u"analyse_puzzle_user_puzzle"
         verbose_name = u"puzzle用户按题目分析"
         app_label = "analyse"
+
+
+class WeiboCount(models.Model):
+    entity = models.ForeignKey(Entity)
+    comments = models.IntegerField()
+    reposts = models.IntegerField()
+    sync_timestamp1 = models.DateTimeField(verbose_name=u"同步时间1")
+
+    class Meta:
+        db_table = u"weibo_count"
+        verbose_name = u"微博评论转发数统计"
+        app_label = "analyse"
+
 
 
