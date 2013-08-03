@@ -15,7 +15,8 @@ class Entity(models.Model):
     PUZZLE = 8
     type = models.IntegerField(verbose_name=u'类型', default=GAME, editable=False)
     tags = TaggableManager(verbose_name=u"标签",blank=True)
-
+    
+    message_id1 = models.BigIntegerField(max_length=255, blank=True)
     message_id3 = models.IntegerField(max_length=255, blank=True)
 
     sync_timestamp1 = models.DateTimeField(verbose_name=u"同步时间1",blank=True)
