@@ -21,7 +21,7 @@ def load_games_for_today(reload=False):
     end_date = datetime(year, month, day, 23, 59, 59)
     games = []
 
-    weixin = Weixin.objects.order_by("-weibo_sync_timestamp")[:1]
+    weixin = Weixin.objects.order_by("-sync_timestamp2")[:1]
     if len(weixin) > 0:
         games = weixin[0].games.all();
 
