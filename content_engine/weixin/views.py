@@ -50,6 +50,7 @@ def _route_callback(error=None, reply=None):
 def index(request):
     global TOKEN, router_error, router_reply
     weixinlogger = logging.getLogger('weixin')
+    conversationlogger = logging.getLogger('conversation')
     if request.method == 'GET':
         if 'signature' not in request.GET or 'timestamp' not in request.GET or 'nonce' not in request.GET or 'echostr' not in request.GET:
                 return HttpResponse('bad request %s' % str(request.GET))
@@ -68,6 +69,7 @@ def index(request):
             weixin = WeiXin.on_message(smart_str(request.raw_post_data))
             message = weixin.to_json()
             weixinlogger.info("receive one message %s" % str(message))
+            conversationlogger.info("receive one message %s" % str(message))
             try:
                 user = WeixinUser.objects.get(uid=message['FromUserName'])
             except:
@@ -83,11 +85,14 @@ def index(request):
                 router_reply.platform = MessageBuilder.PLATFORM_WEIXIN
                 if router_reply.type != MessageBuilder.TYPE_NO_RESPONSE:
                     weixinlogger.info("reply success type %s platform %s data %s" % (router_reply.type, router_reply.platform, router_reply.data))
+                    conversationlogger.info("reply success type %s platform %s data %s" % (router_reply.type, router_reply.platform, router_reply.data))
                     return HttpResponse(MessageBuilder.build(message, router_reply), content_type="application/xml")
                 else:
                     weixinlogger.info("%s", router_reply.data)
+                    conversationlogger.info("%s", router_reply.data)
             else:
                 weixinlogger.info("router error %s router reply %s" % (str(router_error), str(router_reply)))
+                conversationlogger.info("router error %s router reply %s" % (str(router_error), str(router_reply)))
                 raise "not find games"
                 return HttpResponse('<xml></xml>', content_type="application/xml")
         except:

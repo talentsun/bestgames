@@ -232,6 +232,15 @@ LOGGING = {
             'backupCount': 5,
             'formatter':'standard',
         }
+        'conversation': {
+            'level':'DEBUG',
+            'class':'logging.handlers.TimedRotatingFileHandler',
+            'filename': os.path.join('/data' + '/logs/','conversation.log'),
+            'backupCount': 0,
+            'when':'d',
+            'interval': 1,
+            'formatter':'standard',
+        }
 
     },
     'loggers': {
@@ -262,6 +271,11 @@ LOGGING = {
         },
         'sync': {
             'handlers': ['sync'],
+            'level': 'DEBUG',
+            'propagate': False,
+        }
+        'conversation': {
+            'handlers': ['conversation'],
             'level': 'DEBUG',
             'propagate': False,
         }
