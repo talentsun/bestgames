@@ -14,6 +14,7 @@ class BaseDialog(models.Model):
         app_label = 'weixin'
 
 class Conversation(models.Model):
+    uid = models.CharField(u"用户微信id", max_length=100, db_index=True)
     user_content = models.CharField(u"用户消息", max_length=1000)
     content_type = models.CharField(u"用户消息类型", max_length=100)
     createtime = models.DateTimeField(u"创建时间")
@@ -22,7 +23,7 @@ class Conversation(models.Model):
     reply_data = models.CharField(u"回复数据", max_length=1000, blank=True)
 
     class Meta:
-        db_table = u"conversation"
+        db_table = u"analyse_weixin_conversation"
         verbose_name = u"微信对话消息"
         app_label = "weixin"
     
