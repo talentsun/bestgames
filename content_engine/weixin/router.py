@@ -7,6 +7,7 @@ from message_builder import MessageBuilder, BuildConfig
 from django.core.cache import cache
 
 weixinlogger = logging.getLogger("weixin")
+conversationlogger = logging.getLogger("conversation")
 logger = logging.getLogger("default")
 
 # Router use memcache to share data whole application
@@ -82,6 +83,7 @@ class Router(object):
             rule = rule_list[i]
             if Rule.is_match(info, rule):
                 weixinlogger.info("match %s" % rule.name)
+                conversationlogger.info("match %s" % rule.name)
                 rule.count = i
                 result = Rule.execute(info, rule, cb)
                 if isinstance(result, (str, unicode)):
