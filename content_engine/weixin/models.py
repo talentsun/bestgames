@@ -12,6 +12,19 @@ class BaseDialog(models.Model):
         verbose_name = u'基本对话'
         verbose_name_plural = u'基本对话'
         app_label = 'weixin'
+
+class Conversation(models.Model):
+    user_content = models.CharField(u"用户消息", max_length=1000)
+    content_type = models.CharField(u"用户消息类型", max_length=100)
+    createtime = models.DateTimeField(u"创建时间")
+    match_type = models.CharField(u"匹配类型", max_length=100, blank=True)
+    reply_type = models.CharField(u"回复类型", max_length=100, blank=True)
+    reply_data = models.CharField(u"回复数据", max_length=1000, blank=True)
+
+    class Meta:
+        db_table = u"conversation"
+        verbose_name = u"微信对话消息"
+        app_label = "weixin"
     
 
 class WeixinUser(models.Model):
