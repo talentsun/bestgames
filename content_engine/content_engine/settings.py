@@ -231,7 +231,7 @@ LOGGING = {
             'maxBytes': 1024*1024*5,
             'backupCount': 5,
             'formatter':'standard',
-        }
+        },
         'conversation': {
             'level':'DEBUG',
             'class':'logging.handlers.TimedRotatingFileHandler',
@@ -273,7 +273,7 @@ LOGGING = {
             'handlers': ['sync'],
             'level': 'DEBUG',
             'propagate': False,
-        }
+        },
         'conversation': {
             'handlers': ['conversation'],
             'level': 'DEBUG',
