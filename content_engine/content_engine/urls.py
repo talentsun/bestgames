@@ -25,7 +25,9 @@ urlpatterns = patterns('',
     url(r'', include('scrapy_itunes.urls')),
     url(r'', include('social_auth.urls')),
     url(r'^weixin/', include('weixin.urls')),
-    url(r'^analyse/', include('analyse.urls'))
+    url(r'^analyse/', include('analyse.urls')),
+    url(r'^site_media/(?P<path>.*)$', 'django.views.static.serve',{'document_root': settings.STATIC_ROOT}),
+    (r'^ckeditor/', include('ckeditor.urls')),
 )
 
 urlpatterns += staticfiles_urlpatterns()

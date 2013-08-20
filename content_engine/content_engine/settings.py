@@ -151,8 +151,32 @@ INSTALLED_APPS = (
     'cronjobs',
     'sync',
     'analyse',
-    'chartit'
+    'chartit',
+    'ckeditor',
 )
+
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar':[
+            ['Cut','Copy','Paste','PasteText','PasteFromWord','-'],        
+            ['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],        
+            ['Bold','Italic','Underline','Strike','-'],        
+            ['NumberedList','BulletedList','-','Blockquote'],        
+            ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],        
+            ['Link','Unlink'],        
+            ['Image','Flash','HorizontalRule','Smiley','SpecialChar'],        
+            ['Styles','Format','Font','FontSize'],        
+            ['TextColor','BGColor'],        
+            ['Maximize','ShowBlocks','Preview']        
+        ],
+        'height': 500,
+        'width':520,
+    },
+}
+
+CKEDITOR_RESTRICT_BY_USER=True
+CKEDITOR_UPLOAD_PATH = "/data/media/upload"
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
