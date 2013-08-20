@@ -85,6 +85,7 @@
         <li><a href="/collections/add?next={{request.get_full_path}}">新增游戏合集</a></li>
         <li><a href="/rediers/add?next={{request.get_full_path}}">新增小兵变大咖</a></li>
         <li><a href="/problems/add?next={{request.get_full_path}}">新增“宅，必有一技”</a></li>
+        <li><a href="/evaluation/add?next={{request.get_full_path}}">新增游戏测评</a></li>
       </ul>
     </div>
 
@@ -174,6 +175,13 @@
             </div>
           </div>
           {% render_table collections "django_tables2/table.html" %}
+
+          <div class="navbar" style="margin-bottom:0;">
+            <div class="navbar-inner">
+              <p class="navbar-text">游戏测评</p>
+            </div>
+          </div>
+          {% render_table evaluation "django_tables2/table.html" %}
         </div>
       
         <div class="tab-pane" id="tab2">
