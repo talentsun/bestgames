@@ -8,8 +8,9 @@ from datetime import datetime
 from taggit.forms import TagField
 from django_select2 import *
 from weixin.models import Gift, GiftItem
+from ckeditor.widgets import CKEditorWidget
 
-from portal.models import Redier, Game, Category, Collection, Problem, Weixin, Player, News, Puzzle
+from portal.models import Redier, Game, Category, Collection, Problem, Weixin, Player, News, Puzzle, Evaluation
 
 class EntityForm(ModelForm):
     tags = TagField(label=u"标签",required=False)
@@ -279,3 +280,38 @@ class GiftItemForm(ModelForm):
     class Meta:
         model = GiftItem
         fields = ("grade", 'value')
+
+
+class EvaluationForm(EntityForm):
+    title = forms.CharField(label=u"标题", max_length=100)
+    content = forms.CharField(label=u"内容", widget=CKEditorWidget())
+    sync_timestamp1 = forms.DateTimeField(label=u"微博同步时间", required=False, widget=DateTimeWidget(options={
+                'autoclose' : 'true',
+                'showMeridian' : 'true',
+                'startDate' : datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+                }))
+    sync_timestamp3 = forms.DateTimeField(label=u"网站同步时间", required=False, widget=DateTimeWidget(options={
+                'autoclose' : 'true',
+                'showMeridian' : 'true',
+                'startDate' : datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+                }))
+    
+
+    class Meta:
+        model = Evaluation
+        fields = ('title',
+                  'icon',
+                  'content',
+                  'rating',
+                  'android_download_url',
+                  'iOS_download_url',
+                  'sync_timestamp1',
+                  'sync_timestamp3',
+                  'presenter',
+                  'brief_comment',
+                  'recommended_reason')
+        widgets = {
+                   'icon' : AjaxClearableFileInput(),
+                   'content' : CKEditorWidget()
+                  }
+

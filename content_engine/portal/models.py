@@ -3,6 +3,7 @@ from django.db import models
 from django.utils.encoding import force_unicode
 from taggit.managers import TaggableManager
 from django.shortcuts import get_object_or_404
+from ckeditor.fields import RichTextField
 
 class Entity(models.Model):
     GAME = 1
@@ -13,6 +14,7 @@ class Entity(models.Model):
     PLAYER = 6
     NEWS = 7
     PUZZLE = 8
+    EVALUATION = 9
     type = models.IntegerField(verbose_name=u'类型', default=GAME, editable=False)
     tags = TaggableManager(verbose_name=u"标签",blank=True)
     
@@ -306,3 +308,53 @@ class Weixin(Entity):
                 self.status3 = Entity.STATUS_PENDING
 
         super(Weixin, self).save(args, kwargs)
+
+
+class Evaluation(Entity):
+    title = models.CharField(u'标题', max_length=100)
+    icon = models.ImageField(u"图标", upload_to='upload/', max_length=255, blank=True)
+    content = RichTextField(u'内容')
+    RATING_1 = 1
+    RATING_2 = 2
+    RATING_3 = 3
+    RATING_4 = 4
+    RATING_5 = 5
+    RATING_6 = 6
+    RATING_7 = 7
+    RATING_8 = 8
+    RATING_9 = 9
+    RATING_10 = 10
+    RATING_CHOICES = (
+        (RATING_10, u"5"),
+        (RATING_9, u"4.5"),
+        (RATING_8, u"4"),
+        (RATING_7, u"3.5"),
+        (RATING_6, u"3"),
+        (RATING_5, u"2.5"),
+        (RATING_4, u"2"),
+        (RATING_3, u"1.5"),
+        (RATING_2, u"1"),
+        (RATING_1, u"0.5"))
+    rating = models.IntegerField(u"评分", choices=RATING_CHOICES, default=RATING_6)
+    android_download_url = models.URLField(u"安卓下载地址", max_length=255, blank=True)
+    iOS_download_url = models.URLField(u"苹果下载地址", max_length=255, blank=True)
+    
+    
+    def __unicode__(self):
+        return force_unicode(self.name)
+    class Meta:
+        db_table = u'evaluation'
+        verbose_name = u'游戏测评'
+    def save(self, *args, **kwargs):
+        self.type = Entity.EVALUATION
+        if self.status1 == Entity.STATUS_DO_NOT_SYNC:
+            if self.sync_timestamp1 is not None:
+                self.status1 = Entity.STATUS_PENDING
+        if self.status2 == Entity.STATUS_DO_NOT_SYNC:
+            if self.sync_timestamp2 is not None:
+                self.status2 = Entity.STATUS_PENDING
+        if self.status3 == Entity.STATUS_DO_NOT_SYNC:
+            if self.sync_timestamp3 is not None:
+                self.status3 = Entity.STATUS_PENDING
+
+        super(Evaluation, self).save(args, kwargs)
