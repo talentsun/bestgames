@@ -14,7 +14,7 @@ body{
 #container_head{width:480px;background-color:#f6f6f6;margin:0;height:160px}
 
 
-#left{width:165px;float:left;padding:15px 0px 15px 15px;background-color:#f6f6f6;height:160px;margin:0;}
+#left{width:165px;float:left;padding:15px 0px 0px 15px;background-color:#f6f6f6;height:160px;margin:0;}
 
 
 #right{background-color:##f6f6f6;float:left;text-align:left;height:160px;}

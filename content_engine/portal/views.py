@@ -220,7 +220,7 @@ def index(request):
     player.paginate(page=request.GET.get("pr-page",1), per_page=5)
     player.data.verbose_name = u"我是玩家"
 
-    evaluation = EvaluaionTable(Evaluation.objects.all(), prefix="ge-")
+    evaluation = EvaluationTable(Evaluation.objects.all(), prefix="ge-")
     evaluation.paginate(page=request.GET.get("ge-page",1),per_page=5)
     evaluation.data.verbose_name = u"游戏测评"
 

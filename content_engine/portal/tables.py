@@ -259,7 +259,7 @@ class EvaluationTable(tables.Table):
     sync_timestamp1 = DateTimeColumn(verbose_name=u"微博同步时间", orderable=False)
     sync_timestamp3 = DateTimeColumn(verbose_name=u"网站同步时间", orderable=False)
     status = TemplateColumn(template_name="sync_status_field.html", orderable=False, verbose_name=u"同步状态")
-    ops = TemplateColumn(template_name="review_field_ops.html", verbose_name=u"操作", orderable=False, attrs={"class":"ops"})
+    ops = TemplateColumn(template_name="evaluation_field_ops.html", verbose_name=u"操作", orderable=False, attrs={"class":"ops"})
 
 
     class Meta:
