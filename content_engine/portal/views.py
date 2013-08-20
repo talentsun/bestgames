@@ -17,10 +17,10 @@ import logging, traceback, time, struct, socket
 from taggit.models import Tag
 
 from weixin.models import BaseDialog, Gift, GiftItem, UserGift, WeixinUser, UserAnswer
-from portal.models import Game, Redier, Collection, Problem, Entity, Weixin, Player, News, Puzzle
+from portal.models import Game, Redier, Collection, Problem, Entity, Weixin, Player, News, Puzzle, Evaluation
 from weixin.tables import UserGiftTable, WeixinUserTable, UserAnswerTable
-from portal.tables import GameTable, RedierTable, CollectionTable, ProblemTable, WeixinTable, PlayerTable, NewsTable, DialogTable, PuzzleTable, GiftTable, GiftItemTable
-from portal.forms import GameForm, RedierForm, CollectionForm, ProblemForm, WeixinForm, PlayerForm, NewsForm, PuzzleForm, GiftForm, GiftItemForm
+from portal.tables import GameTable, RedierTable, CollectionTable, ProblemTable, WeixinTable, PlayerTable, NewsTable, DialogTable, PuzzleTable, GiftTable, GiftItemTable, EvaluationTable
+from portal.forms import GameForm, RedierForm, CollectionForm, ProblemForm, WeixinForm, PlayerForm, NewsForm, PuzzleForm, GiftForm, GiftItemForm, EvaluationForm
 from service import search_pb2
 from content_engine import settings
 
@@ -47,6 +47,8 @@ def d(request, id=None):
                 return redirect('http://cow.bestgames7.com/news/%s/preview' % entity.id)
             elif type == 3:
                 return redirect('http://cow.bestgames7.com/collections/%s/preview' % entity.id)
+            elif type == 9:
+                return redirect('http://cow.bestgames7.com/evaluation/%s/preview' % entity.id)
             else:
                 return redirect('http://www.bestgames7.com/')
         else:
@@ -218,6 +220,10 @@ def index(request):
     player.paginate(page=request.GET.get("pr-page",1), per_page=5)
     player.data.verbose_name = u"我是玩家"
 
+    evaluation = EvaluaionTable(Evaluation.objects.all(), prefix="ge-")
+    evaluation.paginate(page=request.GET.get("ge-page",1),per_page=5)
+    evaluation.data.verbose_name = u"游戏测评"
+
     gift = GiftTable(Gift.objects.all(), prefix="gift-")
     gift.paginate(page=request.GET.get("gift-page", 1), per_page = 5)
     gift.data.verbose_name = u"礼物类型"
@@ -258,7 +264,7 @@ def index(request):
     delta_puzzle_chart = get_delta_puzzle_user_day()
     puzzle_chart = get_puzzle_user_puzzle()
 
-    return render(request, "index.html", {"games": games, "rediers":rediers, 'collections':collections, 'problems':problems, 'weixin':weixin, 'player':player, 'dialog': dialog, 'news':news, 'puzzles': puzzles, 'gift': gift, 'gift_item': giftItem, 'user_gift':userGift, 'weixin_user':weixinUser, 'user_answer' : userAnswer, 'charts': [all_puzzle_chart, delta_puzzle_chart, puzzle_chart]})
+    return render(request, "index.html", {"games": games, "rediers":rediers, 'evaluation':evaluation, 'collections':collections, 'problems':problems, 'weixin':weixin, 'player':player, 'dialog': dialog, 'news':news, 'puzzles': puzzles, 'gift': gift, 'gift_item': giftItem, 'user_gift':userGift, 'weixin_user':weixinUser, 'user_answer' : userAnswer, 'charts': [all_puzzle_chart, delta_puzzle_chart, puzzle_chart]})
 
 def logout(request):
     auth.logout(request)
@@ -754,5 +760,55 @@ def delete_dialog(request, dialog_id):
     dialog = get_object_or_404(BaseDialog, id=dialog_id)
     dialog.delete()
     return _redirect_back(request)
+
+
+@login_required
+def add_edit_evaluation(request,evaluation_id=None):
+    _auth_user(request)
+    sync_timestamp1 = ''
+    sync_timestamp3 = ''
+    if evaluation_id:
+        evaluation = get_object_or_404(Evaluation, entity_ptr_id=evaluation_id)
+        sync_timestamp1 = evaluation.sync_timestamp1
+        sync_timestamp3 = evaluation.sync_timestamp3
+    else:
+        evaluation = None
+
+    if request.method == 'POST':
+        form = EvaluationForm(request.POST, request.FILES, instance=evaluation)
+        if form.is_valid():
+            evaluation = form.save()
+            if request.POST['icon']:
+                evaluation.icon = request.POST['icon'].replace(settings.MEDIA_URL, '', 1)
+            else:
+                evaluation.icon = request.POST['icon']
+            if request.POST['content']:
+                evaluation.content = request.POST['content']
+            if sync_timestamp1 != evaluation.sync_timestamp1:
+                if sync_timestamp1 != '':
+                    evaluation.status1 = Entity.STATUS_PENDING
+            if sync_timestamp3 != evaluation.sync_timestamp3:
+                if sync_timestamp3 != '':
+                    evaluation.status3 = Entity.STATUS_PENDING
+            evaluation.save()
+            return _redirect_back(request)
+    else:
+        if evaluation is None:
+            form = EvaluationForm(instance=evaluation, initial={'presenter' : request.user.username})
+        else:
+            form = EvaluationForm(instance=evaluation)
+
+    return render(request, 'add_edit_evaluation.html', {'form' : form})
+
+@login_required
+def delete_evaluation(request, evaluation_id=None):
+    _auth_user(request)
+    evaluation = get_object_or_404(Evaluation, entity_ptr_id=evaluation_id)
+    evaluation.delete()
+    return _redirect_back(request)
+
+def preview_evaluation(request, evaluation_id=None):
+    evaluation = get_object_or_404(Evaluation, entity_ptr_id=evaluation_id)
+    return render(request, 'preview_evaluation.html', { 'evaluation' : evaluation })
 
 

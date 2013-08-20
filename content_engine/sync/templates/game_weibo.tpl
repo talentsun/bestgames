@@ -10,16 +10,16 @@
         <div class="screenshots">
             {% if game.screenshot_path_1.path %}
                 <img src="game.screenshot_path_1.path" id="screenshot_1" />
-            {% end if %}
+            {% endif %}
             {% if game.screenshot_path_2.path %}
                 <img src="game.screenshot_path_2.path" id="screenshot_2" />
-            {% end if %}
+            {% endif %}
             {% if game.screenshot_path_3.path %}
                 <img src="game.screenshot_path_3.path" id="screenshot_3" />
-            {% end if %}
+            {% endif %}
             {% if game.screenshot_path_4.path %}
                 <img src="game.screenshot_path_4.path" id="screenshot_4" />
-            {% end if %}
+            {% endif %}
         </div>
         <div class ="bottom"></div>
     </div>

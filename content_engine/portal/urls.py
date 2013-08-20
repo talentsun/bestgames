@@ -42,4 +42,8 @@ urlpatterns = patterns('portal.views',
     url(r'^dialogs/(?P<dialog_id>\d+)/delete','delete_dialog'),
     url(r'^logout', 'logout'),
     url(r'^d/(?P<id>\d+)/$', 'd'),
+    url(r'^evaluation/add','add_edit_evaluation'),
+    url(r'^evaluation/(?P<evaluation_id>\d+)/edit','add_edit_evaluation'),
+    url(r'^evaluation/(?P<evaluation_id>\d+)/delete','delete_evaluation'),
+    url(r'^evaluation/(?P<evaluation_id>\d+)/preview','preview_evaluation'),
 )

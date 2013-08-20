@@ -3,7 +3,7 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-from portal.models import Game, Redier, Collection, Problem, Entity, Weixin, Player, News
+from portal.models import Game, Redier, Collection, Problem, Entity, Weixin, Player, News, Evaluation
 from utils import make_image
 import os
 from django.template.loader import render_to_string
@@ -121,3 +121,25 @@ def build_news_message(news):
     else:
         weibo_status = _shorten_text(news.recommended_reason, 132)
     return WeiboMessage(u'#游戏情报站# ' + weibo_status, make_image(news.id, content), news.id)
+
+
+
+def build_evaluation_message(evaluation):
+    content = str(render_to_string('evaluation_weibo.tpl', {
+        'template_path': TEMPLATE_ROOT,
+        'title': evaluation.title,
+        'icon': evaluation.icon.path,
+        'rating': evaluation.rating,
+        'comment': evaluation.brief_comment,
+        'content': evaluation.content,
+        'android': evaluation.android_download_url,
+        'ios': evaluation.iOS_download_url,
+        }))
+    entity = Entity.objects.get(id=evaluation.id)   
+    if entity.status3 == 2:
+        message_link = u'【下载】' + 'http://cow.bestgames7.com/d/%s/' % evaluation.id
+    else:
+        message_link = ''  
+    weibo_status = _shorten_text(evaluation.recommended_reason, 110) + message_link
+
+    return WeiboMessage(u'#游戏测评# '+weibo_status, make_image(evaluation.id, content), evaluation.id)
