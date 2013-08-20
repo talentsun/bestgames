@@ -2,7 +2,7 @@
 #! usr/local/bin/python
 import cronjobs
 import datetime
-from portal.models import Game, Redier, Collection, Problem, Entity, Weixin, Player, News, Puzzle
+from portal.models import Game, Redier, Collection, Problem, Entity, Weixin, Player, News, Puzzle, Evaluation
 from message_sender import MessageSender
 import weibo_message_builder
 import weixin_message_builder
@@ -53,6 +53,9 @@ def sync_weibo():
 		elif entity.type == Entity.NEWS:
 			weibo_message = weibo_message_builder.build_news_message(News.objects.get(id=entity.id))
 			logger.info('sync news %s to weibo' % weibo_message.entity_id)
+		elif entity.type == Entity.EVALUATION:
+			weibo_message = weibo_message_builder.build_evaluation_message(Evaluation.objects.get(id=entity.id))
+			logger.info('sync evaluation %s to weibo' % weibo_message.entity_id)
 		if weibo_message is not None:
 			MessageSender.send_weibo(weibo_message)
 		else:
