@@ -38,7 +38,7 @@
                 <img src= "{{ template_path }}img/android.png"/>
             {% endif %}
             {% if ios %}
-                <img src= "{{ template_path }}img/iOS.png" />
+                <img src= "{{ template_path }}img/ios.png" />
             {% endif %} </div></div> 
     </div>
     <div id="container_body">
