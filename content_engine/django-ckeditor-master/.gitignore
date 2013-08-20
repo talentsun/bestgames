@@ -1,0 +1,13 @@
+*.egg-info
+*.pyc
+*.swp
+.installed.cfg
+/bin/
+/develop-eggs/
+/eggs/
+/parts/
+/ckeditor.db
+ve/
+django-ckeditor.sublime-workspace
+django-ckeditor.sublime-project
+*.DS_Store
