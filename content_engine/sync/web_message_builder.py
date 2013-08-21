@@ -189,14 +189,14 @@ def build_evaluation_message(evaluation):
 	post = WordPressPost()
 	post.title = evaluation.title
 
-        post.content = str(render_to_string('evaluation_web.tpl' {
+	post.content = str(render_to_string('evaluation_web.tpl' {
 		'id' : evaluation.id,
-                'content' : _normalize_content(evluation.recommended_reason),
-                'icon' : settings.MEDIA_URL + evaluation.icon.name,
-                'platforms' : _get_game_evaluation_platforms(evaluation),
-                'android_download_url' : evaluation.android_download_url,
-                'iOS_download_url' : evaluation.iOS_download_url,
-                'evaluation_content' : evaluation.content,
+		'content' : _normalize_content(evluation.recommended_reason),
+		'icon' : settings.MEDIA_URL + evaluation.icon.name,
+		'platforms' : _get_game_evaluation_platforms(evaluation),
+		'android_download_url' : evaluation.android_download_url,
+		'iOS_download_url' : evaluation.iOS_download_url,
+		'evaluation_content' : evaluation.content,
 	}))
 
 	post.terms_names = {
