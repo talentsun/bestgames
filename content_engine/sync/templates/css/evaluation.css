@@ -16,7 +16,7 @@ body{
 #left{width:165px;float:left;padding-top:15px;padding-left:15px;padding-right:0;background-color:#f6f6f6;height:160px;}
 
 
-#right{background-color:#f6f6f6;float:left;text-align:left;height:160px;padding-top:20px;margin:0}
+#right{background-color:#f6f6f6;float:left;text-align:left;height:160px;padding-top:15px;margin:0}
 
 
 #container_body{width:480px;background-color:#ffffff;margin-top:10px;padding-top:5px;padding-left:8px;padding-right:8px;margin-right:8px;}

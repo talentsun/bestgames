@@ -137,7 +137,7 @@ def build_evaluation_message(evaluation):
         }))
     entity = Entity.objects.get(id=evaluation.id)   
     if entity.status3 == 2:
-        message_link = u'【下载】' + 'http://cow.bestgames7.com/d/%s/' % evaluation.id
+        message_link = u'【详情】' + 'http://cow.bestgames7.com/d/%s/' % evaluation.id
     else:
         message_link = ''  
     weibo_status = _shorten_text(evaluation.recommended_reason, 110) + message_link
