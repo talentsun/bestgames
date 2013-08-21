@@ -200,6 +200,7 @@ def build_evaluation_message(evaluation):
 	}))
 
 	post.terms_names = {
+		'category' : [u'游戏测评']
 		'post_tag' : _get_game_evaluation_tags(evaluation)
 	}
 
