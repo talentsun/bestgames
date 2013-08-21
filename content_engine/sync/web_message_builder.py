@@ -29,11 +29,31 @@ def _get_game_tags(game):
 		tags.append(u'苹果')
 	return tags
 
+def _get_game_evaluation_tags(evaluation):
+	tags = []
+	if evaluation.android_download_url != '':
+		tags.append(u'安卓')
+	if evaluation.iOS_download_url != '':
+		tags.append(u'苹果')
+	return tags
+
 def _get_game_platforms(game):
 	platforms = []
 	if game.android_download_url != '':
 		platforms.append('Android')
 	if game.iOS_download_url != '':
+		platforms.append('iOS')
+	platforms_str = ''
+	if len(platforms) > 0:
+		return string.join(platforms, ', ')
+	else:
+		return ''
+
+def _get_game_evaluation_platforms(evaluation):
+	platforms = []
+	if evaluation.android_download_url != '':
+		platforms.append('Android')
+	if evaluation.iOS_download_url != '':
 		platforms.append('iOS')
 	platforms_str = ''
 	if len(platforms) > 0:
@@ -164,3 +184,25 @@ def build_puzzle_message(puzzle):
 	post.post_status = 'publish'
 
 	return WebMessage(puzzle.id, post)
+
+def build_evaluation_message(evaluation):
+	post = WordPressPost()
+	post.title = evaluation.title
+
+        post.content = str(render_to_string('evaluation_web.tpl' {
+		'id' : evaluation.id,
+                'content' : _normalize_content(evluation.recommended_reason),
+                'icon' : settings.MEDIA_URL + evaluation.icon.name,
+                'platforms' : _get_game_evaluation_platforms(evaluation),
+                'android_download_url' : evaluation.android_download_url,
+                'iOS_download_url' : evaluation.iOS_download_url,
+                'evaluation_content' : evaluation.content,
+	}))
+
+	post.terms_names = {
+		'post_tag' : _get_game_evaluation_tags(evaluation)
+	}
+
+	post.post_status = 'publish'
+
+	return WebMessage(evaluation.id, post)
