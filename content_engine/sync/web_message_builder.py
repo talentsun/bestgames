@@ -197,7 +197,7 @@ def build_evaluation_message(evaluation):
 		'android_download_url' : evaluation.android_download_url,
 		'iOS_download_url' : evaluation.iOS_download_url,
 		'evaluation_content' : evaluation.content,
-                'rating' : evaluation.rating,
+		'rating' : evaluation.rating,
 	}))
 
 	post.terms_names = {
