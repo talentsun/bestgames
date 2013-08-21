@@ -2,12 +2,13 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel="stylesheet" type="text/css" href="{{ template_path }}css/evaluation.css" />
-<title>review</title>
+<link rel="stylesheet" type="text/css" href="http://cow.bestgames7.com/static/css/bootstrap.min.css" />
+<title>evaluation</title>
 </head>
 <body>
     <div id="container_head">
         <div id="left">
-            <img src="{{ icon }}" width="130px" height="130px"/>
+            <img src="{{ icon }}" class="img-rounded" width="130px" height="130px"/>
         </div>
         <div id="right">
             <p style="font-family:arial;color:#666666;font-size:20px">{{ title }}</p>

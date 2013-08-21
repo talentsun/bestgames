@@ -87,5 +87,8 @@ def sync_web():
 		if entity.type == Entity.PUZZLE:
 			web_message = web_message_builder.build_puzzle_message(Puzzle.objects.get(id=entity.id))
 			logger.info('sync puzzle %s to web' % entity.id)
+		if entity.type == Entity.EVALUATION:
+			web_message = web_message_builder.build_evaluation_message(Evaluation.objects.get(id=entity.id))
+			logger.info('sync evaluation %s to web' % entity.id)
 		if web_message is not None:
 			MessageSender.send_web(web_message)
