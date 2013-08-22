@@ -25,6 +25,7 @@ def _shorten_text(origin_text, shorten_len=140):
 def build_game_message(game):
     content = str(render_to_string('game_weibo.tpl', {
         'template_path' : TEMPLATE_ROOT,
+        'game' : game,
         }))
     entity = Entity.objects.get(id=game.id)
     if entity.status3 == 2:
@@ -137,7 +138,7 @@ def build_evaluation_message(evaluation):
         }))
     entity = Entity.objects.get(id=evaluation.id)   
     if entity.status3 == 2:
-        message_link = u'【下载】' + 'http://cow.bestgames7.com/d/%s/' % evaluation.id
+        message_link = u'【详情】' + 'http://cow.bestgames7.com/d/%s/' % evaluation.id
     else:
         message_link = ''  
     weibo_status = _shorten_text(evaluation.recommended_reason, 110) + message_link
