@@ -25,6 +25,7 @@ def _shorten_text(origin_text, shorten_len=140):
 def build_game_message(game):
     content = str(render_to_string('game_weibo.tpl', {
         'template_path' : TEMPLATE_ROOT,
+        'game' : game,
         }))
     entity = Entity.objects.get(id=game.id)
     if entity.status3 == 2:
